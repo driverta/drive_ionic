@@ -17,39 +17,39 @@ export class Items {
   constructor(public http: Http) {
     let items = [
       {
-        "name": "Burt Bear",
+        "name": "Bench Press",
         "profilePic": "assets/img/speakers/bear.jpg",
-        "about": "Burt is a Bear."
+        "about": "Barbell."
       },
       {
-        "name": "Charlie Cheetah",
+        "name": "Squat",
         "profilePic": "assets/img/speakers/cheetah.jpg",
-        "about": "Charlie is a Cheetah."
+        "about": "Barbell"
       },
       {
-        "name": "Donald Duck",
+        "name": "Deadlift",
         "profilePic": "assets/img/speakers/duck.jpg",
-        "about": "Donald is a Duck."
+        "about": "Barbell"
       },
       {
-        "name": "Eva Eagle",
+        "name": "Shoulder Press",
         "profilePic": "assets/img/speakers/eagle.jpg",
-        "about": "Eva is an Eagle."
+        "about": "Dumbbell"
       },
       {
-        "name": "Ellie Elephant",
+        "name": "Incline Flyes",
         "profilePic": "assets/img/speakers/elephant.jpg",
-        "about": "Ellie is an Elephant."
+        "about": "Cables"
       },
       {
-        "name": "Molly Mouse",
+        "name": "Leg Press",
         "profilePic": "assets/img/speakers/mouse.jpg",
-        "about": "Molly is a Mouse."
+        "about": "Machine"
       },
       {
-        "name": "Paul Puppy",
+        "name": "Curls",
         "profilePic": "assets/img/speakers/puppy.jpg",
-        "about": "Paul is a Puppy."
+        "about": "Dumbbell"
       }
     ];
 
