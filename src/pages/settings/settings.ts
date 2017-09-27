@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { Camera } from '@ionic-native/camera';
 
 import { Settings } from '../../providers/providers';
 
@@ -17,7 +18,11 @@ import { Settings } from '../../providers/providers';
 })
 export class SettingsPage {
   // Our local settings object
+  @ViewChild('fileInput') fileInput;
+
   options: any;
+
+  show: boolean = true;
 
   settingsReady = false;
 
@@ -38,11 +43,13 @@ export class SettingsPage {
     public settings: Settings,
     public formBuilder: FormBuilder,
     public navParams: NavParams,
-    public translate: TranslateService) {
+    public translate: TranslateService,
+    public camera: Camera) {
   }
 
   _buildForm() {
     let group: any = {
+      profilePic: [''],
       option1: [this.options.option1],
       option2: [this.options.option2],
       option3: [this.options.option3]
@@ -68,6 +75,38 @@ export class SettingsPage {
   ionViewDidLoad() {
     // Build an empty form for the template to render
     this.form = this.formBuilder.group({});
+  }
+
+  getPicture() {
+    if (Camera['installed']()) {
+      this.camera.getPicture({
+        destinationType: this.camera.DestinationType.DATA_URL,
+        targetWidth: 96,
+        targetHeight: 96
+      }).then((data) => {
+        this.form.patchValue({ 'profilePic': 'data:image/jpg;base64,' + data });
+      }, (err) => {
+        alert('Unable to take photo');
+      })
+    } else {
+      this.fileInput.nativeElement.click();
+    }
+  }
+
+  processWebImage(event) {
+    let reader = new FileReader();
+    reader.onload = (readerEvent) => {
+
+      let imageData = (readerEvent.target as any).result;
+      this.show = false;
+      this.form.patchValue({ 'profilePic': imageData });
+    };
+
+    reader.readAsDataURL(event.target.files[0]);
+  }
+
+  getProfileImageStyle() {
+    return 'url(' + this.form.controls['profilePic'].value + ')'
   }
 
   ionViewWillEnter() {

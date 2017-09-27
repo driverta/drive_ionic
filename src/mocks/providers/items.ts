@@ -5,7 +5,7 @@ import { Item } from '../../models/item';
 
 @Injectable()
 export class Items {
-  items: Item[] = [];
+  lifts: Item[] = [];
 
   defaultItem: any = {
     "name": "Burt Bear",
@@ -15,7 +15,7 @@ export class Items {
 
 
   constructor(public http: Http) {
-    let items = [
+    let lifts = [
       {
         "name": "Bench Press",
         "profilePic": "assets/img/speakers/bear.jpg",
@@ -53,17 +53,17 @@ export class Items {
       }
     ];
 
-    for (let item of items) {
-      this.items.push(new Item(item));
+    for (let item of lifts) {
+      this.lifts.push(new Item(item));
     }
   }
 
   query(params?: any) {
     if (!params) {
-      return this.items;
+      return this.lifts;
     }
 
-    return this.items.filter((item) => {
+    return this.lifts.filter((item) => {
       for (let key in params) {
         let field = item[key];
         if (typeof field == 'string' && field.toLowerCase().indexOf(params[key].toLowerCase()) >= 0) {
@@ -77,10 +77,10 @@ export class Items {
   }
 
   add(item: Item) {
-    this.items.push(item);
+    this.lifts.push(item);
   }
 
   delete(item: Item) {
-    this.items.splice(this.items.indexOf(item), 1);
+    this.lifts.splice(this.lifts.indexOf(item), 1);
   }
 }
