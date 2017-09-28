@@ -1,0 +1,44 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>{{ item.name }}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+  <div padding>
+	  <ion-segment [(ngModel)]="exercise">
+	    <ion-segment-button value="set">
+	      New Set
+	    </ion-segment-button>
+	    <ion-segment-button value="history">
+	      History
+	    </ion-segment-button>
+	    <ion-segment-button value="records">
+	      Records
+	    </ion-segment-button>
+	  </ion-segment>
+	</div>
+
+	<div [ngSwitch]="exercise">
+	  <ion-list *ngSwitchCase="'set'">
+	    <ion-item>
+	      <new-set></new-set>
+	    </ion-item>
+	  </ion-list>
+
+	  <ion-list *ngSwitchCase="'history'">
+	    <ion-item>
+	      <h2>History</h2>
+	    </ion-item>
+	  </ion-list>
+
+	  <ion-list *ngSwitchCase="'records'">
+	    <ion-item>
+	      <h2>Records</h2>
+	    </ion-item>
+	  </ion-list>
+	</div>
+</ion-content>

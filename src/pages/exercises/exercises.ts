@@ -6,8 +6,8 @@ import { Items } from '../../providers/providers';
 
 @IonicPage()
 @Component({
-  selector: 'page-list-master',
-  templateUrl: 'list-master.html'
+  selector: 'page-exercises',
+  templateUrl: 'exercises.html'
 })
 export class ListMasterPage {
   currentItems: Item[];

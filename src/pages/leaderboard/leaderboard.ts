@@ -6,8 +6,8 @@ import { Items } from '../../providers/providers';
 
 @IonicPage()
 @Component({
-  selector: 'page-search',
-  templateUrl: 'search.html'
+  selector: 'page-leaderboard',
+  templateUrl: 'leaderboard.html'
 })
 export class SearchPage {
 

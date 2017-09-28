@@ -13,8 +13,8 @@ import { Settings } from '../../providers/providers';
  */
 @IonicPage()
 @Component({
-  selector: 'page-settings',
-  templateUrl: 'settings.html'
+  selector: 'page-profile',
+  templateUrl: 'profile.html'
 })
 export class SettingsPage {
   // Our local settings object
@@ -34,7 +34,7 @@ export class SettingsPage {
   };
 
   page: string = 'main';
-  pageTitleKey: string = 'SETTINGS_TITLE';
+  pageTitleKey: string = 'Profile';
   pageTitle: string;
 
   subSettings: any = SettingsPage;
