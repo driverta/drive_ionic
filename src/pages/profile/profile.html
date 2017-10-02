@@ -8,8 +8,14 @@
 
 <ion-content>
 
-  <form [formGroup]="form" *ngIf="settingsReady">
-
+  <div class="levels">
+      <h2>LEVEL <span class="sick"> {{xlevel}}</span> : <span class="sick">{{xcurrent}}</span> / <span class="sick">{{xtotal}}</span> GAINS</h2>
+    </div>
+    <div id="myProgress">
+    <div id="myBar" [ngStyle]="{'width.%' : progress}"></div>
+  </div>
+  <h1>{{username | uppercase }}</h1>
+  <form [formGroup]="form" *ngIf="settingsReady" class="pic">
     <input type="file" #fileInput style="visibility: hidden; height: 0px" name="files[]" (change)="processWebImage($event)" />
     <div class="profile-image-wrapper" (click)="getPicture()">
       <div class="profile-image-placeholder" *ngIf="show">
@@ -20,37 +26,26 @@
       </div>
       <div class="profile-image" [style.backgroundImage]="getProfileImageStyle()" *ngIf="!show"></div>
     </div>
-    <ion-list *ngIf="page == 'main'">
-      <ion-item>
-        <ion-label>{{ 'SETTINGS_OPTION1' | translate }}</ion-label>
-        <ion-toggle formControlName="option1"></ion-toggle>
-      </ion-item>
-
-      <ion-item>
-        <ion-label>{{ 'SETTINGS_OPTION2' | translate }}</ion-label>
-        <ion-input formControlName="option2"></ion-input>
-      </ion-item>
-
-      <ion-item>
-        <ion-label>{{ 'SETTINGS_OPTION3' | translate }}</ion-label>
-        <ion-select formControlName="option3">
-          <ion-option value="1" checked="true">1</ion-option>
-          <ion-option value="2">2</ion-option>
-          <ion-option value="3">3</ion-option>
-        </ion-select>
-      </ion-item>
-
-      <button ion-item [navPush]="subSettings" [navParams]="profileSettings">
-        {{ 'SETTINGS_PROFILE_BUTTON' | translate }}
-      </button>
-    </ion-list>
-
-    <ion-list *ngIf="page == 'profile'">
-      <ion-item>
-        <ion-label>{{ 'SETTINGS_OPTION4' | translate }}</ion-label>
-        <ion-input formControlName="option4"></ion-input>
-      </ion-item>
-    </ion-list>
   </form>
+  <div class="stats">
+    <table>
+      <tr>
+        <th>12</th>
+        <th>1,325</th>
+      </tr>
+      <tr>
+        <td>Records</td>
+        <td>Gains</td>
+      </tr>
+      <tr>
+        <th>25</th>
+        <th>20</th>
+      </tr>
+      <tr>
+        <td>Competitors</td>
+        <td>Competing</td>
+      </tr>
+    </table>
+  </div>
 
 </ion-content>

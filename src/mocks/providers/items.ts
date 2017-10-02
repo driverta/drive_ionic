@@ -19,37 +19,37 @@ export class Items {
       {
         "name": "Bench Press",
         "profilePic": "assets/img/speakers/bear.jpg",
-        "about": "Barbell."
+        "about": "Chest"
       },
       {
         "name": "Squat",
         "profilePic": "assets/img/speakers/cheetah.jpg",
-        "about": "Barbell"
+        "about": "Legs"
       },
       {
         "name": "Deadlift",
         "profilePic": "assets/img/speakers/duck.jpg",
-        "about": "Barbell"
+        "about": "Back"
       },
       {
         "name": "Shoulder Press",
         "profilePic": "assets/img/speakers/eagle.jpg",
-        "about": "Dumbbell"
+        "about": "Shoulders"
       },
       {
         "name": "Incline Flyes",
         "profilePic": "assets/img/speakers/elephant.jpg",
-        "about": "Cables"
+        "about": "Chest"
       },
       {
         "name": "Leg Press",
         "profilePic": "assets/img/speakers/mouse.jpg",
-        "about": "Machine"
+        "about": "Legs"
       },
       {
         "name": "Curls",
         "profilePic": "assets/img/speakers/puppy.jpg",
-        "about": "Dumbbell"
+        "about": "Arms"
       }
     ];
 

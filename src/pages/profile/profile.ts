@@ -20,6 +20,12 @@ export class SettingsPage {
   // Our local settings object
   @ViewChild('fileInput') fileInput;
 
+  xlevel = 1;
+  xcurrent = 25;
+  xtotal = 100;
+  progress = 75;
+  username = "tdriver369"
+
   options: any;
 
   show: boolean = true;
