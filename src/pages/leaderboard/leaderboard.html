@@ -8,7 +8,7 @@
 
 
 <ion-content>
-  <ion-searchbar (ionInput)="getItems($event)" placeholder="{{ 'SEARCH_PLACEHOLDER' | translate }}"></ion-searchbar>
+  <ion-searchbar (ionInput)="getItems($event)" placeholder="search usernames to compete with friends"></ion-searchbar>
   <ion-list>
     <button ion-item (click)="openItem(item)" *ngFor="let item of currentItems">
       <ion-avatar item-start>
@@ -19,4 +19,27 @@
       <ion-note item-end *ngIf="item.note">{{item.note}}</ion-note>
     </button>
   </ion-list>
+  <div class="timespan">
+    <ion-select>
+      <ion-option>Day</ion-option>
+      <ion-option>Week</ion-option>
+      <ion-option>Month</ion-option>
+      <ion-option>All Time</ion-option>
+    </ion-select>
+
+    <table>
+      <tr>
+        <td>Rank</td>
+        <td>Username</td>
+        <td>Level</td>
+        <td>Gains</td>
+      </tr>
+      <tr *ngFor="let x of players">
+        <td>{{x.rank}}</td>
+        <td>{{x.username}}</td>
+        <td>{{x.level}}</td>
+        <td>{{x.gains}}</td>
+      </tr>
+    </table>
+  </div>
 </ion-content>

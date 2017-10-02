@@ -13,6 +13,12 @@ export class SearchPage {
 
   currentItems: any = [];
 
+  players = [
+    {rank: 1, username: "tdriver369", level: 7, gains: 375},
+    {rank: 2, username: "battleblake", level: 4, gains: 235},
+    {rank: 3, username: "fratdromazos", level: 2, gains: 105}
+  ]
+
   constructor(public navCtrl: NavController, public navParams: NavParams, public items: Items) { }
 
   /**
