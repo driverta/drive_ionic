@@ -18,6 +18,15 @@ page-tutorial {
     margin: 36px 0;
   }
 
+  .slides-pager-page.active {
+    color: red !important;
+    stroke: red !important;
+  }
+
+  .swiper-pagination-bullet-active {
+    background: red;
+  }
+
   b {
     font-weight: 500;
   }
