@@ -1,3 +1,18 @@
+# DRIVE
+
+This app used the Ionic Super Starter as a template. All lot of the original pages and variables still have the same names. 
+
+To run an ionic app first Make sure you have an up-to-date version of Node.js installed on your system.
+
+Then install Cordova and Ionic:
+npm install -g cordova ionic
+
+Finally cd into this projects directory and run:
+ionic serve
+
+The app should run in your browser. The app is only designed for mobile devices, it won't look right as a webpage.
+
+
 # The Ionic Super Starter 🎮
 
 _Note: the Ionic Super Starter requires Ionic CLI 3._
