@@ -2,6 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Camera } from '@ionic-native/camera';
 import { IonicPage, NavController, ViewController } from 'ionic-angular';
+import { CustomRecordsPage } from '../custom-records/custom-records';
 
 @IonicPage()
 @Component({
@@ -10,6 +11,8 @@ import { IonicPage, NavController, ViewController } from 'ionic-angular';
 })
 export class ItemCreatePage {
   @ViewChild('fileInput') fileInput;
+
+  customPage = CustomRecordsPage;
 
   isReadyToSave: boolean;
 
@@ -32,6 +35,12 @@ export class ItemCreatePage {
 
   ionViewDidLoad() {
 
+  }
+
+  goToOtherPage() {
+    //push another page onto the history stack
+    //causing the nav controller to animate the new page in
+    this.navCtrl.push('CustomRecordsPage');
   }
 
   /**

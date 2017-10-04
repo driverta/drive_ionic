@@ -19,7 +19,11 @@ page-tutorial {
   }
 
   .swiper-pagination-bullet-active {
-    background: red;
+    background: red !important;
+  }
+
+  .swiper-pagination-bullet {
+    background: white;
   }
 
   b {
