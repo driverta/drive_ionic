@@ -1,6 +1,6 @@
 # DRIVE
 
-This app used the Ionic Super Starter as a template. All lot of the original pages and variables still have the same names. 
+This app used the Ionic Super Starter as a template. A lot of the original pages and variables still have the same names. 
 
 To run an ionic app first Make sure you have an up-to-date version of Node.js installed on your system.
 
