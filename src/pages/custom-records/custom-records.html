@@ -14,6 +14,22 @@
 
 
 <ion-content padding>
-	<h1>This is a test</h1>
+	<div class="bigRec">
+		<p class="addRec">Add Record: <input class="recText" type="text" value="11"><input type="submit" id="add" value="+"></p>
+		<br>
+		<table>
+			<tr>
+				<th>Reps</th>
+				<th></th>
+			</tr>
+			<tr *ngFor="let x of sampleRecords">
+				<td >{{x}}</td>
+				<td>
+					<input type="button" value="X" class="remove">
+				</td>
+			</tr>
+		</table>
+	</div>
+
 
 </ion-content>

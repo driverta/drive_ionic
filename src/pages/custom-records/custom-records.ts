@@ -15,6 +15,8 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class CustomRecordsPage {
 
+	sampleRecords = [1,2,3,4,5,6,8,10,12,15];
+
   constructor(public navCtrl: NavController, public navParams: NavParams) {
   }
 
