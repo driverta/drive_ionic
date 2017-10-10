@@ -93,4 +93,21 @@ page-exercise-detail {
 	#oneRM {
 		margin-top: 300px;
 	}
+
+	.axis text{
+		fill: white;
+		font-size: 30px;
+	}
+
+	.axis-title text{
+		fill: white;
+	}
+
+	.bar {
+		fill: red;
+	}
+
+	.hide {
+	  display: none;
+	}
 }
