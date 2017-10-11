@@ -25,6 +25,7 @@ export class SettingsPage {
   xtotal = 100;
   progress = 75;
   username = "tdriver369"
+  rank = "frail body"
 
   options: any;
 

@@ -41,9 +41,11 @@ export class SignupPage {
   test() {
     var yo = firebase.database().ref('/user');
     yo.push(this.account);
+    return firebase.auth().createUserWithEmailAndPassword(this.account.email, this.account.password);
   }
 
   doSignup() {
+    this.test();
     // Attempt to login in through our User service
     this.user.signup(this.account).subscribe((resp) => {
       this.navCtrl.push(MainPage);
