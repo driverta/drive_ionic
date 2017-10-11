@@ -38,28 +38,14 @@ export class SignupPage {
 
   }
 
-  test() {
+  doSignUp() {
     var yo = firebase.database().ref('/user');
     yo.push(this.account);
-    return firebase.auth().createUserWithEmailAndPassword(this.account.email, this.account.password);
-  }
-
-  doSignup() {
-    this.test();
-    // Attempt to login in through our User service
-    this.user.signup(this.account).subscribe((resp) => {
-      this.navCtrl.push(MainPage);
-    }, (err) => {
-
-      this.navCtrl.push(MainPage);
-
-      // Unable to sign up
-      let toast = this.toastCtrl.create({
-        message: this.signupErrorString,
-        duration: 3000,
-        position: 'top'
+    firebase.auth().createUserWithEmailAndPassword(this.account.email, this.account.password)
+      .then(value => {
+        this.navCtrl.push(MainPage);
       });
-      toast.present();
-    });
   }
+
+
 }
