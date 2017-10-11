@@ -2,13 +2,15 @@ import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { IonicPage, NavController, ToastController } from 'ionic-angular';
 
+import firebase from 'firebase';
+
 import { User } from '../../providers/providers';
 import { MainPage } from '../pages';
 
 @IonicPage()
 @Component({
   selector: 'page-signup',
-  templateUrl: 'signup.html'
+  templateUrl: 'signup.html',
 })
 export class SignupPage {
   // The account fields for the login form.
@@ -19,6 +21,8 @@ export class SignupPage {
     email: 'test@example.com',
     password: 'test'
   };
+
+  bro: string = "bro";
 
   // Our translated text strings
   private signupErrorString: string;
@@ -31,6 +35,12 @@ export class SignupPage {
     this.translateService.get('SIGNUP_ERROR').subscribe((value) => {
       this.signupErrorString = value;
     })
+
+  }
+
+  test() {
+    var yo = firebase.database().ref('/user');
+    yo.push(this.account);
   }
 
   doSignup() {
