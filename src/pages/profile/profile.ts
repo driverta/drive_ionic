@@ -5,6 +5,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Camera } from '@ionic-native/camera';
 
 import { Settings } from '../../providers/providers';
+import { User } from '../../providers/providers';
 
 /**
  * The Settings page is a simple form that syncs with a Settings provider
@@ -51,10 +52,12 @@ export class SettingsPage {
     public formBuilder: FormBuilder,
     public navParams: NavParams,
     public translate: TranslateService,
-    public camera: Camera) {
+    public camera: Camera,
+    private user: User) {
   }
 
   _buildForm() {
+    this.username = this.user._user
     let group: any = {
       profilePic: [''],
       option1: [this.options.option1],
