@@ -10,13 +10,13 @@
 
   <div padding>
 	  <ion-segment [(ngModel)]="exercise">
-	    <ion-segment-button (click)="hideChart()" value="set">
+	    <ion-segment-button (click)="hideCharts()" value="set">
 	      New Set
 	    </ion-segment-button>
-	    <ion-segment-button (click)="hideChart()" value="history">
+	    <ion-segment-button (click)="showLine()" value="history">
 	      History
 	    </ion-segment-button>
-	    <ion-segment-button (click)="showChart()" value="records">
+	    <ion-segment-button (click)="showBar()" value="records">
 	      Records
 	    </ion-segment-button>
 	  </ion-segment>
@@ -35,7 +35,8 @@
 	    <records></records>
 	  </div>
 	  <bar-chart [hidden]="selectedValue!=1" ></bar-chart>
-	  
+	  <line-chart [hidden]="selectedValue!=2" ></line-chart>
+
 	</div>
 </ion-content>
 

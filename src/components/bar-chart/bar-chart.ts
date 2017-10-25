@@ -19,7 +19,6 @@ import * as d3Axis from "d3-axis";
 export class BarChartComponent {
 
   constructor(public navCtrl: NavController) {
-   
   }
 
 }

@@ -7,6 +7,7 @@ import { BarChartComponent } from '../../components/bar-chart/bar-chart';
 import { NewSetComponent } from '../../components/new-set/new-set';
 import { HistoryComponent } from '../../components/history/history';
 import { RecordsComponent } from '../../components/records/records';
+import { LineChartComponent } from '../../components/line-chart/line-chart';
 
 @NgModule({
   declarations: [
@@ -14,7 +15,8 @@ import { RecordsComponent } from '../../components/records/records';
     BarChartComponent,
     NewSetComponent,
     HistoryComponent,
-    RecordsComponent
+    RecordsComponent,
+    LineChartComponent
   ],
   imports: [
     IonicPageModule.forChild(ItemDetailPage),

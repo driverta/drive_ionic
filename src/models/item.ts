@@ -18,12 +18,17 @@ export class Item {
 
 }
 
-export interface Employee {
+export interface Record {
     reps: number,
     oneRM: number
 }
 
-export const StatsBarChart: Employee[] = [
+export interface Set {
+    date: string,
+    oneRM: number
+}
+
+export const StatsBarChart: Record[] = [
     {reps: 1, oneRM: 315},
     {reps: 2, oneRM: 300},
     {reps: 3, oneRM: 275},
@@ -35,4 +40,18 @@ export const StatsBarChart: Employee[] = [
     {reps: 10, oneRM: 275},
     {reps: 12, oneRM: 305},
     {reps: 15, oneRM: 285}
+];
+
+export const StatsLineChart: Set[] = [
+    {date: "9-20", oneRM: 315},
+    {date: "9-20", oneRM: 300},
+    {date: "9-26", oneRM: 275},
+    {date: "9-26", oneRM: 225},
+    {date: "9-26", oneRM: 330},
+    {date: "10-2", oneRM: 225},
+    {date: "10-2", oneRM: 315},
+    {date: "10-9", oneRM: 300},
+    {date: "10-9", oneRM: 275},
+    {date: "10-15", oneRM: 305},
+    {date: "10-15", oneRM: 285}
 ];
