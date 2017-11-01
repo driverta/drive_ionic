@@ -9,6 +9,7 @@ import { BarChartComponent } from '../../components/bar-chart/bar-chart';
 
 import * as d3 from 'd3-selection';
 import * as d3Scale from "d3-scale";
+import * as d3Shape from "d3-shape";
 import * as d3Array from "d3-array";
 import * as d3Axis from "d3-axis";
 
@@ -40,6 +41,8 @@ export class ItemDetailPage {
   svg2: any;
   g2: any;
 
+  line: d3Shape.Line<[number, number]>;
+
   showBar() {
     this.selectedValue = 1;
   }
@@ -65,6 +68,7 @@ export class ItemDetailPage {
     this.initAxis();
     this.drawAxis();
     this.drawBars();
+    this.drawLine();
   }
 
   initSvg() {
@@ -153,15 +157,17 @@ export class ItemDetailPage {
         .attr("y", (d) => this.y(d.oneRM) )
         .attr("width", this.x.bandwidth())
         .attr("height", (d) => this.height - this.y(d.oneRM) );
+  }
 
-    this.g2.selectAll(".bar")
-        .data(StatsLineChart)
-        .enter().append("rect")
-        .attr("class", "bar")
-        .attr("x", (d) => this.x2(d.date) )
-        .attr("y", (d) => this.y2(d.oneRM) )
-        .attr("width", this.x2.bandwidth())
-        .attr("height", (d) => this.height2 - this.y2(d.oneRM) );
+  drawLine() {
+    this.line = d3Shape.line()
+        .x( (d: any) => this.x2(d.date) )
+        .y( (d: any) => this.y2(d.oneRM) );
+
+    this.g2.append("path")
+        .datum(StatsLineChart)
+        .attr("class", "line")
+        .attr("d", this.line);
   }
 
 }
