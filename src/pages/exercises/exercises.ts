@@ -14,10 +14,11 @@ import { User } from '../../providers/providers';
   templateUrl: 'exercises.html'
 })
 export class ListMasterPage {
-  currentItems: [{name: "", about: ""}];
+  lifts = [{name: "Bench", about: "chest"}];
+
   username = "test";
 
-  name = ["Lift 1"];
+  names = ["Lift 1"];
   about = ["nothing"];
   
 
@@ -34,19 +35,19 @@ export class ListMasterPage {
    * The view loaded, let's query our items for the list
    */
   ionViewDidLoad() {
+    this.lifts = [];
     this.username = this.user._user
     var query1 = firebase.database().ref('/' + this.username + '/exercises');
       
     query1.once("value").then( snapshot => {
-        snapshot.forEach( childSnapshot => {
+        
+      snapshot.forEach( childSnapshot => {
 
-          var childData1 = childSnapshot.val();
-          alert(childData1.name);
-          //this.currentItems.push({name: childData1.name, about: childData1.about});
-          //this.name.push(childData1.name);
-          //this.about.push(childData1.about);
-                
-        });
+        var childData1 = childSnapshot.val();
+        //alert(childData1.name);
+        this.lifts.push(childData1);
+        
+      });
       
     });
   }
@@ -59,7 +60,7 @@ export class ListMasterPage {
     let addModal = this.modalCtrl.create('ItemCreatePage');
     addModal.onDidDismiss(item => {
       if (item) {
-        this.items.add(item);
+        this.ionViewDidLoad();
       }
     })
     addModal.present();
