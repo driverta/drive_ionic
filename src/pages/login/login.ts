@@ -51,7 +51,7 @@ export class LoginPage {
         if (childData1.email == this.account.email) {
           this.user._user = childData1.name;
         }
-              
+        //alert(this.user._user);      
       });
     });
   }

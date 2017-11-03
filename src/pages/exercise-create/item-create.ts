@@ -21,7 +21,7 @@ export class ItemCreatePage {
   isReadyToSave: boolean;
 
   item: any;
-  exercise: { name: string, about: string} = {name: "",about: ""};
+  exercise: { name: string, about: string, records: any} = {name: "",about: "", records: [1,2,3,4,5,6,8,10,12,15]};
   username = "test";
 
   form: FormGroup;
@@ -75,4 +75,6 @@ export class ItemCreatePage {
     var yo = firebase.database().ref('/' + this.username + '/exercises');
     yo.push(this.exercise);
   }
+
+
 }

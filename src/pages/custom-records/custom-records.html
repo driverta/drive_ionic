@@ -25,11 +25,10 @@
 			<tr *ngFor="let x of sampleRecords">
 				<td >{{x}}</td>
 				<td>
-					<input type="button" value="X" class="remove">
+					<input (click)="deleteRec(x);" type="button" value="X" class="remove">
 				</td>
 			</tr>
 		</table>
 	</div>
-
 
 </ion-content>
