@@ -44,15 +44,15 @@ export class LoginPage {
     var query1 = firebase.database().ref("/user");
 
     query1.once("value").then( snapshot => {
-      //$timeout(function() {
-        snapshot.forEach( childSnapshot => {
+      
+      snapshot.forEach( childSnapshot => {
 
-          var childData1 = childSnapshot.val();
-          if (childData1.email == this.account.email) {
-            this.user._user = childData1.name;
-          }
-                
-        });
+        var childData1 = childSnapshot.val();
+        if (childData1.email == this.account.email) {
+          this.user._user = childData1.name;
+        }
+              
+      });
     });
   }
 

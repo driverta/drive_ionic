@@ -4,22 +4,51 @@ import { IonicPage, ModalController, NavController } from 'ionic-angular';
 import { Item } from '../../models/item';
 import { Items } from '../../providers/providers';
 
+import firebase from 'firebase';
+
+import { User } from '../../providers/providers';
+
 @IonicPage()
 @Component({
   selector: 'page-exercises',
   templateUrl: 'exercises.html'
 })
 export class ListMasterPage {
-  currentItems: Item[];
+  currentItems: [{name: "", about: ""}];
+  username = "test";
 
-  constructor(public navCtrl: NavController, public items: Items, public modalCtrl: ModalController) {
-    this.currentItems = this.items.query();
+  name = ["Lift 1"];
+  about = ["nothing"];
+  
+
+  constructor(
+    public navCtrl: NavController,
+    public user: User,
+    public items: Items,
+    public modalCtrl: ModalController) {
+
+    
   }
 
   /**
    * The view loaded, let's query our items for the list
    */
   ionViewDidLoad() {
+    this.username = this.user._user
+    var query1 = firebase.database().ref('/' + this.username + '/exercises');
+      
+    query1.once("value").then( snapshot => {
+        snapshot.forEach( childSnapshot => {
+
+          var childData1 = childSnapshot.val();
+          alert(childData1.name);
+          //this.currentItems.push({name: childData1.name, about: childData1.about});
+          //this.name.push(childData1.name);
+          //this.about.push(childData1.about);
+                
+        });
+      
+    });
   }
 
   /**

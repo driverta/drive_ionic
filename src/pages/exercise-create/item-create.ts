@@ -4,6 +4,10 @@ import { Camera } from '@ionic-native/camera';
 import { IonicPage, NavController, ViewController } from 'ionic-angular';
 import { CustomRecordsPage } from '../custom-records/custom-records';
 
+import firebase from 'firebase';
+
+import { User } from '../../providers/providers';
+
 @IonicPage()
 @Component({
   selector: 'page-item-create',
@@ -17,12 +21,19 @@ export class ItemCreatePage {
   isReadyToSave: boolean;
 
   item: any;
+  exercise: { name: string, about: string} = {name: "",about: ""};
+  username = "test";
 
   form: FormGroup;
 
-  constructor(public navCtrl: NavController, public viewCtrl: ViewController, formBuilder: FormBuilder, public camera: Camera) {
+  constructor(
+    public navCtrl: NavController, 
+    public user: User,
+    public viewCtrl: ViewController, 
+    formBuilder: FormBuilder, 
+    public camera: Camera) {
+
     this.form = formBuilder.group({
-      profilePic: [''],
       name: ['', Validators.required],
       about: ['']
     });
@@ -57,5 +68,11 @@ export class ItemCreatePage {
   done() {
     if (!this.form.valid) { return; }
     this.viewCtrl.dismiss(this.form.value);
+  }
+
+  saveExercise() {
+    this.username = this.user._user
+    var yo = firebase.database().ref('/' + this.username + '/exercises');
+    yo.push(this.exercise);
   }
 }

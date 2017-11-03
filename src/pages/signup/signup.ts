@@ -22,6 +22,10 @@ export class SignupPage {
     password: 'test'
   };
 
+  starterBench = {name: 'Bench Press', about: 'Chest'}
+  starterSquat = {name: 'Squat', about: 'Legs'}
+  starterDead = {name: 'Deadlift', about: 'Back'}
+
   bro: string = "bro";
 
   // Our translated text strings
@@ -39,10 +43,17 @@ export class SignupPage {
   }
 
   doSignUp() {
-    var yo = firebase.database().ref('/user');
+    var yo = firebase.database().ref('/' + this.account.name + '/info');
     yo.push(this.account);
+
+    var doe = firebase.database().ref('/' + this.account.name + '/exercises');
+    doe.push(this.starterBench);
+    doe.push(this.starterSquat);
+    doe.push(this.starterDead);
+
     firebase.auth().createUserWithEmailAndPassword(this.account.email, this.account.password)
       .then(value => {
+        this.user._user = this.account.name;
         this.navCtrl.push(MainPage);
       });
   }
