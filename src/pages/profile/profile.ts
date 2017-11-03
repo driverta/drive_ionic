@@ -57,7 +57,7 @@ export class SettingsPage {
   }
 
   _buildForm() {
-    this.username = this.user._user
+    //this.username = this.user._user
     let group: any = {
       profilePic: [''],
       option1: [this.options.option1],

@@ -43,8 +43,8 @@ export class SignupPage {
   }
 
   doSignUp() {
-    var yo = firebase.database().ref('/' + this.account.name + '/info');
-    yo.push(this.account);
+    var bro = firebase.database().ref('/users');
+    bro.push(this.account);
 
     var doe = firebase.database().ref('/' + this.account.name + '/exercises');
     doe.push(this.starterBench);

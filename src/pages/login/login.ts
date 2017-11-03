@@ -41,7 +41,7 @@ export class LoginPage {
   }
 
   setUser() {
-    var query1 = firebase.database().ref("/user");
+    var query1 = firebase.database().ref("/users");
 
     query1.once("value").then( snapshot => {
       
