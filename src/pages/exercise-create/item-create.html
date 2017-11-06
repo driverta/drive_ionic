@@ -45,4 +45,9 @@
   <ion-item-sliding>
     <button ion-item (click)="goToOtherPage()">Custom Records</button>
   </ion-item-sliding>
+  <table>
+    <tr *ngFor="let x of exercise.records">
+      <td>{{x}}</td>
+    </tr>
+  </table>
 </ion-content>
