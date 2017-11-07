@@ -19,7 +19,8 @@ import { Records } from '../../providers/providers';
 })
 export class CustomRecordsPage {
 
-  newRecord = {reps: 11, weight: 0, oneRM: 0, records: 0};
+  //newRecord = {reps: 11, weight: 0, oneRM: 0, records: 0};
+  newRep = 11;
   sameRecord = false;
 
 	private getDataObserver: any;
@@ -66,7 +67,7 @@ export class CustomRecordsPage {
   
   addRecord() {
     this.records._records.forEach( (value, index) => {
-      if (value.reps == this.newRecord.reps) {
+      if (value.reps == this.newRep) {
         this.sameRecord = true;
       }
     });
@@ -76,7 +77,9 @@ export class CustomRecordsPage {
     else if (this.sameRecord) {
       this.duplicateAlert();
     } else {
-      var n = this.newRecord
+      //alert(newRep);
+
+      var n = {reps: this.newRep, weight: 0, oneRM: 0, records: 0}
       this.records._records.push(n);
     }
     this.records._records = this.records._records.sort((a, b) => a.reps - b.reps);
