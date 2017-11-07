@@ -19,7 +19,7 @@ import { Records } from '../../providers/providers';
 })
 export class CustomRecordsPage {
 
-  newRecord = 11;
+  newRecord = {reps: 11, weight: 0, oneRM: 0, records: 0};
   sameRecord = false;
 
 	private getDataObserver: any;
@@ -57,34 +57,33 @@ export class CustomRecordsPage {
   }
 
   deleteRec(x) {
-  	for (let i of this.records._records) {
-  		if (this.records._records[i] == x) {
-  			this.records._records.splice(i, 1);
-  		}
-  	}
+    this.records._records.forEach( (value, index) => {
+      if (value.reps == x.reps) {
+        this.records._records.splice(index, 1);
+      }
+    });
   }
-
+  
   addRecord() {
-    for (let i of this.records._records) {
-      if (this.records._records[i] == this.newRecord) {
+    this.records._records.forEach( (value, index) => {
+      if (value.reps == this.newRecord.reps) {
         this.sameRecord = true;
       }
-    }
+    });
     if (this.records._records.length == 10){
       this.tooManyAlert();
     }
     else if (this.sameRecord) {
       this.duplicateAlert();
     } else {
-      this.records._records.push(this.newRecord);
+      var n = this.newRecord
+      this.records._records.push(n);
     }
-    this.records._records = this.records._records.sort((a, b) => a - b);
+    this.records._records = this.records._records.sort((a, b) => a.reps - b.reps);
     this.sameRecord = false;
   }
 
-  saveRecord(_records: Records) {
-    this.navCtrl.push('ItemDetailPage', {
-      //_records: Records
-    });
+  saveRecord() {
+    this.navCtrl.push('ItemDetailPage');
   }
 }

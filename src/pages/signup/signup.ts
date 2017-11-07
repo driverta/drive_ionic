@@ -22,9 +22,51 @@ export class SignupPage {
     password: 'test'
   };
 
-  starterBench = {name: 'Bench Press', about: 'Chest'}
-  starterSquat = {name: 'Squat', about: 'Legs'}
-  starterDead = {name: 'Deadlift', about: 'Back'}
+  starterBench = {
+    name: 'Bench Press', 
+    about: 'Chest', 
+    records: [
+      { reps: 1, weight: 0, oneRM: 0, records: 0 },
+      { reps: 2, weight: 0, oneRM: 0, records: 0 },
+      { reps: 3, weight: 0, oneRM: 0, records: 0 },
+      { reps: 4, weight: 0, oneRM: 0, records: 0 },
+      { reps: 5, weight: 0, oneRM: 0, records: 1 },
+      { reps: 6, weight: 0, oneRM: 0, records: 0 },
+      { reps: 8, weight: 0, oneRM: 0, records: 0 },
+      { reps: 10, weight: 0, oneRM: 0, records: 1 },
+      { reps: 12, weight: 0, oneRM: 0, records: 0 },
+      { reps: 15, weight: 0, oneRM: 0, records: 0 }
+    ]}
+  starterSquat = {
+    name: 'Squat', 
+    about: 'Legs', 
+    records: [
+      { reps: 1, weight: 0, oneRM: 0, records: 0 },
+      { reps: 2, weight: 0, oneRM: 0, records: 0 },
+      { reps: 3, weight: 0, oneRM: 0, records: 0 },
+      { reps: 4, weight: 0, oneRM: 0, records: 0 },
+      { reps: 5, weight: 0, oneRM: 0, records: 1 },
+      { reps: 6, weight: 0, oneRM: 0, records: 0 },
+      { reps: 8, weight: 0, oneRM: 0, records: 0 },
+      { reps: 10, weight: 0, oneRM: 0, records: 1 },
+      { reps: 12, weight: 0, oneRM: 0, records: 0 },
+      { reps: 15, weight: 0, oneRM: 0, records: 0 }
+    ]}
+  starterDead = {
+    name: 'Deadlift', 
+    about: 'Back', 
+    records: [
+      { reps: 1, weight: 0, oneRM: 0, records: 0 },
+      { reps: 2, weight: 0, oneRM: 0, records: 0 },
+      { reps: 3, weight: 0, oneRM: 0, records: 0 },
+      { reps: 4, weight: 0, oneRM: 0, records: 0 },
+      { reps: 5, weight: 0, oneRM: 0, records: 1 },
+      { reps: 6, weight: 0, oneRM: 0, records: 0 },
+      { reps: 8, weight: 0, oneRM: 0, records: 0 },
+      { reps: 10, weight: 0, oneRM: 0, records: 1 },
+      { reps: 12, weight: 0, oneRM: 0, records: 0 },
+      { reps: 15, weight: 0, oneRM: 0, records: 0 }
+    ]}
 
   bro: string = "bro";
 
@@ -39,7 +81,6 @@ export class SignupPage {
     this.translateService.get('SIGNUP_ERROR').subscribe((value) => {
       this.signupErrorString = value;
     })
-
   }
 
   doSignUp() {

@@ -1,7 +1,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>{{ item.name }}</ion-title>
+    <ion-title>{{ exercise.about }}</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -79,7 +79,7 @@
 	      			<th>1RM</th>
 	      			<th>Records</th>
 	      		</tr>
-	      		<tr *ngFor="let x of records" [ngClass]="{red: x.records == 0, green: x.records > 0}">
+	      		<tr *ngFor="let x of i" [ngClass]="{red: x.records == 0, green: x.records > 0}">
 	      			<td class="bold">{{x.reps}}</td>
 	      			<td>{{x.weight}}</td>
 	      			<td>{{x.oneRM}}</td>

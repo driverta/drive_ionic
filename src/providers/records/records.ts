@@ -11,7 +11,18 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class Records {
 
-	_records = [1,2,3,4,5,6,8,10,12,15];
+	_records = [
+    { reps: 1, weight: 0, oneRM: 0, records: 0 },
+    { reps: 2, weight: 0, oneRM: 0, records: 0 },
+    { reps: 3, weight: 0, oneRM: 0, records: 0 },
+    { reps: 4, weight: 0, oneRM: 0, records: 0 },
+    { reps: 5, weight: 185, oneRM: 225, records: 1 },
+    { reps: 6, weight: 0, oneRM: 0, records: 0 },
+    { reps: 8, weight: 0, oneRM: 0, records: 0 },
+    { reps: 10, weight: 135, oneRM: 225, records: 1 },
+    { reps: 12, weight: 0, oneRM: 0, records: 0 },
+    { reps: 15, weight: 0, oneRM: 0, records: 0 }
+  ];
 
   constructor(public http: Http) {
    

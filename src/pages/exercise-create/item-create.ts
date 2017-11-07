@@ -64,7 +64,18 @@ export class ItemCreatePage {
    * The user cancelled, so we dismiss without sending data back.
    */
   cancel() {
-    this.records._records = [1,2,3,4,5,6,8,10,12,15];
+    this.records._records = [
+      { reps: 1, weight: 0, oneRM: 0, records: 0 },
+      { reps: 2, weight: 0, oneRM: 0, records: 0 },
+      { reps: 3, weight: 0, oneRM: 0, records: 0 },
+      { reps: 4, weight: 0, oneRM: 0, records: 0 },
+      { reps: 5, weight: 0, oneRM: 0, records: 0 },
+      { reps: 6, weight: 0, oneRM: 0, records: 0 },
+      { reps: 8, weight: 0, oneRM: 0, records: 0 },
+      { reps: 10, weight: 0, oneRM: 0, records: 0 },
+      { reps: 12, weight: 0, oneRM: 0, records: 0 },
+      { reps: 15, weight: 0, oneRM: 0, records: 0 }
+    ];
     this.viewCtrl.dismiss();
   }
 
@@ -74,7 +85,18 @@ export class ItemCreatePage {
    */
   done() {
     if (!this.form.valid) { return; }
-    this.records._records = [1,2,3,4,5,6,8,10,12,15];
+    this.records._records = [
+      { reps: 1, weight: 0, oneRM: 0, records: 0 },
+      { reps: 2, weight: 0, oneRM: 0, records: 0 },
+      { reps: 3, weight: 0, oneRM: 0, records: 0 },
+      { reps: 4, weight: 0, oneRM: 0, records: 0 },
+      { reps: 5, weight: 0, oneRM: 0, records: 0 },
+      { reps: 6, weight: 0, oneRM: 0, records: 0 },
+      { reps: 8, weight: 0, oneRM: 0, records: 0 },
+      { reps: 10, weight: 0, oneRM: 0, records: 0 },
+      { reps: 12, weight: 0, oneRM: 0, records: 0 },
+      { reps: 15, weight: 0, oneRM: 0, records: 0 }
+    ];
     this.viewCtrl.dismiss(this.form.value);
   }
 

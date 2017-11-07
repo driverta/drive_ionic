@@ -15,7 +15,7 @@
 
 <ion-content padding>
 	<div class="bigRec">
-		<p class="addRec">Add Record: <input [(ngModel)]="newRecord" class="recText" type="text" value="11"><input (click)="addRecord();" type="submit" id="add" value="+"></p>
+		<p class="addRec">Add Record: <input [(ngModel)]="newRecord.reps" class="recText" type="text" value="11"><input (click)="addRecord();" type="submit" id="add" value="+"></p>
 		<br>
 		<table>
 			<tr>
@@ -23,7 +23,7 @@
 				<th></th>
 			</tr>
 			<tr *ngFor="let x of records._records">
-				<td >{{x}}</td>
+				<td >{{x.reps}}</td>
 				<td>
 					<input (click)="deleteRec(x);" type="button" value="X" class="remove">
 				</td>
