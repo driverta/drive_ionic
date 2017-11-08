@@ -36,7 +36,8 @@ export class SignupPage {
       { reps: 10, weight: 0, oneRM: 0, records: 1 },
       { reps: 12, weight: 0, oneRM: 0, records: 0 },
       { reps: 15, weight: 0, oneRM: 0, records: 0 }
-    ]}
+    ],
+    history: [{ date: 0, reps: 0, weight: 0, oneRM: 0 }]};
   starterSquat = {
     name: 'Squat', 
     about: 'Legs', 
@@ -51,7 +52,8 @@ export class SignupPage {
       { reps: 10, weight: 0, oneRM: 0, records: 1 },
       { reps: 12, weight: 0, oneRM: 0, records: 0 },
       { reps: 15, weight: 0, oneRM: 0, records: 0 }
-    ]}
+    ],
+    history: [{ date: 0, reps: 0, weight: 0, oneRM: 0 }]};
   starterDead = {
     name: 'Deadlift', 
     about: 'Back', 
@@ -66,7 +68,8 @@ export class SignupPage {
       { reps: 10, weight: 0, oneRM: 0, records: 1 },
       { reps: 12, weight: 0, oneRM: 0, records: 0 },
       { reps: 15, weight: 0, oneRM: 0, records: 0 }
-    ]}
+    ],
+    history: [{ date: 0, reps: 0, weight: 0, oneRM: 0 }]};
 
   bro: string = "bro";
 
@@ -84,13 +87,22 @@ export class SignupPage {
   }
 
   doSignUp() {
-    var bro = firebase.database().ref('/users');
-    bro.push(this.account);
+    var lifter = firebase.database().ref('/users');
+    lifter.push(this.account);
 
-    var doe = firebase.database().ref('/' + this.account.name + '/exercises');
-    doe.push(this.starterBench);
-    doe.push(this.starterSquat);
-    doe.push(this.starterDead);
+    var setX = firebase.database().ref('/' + this.account.name);
+    setX.child('exercises').set('Bench');
+    setX.child('exercises').set('Squat');
+    setX.child('exercises').set('Deadlift');
+
+    var b = firebase.database().ref('/' + this.account.name + '/exercises/Bench');
+    b.set(this.starterBench);
+
+    var s = firebase.database().ref('/' + this.account.name + '/exercises/Squat');
+    s.set(this.starterSquat);
+
+    var d = firebase.database().ref('/' + this.account.name + '/exercises/Deadlift');
+    d.set(this.starterDead);
 
     firebase.auth().createUserWithEmailAndPassword(this.account.email, this.account.password)
       .then(value => {

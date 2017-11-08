@@ -102,8 +102,10 @@ export class ItemCreatePage {
 
   saveExercise() {
     this.username = this.user._user
-    var yo = firebase.database().ref('/' + this.username + '/exercises');
-    yo.push(this.exercise);
+
+    var setX = firebase.database().ref('/' + this.username + '/exercises');
+    setX.child(this.exercise.name).set(this.exercise);
+
   }
 
 
