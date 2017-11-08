@@ -3,11 +3,13 @@ import { Items } from '../mocks/providers/items';
 import { Settings } from './settings/settings';
 import { User } from './user/user';
 import { Records } from './records/records';
+import { Levels } from './levels/levels';
 
 export {
     Api,
     Items,
     Settings,
     User,
-    Records
+    Records,
+    Levels
 };

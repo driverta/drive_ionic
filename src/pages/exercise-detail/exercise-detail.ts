@@ -23,10 +23,7 @@ export class ItemDetailPage {
   username: any;
   segment: any;
 
-  history = [
-    { date: '9-20-17', weight: 135, reps: 10, oneRM: 225},
-    { date: '9-21-17', weight: 185, reps: 5, oneRM: 225}
-  ]
+  history = [];
 
   constructor(public navCtrl: NavController,
     navParams: NavParams,
@@ -38,16 +35,35 @@ export class ItemDetailPage {
   }
 
   ionViewDidLoad() {
-    this.myRecords = this.exercise.records
+    this.username = this.user._user
+    this.myRecords = this.exercise.records;
+    this.history = [];
+
+    var query1 = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '/history');
+
+    query1.once("value").then( snapshot => {
+      
+      
+      snapshot.forEach( childSnapshot => {
+        
+        var childData1 = childSnapshot.val();
+        
+        this.history.push(childData1);
+              
+      });
+      
+    });
+
   }
 
   addSet() {
     var date = new Date().toISOString();
     var oneRM = this.weight / (1.0278- (this.reps * .0278));
     var set = { date: date, weight: this.weight, reps: this.reps, oneRM: oneRM}
-    this.username = this.user._user
-    alert(this.exercise);
-    var yo = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise + '/history');
+    
+    //alert(this.exercise);
+    var yo = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '/history');
     yo.push(set);
+    this.ionViewDidLoad();
   }
 }

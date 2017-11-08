@@ -46,7 +46,7 @@ export class LoginPage {
     query1.once("value").then( snapshot => {
       
       snapshot.forEach( childSnapshot => {
-
+        
         var childData1 = childSnapshot.val();
         if (childData1.email == this.account.email) {
           this.user._user = childData1.name;
