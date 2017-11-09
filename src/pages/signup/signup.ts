@@ -30,14 +30,14 @@ export class SignupPage {
       { reps: 2, weight: 0, oneRM: 0, records: 0 },
       { reps: 3, weight: 0, oneRM: 0, records: 0 },
       { reps: 4, weight: 0, oneRM: 0, records: 0 },
-      { reps: 5, weight: 0, oneRM: 0, records: 1 },
+      { reps: 5, weight: 0, oneRM: 0, records: 0 },
       { reps: 6, weight: 0, oneRM: 0, records: 0 },
       { reps: 8, weight: 0, oneRM: 0, records: 0 },
-      { reps: 10, weight: 0, oneRM: 0, records: 1 },
+      { reps: 10, weight: 0, oneRM: 0, records: 0 },
       { reps: 12, weight: 0, oneRM: 0, records: 0 },
       { reps: 15, weight: 0, oneRM: 0, records: 0 }
-    ],
-    history: [{ date: 0, reps: 0, weight: 0, oneRM: 0 }]};
+    ]};
+    //history: [{ date: 0, reps: 0, weight: 0, oneRM: 0, gains: 0 }]};
   starterSquat = {
     name: 'Squat', 
     about: 'Legs', 
@@ -46,14 +46,14 @@ export class SignupPage {
       { reps: 2, weight: 0, oneRM: 0, records: 0 },
       { reps: 3, weight: 0, oneRM: 0, records: 0 },
       { reps: 4, weight: 0, oneRM: 0, records: 0 },
-      { reps: 5, weight: 0, oneRM: 0, records: 1 },
+      { reps: 5, weight: 0, oneRM: 0, records: 0 },
       { reps: 6, weight: 0, oneRM: 0, records: 0 },
       { reps: 8, weight: 0, oneRM: 0, records: 0 },
-      { reps: 10, weight: 0, oneRM: 0, records: 1 },
+      { reps: 10, weight: 0, oneRM: 0, records: 0 },
       { reps: 12, weight: 0, oneRM: 0, records: 0 },
       { reps: 15, weight: 0, oneRM: 0, records: 0 }
     ],
-    history: [{ date: 0, reps: 0, weight: 0, oneRM: 0 }]};
+    history: [{ date: 0, reps: 0, weight: 0, oneRM: 0, gains: 0 }]};
   starterDead = {
     name: 'Deadlift', 
     about: 'Back', 
@@ -62,14 +62,14 @@ export class SignupPage {
       { reps: 2, weight: 0, oneRM: 0, records: 0 },
       { reps: 3, weight: 0, oneRM: 0, records: 0 },
       { reps: 4, weight: 0, oneRM: 0, records: 0 },
-      { reps: 5, weight: 0, oneRM: 0, records: 1 },
+      { reps: 5, weight: 0, oneRM: 0, records: 0 },
       { reps: 6, weight: 0, oneRM: 0, records: 0 },
       { reps: 8, weight: 0, oneRM: 0, records: 0 },
-      { reps: 10, weight: 0, oneRM: 0, records: 1 },
+      { reps: 10, weight: 0, oneRM: 0, records: 0 },
       { reps: 12, weight: 0, oneRM: 0, records: 0 },
       { reps: 15, weight: 0, oneRM: 0, records: 0 }
     ],
-    history: [{ date: 0, reps: 0, weight: 0, oneRM: 0 }]};
+    history: [{ date: 0, reps: 0, weight: 0, oneRM: 0, gains: 0 }]};
 
   bro: string = "bro";
 
@@ -91,11 +91,11 @@ export class SignupPage {
     lifter.push(this.account);
 
     var setX = firebase.database().ref('/' + this.account.name);
-    setX.child('exercises').set('Bench');
+    setX.child('exercises').set('Bench Press');
     setX.child('exercises').set('Squat');
     setX.child('exercises').set('Deadlift');
 
-    var b = firebase.database().ref('/' + this.account.name + '/exercises/Bench');
+    var b = firebase.database().ref('/' + this.account.name + '/exercises/Bench Press');
     b.set(this.starterBench);
 
     var s = firebase.database().ref('/' + this.account.name + '/exercises/Squat');
@@ -103,6 +103,14 @@ export class SignupPage {
 
     var d = firebase.database().ref('/' + this.account.name + '/exercises/Deadlift');
     d.set(this.starterDead);
+
+    /* Tried to set History without a zero value but it ovverrides other exercise data
+
+    var setHistory = firebase.database().ref('/' + this.account.name + '/exercises');
+    setHistory.child('Bench').set('history');
+    setHistory.child('Squat').set('history');
+    setHistory.child('Deadlift').set('history');
+    */
 
     firebase.auth().createUserWithEmailAndPassword(this.account.email, this.account.password)
       .then(value => {

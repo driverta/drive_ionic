@@ -44,7 +44,7 @@ export class ListMasterPage {
       snapshot.forEach( childSnapshot => {
 
         var childData1 = childSnapshot.val();
-        //alert(childData1.name);
+        
         this.lifts.push(childData1);
         
       });

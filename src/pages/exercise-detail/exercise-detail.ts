@@ -19,9 +19,12 @@ export class ItemDetailPage {
 	progress = 75;
   weight = 100;
   reps = 10;
+  gains = 0;
   myRecords: any;
   username: any;
   segment: any;
+  loop = 0;
+  loop2 = 0;
 
   history = [];
 
@@ -53,13 +56,46 @@ export class ItemDetailPage {
       });
       
     });
+    
+    var query2 = firebase.database().ref('/' + this.username + '/exercises');
+    query2.once("value").then( snapshot => {
+      //this.loop = 0;
+      snapshot.forEach( childSnapshot => {
+        //this.loop2 = 0;
+        this.loop++
+        var childData2 = childSnapshot.val();
+        var checkX = childData2.name;
+        //alert(checkX);
+        
+        var query3 = firebase.database().ref('/' + this.username + '/exercises/' + checkX + '/history');
+        query3.once("value").then( snapshot2 => {
+          snapshot2.forEach( childSnapshot2 => {
+            this.loop2++
+            var childData3 = childSnapshot2.val()
+            var setGains = childData3.gains;
 
+            this.gains = this.gains + setGains;
+            //alert(setGains);
+            
+            if (this.loop == snapshot.numChildren() && this.loop2 == snapshot2.numChildren()) {
+              this.setLevel();
+            }
+            
+          })
+        })
+      })
+    })
+  }
+
+  setLevel () {
+    alert(this.gains)
   }
 
   addSet() {
     var date = new Date().toISOString();
     var oneRM = this.weight / (1.0278- (this.reps * .0278));
-    var set = { date: date, weight: this.weight, reps: this.reps, oneRM: oneRM}
+    var gains = 5;
+    var set = { date: date, weight: this.weight, reps: this.reps, oneRM: oneRM, gains: gains}
     
     //alert(this.exercise);
     var yo = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '/history');
