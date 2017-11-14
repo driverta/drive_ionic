@@ -82,7 +82,7 @@
 	      		<tr *ngFor="let x of myRecords" [ngClass]="{red: x.records == 0, green: x.records > 0}">
 	      			<td class="bold">{{x.reps}}</td>
 	      			<td>{{x.weight}}</td>
-	      			<td>{{x.oneRM}}</td>
+	      			<td>{{x.oneRM.toFixed(1)}}</td>
 	      			<td>{{x.records}}</td>
 	      		</tr>
 	      	  </table>

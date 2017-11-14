@@ -22,12 +22,12 @@ export class ItemDetailPage {
   weight = 100;
   reps = 10;
   gains = 0;
-  myRecords: any;
   username: any;
   segment: any;
   loop = 0;
 
   history = [];
+  myRecords = [];
 
   constructor(public navCtrl: NavController,
     navParams: NavParams,
@@ -41,26 +41,19 @@ export class ItemDetailPage {
 
   ionViewDidLoad() {
     this.username = this.user._user
-    this.myRecords = this.exercise.records;
+    this.myRecords = [];
     this.history = [];
 
-    var query1 = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '/history');
-
-    query1.once("value").then( snapshot => {
-      
-      
+    var queryHistory = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '/history');
+    queryHistory.once("value").then( snapshot => {
       snapshot.forEach( childSnapshot => {
-        
         var childData1 = childSnapshot.val();
-        
-        this.history.push(childData1);
-              
+        this.history.push(childData1);     
       });
-      
     });
     
-    var query2 = firebase.database().ref('/' + this.username + '/gains');
-    query2.once("value").then( snapshot => {
+    var queryGains = firebase.database().ref('/' + this.username + '/gains');
+    queryGains.once("value").then( snapshot => {
       this.loop = 0;
       this.gains = 0;
       snapshot.forEach( childSnapshot => {
@@ -72,6 +65,14 @@ export class ItemDetailPage {
           this.setLevel()
       })
     })
+
+    var queryRecords = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '/records');
+    queryRecords.once("value").then( snapshot => {
+      snapshot.forEach( childSnapshot => {
+        var childData1 = childSnapshot.val();
+        this.myRecords.push(childData1);     
+      });
+    });
     
   }
 
@@ -90,14 +91,30 @@ export class ItemDetailPage {
     var date = new Date().toISOString();
     var oneRM = this.weight / (1.0278- (this.reps * .0278));
     var gains = 5;
+
+    this.myRecords.forEach( (value, index) => {
+      if (this.reps == value.reps) {
+        if (this.weight > value.weight) {
+          this.myRecords[index].weight = this.weight;
+          this.myRecords[index].oneRM = oneRM;
+          this.myRecords[index].records++;
+          gains = 10;
+        }
+      }
+    });
+
     var set = { date: date, weight: this.weight, reps: this.reps, oneRM: oneRM, gains: gains};
     var g = { date: date, gains: gains};
-    //alert(this.exercise);
+    
     var history = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '/history');
     history.push(set);
 
     var points = firebase.database().ref('/' + this.username + '/gains');
     points.push(g);
+
+    var records = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '/records');
+    records.set(this.myRecords);
+
     this.ionViewDidLoad();
   }
 }
