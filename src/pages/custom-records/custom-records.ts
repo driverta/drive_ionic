@@ -90,4 +90,3 @@ export class CustomRecordsPage {
     this.navCtrl.push('ItemDetailPage');
   }
 }
-

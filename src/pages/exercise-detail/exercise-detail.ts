@@ -4,6 +4,8 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Items } from '../../providers/providers';
 import { Records } from '../../providers/providers';
 import { User } from '../../providers/providers';
+import { Levels } from '../../providers/providers';
+
 import firebase from 'firebase';
 
 @IonicPage()
@@ -24,7 +26,6 @@ export class ItemDetailPage {
   username: any;
   segment: any;
   loop = 0;
-  loop2 = 0;
 
   history = [];
 
@@ -32,7 +33,8 @@ export class ItemDetailPage {
     navParams: NavParams,
     items: Items,
     public user: User,
-    private records: Records) {
+    private records: Records,
+    public levels: Levels) {
 
     this.exercise = navParams.get('item') || items.defaultItem;
   }
@@ -57,49 +59,45 @@ export class ItemDetailPage {
       
     });
     
-    var query2 = firebase.database().ref('/' + this.username + '/exercises');
+    var query2 = firebase.database().ref('/' + this.username + '/gains');
     query2.once("value").then( snapshot => {
-      //this.loop = 0;
+      this.loop = 0;
+      this.gains = 0;
       snapshot.forEach( childSnapshot => {
-        //this.loop2 = 0;
         this.loop++
         var childData2 = childSnapshot.val();
-        var checkX = childData2.name;
-        //alert(checkX);
-        
-        var query3 = firebase.database().ref('/' + this.username + '/exercises/' + checkX + '/history');
-        query3.once("value").then( snapshot2 => {
-          snapshot2.forEach( childSnapshot2 => {
-            this.loop2++
-            var childData3 = childSnapshot2.val()
-            var setGains = childData3.gains;
-
-            this.gains = this.gains + setGains;
-            //alert(setGains);
-            
-            if (this.loop == snapshot.numChildren() && this.loop2 == snapshot2.numChildren()) {
-              this.setLevel();
-            }
-            
-          })
-        })
+        var gains = childData2.gains;
+        this.gains = this.gains + gains
+        if ( snapshot.numChildren() == this.loop )
+          this.setLevel()
       })
     })
+    
   }
 
   setLevel () {
-    alert(this.gains)
+    this.levels._levels.forEach( ( value, index) => {
+      if (this.gains > value.totalPoints) {
+        this.xcurrent = this.gains - value.totalPoints;
+        this.xlevel = value.level;
+        this.xtotal = value.levelPoints;
+        this.progress = this.xcurrent / this.xtotal * 100
+      }
+    });
   }
 
   addSet() {
     var date = new Date().toISOString();
     var oneRM = this.weight / (1.0278- (this.reps * .0278));
     var gains = 5;
-    var set = { date: date, weight: this.weight, reps: this.reps, oneRM: oneRM, gains: gains}
-    
+    var set = { date: date, weight: this.weight, reps: this.reps, oneRM: oneRM, gains: gains};
+    var g = { date: date, gains: gains};
     //alert(this.exercise);
-    var yo = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '/history');
-    yo.push(set);
+    var history = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '/history');
+    history.push(set);
+
+    var points = firebase.database().ref('/' + this.username + '/gains');
+    points.push(g);
     this.ionViewDidLoad();
   }
 }
