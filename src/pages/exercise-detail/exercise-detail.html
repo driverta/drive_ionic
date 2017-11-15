@@ -40,6 +40,13 @@
 	    		<h2><input (click)="addSet()" type="submit" id="add" value="+"></h2>
 	    		<br>
 	    	</div>
+	    	<br>
+	    	<br>
+	    	<div *ngIf="bool" class="animation">
+	    		<div class="animation2">
+	    			<h1>NEW RECORD!</h1>
+	    		</div>
+	    	</div>
 	    </ion-item>
 	  </ion-list>
 
@@ -79,7 +86,7 @@
 	      			<th>1RM</th>
 	      			<th>Records</th>
 	      		</tr>
-	      		<tr *ngFor="let x of myRecords" [ngClass]="{red: x.records == 0, green: x.records > 0}">
+	      		<tr *ngFor="let x of myRecords" [ngClass]="{red: x.records == 0, green: x.records > 0, silver: x.records > 4 && x.records < 10, gold: x.records > 9 }">
 	      			<td class="bold">{{x.reps}}</td>
 	      			<td>{{x.weight}}</td>
 	      			<td>{{x.oneRM.toFixed(1)}}</td>

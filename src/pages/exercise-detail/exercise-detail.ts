@@ -23,8 +23,9 @@ export class ItemDetailPage {
   reps = 10;
   gains = 0;
   username: any;
-  segment: any;
+  segment = "set";
   loop = 0;
+  bool = false;
 
   history = [];
   myRecords = [];
@@ -91,6 +92,7 @@ export class ItemDetailPage {
     var date = new Date().toISOString();
     var oneRM = this.weight / (1.0278- (this.reps * .0278));
     var gains = 5;
+    this.bool = false;
 
     this.myRecords.forEach( (value, index) => {
       if (this.reps == value.reps) {
@@ -99,9 +101,14 @@ export class ItemDetailPage {
           this.myRecords[index].oneRM = oneRM;
           this.myRecords[index].records++;
           gains = 10;
+          this.bool = true;
         }
       }
     });
+
+    setTimeout(() => {
+      this.bool = false;
+    }, 2000);
 
     var set = { date: date, weight: this.weight, reps: this.reps, oneRM: oneRM, gains: gains};
     var g = { date: date, gains: gains};

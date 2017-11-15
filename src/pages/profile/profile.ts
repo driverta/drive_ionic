@@ -6,6 +6,9 @@ import { Camera } from '@ionic-native/camera';
 
 import { Settings } from '../../providers/providers';
 import { User } from '../../providers/providers';
+import { Levels } from '../../providers/providers';
+
+import firebase from 'firebase';
 
 /**
  * The Settings page is a simple form that syncs with a Settings provider
@@ -27,6 +30,8 @@ export class SettingsPage {
   progress = 75;
   username = "test"
   rank = "frail body"
+  loop = 0;
+  gains = 0;
 
   options: any;
 
@@ -53,11 +58,11 @@ export class SettingsPage {
     public navParams: NavParams,
     public translate: TranslateService,
     public camera: Camera,
-    private user: User) {
+    private user: User,
+    public levels: Levels) {
   }
 
   _buildForm() {
-    this.username = this.user._user
     let group: any = {
       profilePic: [''],
       option1: [this.options.option1],
@@ -83,8 +88,34 @@ export class SettingsPage {
   }
 
   ionViewDidLoad() {
+    this.username = this.user._user
     // Build an empty form for the template to render
     this.form = this.formBuilder.group({});
+
+    var queryGains = firebase.database().ref('/' + this.username + '/gains');
+    queryGains.once("value").then( snapshot => {
+      this.loop = 0;
+      this.gains = 0;
+      snapshot.forEach( childSnapshot => {
+        this.loop++
+        var childData2 = childSnapshot.val();
+        var gains = childData2.gains;
+        this.gains = this.gains + gains
+        if ( snapshot.numChildren() == this.loop )
+          this.setLevel()
+      })
+    })
+  }
+
+  setLevel () {
+    this.levels._levels.forEach( ( value, index) => {
+      if (this.gains > value.totalPoints) {
+        this.xcurrent = this.gains - value.totalPoints;
+        this.xlevel = value.level;
+        this.xtotal = value.levelPoints;
+        this.progress = this.xcurrent / this.xtotal * 100
+      }
+    });
   }
 
   getPicture() {
@@ -120,6 +151,7 @@ export class SettingsPage {
   }
 
   ionViewWillEnter() {
+    this.ionViewDidLoad();
     // Build an empty form for the template to render
     this.form = this.formBuilder.group({});
 
