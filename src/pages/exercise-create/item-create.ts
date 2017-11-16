@@ -29,13 +29,14 @@ export class ItemCreatePage {
   form: FormGroup;
 
   constructor(
-    public navCtrl: NavController, 
+    public navCtrl: NavController,
     public user: User,
     public viewCtrl: ViewController, 
     formBuilder: FormBuilder, 
     public camera: Camera,
     navParams: NavParams,
     private records: Records) {
+
 
     this.form = formBuilder.group({
       name: ['', Validators.required],

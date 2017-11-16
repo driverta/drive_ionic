@@ -20,7 +20,7 @@ export class ListMasterPage {
 
   names = ["Lift 1"];
   about = ["nothing"];
-  
+
 
   constructor(
     public navCtrl: NavController,
@@ -28,7 +28,7 @@ export class ListMasterPage {
     public items: Items,
     public modalCtrl: ModalController) {
 
-    
+
   }
 
   /**
@@ -38,17 +38,17 @@ export class ListMasterPage {
     this.lifts = [];
     this.username = this.user._user
     var query1 = firebase.database().ref('/' + this.username + '/exercises');
-      
+
     query1.once("value").then( snapshot => {
-        
+
       snapshot.forEach( childSnapshot => {
 
         var childData1 = childSnapshot.val();
         
         this.lifts.push(childData1);
-        
+
       });
-      
+
     });
   }
 
@@ -70,7 +70,25 @@ export class ListMasterPage {
    * Delete an item from the list of items.
    */
   deleteItem(item) {
-    this.items.delete(item);
+    this.username = this.user._user
+    var name = item['name'];
+    var query1 = firebase.database().ref('/' + this.username + '/exercises');
+    //alert(name);
+    query1.once("value").then( snapshot => {
+
+      snapshot.forEach( childSnapshot => {
+
+        var childData1 = childSnapshot.val();
+        if (childData1['name'].localeCompare(name) == 0) {
+          childSnapshot.getRef().remove().then(() => {
+            console.log('Write succeeded!');
+            this.ionViewDidLoad();
+          });
+        }
+
+      });
+
+    });
   }
 
   /**
@@ -81,4 +99,5 @@ export class ListMasterPage {
       item: item
     });
   }
+
 }

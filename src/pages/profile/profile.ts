@@ -63,6 +63,7 @@ export class SettingsPage {
   }
 
   _buildForm() {
+
     let group: any = {
       profilePic: [''],
       option1: [this.options.option1],
