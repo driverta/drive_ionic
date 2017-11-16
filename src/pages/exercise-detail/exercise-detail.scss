@@ -3,6 +3,12 @@ page-exercise-detail {
   .item-detail {
     
   }
+
+  .animation {
+  	text-align: center;
+  	animation: bounceInUp 1s;
+  }
+
   .setbet {
   	text-align: center;
   }
@@ -84,6 +90,14 @@ page-exercise-detail {
 
 	.green {
 		background-color: LightGreen;
+	}
+
+	.gold {
+		background-color: gold;
+	}
+
+	.silver {
+		background-color: silver;
 	}
 
 	.bold {

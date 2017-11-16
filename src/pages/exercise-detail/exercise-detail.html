@@ -1,7 +1,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>{{ item.name }}</ion-title>
+    <ion-title>{{ exercise.name }}</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -9,7 +9,7 @@
 
 <ion-content>
   <div padding>
-	  <ion-segment [(ngModel)]="exercise">
+	  <ion-segment [(ngModel)]="segment">
 	    <ion-segment-button value="set">
 	      New Set
 	    </ion-segment-button>
@@ -22,7 +22,7 @@
 	  </ion-segment>
 	</div>
 
-	<div [ngSwitch]="exercise">
+	<div [ngSwitch]="segment">
 	  <ion-list *ngSwitchCase="'set'">
 	    <ion-item>
 	    	<div class="levels">
@@ -33,12 +33,19 @@
 			</div>
 			<div class="breaker"></div>
 	    	<div class="setbet">
-	    		<h2>Weight: <input type="text" value="100"></h2>
+	    		<h2>Weight: <input [(ngModel)]="weight" type="text" value="100"></h2>
 	    		<br>
-	    		<h2>Reps: <input type="text" value="10"></h2>
+	    		<h2>Reps: <input [(ngModel)]="reps" type="text" value="10"></h2>
 	    		<br>
-	    		<h2><input type="submit" id="add" value="+"></h2>
+	    		<h2><input (click)="addSet()" type="submit" id="add" value="+"></h2>
 	    		<br>
+	    	</div>
+	    	<br>
+	    	<br>
+	    	<div *ngIf="bool" class="animation">
+	    		<div class="animation2">
+	    			<h1>NEW RECORD!</h1>
+	    		</div>
 	    	</div>
 	    </ion-item>
 	  </ion-list>
@@ -55,10 +62,10 @@
 	      			<th></th>
 	      		</tr>
 	      		<tr *ngFor="let x of history">
-					<td>{{x.date}}</td>
+					<td>{{x.date | date: 'MM/dd'}}</td>
 					<td>{{x.weight}}</td>
 					<td>{{x.reps}}</td>
-					<td>{{x.oneRM}}</td>
+					<td>{{x.oneRM.toFixed(1)}}</td>
 					<td>
 						<input type="button" value="X" class="remove">
 					</td>
@@ -79,10 +86,10 @@
 	      			<th>1RM</th>
 	      			<th>Records</th>
 	      		</tr>
-	      		<tr *ngFor="let x of records" [ngClass]="{red: x.records == 0, green: x.records > 0}">
+	      		<tr *ngFor="let x of myRecords" [ngClass]="{red: x.records == 0, green: x.records > 0, silver: x.records > 4 && x.records < 10, gold: x.records > 9 }">
 	      			<td class="bold">{{x.reps}}</td>
 	      			<td>{{x.weight}}</td>
-	      			<td>{{x.oneRM}}</td>
+	      			<td>{{x.oneRM.toFixed(1)}}</td>
 	      			<td>{{x.records}}</td>
 	      		</tr>
 	      	  </table>
