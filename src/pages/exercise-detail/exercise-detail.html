@@ -6,17 +6,17 @@
 
 </ion-header>
 
+<ion-content scrollY="false">
 
-<ion-content>
   <div padding>
 	  <ion-segment [(ngModel)]="exercise">
-	    <ion-segment-button value="set">
+	    <ion-segment-button (click)="hideCharts()" value="set">
 	      New Set
 	    </ion-segment-button>
-	    <ion-segment-button value="history">
+	    <ion-segment-button (click)="showLine()" value="history">
 	      History
 	    </ion-segment-button>
-	    <ion-segment-button value="records">
+	    <ion-segment-button (click)="showBar()" value="records">
 	      Records
 	    </ion-segment-button>
 	  </ion-segment>
@@ -24,70 +24,19 @@
 
 	<div [ngSwitch]="exercise">
 	  <ion-list *ngSwitchCase="'set'">
-	    <ion-item>
-	    	<div class="levels">
-	    		<h2>LEVEL <span class="sick"> {{xlevel}}</span> : <span class="sick">{{xcurrent}}</span> / <span class="sick">{{xtotal}}</span> GAINS</h2>
-	    	</div>
-	    	<div id="myProgress">
-				<div id="myBar" [ngStyle]="{'width.%' : progress}"></div>
-			</div>
-			<div class="breaker"></div>
-	    	<div class="setbet">
-	    		<h2>Weight: <input type="text" value="100"></h2>
-	    		<br>
-	    		<h2>Reps: <input type="text" value="10"></h2>
-	    		<br>
-	    		<h2><input type="submit" id="add" value="+"></h2>
-	    		<br>
-	    	</div>
-	    </ion-item>
+		<new-set></new-set>
 	  </ion-list>
 
 	  <ion-list *ngSwitchCase="'history'">
-	    <ion-item>
-	      <div class="scrollingtable">
-	      	<table>
-	      		<tr>
-	      			<th>Date</th>
-	      			<th>Weight</th>
-	      			<th>Reps</th>
-	      			<th>1RM</th>
-	      			<th></th>
-	      		</tr>
-	      		<tr *ngFor="let x of history">
-					<td>{{x.date}}</td>
-					<td>{{x.weight}}</td>
-					<td>{{x.reps}}</td>
-					<td>{{x.oneRM}}</td>
-					<td>
-						<input type="button" value="X" class="remove">
-					</td>
-				</tr>
-	      	</table>
-	      	<h1 id="oneRM">Average One Rep Max: 225</h1>
-	      </div>
-	    </ion-item>
+	    <history></history>
 	  </ion-list>
 
-	  <ion-list *ngSwitchCase="'records'">
-	    <ion-item>
-	    	<div class="rectable">
-		      <table>
-		      	<tr>
-	      			<th>Reps</th>
-	      			<th>Weight</th>
-	      			<th>1RM</th>
-	      			<th>Records</th>
-	      		</tr>
-	      		<tr *ngFor="let x of records" [ngClass]="{red: x.records == 0, green: x.records > 0}">
-	      			<td class="bold">{{x.reps}}</td>
-	      			<td>{{x.weight}}</td>
-	      			<td>{{x.oneRM}}</td>
-	      			<td>{{x.records}}</td>
-	      		</tr>
-	      	  </table>
-	      	</div>
-	    </ion-item>
-	  </ion-list>
+	  <div *ngSwitchCase="'records'">
+	    <records></records>
+	  </div>
+	  <bar-chart [hidden]="selectedValue!=1" ></bar-chart>
+	  <line-chart [hidden]="selectedValue!=2" ></line-chart>
+
 	</div>
 </ion-content>
+

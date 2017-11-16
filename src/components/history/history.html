@@ -1,0 +1,29 @@
+<!-- Generated template for the HistoryComponent component -->
+<div>
+  <ion-item>
+    <div class="scrollingtable">
+    	<table id="headers">
+    		<tr>
+    			<th>Date</th>
+    			<th>Weight</th>
+    			<th>Reps</th>
+    			<th>1RM</th>
+    			<th>Delete</th>
+    		</tr>
+    	</table>
+      <ion-scroll scrollY="true" class="scroll">
+        <table>
+          <tr *ngFor="let x of history">
+            <td>{{x.date}}</td>
+            <td>{{x.weight}}</td>
+            <td>{{x.reps}}</td>
+            <td>{{x.oneRM}}</td>
+            <td>
+              <input type="button" value="X" class="remove">
+            </td>
+          </tr>
+        </table>
+      </ion-scroll>
+    </div>
+  </ion-item>
+</div>
