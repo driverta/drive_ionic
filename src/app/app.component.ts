@@ -7,6 +7,8 @@ import { Config, Nav, Platform } from 'ionic-angular';
 import { FirstRunPage } from '../pages/pages';
 import { Settings } from '../providers/providers';
 
+import { DataService } from '../providers/api/firebase';
+
 @Component({
   template: `
   <ion-menu [content]="content">
@@ -48,8 +50,10 @@ export class MyApp {
     { title: 'Leaderboard', component: 'SearchPage' }
   ]
 
-  constructor(private translate: TranslateService, private platform: Platform, settings: Settings, private config: Config, private statusBar: StatusBar, private splashScreen: SplashScreen) {
+  constructor(private translate: TranslateService, private platform: Platform, settings: Settings, private config: Config, private statusBar: StatusBar, private splashScreen: SplashScreen, data: DataService) {
     this.initTranslate();
+    data.init();
+
   }
 
   ionViewDidLoad() {

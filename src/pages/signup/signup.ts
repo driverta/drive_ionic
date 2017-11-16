@@ -2,13 +2,15 @@ import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { IonicPage, NavController, ToastController } from 'ionic-angular';
 
+import firebase from 'firebase';
+
 import { User } from '../../providers/providers';
 import { MainPage } from '../pages';
 
 @IonicPage()
 @Component({
   selector: 'page-signup',
-  templateUrl: 'signup.html'
+  templateUrl: 'signup.html',
 })
 export class SignupPage {
   // The account fields for the login form.
@@ -19,6 +21,57 @@ export class SignupPage {
     email: 'test@example.com',
     password: 'test'
   };
+
+  starterBench = {
+    name: 'Bench Press', 
+    about: 'Chest', 
+    records: [
+      { reps: 1, weight: 0, oneRM: 0, records: 0 },
+      { reps: 2, weight: 0, oneRM: 0, records: 0 },
+      { reps: 3, weight: 0, oneRM: 0, records: 0 },
+      { reps: 4, weight: 0, oneRM: 0, records: 0 },
+      { reps: 5, weight: 0, oneRM: 0, records: 0 },
+      { reps: 6, weight: 0, oneRM: 0, records: 0 },
+      { reps: 8, weight: 0, oneRM: 0, records: 0 },
+      { reps: 10, weight: 0, oneRM: 0, records: 0 },
+      { reps: 12, weight: 0, oneRM: 0, records: 0 },
+      { reps: 15, weight: 0, oneRM: 0, records: 0 }
+    ]};
+    //history: [{ date: 0, reps: 0, weight: 0, oneRM: 0, gains: 0 }]};
+  starterSquat = {
+    name: 'Squat', 
+    about: 'Legs', 
+    records: [
+      { reps: 1, weight: 0, oneRM: 0, records: 0 },
+      { reps: 2, weight: 0, oneRM: 0, records: 0 },
+      { reps: 3, weight: 0, oneRM: 0, records: 0 },
+      { reps: 4, weight: 0, oneRM: 0, records: 0 },
+      { reps: 5, weight: 0, oneRM: 0, records: 0 },
+      { reps: 6, weight: 0, oneRM: 0, records: 0 },
+      { reps: 8, weight: 0, oneRM: 0, records: 0 },
+      { reps: 10, weight: 0, oneRM: 0, records: 0 },
+      { reps: 12, weight: 0, oneRM: 0, records: 0 },
+      { reps: 15, weight: 0, oneRM: 0, records: 0 }
+    ],
+    history: [{ date: 0, reps: 0, weight: 0, oneRM: 0, gains: 0 }]};
+  starterDead = {
+    name: 'Deadlift', 
+    about: 'Back', 
+    records: [
+      { reps: 1, weight: 0, oneRM: 0, records: 0 },
+      { reps: 2, weight: 0, oneRM: 0, records: 0 },
+      { reps: 3, weight: 0, oneRM: 0, records: 0 },
+      { reps: 4, weight: 0, oneRM: 0, records: 0 },
+      { reps: 5, weight: 0, oneRM: 0, records: 0 },
+      { reps: 6, weight: 0, oneRM: 0, records: 0 },
+      { reps: 8, weight: 0, oneRM: 0, records: 0 },
+      { reps: 10, weight: 0, oneRM: 0, records: 0 },
+      { reps: 12, weight: 0, oneRM: 0, records: 0 },
+      { reps: 15, weight: 0, oneRM: 0, records: 0 }
+    ],
+    history: [{ date: 0, reps: 0, weight: 0, oneRM: 0, gains: 0 }]};
+
+  bro: string = "bro";
 
   // Our translated text strings
   private signupErrorString: string;
@@ -33,21 +86,38 @@ export class SignupPage {
     })
   }
 
-  doSignup() {
-    // Attempt to login in through our User service
-    this.user.signup(this.account).subscribe((resp) => {
-      this.navCtrl.push(MainPage);
-    }, (err) => {
+  doSignUp() {
+    var lifter = firebase.database().ref('/users');
+    lifter.push(this.account);
 
-      this.navCtrl.push(MainPage);
+    var setX = firebase.database().ref('/' + this.account.name);
+    setX.child('exercises').set('Bench Press');
+    setX.child('exercises').set('Squat');
+    setX.child('exercises').set('Deadlift');
 
-      // Unable to sign up
-      let toast = this.toastCtrl.create({
-        message: this.signupErrorString,
-        duration: 3000,
-        position: 'top'
+    var b = firebase.database().ref('/' + this.account.name + '/exercises/Bench Press');
+    b.set(this.starterBench);
+
+    var s = firebase.database().ref('/' + this.account.name + '/exercises/Squat');
+    s.set(this.starterSquat);
+
+    var d = firebase.database().ref('/' + this.account.name + '/exercises/Deadlift');
+    d.set(this.starterDead);
+
+    /* Tried to set History without a zero value but it ovverrides other exercise data
+
+    var setHistory = firebase.database().ref('/' + this.account.name + '/exercises');
+    setHistory.child('Bench').set('history');
+    setHistory.child('Squat').set('history');
+    setHistory.child('Deadlift').set('history');
+    */
+
+    firebase.auth().createUserWithEmailAndPassword(this.account.email, this.account.password)
+      .then(value => {
+        this.user._user = this.account.name;
+        this.navCtrl.push(MainPage);
       });
-      toast.present();
-    });
   }
+
+
 }

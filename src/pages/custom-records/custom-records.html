@@ -7,7 +7,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>custom-records</ion-title>
+    <ion-title>Custom Records</ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -15,21 +15,20 @@
 
 <ion-content padding>
 	<div class="bigRec">
-		<p class="addRec">Add Record: <input class="recText" type="text" value="11"><input type="submit" id="add" value="+"></p>
+		<p class="addRec">Add Record: <input [(ngModel)]="newRep" class="recText" type="text" value="11"><input (click)="addRecord();" type="submit" id="add" value="+"></p>
 		<br>
 		<table>
 			<tr>
 				<th>Reps</th>
 				<th></th>
 			</tr>
-			<tr *ngFor="let x of sampleRecords">
-				<td >{{x}}</td>
+			<tr *ngFor="let x of records._records">
+				<td >{{x.reps}}</td>
 				<td>
-					<input type="button" value="X" class="remove">
+					<input (click)="deleteRec(x);" type="button" value="X" class="remove">
 				</td>
 			</tr>
 		</table>
 	</div>
-
 
 </ion-content>

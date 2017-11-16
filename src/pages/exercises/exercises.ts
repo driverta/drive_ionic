@@ -4,22 +4,52 @@ import { IonicPage, ModalController, NavController } from 'ionic-angular';
 import { Item } from '../../models/item';
 import { Items } from '../../providers/providers';
 
+import firebase from 'firebase';
+
+import { User } from '../../providers/providers';
+
 @IonicPage()
 @Component({
   selector: 'page-exercises',
   templateUrl: 'exercises.html'
 })
 export class ListMasterPage {
-  currentItems: Item[];
+  lifts = [{name: "Bench", about: "chest"}];
 
-  constructor(public navCtrl: NavController, public items: Items, public modalCtrl: ModalController) {
-    this.currentItems = this.items.query();
+  username = "test";
+
+  names = ["Lift 1"];
+  about = ["nothing"];
+
+
+  constructor(
+    public navCtrl: NavController,
+    public user: User,
+    public items: Items,
+    public modalCtrl: ModalController) {
+
+
   }
 
   /**
    * The view loaded, let's query our items for the list
    */
   ionViewDidLoad() {
+    this.lifts = [];
+    this.username = this.user._user
+    var query1 = firebase.database().ref('/' + this.username + '/exercises');
+
+    query1.once("value").then( snapshot => {
+
+      snapshot.forEach( childSnapshot => {
+
+        var childData1 = childSnapshot.val();
+        
+        this.lifts.push(childData1);
+
+      });
+
+    });
   }
 
   /**
@@ -30,7 +60,7 @@ export class ListMasterPage {
     let addModal = this.modalCtrl.create('ItemCreatePage');
     addModal.onDidDismiss(item => {
       if (item) {
-        this.items.add(item);
+        this.ionViewDidLoad();
       }
     })
     addModal.present();
@@ -40,7 +70,25 @@ export class ListMasterPage {
    * Delete an item from the list of items.
    */
   deleteItem(item) {
-    this.items.delete(item);
+    this.username = this.user._user
+    var name = item['name'];
+    var query1 = firebase.database().ref('/' + this.username + '/exercises');
+    //alert(name);
+    query1.once("value").then( snapshot => {
+
+      snapshot.forEach( childSnapshot => {
+
+        var childData1 = childSnapshot.val();
+        if (childData1['name'].localeCompare(name) == 0) {
+          childSnapshot.getRef().remove().then(() => {
+            console.log('Write succeeded!');
+            this.ionViewDidLoad();
+          });
+        }
+
+      });
+
+    });
   }
 
   /**
@@ -51,4 +99,5 @@ export class ListMasterPage {
       item: item
     });
   }
+
 }
