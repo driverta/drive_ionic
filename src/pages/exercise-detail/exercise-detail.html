@@ -6,17 +6,17 @@
 
 </ion-header>
 
+<ion-content scrollY="false">
 
-<ion-content>
   <div padding>
 	  <ion-segment [(ngModel)]="segment">
-	    <ion-segment-button value="set">
+	    <ion-segment-button (click)="hideCharts()" value="set">
 	      New Set
 	    </ion-segment-button>
-	    <ion-segment-button value="history">
+	    <ion-segment-button (click)="showLine()" value="history">
 	      History
 	    </ion-segment-button>
-	    <ion-segment-button value="records">
+	    <ion-segment-button (click)="showBar()" value="records">
 	      Records
 	    </ion-segment-button>
 	  </ion-segment>
@@ -96,5 +96,10 @@
 	      	</div>
 	    </ion-item>
 	  </ion-list>
+
+	  <bar-chart [hidden]="selectedValue!=1" ></bar-chart>
+	  <line-chart [hidden]="selectedValue!=2" ></line-chart>
+
 	</div>
 </ion-content>
+

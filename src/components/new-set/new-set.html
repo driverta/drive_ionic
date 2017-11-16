@@ -1,0 +1,20 @@
+<!-- Generated template for the NewSetComponent component -->
+<div>
+  <ion-item>
+		<div class="levels">
+			<h2>LEVEL <span class="sick"> {{xlevel}}</span> : <span class="sick">{{xcurrent}}</span> / <span class="sick">{{xtotal}}</span> GAINS</h2>
+		</div>
+		<div id="myProgress">
+			<div id="myBar" [ngStyle]="{'width.%' : progress}"></div>
+		</div>
+		<div class="breaker"></div>
+		<div class="setbet">
+			<h2>Weight: <input type="text" value="100"></h2>
+			<br>
+			<h2>Reps: <input type="text" value="10"></h2>
+			<br>
+			<h2><input type="submit" id="add" value="+"></h2>
+			<br>
+		</div>
+	</ion-item>
+</div>

@@ -70,26 +70,25 @@ page-exercise-detail {
 		background-color: red;
 	}
 
-	.rectable {
-		text-align: center;
+	.bold {
+		font-style: bold;
 	}
 
-	.rectable td {
-		color: black;
-		width: 150px;
-		height: 25px;
+	#oneRM {
+		margin-top: 300px;
 	}
 
-	.rectable th td {
-
+	.axis text{
+		fill: white;
+		font-size: 30px;
 	}
 
-	.red {
-		background-color: LightCoral;
+	.axis-title text{
+		fill: white;
 	}
 
-	.green {
-		background-color: LightGreen;
+	.bar {
+		fill: red;
 	}
 
 	.gold {
@@ -102,9 +101,13 @@ page-exercise-detail {
 
 	.bold {
 		font-style: bold;
+
+	.hide {
+	  display: none;
+
 	}
 
-	#oneRM {
-		margin-top: 300px;
+	.line {
+		stroke: white;
 	}
 }

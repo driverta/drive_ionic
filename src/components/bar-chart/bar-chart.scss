@@ -1,0 +1,20 @@
+bar-chart {
+
+	.axis text{
+		fill: white;
+		font-size: 30px;
+	}
+
+	.axis-title text{
+		fill: white;
+	}
+
+	.bar {
+		fill: red;
+	}
+
+	svg {
+		width: 100%;
+	}
+
+}

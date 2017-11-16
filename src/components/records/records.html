@@ -1,0 +1,24 @@
+<!-- Generated template for the RecordsComponent component -->
+<div>
+  <ion-item>
+  	<div class="rectable">
+      <table>
+      	<tr>
+    			<th>Reps</th>
+    			<th>Weight</th>
+    			<th>1RM</th>
+    			<th>Records</th>
+    		</tr>
+    		<tr *ngFor="let x of records" [ngClass]="{red: x.records == 0, green: x.records > 0}">
+    			<td class="bold">{{x.reps}}</td>
+    			<td>{{x.weight}}</td>
+    			<td>{{x.oneRM}}</td>
+    			<td>{{x.records}}</td>
+    		</tr>
+    	  </table>
+    	</div>
+    	<!--Here is where I want the bar graph but I CANNOT see it
+    	<svg id="barChart"></svg>
+    	-->
+  </ion-item>
+</div>
