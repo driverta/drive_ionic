@@ -134,6 +134,7 @@ export class ItemDetailPage {
         this.progress = this.xcurrent / this.xtotal * 100
       }
     });
+  }
 
   showBar() {
     this.selectedValue = 1;

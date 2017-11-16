@@ -4,6 +4,10 @@ page-exercise-detail {
     
   }
 
+  body {
+		cursor: auto;
+	}
+
   .animation {
   	text-align: center;
   	animation: bounceInUp 1s;
@@ -66,8 +70,20 @@ page-exercise-detail {
 		width: 200px;
 	}
 
+	.scrollingtable th {
+		width: 200px;
+	}
+
 	.remove {
 		background-color: red;
+	}
+
+	.scroll {
+		height: 200px;
+	}
+
+	#headers {
+		margin-bottom: 10px;
 	}
 
 	.bold {
@@ -101,6 +117,7 @@ page-exercise-detail {
 
 	.bold {
 		font-style: bold;
+	}
 
 	.hide {
 	  display: none;
@@ -110,4 +127,27 @@ page-exercise-detail {
 	.line {
 		stroke: white;
 	}
+
+	.rectable {
+		text-align: center;
+	}
+
+	.rectable td {
+		color: black;
+		width: 150px;
+		height: 25px;
+	}
+
+	.rectable th td {
+
+	}
+
+	.red {
+		background-color: LightCoral;
+	}
+
+	.green {
+		background-color: LightGreen;
+	}
+
 }
