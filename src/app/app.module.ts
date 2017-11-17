@@ -18,6 +18,7 @@ import { MyApp } from './app.component';
 import { DataService } from '../providers/api/firebase';
 import { Records } from '../providers/records/records';
 import { Levels } from '../providers/levels/levels';
+import { HistoryProvider } from '../providers/history/history';
 
 // The translate loader needs to know where to load i18n files
 // in Ionic's static asset pipeline.
@@ -74,7 +75,8 @@ export function provideSettings(storage: Storage) {
     // Keep this to enable Ionic's runtime error handling during development
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     Records,
-    Levels
+    Levels,
+    HistoryProvider
   ]
 })
 export class AppModule { }

@@ -19,18 +19,20 @@ export class Item {
 }
 
 export interface Record {
+    date: any,
     reps: number,
-    oneRM: number
+    oneRM: number,
+    record: number
 }
 
 export interface Set {
-    date: string,
+    date: any,
     reps: number,
     weight: number,
     oneRM: number
 }
 
-export const StatsBarChart: Record[] = [
+export var StatsBarChart = [
     {reps: 1, oneRM: 315},
     {reps: 2, oneRM: 300},
     {reps: 3, oneRM: 275},
@@ -44,7 +46,7 @@ export const StatsBarChart: Record[] = [
     {reps: 15, oneRM: 285}
 ];
 
-export const StatsLineChart: Set[] = [
+export var StatsLineChart: Set[] = [
     {date: "9-20", reps: 1, weight:315, oneRM: 315},
     {date: "9-21", reps: 10, weight:215, oneRM: 300},
     {date: "9-26", reps: 5, weight:235, oneRM: 275},

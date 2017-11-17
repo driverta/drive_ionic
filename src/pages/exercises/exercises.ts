@@ -3,6 +3,7 @@ import { IonicPage, ModalController, NavController } from 'ionic-angular';
 
 import { Item } from '../../models/item';
 import { Items } from '../../providers/providers';
+import { Records } from '../../providers/providers';
 
 import firebase from 'firebase';
 
@@ -26,6 +27,7 @@ export class ListMasterPage {
     public navCtrl: NavController,
     public user: User,
     public items: Items,
+    public records: Records,
     public modalCtrl: ModalController) {
 
 
@@ -57,6 +59,18 @@ export class ListMasterPage {
    * modal and then adds the new item to our data source if the user created one.
    */
   addItem() {
+    this.records._records = [
+      { reps: 1, weight: 0, oneRM: 0, records: 0 },
+      { reps: 2, weight: 0, oneRM: 0, records: 0 },
+      { reps: 3, weight: 0, oneRM: 0, records: 0 },
+      { reps: 4, weight: 0, oneRM: 0, records: 0 },
+      { reps: 5, weight: 0, oneRM: 0, records: 0 },
+      { reps: 6, weight: 0, oneRM: 0, records: 0 },
+      { reps: 8, weight: 0, oneRM: 0, records: 0 },
+      { reps: 10, weight: 0, oneRM: 0, records: 0 },
+      { reps: 12, weight: 0, oneRM: 0, records: 0 },
+      { reps: 15, weight: 0, oneRM: 0, records: 0 }
+    ];
     let addModal = this.modalCtrl.create('ItemCreatePage');
     addModal.onDidDismiss(item => {
       if (item) {

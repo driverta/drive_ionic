@@ -4,6 +4,7 @@ import { Settings } from './settings/settings';
 import { User } from './user/user';
 import { Records } from './records/records';
 import { Levels } from './levels/levels';
+import { HistoryProvider } from './history/history';
 
 export {
     Api,
@@ -11,5 +12,6 @@ export {
     Settings,
     User,
     Records,
-    Levels
+    Levels,
+    HistoryProvider
 };

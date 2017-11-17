@@ -7,6 +7,7 @@ import { Items } from '../../providers/providers';
 import { Records } from '../../providers/providers';
 import { User } from '../../providers/providers';
 import { Levels } from '../../providers/providers';
+//import { History } from '../../providers/providers';
 
 import firebase from 'firebase';
 
@@ -40,8 +41,8 @@ export class ItemDetailPage {
   loop = 0;
   bool = false;
 
-  history = [];
-  myRecords = [];
+  history = [{date: 1, reps: 1, weight: 1, oneRM: 1}];
+  myRecords = [{reps: 1, weight: 1, oneRM: 1, records: 1}];
 
   item: any;
 
@@ -86,12 +87,6 @@ export class ItemDetailPage {
     this.username = this.user._user
     this.myRecords = [];
     this.history = [];
-    
-    this.initSvg()
-    this.initAxis();
-    this.drawAxis();
-    this.drawBars();
-    this.drawLine();
 
     var queryHistory = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '/history');
     queryHistory.once("value").then( snapshot => {
@@ -115,14 +110,23 @@ export class ItemDetailPage {
       })
     })
 
+    var count = 0; 
     var queryRecords = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '/records');
     queryRecords.once("value").then( snapshot => {
       snapshot.forEach( childSnapshot => {
         var childData1 = childSnapshot.val();
-        this.myRecords.push(childData1);     
+        var r = {reps: childData1.reps, weight: childData1.weight, oneRM: childData1.oneRM, records: childData1.records};
+        this.records._records[count] = r;
+        count++     
       });
-    });
-    
+    }); 
+
+    this.initSvg()
+    this.initAxis();
+    this.drawAxis();
+    this.drawBars();
+    this.drawLine();
+
   }
 
   setLevel () {
@@ -170,13 +174,13 @@ export class ItemDetailPage {
   initAxis() {
     this.x = d3Scale.scaleBand().rangeRound([0, this.width]).padding(0.1);
     this.y = d3Scale.scaleLinear().rangeRound([this.height, 0]);
-    this.x.domain(StatsBarChart.map((d) => d.reps));
-    this.y.domain([0, d3Array.max(StatsBarChart, (d) => d.oneRM)]);
+    this.x.domain(this.records._records.map((d) => d.reps));
+    this.y.domain([0, d3Array.max(this.records._records, (d) => d.oneRM)]);
 
     this.x2 = d3Scale.scaleBand().rangeRound([0, this.width2]).padding(0.1);
     this.y2 = d3Scale.scaleLinear().rangeRound([this.height2, 0]);
-    this.x2.domain(StatsLineChart.map((d) => d.date));
-    this.y2.domain([0, d3Array.max(StatsLineChart, (d) => d.oneRM)]);
+    this.x2.domain(this.history.map((d) => d.date));
+    this.y2.domain([0, d3Array.max(this.history, (d) => d.oneRM)]);
   }
 
   drawAxis() {
@@ -227,7 +231,7 @@ export class ItemDetailPage {
 
   drawBars() {
     this.g.selectAll(".bar")
-        .data(StatsBarChart)
+        .data(this.records._records)
         .enter().append("rect")
         .attr("class", "bar")
         .attr("x", (d) => this.x(d.reps) )
@@ -242,7 +246,7 @@ export class ItemDetailPage {
         .y( (d: any) => this.y2(d.oneRM) );
 
     this.g2.append("path")
-        .datum(StatsLineChart)
+        .datum(this.history)
         .attr("class", "line")
         .attr("d", this.line);
   }
@@ -253,12 +257,12 @@ export class ItemDetailPage {
     var gains = 5;
     this.bool = false;
 
-    this.myRecords.forEach( (value, index) => {
+    this.records._records.forEach( (value, index) => {
       if (this.reps == value.reps) {
         if (this.weight > value.weight) {
-          this.myRecords[index].weight = this.weight;
-          this.myRecords[index].oneRM = oneRM;
-          this.myRecords[index].records++;
+          this.records._records[index].weight = this.weight;
+          this.records._records[index].oneRM = oneRM;
+          this.records._records[index].records++;
           gains = 10;
           this.bool = true;
         }
@@ -279,7 +283,7 @@ export class ItemDetailPage {
     points.push(g);
 
     var records = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '/records');
-    records.set(this.myRecords);
+    records.set(this.records._records);
 
     this.ionViewDidLoad();
   }

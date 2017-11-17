@@ -87,7 +87,7 @@
 	      			<th>1RM</th>
 	      			<th>Records</th>
 	      		</tr>
-	      		<tr *ngFor="let x of myRecords" [ngClass]="{red: x.records == 0, green: x.records > 0 && x.records < 5, silver: x.records > 4 && x.records < 10, gold: x.records > 9 }">
+	      		<tr *ngFor="let x of records._records" [ngClass]="{red: x.records == 0, green: x.records > 0 && x.records < 5, silver: x.records > 4 && x.records < 10, gold: x.records > 9 }">
 	      			<td class="bold">{{x.reps}}</td>
 	      			<td>{{x.weight}}</td>
 	      			<td>{{x.oneRM.toFixed(1)}}</td>
