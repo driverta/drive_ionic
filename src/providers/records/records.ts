@@ -16,7 +16,7 @@ export class Records {
 	    { reps: 2, weight: 0, oneRM: 0, records: 0 },
 	    { reps: 3, weight: 0, oneRM: 0, records: 0 },
 	    { reps: 4, weight: 0, oneRM: 0, records: 0 },
-	    { reps: 5, weight: 100, oneRM: 200, records: 1 },
+	    { reps: 5, weight: 0, oneRM: 0, records: 0 },
 	    { reps: 6, weight: 0, oneRM: 0, records: 0 },
 	    { reps: 8, weight: 0, oneRM: 0, records: 0 },
 	    { reps: 10, weight: 0, oneRM: 0, records: 0 },

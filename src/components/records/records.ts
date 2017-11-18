@@ -1,4 +1,10 @@
 import { Component } from '@angular/core';
+import { NavParams } from 'ionic-angular';
+
+import { User } from '../../providers/providers';
+import { Records } from '../../providers/providers';
+
+import firebase from 'firebase';
 
 /**
  * Generated class for the RecordsComponent component.
@@ -12,21 +18,32 @@ import { Component } from '@angular/core';
 })
 export class RecordsComponent {
 
-  records = [
-    { reps: 1, weight: 0, oneRM: 0, records: 0 },
-    { reps: 2, weight: 0, oneRM: 0, records: 0 },
-    { reps: 3, weight: 0, oneRM: 0, records: 0 },
-    { reps: 4, weight: 0, oneRM: 0, records: 0 },
-    { reps: 5, weight: 185, oneRM: 225, records: 1 },
-    { reps: 6, weight: 0, oneRM: 0, records: 0 },
-    { reps: 8, weight: 0, oneRM: 0, records: 0 },
-    { reps: 10, weight: 135, oneRM: 225, records: 1 },
-    { reps: 12, weight: 0, oneRM: 0, records: 0 },
-    { reps: 15, weight: 0, oneRM: 0, records: 0 }
-  ];
+  exercise: any;
+  username: any;
 
-  constructor() {
-    
+  constructor(
+    navParams: NavParams,
+    public user: User,
+    private records: Records
+    ) {
+
+    this.exercise = navParams.get('item');
+ 
+  }
+
+  ngOnInit() {
+    this.username = this.user._user;
+    var count = 0; 
+    var queryRecords = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '/records');
+    queryRecords.once("value").then( snapshot => {
+      snapshot.forEach( childSnapshot => {
+        var childData1 = childSnapshot.val();
+        var r = {reps: childData1.reps, weight: childData1.weight, oneRM: childData1.oneRM, records: childData1.records};
+        this.records._records[count] = r;
+        //alert(this.records._records[count].records);
+        count++     
+      });
+    });
   }
 
 }

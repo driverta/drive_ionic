@@ -1,5 +1,12 @@
 import { Component } from '@angular/core';
 import  { StatsLineChart } from '../../models/item';
+import  { NavParams } from 'ionic-angular';
+
+import { HistoryProvider } from '../../providers/providers';
+import { User } from '../../providers/providers';
+
+
+import firebase from 'firebase';
 
 /**
  * Generated class for the HistoryComponent component.
@@ -13,22 +20,30 @@ import  { StatsLineChart } from '../../models/item';
 })
 export class HistoryComponent {
 
-  history = [
-    {date: "9-20", reps: 1, weight:315, oneRM: 315},
-    {date: "9-21", reps: 10, weight:215, oneRM: 300},
-    {date: "9-26", reps: 5, weight:235, oneRM: 275},
-    {date: "9-27", reps: 3, weight:205, oneRM: 225},
-    {date: "9-28", reps: 2, weight:320, oneRM: 330},
-    {date: "10-2", reps: 5, weight:185, oneRM: 225},
-    {date: "10-3", reps: 16, weight:275, oneRM: 315},
-    {date: "10-9", reps: 1, weight:300, oneRM: 300},
-    {date: "10-10", reps: 1, weight:275, oneRM: 275},
-    {date: "10-15", reps: 4, weight:285, oneRM: 305},
-    {date: "10-16", reps: 1, weight:385, oneRM: 285}
-];
+  username: any;
+  exercise: any;
 
-  constructor() {
+  constructor(
+    navParams: NavParams,
+    public user: User,
+    private history: HistoryProvider
+    ) {
+
+    this.exercise = navParams.get('item');
     
   }
 
+  ngOnInit() {
+    this.username = this.user._user;
+    this.history._history = [];
+
+    var queryHistory = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '/history');
+    queryHistory.once("value").then( snapshot => {
+      snapshot.forEach( childSnapshot => {
+        var childData1 = childSnapshot.val();
+        var s = {date: childData1.date, reps: childData1.reps, weight: childData1.weight, oneRM: childData1.oneRM};
+        this.history._history.push(s); 
+      });
+    });
+  }
 }

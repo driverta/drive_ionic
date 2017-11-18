@@ -11,6 +11,8 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class HistoryProvider {
 
+	_history = [{date: new Date(0), reps: 0, weight: 0, oneRM: 0}]
+
   constructor(public http: Http) {
   
   }
