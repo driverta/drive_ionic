@@ -6,12 +6,6 @@ import { Records } from '../../providers/providers';
 
 import firebase from 'firebase';
 
-/**
- * Generated class for the RecordsComponent component.
- *
- * See https://angular.io/api/core/Component for more info on Angular
- * Components.
- */
 @Component({
   selector: 'records',
   templateUrl: 'records.html'
