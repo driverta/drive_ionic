@@ -19,7 +19,7 @@
             <td>{{x.reps}}</td>
             <td>{{x.oneRM.toFixed(1)}}</td>
             <td>
-              <input type="button" value="X" class="remove">
+              <input type="button" value="X" class="remove" (click)="deleteSet(x)">
             </td>
           </tr>
         </table>

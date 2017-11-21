@@ -28,9 +28,7 @@ export class HistoryComponent {
     public user: User,
     private history: HistoryProvider
     ) {
-
     this.exercise = navParams.get('item');
-    
   }
 
   ngOnInit() {
@@ -43,6 +41,25 @@ export class HistoryComponent {
         var childData1 = childSnapshot.val();
         var s = {date: childData1.date, reps: childData1.reps, weight: childData1.weight, oneRM: childData1.oneRM};
         this.history._history.push(s); 
+      });
+    });
+  }
+
+  deleteSet(x) {
+    this.username = this.user._user
+    var set = x;
+    var query1 = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '/history');
+    query1.once("value").then( snapshot => {
+
+      snapshot.forEach( childSnapshot => {
+
+        var childData1 = childSnapshot.val();
+        if (x.date == childData1.date) {
+          childSnapshot.getRef().remove().then(() => {
+            console.log('Write succeeded!');
+            this.ngOnInit();
+          });
+        }
       });
     });
   }

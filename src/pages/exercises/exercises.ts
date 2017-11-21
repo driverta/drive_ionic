@@ -99,9 +99,7 @@ export class ListMasterPage {
             this.ionViewWillLoad();
           });
         }
-
       });
-
     });
   }
 
