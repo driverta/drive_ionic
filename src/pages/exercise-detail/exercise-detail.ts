@@ -47,6 +47,10 @@ export class ItemDetailPage {
   }
 
   ionViewWillEnter() {
+    this.makeCharts();
+  }
+
+  public makeCharts() {
     this.barChart.makeChart();
     this.lineChart.makeChart2();
   }

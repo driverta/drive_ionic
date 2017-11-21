@@ -62,6 +62,7 @@ export class BarChartComponent {
   }
 
   setChart() {
+    
     this.initSvg()
     this.initAxis();
     this.drawAxis();

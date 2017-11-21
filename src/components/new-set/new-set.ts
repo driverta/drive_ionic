@@ -1,9 +1,12 @@
-import { Component } from '@angular/core';
-import { NavParams } from 'ionic-angular';
+import { Component, ViewChild } from '@angular/core';
+import { NavParams, NavController } from 'ionic-angular';
 
 import { User } from '../../providers/providers';
 import { Levels } from '../../providers/providers';
 import { Records } from '../../providers/providers';
+
+import { BarChartComponent } from '../../components/bar-chart/bar-chart';
+import { LineChartComponent } from '../../components/line-chart/line-chart';
 
 import firebase from 'firebase';
 
@@ -31,7 +34,11 @@ export class NewSetComponent {
   bool = false;
   exercise: any;
 
+  @ViewChild(BarChartComponent) barChart: BarChartComponent
+  @ViewChild(LineChartComponent) lineChart: LineChartComponent
+
   constructor(
+    public navCtrl: NavController,
   	navParams: NavParams,
   	public user: User,
   	public levels: Levels,
@@ -106,6 +113,9 @@ export class NewSetComponent {
     var records = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '/records');
     records.set(this.records._records);
 
+    //this.bar.makeChart();
+    //this.lineChart.makeChart2();
+    //this.navParams.get.makeCharts();
     this.ngOnInit();
   }
 

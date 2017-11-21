@@ -51,6 +51,8 @@ export class LineChartComponent {
   }
 
   public makeChart2() {
+  	this.username = this.user._user;
+  	this.history._charts = [];
   	var queryHistory = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '/history');
     queryHistory.once("value").then( snapshot => {
     	this.loop = 0;
@@ -64,10 +66,10 @@ export class LineChartComponent {
         }
       });
     });
-    //this.setChart2()
   }
 
   setChart2() {
+  	//alert("YO")
   	this.initSvg()
     this.initAxis();
     this.drawAxis();
@@ -87,8 +89,8 @@ export class LineChartComponent {
   initAxis() {
     this.x2 = d3Scale.scaleBand().rangeRound([0, this.width2]).padding(0.1);
     this.y2 = d3Scale.scaleLinear().rangeRound([this.height2, 0]);
-    this.x2.domain(this.history._history.map((d) => d.date));
-    this.y2.domain([0, d3Array.max(this.history._history, (d) => d.oneRM)]);
+    this.x2.domain(this.history._charts.map((d) => d.date));
+    this.y2.domain([0, d3Array.max(this.history._charts, (d) => d.oneRM)]);
   }
 
   drawAxis() {
@@ -121,7 +123,7 @@ export class LineChartComponent {
         .y( (d: any) => this.y2(d.oneRM) );
 
     this.g2.append("path")
-        .datum(this.history._history)
+        .datum(this.history._charts)
         .attr("class", "line")
         .attr("d", this.line);
   }
