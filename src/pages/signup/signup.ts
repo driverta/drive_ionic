@@ -52,8 +52,8 @@ export class SignupPage {
       { reps: 10, weight: 0, oneRM: 0, records: 0 },
       { reps: 12, weight: 0, oneRM: 0, records: 0 },
       { reps: 15, weight: 0, oneRM: 0, records: 0 }
-    ],
-    history: [{ date: 0, reps: 0, weight: 0, oneRM: 0, gains: 0 }]};
+    ]};
+    //history: [{ date: 0, reps: 0, weight: 0, oneRM: 0, gains: 0 }]};
   starterDead = {
     name: 'Deadlift', 
     about: 'Back', 
@@ -68,8 +68,8 @@ export class SignupPage {
       { reps: 10, weight: 0, oneRM: 0, records: 0 },
       { reps: 12, weight: 0, oneRM: 0, records: 0 },
       { reps: 15, weight: 0, oneRM: 0, records: 0 }
-    ],
-    history: [{ date: 0, reps: 0, weight: 0, oneRM: 0, gains: 0 }]};
+    ]};
+    //history: [{ date: 0, reps: 0, weight: 0, oneRM: 0, gains: 0 }]};
 
   bro: string = "bro";
 

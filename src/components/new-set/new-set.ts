@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, Output, EventEmitter } from '@angular/core';
 import { NavParams, NavController } from 'ionic-angular';
 
 import { User } from '../../providers/providers';
@@ -36,6 +36,7 @@ export class NewSetComponent {
 
   @ViewChild(BarChartComponent) barChart: BarChartComponent
   @ViewChild(LineChartComponent) lineChart: LineChartComponent
+  @Output() myEvent = new EventEmitter();
 
   constructor(
     public navCtrl: NavController,
@@ -116,6 +117,7 @@ export class NewSetComponent {
     //this.bar.makeChart();
     //this.lineChart.makeChart2();
     //this.navParams.get.makeCharts();
+    this.myEvent.emit(null);
     this.ngOnInit();
   }
 

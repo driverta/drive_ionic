@@ -24,7 +24,7 @@
 
 	<div [ngSwitch]="segment">
 	  <ion-list *ngSwitchCase="'set'">
-	    <new-set></new-set>
+	    <new-set (myEvent)="ionViewWillEnter();"></new-set>
 	  </ion-list>
 
 	  <ion-list *ngSwitchCase="'history'">

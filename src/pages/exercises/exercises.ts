@@ -30,13 +30,12 @@ export class ListMasterPage {
     public records: Records,
     public modalCtrl: ModalController) {
 
-
   }
 
   /**
    * The view loaded, let's query our items for the list
    */
-  ionViewWillLoad() {
+  ionViewWillEnter() {
     this.lifts = [];
     this.username = this.user._user
     var query1 = firebase.database().ref('/' + this.username + '/exercises');
@@ -74,7 +73,7 @@ export class ListMasterPage {
     let addModal = this.modalCtrl.create('ItemCreatePage');
     addModal.onDidDismiss(item => {
       if (item) {
-        this.ionViewWillLoad();
+        this.ionViewWillEnter();
       }
     })
     addModal.present();
@@ -96,7 +95,7 @@ export class ListMasterPage {
         if (childData1['name'].localeCompare(name) == 0) {
           childSnapshot.getRef().remove().then(() => {
             console.log('Write succeeded!');
-            this.ionViewWillLoad();
+            this.ionViewWillEnter();
           });
         }
       });
