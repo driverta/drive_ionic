@@ -62,7 +62,7 @@ export class BarChartComponent {
   }
 
   setChart() {
-    
+    //d3.selectAll("svg > *").remove();
     this.initSvg()
     this.initAxis();
     this.drawAxis();

@@ -7,6 +7,8 @@ import { Records } from '../../providers/providers';
 
 import firebase from 'firebase';
 
+import * as d3 from 'd3-selection';
+
 /**
  * Generated class for the NewSetComponent component.
  *
@@ -75,7 +77,7 @@ export class NewSetComponent {
   }
 
   addSet() {
-  	
+  	d3.selectAll("svg > *").remove();
     var date = new Date().toISOString();
     var oneRM = this.weight / (1.0278- (this.reps * .0278));
     var gains = 5;
@@ -108,6 +110,8 @@ export class NewSetComponent {
 
     var records = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '/records');
     records.set(this.records._records);
+
+
 
     this.myEvent.emit(null);
     this.ngOnInit();

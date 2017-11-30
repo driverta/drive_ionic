@@ -69,7 +69,6 @@ export class LineChartComponent {
   }
 
   setChart2() {
-  	//alert("YO")
   	this.initSvg()
     this.initAxis();
     this.drawAxis();
@@ -122,10 +121,13 @@ export class LineChartComponent {
         .x( (d: any) => this.x2(d.date) )
         .y( (d: any) => this.y2(d.oneRM) );
 
+    
     this.g2.append("path")
         .datum(this.history._charts)
         .attr("class", "line")
         .attr("d", this.line);
+
+    //this.g2.exit().remove();
   }
 
 }

@@ -10,6 +10,8 @@ import { HistoryProvider } from '../../providers/providers';
 import { BarChartComponent } from '../../components/bar-chart/bar-chart';
 import { LineChartComponent } from '../../components/line-chart/line-chart';
 
+import firebase from 'firebase';
+
 @IonicPage()
 @Component({
   selector: 'page-exercise-detail',
@@ -19,6 +21,7 @@ export class ItemDetailPage {
 
   selectedValue = 0;
   exercise: any;
+  username: any;
   segment = "set";
 
   @ViewChild(BarChartComponent) barChart: BarChartComponent
@@ -27,6 +30,7 @@ export class ItemDetailPage {
   constructor(public navCtrl: NavController,
     navParams: NavParams,
     items: Items,
+    public records: Records,
     public user: User,
     public levels: Levels) {
 
@@ -34,6 +38,18 @@ export class ItemDetailPage {
   }
 
   ionViewWillEnter() {
+    this.username = this.user._user;
+    var count = 0; 
+    var queryRecords = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '/records');
+    queryRecords.once("value").then( snapshot => {
+      snapshot.forEach( childSnapshot => {
+        var childData1 = childSnapshot.val();
+        var r = {reps: childData1.reps, weight: childData1.weight, oneRM: childData1.oneRM, records: childData1.records};
+        this.records._records[count] = r;
+        //alert(this.records._records[count].records);
+        count++     
+      });
+    });
     this.barChart.makeChart();
     this.lineChart.makeChart2();
   }
