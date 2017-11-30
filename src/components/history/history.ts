@@ -1,19 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, Output, EventEmitter } from '@angular/core';
 import  { StatsLineChart } from '../../models/item';
 import  { NavParams } from 'ionic-angular';
 
 import { HistoryProvider } from '../../providers/providers';
 import { User } from '../../providers/providers';
 
-
 import firebase from 'firebase';
 
-/**
- * Generated class for the HistoryComponent component.
- *
- * See https://angular.io/api/core/Component for more info on Angular
- * Components.
- */
+import * as d3 from 'd3-selection';
+
 @Component({
   selector: 'history',
   templateUrl: 'history.html'
@@ -22,6 +17,8 @@ export class HistoryComponent {
 
   username: any;
   exercise: any;
+
+  @Output() myEvent2 = new EventEmitter();
 
   constructor(
     navParams: NavParams,
@@ -46,6 +43,7 @@ export class HistoryComponent {
   }
 
   deleteSet(x) {
+    d3.selectAll("svg > *").remove();
     this.username = this.user._user
     var set = x;
     var query1 = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '/history');
@@ -58,6 +56,7 @@ export class HistoryComponent {
           childSnapshot.getRef().remove().then(() => {
             console.log('Write succeeded!');
             this.ngOnInit();
+            this.myEvent2.emit(null);
           });
         }
       });

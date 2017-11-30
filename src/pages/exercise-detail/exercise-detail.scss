@@ -8,84 +8,6 @@ page-exercise-detail {
 		cursor: auto;
 	}
 
-  .animation {
-  	text-align: center;
-  	animation: bounceInUp 1s;
-  }
-
-  .setbet {
-  	text-align: center;
-  }
-
-  .setbet input {
-  	color: black;
-  }
-
-  #add {
-  	border-radius: 50%;
-  	font-size: 30px;
-  	font-style: bold;
-  	width: 40px;
-  }
-
-  .levels {
-  	text-align: center;
-  }
-
-  .sick {
-  	color: red;
-  }
-
-  #myProgress {
-	  width: 100%;
-	  background-color: #ddd;
-	  border: 1px solid black;
-	}
-
-	#myBar {
-		width: 20%;
-		background-color: red;
-		border: 1px solid black;
-		height: 15px;
-	}
-
-	.breaker {
-	  color: white;
-	  border : 1px solid white;
-	  margin-bottom : 10px;
-	  margin-top: 5px;
-	}
-
-	.scrollingtable {
-		text-align: center;
-	}
-
-	table {
-		margin-left:auto; 
-	    margin-right:auto;
-	    border-collapse: separate;
-	}
-
-	.scrollingtable td {
-		width: 200px;
-	}
-
-	.scrollingtable th {
-		width: 200px;
-	}
-
-	.remove {
-		background-color: red;
-	}
-
-	.scroll {
-		height: 200px;
-	}
-
-	#headers {
-		margin-bottom: 10px;
-	}
-
 	.bold {
 		font-style: bold;
 	}
@@ -94,60 +16,26 @@ page-exercise-detail {
 		margin-top: 300px;
 	}
 
-	.axis text{
-		fill: white;
-		font-size: 30px;
-	}
-
-	.axis-title text{
-		fill: white;
-	}
-
-	.bar {
-		fill: red;
-	}
-
-	.gold {
-		background-color: gold;
-	}
-
-	.silver {
-		background-color: silver;
-	}
-
 	.bold {
 		font-style: bold;
 	}
 
 	.hide {
 	  display: none;
-
 	}
 
-	.line {
-		stroke: white;
+	.axis-title text{
+		fill: white;
+		font-size: 30px;
 	}
 
-	.rectable {
-		text-align: center;
+	.axis text{
+		fill: white;
+		font-size: 35px;
 	}
 
-	.rectable td {
-		color: black;
-		width: 150px;
-		height: 25px;
-	}
-
-	.rectable th td {
-
-	}
-
-	.red {
-		background-color: LightCoral;
-	}
-
-	.green {
-		background-color: LightGreen;
+	svg {
+		width: 100%;
 	}
 
 }

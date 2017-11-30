@@ -28,7 +28,7 @@
 	  </ion-list>
 
 	  <ion-list *ngSwitchCase="'history'">
-	  	<history></history>
+	  	<history (myEvent2)="ionViewWillEnter();"></history>
 	  </ion-list>
 
 	  <ion-list *ngSwitchCase="'records'">

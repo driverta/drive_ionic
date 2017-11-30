@@ -9,12 +9,6 @@ import firebase from 'firebase';
 
 import * as d3 from 'd3-selection';
 
-/**
- * Generated class for the NewSetComponent component.
- *
- * See https://angular.io/api/core/Component for more info on Angular
- * Components.
- */
 @Component({
   selector: 'new-set',
   templateUrl: 'new-set.html'
