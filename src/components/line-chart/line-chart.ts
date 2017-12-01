@@ -94,16 +94,6 @@ export class LineChartComponent {
 
   drawAxis() {
     this.g2.append("g")
-        .attr("class", "axis axis--x")
-        .attr("transform", "translate(0," + this.height2 + ")")
-        .call(d3Axis.axisBottom(this.x2))
-        .append("text")
-        .attr("class", "axis-title")
-        .attr("y", 70)
-        .attr("x", this.width2 / 2)
-        .attr("text-anchor", "end")
-        .text("Date");
-    this.g2.append("g")
         .attr("class", "axis axis--y")
         .call(d3Axis.axisLeft(this.y2))
         .append("text")
@@ -126,8 +116,6 @@ export class LineChartComponent {
         .datum(this.history._charts)
         .attr("class", "line")
         .attr("d", this.line);
-
-    //this.g2.exit().remove();
   }
 
 }

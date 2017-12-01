@@ -26,23 +26,34 @@
 <ion-content>
   <form *ngIf="form" [formGroup]="form" (ngSubmit)="createItem()">
     <ion-list>
-      <ion-item>
-        <ion-input type="text" [(ngModel)]="exercise.name" placeholder="{{ 'ITEM_NAME_PLACEHOLDER' | translate }}" formControlName="name"></ion-input>
+      <ion-item no-lines>Name:</ion-item>
+      <ion-item >
+        <ion-input type="text" [(ngModel)]="exercise.name" placeholder="{{ 'E.g. Shoulder Press' | translate }}" formControlName="name"></ion-input>
       </ion-item>
+      <ion-item no-lines>Variation:</ion-item>
+      <ion-item>
+        <ion-input type="text" [(ngModel)]="exercise.variation" placeholder="{{ 'E.g. Dumbell' | translate }}" formControlName="variation"></ion-input>
+      </ion-item>
+      <ion-item no-lines>Muscle Group:</ion-item>
       <div class="select">
-        <ion-select [(ngModel)]="exercise.about" formControlName="about">
+        <ion-select [(ngModel)]="exercise.muscle" formControlName="muscle">
           <ion-option>Chest</ion-option>
           <ion-option>Back</ion-option>
           <ion-option>Legs</ion-option>
           <ion-option>Core</ion-option>
           <ion-option>Shoulders</ion-option>
           <ion-option>Arms</ion-option>
-          <ion-option>Cardio</ion-option>
+          <ion-option>Other</ion-option>
         </ion-select>
       </div>
     </ion-list>
   </form>
-  <ion-item-sliding>
-    <button ion-item (click)="goToOtherPage()">Custom Records</button>
-  </ion-item-sliding>
+  <ion-item no-lines>Records:</ion-item>
+  
+  <div padding>
+    <button ion-button color="primary" block (click)="goToOtherPage()">Customize</button>
+  </div>
+  
+    
+  
 </ion-content>

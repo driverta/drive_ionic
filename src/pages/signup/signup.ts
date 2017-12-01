@@ -23,8 +23,9 @@ export class SignupPage {
   };
 
   starterBench = {
-    name: 'Bench Press', 
-    about: 'Chest', 
+    name: 'Bench Press',
+    variation: 'Barbell', 
+    muscle: 'Chest', 
     records: [
       { reps: 1, weight: 0, oneRM: 0, records: 0 },
       { reps: 2, weight: 0, oneRM: 0, records: 0 },
@@ -39,8 +40,9 @@ export class SignupPage {
     ]};
     //history: [{ date: 0, reps: 0, weight: 0, oneRM: 0, gains: 0 }]};
   starterSquat = {
-    name: 'Squat', 
-    about: 'Legs', 
+    name: 'Squat',
+    variation: 'Barbell',
+    muscle: 'Legs', 
     records: [
       { reps: 1, weight: 0, oneRM: 0, records: 0 },
       { reps: 2, weight: 0, oneRM: 0, records: 0 },
@@ -55,8 +57,9 @@ export class SignupPage {
     ]};
     //history: [{ date: 0, reps: 0, weight: 0, oneRM: 0, gains: 0 }]};
   starterDead = {
-    name: 'Deadlift', 
-    about: 'Back', 
+    name: 'Deadlift',
+    variation: 'Barbell',
+    muscle: 'Back', 
     records: [
       { reps: 1, weight: 0, oneRM: 0, records: 0 },
       { reps: 2, weight: 0, oneRM: 0, records: 0 },
