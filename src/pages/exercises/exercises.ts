@@ -1,5 +1,11 @@
 import { Component } from '@angular/core';
-import { IonicPage, ModalController, NavController, ActionSheetController } from 'ionic-angular';
+import { 
+  IonicPage,
+  ModalController,
+  NavController,
+  ActionSheetController,
+  AlertController
+} from 'ionic-angular';
 
 import { Item } from '../../models/item';
 import { Items } from '../../providers/providers';
@@ -31,6 +37,7 @@ export class ListMasterPage {
     public items: Items,
     public records: Records,
     public modalCtrl: ModalController,
+    private alertCtrl: AlertController,
     public actShtCtrl: ActionSheetController) {
 
   }
@@ -84,9 +91,29 @@ export class ListMasterPage {
     addModal.present();
   }
 
-  /**
-   * Delete an item from the list of items.
-   */
+  presentConfirm(item) {
+    let alert = this.alertCtrl.create({
+      title: 'Delete?',
+      message: 'Do you want to delete ' + item.name + ' from you exercises? You will keep the gains',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        },
+        {
+          text: 'Delete',
+          handler: () => {
+            this.deleteItem(item);
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
+
   deleteItem(item) {
     this.username = this.user._user
     var name = item['name'];

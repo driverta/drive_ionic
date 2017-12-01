@@ -12,6 +12,7 @@ import { Items } from '../../providers/providers';
 export class SearchPage {
 
   currentItems: any = [];
+  timeFilter = "Day"
 
   players = [
     {rank: 1, username: "tdriver369", level: 7, gains: 375},

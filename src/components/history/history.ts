@@ -1,6 +1,6 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 import  { StatsLineChart } from '../../models/item';
-import  { NavParams } from 'ionic-angular';
+import  { NavParams, AlertController } from 'ionic-angular';
 
 import { HistoryProvider } from '../../providers/providers';
 import { User } from '../../providers/providers';
@@ -23,7 +23,8 @@ export class HistoryComponent {
   constructor(
     navParams: NavParams,
     public user: User,
-    private history: HistoryProvider
+    private history: HistoryProvider,
+    private alertCtrl: AlertController
     ) {
     this.exercise = navParams.get('item');
   }
@@ -40,6 +41,29 @@ export class HistoryComponent {
         this.history._history.push(s); 
       });
     });
+  }
+
+  presentConfirm(x) {
+    let alert = this.alertCtrl.create({
+      title: 'Delete?',
+      message: 'Do you want to delete this set (' + x.weight + ' x ' + x.reps + ') and loose these gains?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        },
+        {
+          text: 'Delete',
+          handler: () => {
+            this.deleteSet(x);
+          }
+        }
+      ]
+    });
+    alert.present();
   }
 
   deleteSet(x) {
