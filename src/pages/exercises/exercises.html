@@ -1,9 +1,15 @@
 <ion-header>
 
   <ion-navbar>
+    <ion-buttons left>
+      <button ion-button icon-only (click)="filterExercises()">
+        <ion-icon name="funnel"></ion-icon>
+      </button>
+    </ion-buttons>
+
     <ion-title>Exercises</ion-title>
 
-    <ion-buttons end>
+    <ion-buttons right>
       <button ion-button icon-only (click)="addItem()">
         <ion-icon name="add"></ion-icon>
       </button>

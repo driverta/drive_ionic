@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, ModalController, NavController } from 'ionic-angular';
+import { IonicPage, ModalController, NavController, ActionSheetController } from 'ionic-angular';
 
 import { Item } from '../../models/item';
 import { Items } from '../../providers/providers';
@@ -15,12 +15,14 @@ import { User } from '../../providers/providers';
   templateUrl: 'exercises.html'
 })
 export class ListMasterPage {
-  lifts = [{name: "Bench", about: "chest"}];
-
+  lifts = [{name: "Bench", muscle: "chest"}];
+  setlifts = [];
   username = "test";
 
   names = ["Lift 1"];
   about = ["nothing"];
+
+  filter: string;
 
 
   constructor(
@@ -28,7 +30,8 @@ export class ListMasterPage {
     public user: User,
     public items: Items,
     public records: Records,
-    public modalCtrl: ModalController) {
+    public modalCtrl: ModalController,
+    public actShtCtrl: ActionSheetController) {
 
   }
 
@@ -37,6 +40,7 @@ export class ListMasterPage {
    */
   ionViewWillEnter() {
     this.lifts = [];
+    this.setlifts = [];
     this.username = this.user._user
     var query1 = firebase.database().ref('/' + this.username + '/exercises');
 
@@ -46,7 +50,8 @@ export class ListMasterPage {
 
         var childData1 = childSnapshot.val();
         
-        this.lifts.push(childData1);
+        this.setlifts.push(childData1);
+        this.lifts = this.setlifts
 
       });
 
@@ -111,4 +116,75 @@ export class ListMasterPage {
     });
   }
 
+  filterExercises(){
+    let actionSheet = this.actShtCtrl.create({
+      title: 'Filter Exercises By Muscle Group',
+      buttons: [
+        {
+          text: 'All',
+          handler: () => {
+            this.lifts = this.setlifts
+          }
+        },{
+          text: 'Chest',
+          handler: () => {
+            this.filter = "Chest";
+            this.executeFilter()
+          }
+        },{
+          text: 'Back',
+          handler: () => {
+            this.filter = "Back";
+            this.executeFilter()          
+          }
+        },{
+          text: 'Legs',
+          handler: () => {
+            this.filter = "Legs";
+            this.executeFilter()          
+          }
+        },{
+          text: 'Core',
+          handler: () => {
+            this.filter = "Core";
+            this.executeFilter()          
+          }
+        },{
+          text: 'Shoulders',
+          handler: () => {
+           this.filter = "Shoulders";
+            this.executeFilter()
+          }
+        },{
+          text: 'Arms',
+          handler: () => {
+            this.filter = "Arms";
+            this.executeFilter()          
+          }
+        },{
+          text: 'Other',
+          handler: () => {
+            this.filter = "Other";
+            this.executeFilter()          
+          }
+        },{
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        }
+      ]
+    });
+    actionSheet.present();
+  }
+
+  executeFilter(){
+    this.lifts = [];
+    this.setlifts.forEach( (value, index) => {
+      if (value.muscle == this.filter){
+        this.lifts.push(value);
+      }
+    });
+  }
 }
