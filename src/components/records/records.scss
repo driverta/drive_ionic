@@ -6,7 +6,7 @@ records {
 	.rectable td {
 		color: black;
 		width: 150px;
-		height: 25px;
+		height: 20px;
 	}
 
 	.rectable th td {
@@ -19,5 +19,13 @@ records {
 
 	.green {
 		background-color: LightGreen;
+	}
+
+	.gold {
+		background-color: gold;
+	}
+
+	.silver {
+		background-color: silver;
 	}
 }

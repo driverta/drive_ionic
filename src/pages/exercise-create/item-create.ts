@@ -23,7 +23,7 @@ export class ItemCreatePage {
 
   item: any;
   myrecords: any
-  exercise: { name: string, about: string, records: any} = {name: "",about: "", records: this.records._records};
+  exercise: { name: string, variation: string, muscle: string, records: any} = {name: "", variation: "", muscle: "Chest", records: this.records._records};
   username = "test";
 
   form: FormGroup;
@@ -40,7 +40,8 @@ export class ItemCreatePage {
 
     this.form = formBuilder.group({
       name: ['', Validators.required],
-      about: ['']
+      variation: [''],
+      muscle: ['']
     });
 
     // Watch the form for changes, and

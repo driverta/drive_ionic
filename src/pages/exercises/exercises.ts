@@ -1,8 +1,15 @@
 import { Component } from '@angular/core';
-import { IonicPage, ModalController, NavController } from 'ionic-angular';
+import { 
+  IonicPage,
+  ModalController,
+  NavController,
+  ActionSheetController,
+  AlertController
+} from 'ionic-angular';
 
 import { Item } from '../../models/item';
 import { Items } from '../../providers/providers';
+import { Records } from '../../providers/providers';
 
 import firebase from 'firebase';
 
@@ -14,28 +21,33 @@ import { User } from '../../providers/providers';
   templateUrl: 'exercises.html'
 })
 export class ListMasterPage {
-  lifts = [{name: "Bench", about: "chest"}];
-
+  lifts = [{name: "Bench", muscle: "chest"}];
+  setlifts = [];
   username = "test";
 
   names = ["Lift 1"];
   about = ["nothing"];
+
+  filter: string;
 
 
   constructor(
     public navCtrl: NavController,
     public user: User,
     public items: Items,
-    public modalCtrl: ModalController) {
-
+    public records: Records,
+    public modalCtrl: ModalController,
+    private alertCtrl: AlertController,
+    public actShtCtrl: ActionSheetController) {
 
   }
 
   /**
    * The view loaded, let's query our items for the list
    */
-  ionViewDidLoad() {
+  ionViewWillEnter() {
     this.lifts = [];
+    this.setlifts = [];
     this.username = this.user._user
     var query1 = firebase.database().ref('/' + this.username + '/exercises');
 
@@ -45,7 +57,8 @@ export class ListMasterPage {
 
         var childData1 = childSnapshot.val();
         
-        this.lifts.push(childData1);
+        this.setlifts.push(childData1);
+        this.lifts = this.setlifts
 
       });
 
@@ -57,18 +70,50 @@ export class ListMasterPage {
    * modal and then adds the new item to our data source if the user created one.
    */
   addItem() {
+    this.records._records = [
+      { reps: 1, weight: 0, oneRM: 0, records: 0 },
+      { reps: 2, weight: 0, oneRM: 0, records: 0 },
+      { reps: 3, weight: 0, oneRM: 0, records: 0 },
+      { reps: 4, weight: 0, oneRM: 0, records: 0 },
+      { reps: 5, weight: 0, oneRM: 0, records: 0 },
+      { reps: 6, weight: 0, oneRM: 0, records: 0 },
+      { reps: 8, weight: 0, oneRM: 0, records: 0 },
+      { reps: 10, weight: 0, oneRM: 0, records: 0 },
+      { reps: 12, weight: 0, oneRM: 0, records: 0 },
+      { reps: 15, weight: 0, oneRM: 0, records: 0 }
+    ];
     let addModal = this.modalCtrl.create('ItemCreatePage');
     addModal.onDidDismiss(item => {
       if (item) {
-        this.ionViewDidLoad();
+        this.ionViewWillEnter();
       }
     })
     addModal.present();
   }
 
-  /**
-   * Delete an item from the list of items.
-   */
+  presentConfirm(item) {
+    let alert = this.alertCtrl.create({
+      title: 'Delete?',
+      message: 'Do you want to delete ' + item.name + ' from you exercises? You will keep the gains',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        },
+        {
+          text: 'Delete',
+          handler: () => {
+            this.deleteItem(item);
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
+
   deleteItem(item) {
     this.username = this.user._user
     var name = item['name'];
@@ -82,12 +127,10 @@ export class ListMasterPage {
         if (childData1['name'].localeCompare(name) == 0) {
           childSnapshot.getRef().remove().then(() => {
             console.log('Write succeeded!');
-            this.ionViewDidLoad();
+            this.ionViewWillEnter();
           });
         }
-
       });
-
     });
   }
 
@@ -100,4 +143,75 @@ export class ListMasterPage {
     });
   }
 
+  filterExercises(){
+    let actionSheet = this.actShtCtrl.create({
+      title: 'Filter Exercises By Muscle Group',
+      buttons: [
+        {
+          text: 'All',
+          handler: () => {
+            this.lifts = this.setlifts
+          }
+        },{
+          text: 'Chest',
+          handler: () => {
+            this.filter = "Chest";
+            this.executeFilter()
+          }
+        },{
+          text: 'Back',
+          handler: () => {
+            this.filter = "Back";
+            this.executeFilter()          
+          }
+        },{
+          text: 'Legs',
+          handler: () => {
+            this.filter = "Legs";
+            this.executeFilter()          
+          }
+        },{
+          text: 'Core',
+          handler: () => {
+            this.filter = "Core";
+            this.executeFilter()          
+          }
+        },{
+          text: 'Shoulders',
+          handler: () => {
+           this.filter = "Shoulders";
+            this.executeFilter()
+          }
+        },{
+          text: 'Arms',
+          handler: () => {
+            this.filter = "Arms";
+            this.executeFilter()          
+          }
+        },{
+          text: 'Other',
+          handler: () => {
+            this.filter = "Other";
+            this.executeFilter()          
+          }
+        },{
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        }
+      ]
+    });
+    actionSheet.present();
+  }
+
+  executeFilter(){
+    this.lifts = [];
+    this.setlifts.forEach( (value, index) => {
+      if (value.muscle == this.filter){
+        this.lifts.push(value);
+      }
+    });
+  }
 }

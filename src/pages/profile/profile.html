@@ -27,17 +27,8 @@
       <div class="profile-image" [style.backgroundImage]="getProfileImageStyle()" *ngIf="!show"></div>
     </div>
   </form>
-  <h3>{{rank | uppercase}}</h3>
   <div class="stats">
     <table>
-      <tr>
-        <th>12</th>
-        <th>1,325</th>
-      </tr>
-      <tr>
-        <td>Records</td>
-        <td>Gains</td>
-      </tr>
       <tr>
         <th>25</th>
         <th>20</th>
@@ -45,6 +36,14 @@
       <tr>
         <td>Competitors</td>
         <td>Competing</td>
+      </tr>
+      <tr>
+        <th>{{records}}</th>
+        <th>{{gains}}</th>
+      </tr>
+      <tr>
+        <td>Records</td>
+        <td>Gains</td>
       </tr>
     </table>
   </div>

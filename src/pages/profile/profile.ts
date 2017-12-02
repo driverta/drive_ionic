@@ -32,6 +32,7 @@ export class SettingsPage {
   rank = "frail body"
   loop = 0;
   gains = 0;
+  records = 0;
 
   options: any;
 
@@ -97,11 +98,15 @@ export class SettingsPage {
     queryGains.once("value").then( snapshot => {
       this.loop = 0;
       this.gains = 0;
+      this.records = 0;
       snapshot.forEach( childSnapshot => {
         this.loop++
         var childData2 = childSnapshot.val();
         var gains = childData2.gains;
         this.gains = this.gains + gains
+        if (gains == 10){
+          this.records++;
+        }
         if ( snapshot.numChildren() == this.loop )
           this.setLevel()
       })
