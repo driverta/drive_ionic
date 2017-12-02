@@ -15,8 +15,8 @@
 
 <ion-content>
   <div class="timespan">
-    <ion-select [(ngModel)]="timeFilter">
-      <ion-option>Day</ion-option>
+    <ion-select (ngModelChange)="filterDay($event)" [(ngModel)]="timeFilter">
+      <ion-option >Day</ion-option>
       <ion-option>Week</ion-option>
       <ion-option>Month</ion-option>
       <ion-option>All Time</ion-option>

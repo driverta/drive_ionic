@@ -78,4 +78,28 @@ export class SearchPage {
     });
   }
 
+  filterDay(ev) {
+    alert("Hi")
+    this.players.forEach( (value, index) => {
+      var queryGains = firebase.database().ref('/' + value.name + '/gains');
+      queryGains.once("value").then( snapshot => {
+        this.loop = 0;
+        this.gains = 0;
+        snapshot.forEach( childSnapshot => {
+          this.loop++
+          var childData1 = childSnapshot.val();
+          var gains = childData1.gains;
+          var date = childData1.date;
+          var todaysDate = new Date().toISOString().slice(0,10);
+          if(date == todaysDate) {
+            this.gains = this.gains + gains
+          }
+          if ( snapshot.numChildren() == this.loop ) {
+            value.gains = this.gains;
+          }
+        });
+      });
+    })
+  }
+
 }
