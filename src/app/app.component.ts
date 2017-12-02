@@ -47,7 +47,8 @@ export class MyApp {
     { title: 'Exercises', component: 'ListMasterPage' },
     { title: 'Menu', component: 'MenuPage' },
     { title: 'Profile', component: 'SettingsPage' },
-    { title: 'Leaderboard', component: 'SearchPage' }
+    { title: 'Leaderboard', component: 'SearchPage' },
+    { title: 'AddCompetitors', component: 'AddCompetitorsPage' }
   ]
 
   constructor(private translate: TranslateService, private platform: Platform, settings: Settings, private config: Config, private statusBar: StatusBar, private splashScreen: SplashScreen, data: DataService) {

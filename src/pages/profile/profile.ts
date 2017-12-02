@@ -33,6 +33,7 @@ export class SettingsPage {
   loop = 0;
   gains = 0;
   records = 0;
+  imageData: any;
 
   options: any;
 
@@ -144,10 +145,20 @@ export class SettingsPage {
     let reader = new FileReader();
     reader.onload = (readerEvent) => {
 
-      let imageData = (readerEvent.target as any).result;
+      this.imageData = (readerEvent.target as any).result;
       this.show = false;
-      this.form.patchValue({ 'profilePic': imageData });
+      this.form.patchValue({ 'profilePic': this.imageData });
     };
+    //alert(this.imageData);
+    var storage = firebase.storage();
+    var storageRef = storage.ref();
+    var imagesRef = storageRef.child(this.username);
+    var spaceRef = storageRef.child(this.username + '/profilePic');
+    /*
+    spaceRef.put(this.imageData).then(function(snapshot) {
+      console.log('Uploaded a blob or file!');
+    });
+    */
 
     reader.readAsDataURL(event.target.files[0]);
   }

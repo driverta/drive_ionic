@@ -53,8 +53,9 @@ export class NewSetComponent {
         var childData2 = childSnapshot.val();
         var gains = childData2.gains;
         this.gains = this.gains + gains
-        if ( snapshot.numChildren() == this.loop )
+        if ( snapshot.numChildren() == this.loop ) {
           this.setLevel()
+        }
       })
     })
   }
