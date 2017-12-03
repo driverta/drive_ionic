@@ -79,8 +79,15 @@ export class SearchPage {
   }
 
   filterDay(ev) {
-    alert("Hi")
-    this.players.forEach( (value, index) => {
+    var todaysDate = new Date().toISOString().slice(0,10);
+    var lastWeek = new Date();
+    var lastMonth = new Date();
+    lastWeek.setDate(lastWeek.getDate() - 7)
+    lastMonth.setDate(lastMonth.getDate() - 30)
+    if(ev == "All Time"){
+      this.ionViewWillEnter();
+    }else{
+      this.players.forEach( (value, index) => {
       var queryGains = firebase.database().ref('/' + value.name + '/gains');
       queryGains.once("value").then( snapshot => {
         this.loop = 0;
@@ -90,16 +97,33 @@ export class SearchPage {
           var childData1 = childSnapshot.val();
           var gains = childData1.gains;
           var date = childData1.date;
-          var todaysDate = new Date().toISOString().slice(0,10);
-          if(date == todaysDate) {
-            this.gains = this.gains + gains
+          var testDate = new Date(date);
+          //alert(testDate);
+          if(ev == "Today"){
+
+            if(date == todaysDate) {
+              this.gains = this.gains + gains;
+            }
           }
+          if(ev == "Week"){
+            
+            if(testDate > lastWeek) {
+              this.gains = this.gains + gains;
+            }
+          }
+          if(ev == "Month"){
+            if(testDate > lastMonth) {
+              this.gains = this.gains + gains;
+            }
+          }
+          
           if ( snapshot.numChildren() == this.loop ) {
             value.gains = this.gains;
           }
         });
       });
     })
+    }
   }
 
 }
