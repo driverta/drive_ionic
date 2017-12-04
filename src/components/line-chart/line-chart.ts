@@ -53,7 +53,7 @@ export class LineChartComponent {
   public makeChart2() {
   	this.username = this.user._user;
   	this.history._charts = [];
-  	var queryHistory = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '/history');
+  	var queryHistory = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '-' + this.exercise.variation + '/history');
     queryHistory.once("value").then( snapshot => {
     	this.loop = 0;
       snapshot.forEach( childSnapshot => {

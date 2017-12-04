@@ -97,13 +97,13 @@ export class NewSetComponent {
     var set = { date: date, weight: this.weight, reps: this.reps, oneRM: oneRM, gains: gains};
     var g = { date: date, gains: gains};
     
-    var history = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '/history');
+    var history = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '-' + this.exercise.variation + '/history');
     history.push(set);
 
     var points = firebase.database().ref('/' + this.username + '/gains');
     points.push(g);
 
-    var records = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '/records');
+    var records = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '-' + this.exercise.variation + '/records');
     records.set(this.records._records);
 
 

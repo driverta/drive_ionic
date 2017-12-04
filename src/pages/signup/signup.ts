@@ -17,9 +17,9 @@ export class SignupPage {
   // If you're using the username field with or without email, make
   // sure to add it to the type
   account: { name: string, email: string, password: string } = {
-    name: 'Test Human',
-    email: 'test@example.com',
-    password: 'test'
+    name: '',
+    email: '',
+    password: ''
   };
 
   starterBench = {
@@ -98,22 +98,14 @@ export class SignupPage {
     setX.child('exercises').set('Squat');
     setX.child('exercises').set('Deadlift');
 
-    var b = firebase.database().ref('/' + this.account.name + '/exercises/Bench Press');
+    var b = firebase.database().ref('/' + this.account.name + '/exercises/Bench Press-Barbell');
     b.set(this.starterBench);
 
-    var s = firebase.database().ref('/' + this.account.name + '/exercises/Squat');
+    var s = firebase.database().ref('/' + this.account.name + '/exercises/Squat-Barbell');
     s.set(this.starterSquat);
 
-    var d = firebase.database().ref('/' + this.account.name + '/exercises/Deadlift');
+    var d = firebase.database().ref('/' + this.account.name + '/exercises/Deadlift-Barbell');
     d.set(this.starterDead);
-
-    /* Tried to set History without a zero value but it ovverrides other exercise data
-
-    var setHistory = firebase.database().ref('/' + this.account.name + '/exercises');
-    setHistory.child('Bench').set('history');
-    setHistory.child('Squat').set('history');
-    setHistory.child('Deadlift').set('history');
-    */
 
     firebase.auth().createUserWithEmailAndPassword(this.account.email, this.account.password)
       .then(value => {

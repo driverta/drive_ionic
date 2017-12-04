@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
 import {Observable} from 'rxjs/Observable';
 import { AlertController } from 'ionic-angular';
 
@@ -28,6 +28,7 @@ export class CustomRecordsPage {
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
+    public viewCtrl: ViewController,
     private alertCtrl: AlertController,
     private records: Records) {
 
@@ -55,6 +56,14 @@ export class CustomRecordsPage {
       buttons: ['Ok']
     });
     alert2.present();
+  }
+
+  notEnoughAlert(){
+    let alert3 = this.alertCtrl.create({
+      title: 'You need to track 10 Records!',
+      buttons: ['Ok']
+    });
+    alert3.present();
   }
 
   deleteRec(x) {
@@ -87,6 +96,26 @@ export class CustomRecordsPage {
   }
 
   saveRecord() {
-    this.navCtrl.push('ItemDetailPage');
+    if (this.records._records.length == 10){
+      this.viewCtrl.dismiss();
+    } else {
+      this.notEnoughAlert();
+    }
+  }
+
+  cancel() {
+    this.records._records = [
+      { reps: 1, weight: 0, oneRM: 0, records: 0 },
+      { reps: 2, weight: 0, oneRM: 0, records: 0 },
+      { reps: 3, weight: 0, oneRM: 0, records: 0 },
+      { reps: 4, weight: 0, oneRM: 0, records: 0 },
+      { reps: 5, weight: 0, oneRM: 0, records: 0 },
+      { reps: 6, weight: 0, oneRM: 0, records: 0 },
+      { reps: 8, weight: 0, oneRM: 0, records: 0 },
+      { reps: 10, weight: 0, oneRM: 0, records: 0 },
+      { reps: 12, weight: 0, oneRM: 0, records: 0 },
+      { reps: 15, weight: 0, oneRM: 0, records: 0 }
+    ];
+    this.viewCtrl.dismiss();
   }
 }

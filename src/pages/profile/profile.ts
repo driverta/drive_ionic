@@ -87,6 +87,7 @@ export class SettingsPage {
     // Watch the form for changes, and
     this.form.valueChanges.subscribe((v) => {
       this.settings.merge(this.form.value);
+      console.log(group.profilePic);
     });
   }
 
@@ -139,9 +140,11 @@ export class SettingsPage {
     } else {
       this.fileInput.nativeElement.click();
     }
+
   }
 
   processWebImage(event) {
+    //alert(event);
     let reader = new FileReader();
     reader.onload = (readerEvent) => {
 
@@ -149,7 +152,7 @@ export class SettingsPage {
       this.show = false;
       this.form.patchValue({ 'profilePic': this.imageData });
     };
-    //alert(this.imageData);
+    
     var storage = firebase.storage();
     var storageRef = storage.ref();
     var imagesRef = storageRef.child(this.username);

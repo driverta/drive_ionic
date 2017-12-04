@@ -33,7 +33,7 @@ export class HistoryComponent {
     this.username = this.user._user;
     this.history._history = [];
 
-    var queryHistory = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '/history');
+    var queryHistory = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '-' + this.exercise.variation + '/history');
     queryHistory.once("value").then( snapshot => {
       snapshot.forEach( childSnapshot => {
         var childData1 = childSnapshot.val();
@@ -70,7 +70,7 @@ export class HistoryComponent {
     d3.selectAll("svg > *").remove();
     this.username = this.user._user
     var set = x;
-    var query1 = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '/history');
+    var query1 = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '-' + this.exercise.variation + '/history');
     query1.once("value").then( snapshot => {
 
       snapshot.forEach( childSnapshot => {
