@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 import { User } from '../../providers/providers';
 import { Levels } from '../../providers/providers';
+import { SortByGainsPipe } from '../../pipes/sort-by-gains/sort-by-gains'
 
 import firebase from 'firebase';
 
@@ -18,6 +19,7 @@ export class SearchPage {
   username: any;
   loop = 0;
   gains = 0;
+  loop2 = 0;
 
   players = [
     {name: "tdriver369", level: 7, gains: 375},
@@ -119,11 +121,11 @@ export class SearchPage {
           
           if ( snapshot.numChildren() == this.loop ) {
             value.gains = this.gains;
+            
           }
         });
       });
     })
     }
   }
-
 }

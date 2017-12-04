@@ -20,6 +20,7 @@ import { Records } from '../providers/records/records';
 import { Levels } from '../providers/levels/levels';
 import { HistoryProvider } from '../providers/history/history';
 
+
 // The translate loader needs to know where to load i18n files
 // in Ionic's static asset pipeline.
 export function HttpLoaderFactory(http: Http) {

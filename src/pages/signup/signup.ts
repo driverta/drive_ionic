@@ -107,6 +107,9 @@ export class SignupPage {
     var d = firebase.database().ref('/' + this.account.name + '/exercises/Deadlift-Barbell');
     d.set(this.starterDead);
 
+    var competitors = firebase.database().ref('/' + this.account.name + '/competing');
+    competitors.child(this.account.name).set(this.account);
+
     firebase.auth().createUserWithEmailAndPassword(this.account.email, this.account.password)
       .then(value => {
         this.user._user = this.account.name;

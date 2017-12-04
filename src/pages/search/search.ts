@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 
 import { User } from '../../providers/providers';
 
@@ -22,8 +22,10 @@ export class AddCompetitorsPage {
 	currentItems: any = [];
 	users: any = [];
 	username: any;
+  players = [];
+  loop = 0;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public user: User) {
+  constructor(public alertCtrl: AlertController, public navCtrl: NavController, public navParams: NavParams, public user: User) {
   }
 
   ionViewWillEnter() {
@@ -37,6 +39,18 @@ export class AddCompetitorsPage {
         var childData1 = childSnapshot.val();
         this.users.push(childData1)
         //alert(this.user._user);      
+      });
+    });
+    this.username = this.user._user
+    this.players = [];
+    var queryPlayers = firebase.database().ref('/' + this.username + '/competing');
+    queryPlayers.once("value").then( snapshot => {
+      this.loop = 0;
+      snapshot.forEach( childSnapshot => {
+        this.loop++
+        var childData1 = childSnapshot.val();
+        var data = {name: childData1.name, level: 0, gains: 0};
+        this.players.push(data);
       });
     });
   }
@@ -58,10 +72,38 @@ export class AddCompetitorsPage {
   }
 
   addToLeaderboard(item){
-  	this.username = this.user._user
-  	var competitors = firebase.database().ref('/' + this.username + '/competing');
-  	competitors.child(item.name).set(item);
+    var check = true;
+    
+    this.players.forEach( value => {
+
+      if (value.name == item.name) {
+
+        this.alreadyCompeting();
+        check = false;
+      } 
+    })
+  	
+    if(check){
+      var competitors = firebase.database().ref('/' + this.username + '/competing');
+      competitors.child(item.name).set(item);
+      this.playerAdded();
+    }
+  	
   }
 
+  alreadyCompeting() {
+    let alert = this.alertCtrl.create({
+      title: 'You are already Cometing with this player!',
+      buttons: ['Ok']
+    });
+    alert.present();
+  }
 
+  playerAdded() {
+    let alert = this.alertCtrl.create({
+      title: 'Player added to your leaderboard!',
+      buttons: ['Ok']
+    });
+    alert.present();
+  }
 }

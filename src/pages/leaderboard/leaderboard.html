@@ -28,7 +28,7 @@
         <td>Name</td>
         <td>Level</td>
       </tr>
-      <tr *ngFor="let x of players">
+      <tr *ngFor="let x of players | sortByGains">
         <td>{{x.gains}}</td>
         <td>{{x.name}}</td>
         <td>{{x.level}}</td>
