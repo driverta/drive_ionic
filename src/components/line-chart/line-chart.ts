@@ -59,6 +59,7 @@ export class LineChartComponent {
       snapshot.forEach( childSnapshot => {
       	this.loop++
         var childData1 = childSnapshot.val();
+        
         var s = {date: childData1.date, reps: childData1.reps, weight: childData1.weight, oneRM: childData1.oneRM};
         this.history._charts.push(s); 
         if ( snapshot.numChildren() == this.loop ) {

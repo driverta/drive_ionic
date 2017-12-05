@@ -147,11 +147,12 @@ export class SettingsPage {
     //alert(event);
     let reader = new FileReader();
     reader.onload = (readerEvent) => {
-
+      //alert(readerEvent.target)
       this.imageData = (readerEvent.target as any).result;
       this.show = false;
       this.form.patchValue({ 'profilePic': this.imageData });
     };
+    reader.readAsDataURL(event.target.files[0]);
     
     var storage = firebase.storage();
     var storageRef = storage.ref();
@@ -162,11 +163,12 @@ export class SettingsPage {
       console.log('Uploaded a blob or file!');
     });
     */
-
-    reader.readAsDataURL(event.target.files[0]);
+    //alert(event.target.files[0])
+    
   }
 
   getProfileImageStyle() {
+
     return 'url(' + this.form.controls['profilePic'].value + ')'
   }
 

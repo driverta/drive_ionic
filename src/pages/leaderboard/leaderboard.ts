@@ -85,6 +85,7 @@ export class SearchPage {
     var lastWeek = new Date();
     var lastMonth = new Date();
     lastWeek.setDate(lastWeek.getDate() - 7)
+
     lastMonth.setDate(lastMonth.getDate() - 30)
     if(ev == "All Time"){
       this.ionViewWillEnter();
@@ -99,11 +100,14 @@ export class SearchPage {
           var childData1 = childSnapshot.val();
           var gains = childData1.gains;
           var date = childData1.date;
-          var testDate = new Date(date);
+          var newDate = date.slice(0,10);
+          //alert(newDate);
+          var testDate = new Date(newDate);
+          
           //alert(testDate);
           if(ev == "Today"){
 
-            if(date == todaysDate) {
+            if(newDate == todaysDate) {
               this.gains = this.gains + gains;
             }
           }
