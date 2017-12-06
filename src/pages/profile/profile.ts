@@ -38,6 +38,7 @@ export class SettingsPage {
   options: any;
 
   show: boolean = true;
+  load: boolean = true;
 
   settingsReady = false;
 
@@ -136,9 +137,11 @@ export class SettingsPage {
         this.progress = this.xcurrent / this.xtotal * 100
       }
     });
+    
   }
 
   getPicture() {
+    this.load = true;
     if (Camera['installed']()) {
       this.camera.getPicture({
         destinationType: this.camera.DestinationType.DATA_URL,
@@ -167,33 +170,37 @@ export class SettingsPage {
       this.show = false;
       this.form.patchValue({ 'profilePic': this.imageData });
     };
-    /*
-    var storage = firebase.storage();
-    var storageRef = storage.ref();
-    var imagesRef = storageRef.child(this.username);
-    var spaceRef = storageRef.child(this.username + '/profilePic');
-    
-    spaceRef.put(this.imageData).then(function(snapshot) {
-      console.log('Uploaded a blob or file!');
-    });
-    */
-
     reader.readAsDataURL(event.target.files[0]);
   }
 
   getProfileImageStyle() {
 
-    return 'url(' + this.form.controls['profilePic'].value + ')'
+    try {
+      //this.noLoad();
+      return 'url(' + this.form.controls['profilePic'].value + ')'
+    }
+    catch(err){
+
+    }
+    finally{
+      
+    }
+    
+  }
+
+  noLoad(){
+    this.load = false;
   }
 
   ionViewWillEnter() {
+
     this.ionViewDidLoad();
     // Build an empty form for the template to render
     this.form = this.formBuilder.group({});
 
     this.page = this.navParams.get('page') || this.page;
     this.pageTitleKey = this.navParams.get('pageTitleKey') || this.pageTitleKey;
-
+    
     this.translate.get(this.pageTitleKey).subscribe((res) => {
       this.pageTitle = res;
     })
