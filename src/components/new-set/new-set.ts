@@ -106,8 +106,6 @@ export class NewSetComponent {
     var records = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '-' + this.exercise.variation + '/records');
     records.set(this.records._records);
 
-
-
     this.myEvent.emit(null);
     this.ngOnInit();
   }

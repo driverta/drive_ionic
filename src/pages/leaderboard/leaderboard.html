@@ -25,13 +25,24 @@
     <table>
       <tr>
         <td>Gains</td>
-        <td>Name</td>
+        <td></td>
+        <td></td>
         <td>Level</td>
       </tr>
-      <tr *ngFor="let x of players | sortByGains">
+      <tr *ngFor="let x of players | sortByGains" [ngClass]="{red: x.name == username}">
         <td>{{x.gains}}</td>
+        <td>
+          <ion-item no-lines>
+            <ion-avatar>
+              <img [src]="x.profilePic" />
+            </ion-avatar>
+          </ion-item>
+        </td>
         <td>{{x.name}}</td>
         <td>{{x.level}}</td>
+        <td>
+          <input type="button" value="X" class="remove" (click)="presentConfirm(x)">
+        </td>
       </tr>
     </table>
   </div>

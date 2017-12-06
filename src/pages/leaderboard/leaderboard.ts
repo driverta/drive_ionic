@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 
 import { User } from '../../providers/providers';
 import { Levels } from '../../providers/providers';
@@ -21,13 +21,11 @@ export class SearchPage {
   gains = 0;
   loop2 = 0;
 
-  players = [
-    {name: "tdriver369", level: 7, gains: 375},
-    {name: "battleblake", level: 4, gains: 235},
-    {name: "fratdromazos", level: 2, gains: 105}
+  players= [
+    {name: "tom", level: 3, gains: 100, profilePic: ""}
   ]
 
-  constructor(public user: User, public levels: Levels, public navCtrl: NavController, public navParams: NavParams) { }
+  constructor(public alertCtrl: AlertController, public user: User, public levels: Levels, public navCtrl: NavController, public navParams: NavParams) { }
 
   addCompetitors() {
     this.navCtrl.push('AddCompetitorsPage')
@@ -43,10 +41,11 @@ export class SearchPage {
       snapshot.forEach( childSnapshot => {
         this.loop++
         var childData1 = childSnapshot.val();
-        var data = {name: childData1.name, level: 0, gains: 0};
+        var data = {name: childData1.name, level: 0, gains: 0, profilePic: ""};
         this.players.push(data);
         if ( snapshot.numChildren() == this.loop ) {
-          this.getGains()
+          this.getGains();
+          this.getPic();
         }
       });
     });
@@ -66,6 +65,20 @@ export class SearchPage {
           if ( snapshot.numChildren() == this.loop ) {
             value.gains = this.gains
             this.setLevel(this.gains, index)
+          }
+        });
+      });
+    })
+  }
+
+  getPic() {
+    this.players.forEach( value => {
+      var queryGains = firebase.database().ref('/users');
+      queryGains.once("value").then( snapshot => {
+        snapshot.forEach( childSnapshot => {
+          var childData1 = childSnapshot.val();
+          if (childData1.name == value.name){
+            value.profilePic = childData1.profilePic;
           }
         });
       });
@@ -131,5 +144,45 @@ export class SearchPage {
       });
     })
     }
+  }
+
+  presentConfirm(x) {
+    let alert = this.alertCtrl.create({
+      title: 'Delete?',
+      message: 'Do you want to remove ' + x.name + ' from your leaderboard?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        },
+        {
+          text: 'Delete',
+          handler: () => {
+            this.deleteSet(x);
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
+
+  deleteSet(x) {
+
+    var set = x;
+    var query1 = firebase.database().ref('/' + this.username + '/competing');
+    query1.once("value").then( snapshot => {
+      snapshot.forEach( childSnapshot => {
+        var childData1 = childSnapshot.val();
+        if (x.name == childData1.name) {
+          childSnapshot.getRef().remove().then(() => {
+            console.log('Write succeeded!');
+            this.ionViewWillEnter();
+          });
+        }
+      });
+    });
   }
 }

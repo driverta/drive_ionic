@@ -87,6 +87,8 @@ export class SettingsPage {
     // Watch the form for changes, and
     this.form.valueChanges.subscribe((v) => {
       this.settings.merge(this.form.value);
+      var pic = firebase.database().ref('/users/' + this.username + '/profilePic');
+      pic.set(this.form.controls['profilePic'].value);
       console.log(group.profilePic);
     });
   }
@@ -103,8 +105,8 @@ export class SettingsPage {
       this.records = 0;
       snapshot.forEach( childSnapshot => {
         this.loop++
-        var childData2 = childSnapshot.val();
-        var gains = childData2.gains;
+        var childData1 = childSnapshot.val();
+        var gains = childData1.gains;
         this.gains = this.gains + gains
         if (gains == 10){
           this.records++;
@@ -112,6 +114,16 @@ export class SettingsPage {
         if ( snapshot.numChildren() == this.loop )
           this.setLevel()
       })
+    })
+
+    var queryPic = firebase.database().ref('users/' + this.username + '/profilePic');
+    queryPic.once("value").then( snapshot => {
+      var pic = snapshot.val();
+      if(pic){
+        this.form.patchValue({ 'profilePic': pic });
+        this.show = false;
+      }
+      //alert(this.form.controls['profilePic'].value)
     })
   }
 
@@ -134,6 +146,7 @@ export class SettingsPage {
         targetHeight: 96
       }).then((data) => {
         this.form.patchValue({ 'profilePic': 'data:image/jpg;base64,' + data });
+
       }, (err) => {
         alert('Unable to take photo');
       })
@@ -141,30 +154,31 @@ export class SettingsPage {
       this.fileInput.nativeElement.click();
     }
 
+
+
   }
 
   processWebImage(event) {
     //alert(event);
     let reader = new FileReader();
     reader.onload = (readerEvent) => {
-      //alert(readerEvent.target)
+
       this.imageData = (readerEvent.target as any).result;
       this.show = false;
       this.form.patchValue({ 'profilePic': this.imageData });
     };
-    reader.readAsDataURL(event.target.files[0]);
-    
+    /*
     var storage = firebase.storage();
     var storageRef = storage.ref();
     var imagesRef = storageRef.child(this.username);
     var spaceRef = storageRef.child(this.username + '/profilePic');
-    /*
+    
     spaceRef.put(this.imageData).then(function(snapshot) {
       console.log('Uploaded a blob or file!');
     });
     */
-    //alert(event.target.files[0])
-    
+
+    reader.readAsDataURL(event.target.files[0]);
   }
 
   getProfileImageStyle() {

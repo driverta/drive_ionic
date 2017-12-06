@@ -30,6 +30,7 @@ export class AddCompetitorsPage {
 
   ionViewWillEnter() {
   	this.users = [];
+    this.username = this.user._user;
     var query1 = firebase.database().ref("/users");
 
     query1.once("value").then( snapshot => {
@@ -39,18 +40,6 @@ export class AddCompetitorsPage {
         var childData1 = childSnapshot.val();
         this.users.push(childData1)
         //alert(this.user._user);      
-      });
-    });
-    this.username = this.user._user
-    this.players = [];
-    var queryPlayers = firebase.database().ref('/' + this.username + '/competing');
-    queryPlayers.once("value").then( snapshot => {
-      this.loop = 0;
-      snapshot.forEach( childSnapshot => {
-        this.loop++
-        var childData1 = childSnapshot.val();
-        var data = {name: childData1.name, level: 0, gains: 0};
-        this.players.push(data);
       });
     });
   }
