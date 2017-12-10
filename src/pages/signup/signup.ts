@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { IonicPage, NavController, ToastController } from 'ionic-angular';
+import { IonicPage, NavController, ToastController, AlertController } from 'ionic-angular';
 
 import firebase from 'firebase';
 
@@ -82,7 +82,8 @@ export class SignupPage {
   constructor(public navCtrl: NavController,
     public user: User,
     public toastCtrl: ToastController,
-    public translateService: TranslateService) {
+    public translateService: TranslateService,
+    public alertCtrl: AlertController) {
 
     this.translateService.get('SIGNUP_ERROR').subscribe((value) => {
       this.signupErrorString = value;
@@ -90,6 +91,7 @@ export class SignupPage {
   }
 
   doSignUp() {
+    
     var name = firebase.database().ref('/users/' + this.account.name + '/name');
     name.set(this.account.name);
     var email = firebase.database().ref('/users/' + this.account.name + '/email');
@@ -118,7 +120,18 @@ export class SignupPage {
       .then(value => {
         this.user._user = this.account.name;
         this.navCtrl.push(MainPage);
+      }).catch( error => {
+        this.firebaseErrors(error)
       });
+  }
+
+  firebaseErrors(error){
+    let alert3 = this.alertCtrl.create({
+      title: error,
+      buttons: ['Ok']
+    });
+    alert3.present();
+    
   }
 
 

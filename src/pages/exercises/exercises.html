@@ -20,6 +20,9 @@
 
 <ion-content>
   <ion-list>
+    <div id='reCont'>
+    <button id="refresh" *ngIf="show" (click)="ionViewWillEnter()">Refresh</button>
+    </div>
     <ion-item-sliding *ngFor="let item of lifts">
       <button ion-item (click)="openItem(item)">
         <!--<ion-avatar item-start>

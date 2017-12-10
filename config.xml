@@ -84,4 +84,5 @@
     <plugin name="cordova-plugin-device" spec="1.1.4" />
     <plugin name="cordova-plugin-splashscreen" spec="~4.0.1" />
     <plugin name="cordova-plugin-firebase" spec="^0.1.24" />
+    <engine name="android" spec="~6.3.0" />
 </widget>
