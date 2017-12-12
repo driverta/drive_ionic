@@ -91,7 +91,10 @@ export class SignupPage {
   }
 
   doSignUp() {
-    
+    if(this.account.name.length > 13){
+      this.tooLong()
+      return;
+    }
     var name = firebase.database().ref('/users/' + this.account.name + '/name');
     name.set(this.account.name);
     var email = firebase.database().ref('/users/' + this.account.name + '/email');
@@ -131,6 +134,15 @@ export class SignupPage {
       buttons: ['Ok']
     });
     alert3.present();
+    
+  }
+
+  tooLong(){
+    let alert = this.alertCtrl.create({
+      title: "Username cannot be more than 12 characters",
+      buttons: ['Ok']
+    });
+    alert.present();
     
   }
 
