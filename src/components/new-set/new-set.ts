@@ -74,7 +74,10 @@ export class NewSetComponent {
   addSet() {
   	d3.selectAll("svg > *").remove();
     var date = new Date().toISOString();
-    var oneRM = this.weight / (1.0278- (this.reps * .0278));
+    var oneRM = (this.weight * this.reps * .033) + this.weight;
+    if(this.reps == 1){
+      oneRM = this.weight;
+    }
     var gains = 5;
     this.bool = false;
 
