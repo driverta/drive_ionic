@@ -33,6 +33,8 @@ export class SettingsPage {
   loop = 0;
   gains = 0;
   records = 0;
+  competing = 0;
+  competitors = 0;
   imageData: any;
 
   options: any;
@@ -114,6 +116,22 @@ export class SettingsPage {
         }
         if ( snapshot.numChildren() == this.loop )
           this.setLevel()
+      })
+    })
+
+    var queryCompeting = firebase.database().ref('/' + this.username + '/competing');
+    queryCompeting.once("value").then( snapshot => {
+      this.competing = 0;
+      snapshot.forEach( childSnapshot => {
+        this.competing++
+      })
+    })
+
+    var queryCompetitors = firebase.database().ref('/' + this.username + '/competitors');
+    queryCompetitors.once("value").then( snapshot => {
+      this.competitors = 0;
+      snapshot.forEach( childSnapshot => {
+        this.competitors++
       })
     })
 

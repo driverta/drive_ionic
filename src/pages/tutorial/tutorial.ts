@@ -32,18 +32,18 @@ export class TutorialPage {
         console.log('Loaded values', values);
         this.slides = [
           {
-            title: values.TUTORIAL_SLIDE1_TITLE,
-            description: values.TUTORIAL_SLIDE1_DESCRIPTION,
+            title: "Welcom to Drive",
+            description: "The game of gains",
             image: 'assets/img/barbell-256.png',
           },
           {
-            title: values.TUTORIAL_SLIDE2_TITLE,
-            description: values.TUTORIAL_SLIDE2_DESCRIPTION,
+            title: "How to earn Gains",
+            description: "Track your workouts and earn 5 gains for every set and 10 gains for every new record.",
             image: 'assets/img/Target-PNG.png',
           },
           {
-            title: values.TUTORIAL_SLIDE3_TITLE,
-            description: values.TUTORIAL_SLIDE3_DESCRIPTION,
+            title: "Compete with Friends",
+            description: "Add friends to your leaderboard to compete",
             image: 'assets/img/knock_out_competition_800_clr.png',
           }
         ];
