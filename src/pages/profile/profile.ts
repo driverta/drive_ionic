@@ -33,10 +33,14 @@ export class SettingsPage {
   loop = 0;
   gains = 0;
   records = 0;
+  competing = 0;
+  competitors = 0;
+  imageData: any;
 
   options: any;
 
   show: boolean = true;
+  load: boolean = true;
 
   settingsReady = false;
 
@@ -86,6 +90,9 @@ export class SettingsPage {
     // Watch the form for changes, and
     this.form.valueChanges.subscribe((v) => {
       this.settings.merge(this.form.value);
+      var pic = firebase.database().ref('/users/' + this.username + '/profilePic');
+      pic.set(this.form.controls['profilePic'].value);
+      console.log(group.profilePic);
     });
   }
 
@@ -101,8 +108,8 @@ export class SettingsPage {
       this.records = 0;
       snapshot.forEach( childSnapshot => {
         this.loop++
-        var childData2 = childSnapshot.val();
-        var gains = childData2.gains;
+        var childData1 = childSnapshot.val();
+        var gains = childData1.gains;
         this.gains = this.gains + gains
         if (gains == 10){
           this.records++;
@@ -110,6 +117,32 @@ export class SettingsPage {
         if ( snapshot.numChildren() == this.loop )
           this.setLevel()
       })
+    })
+
+    var queryCompeting = firebase.database().ref('/' + this.username + '/competing');
+    queryCompeting.once("value").then( snapshot => {
+      this.competing = 0;
+      snapshot.forEach( childSnapshot => {
+        this.competing++
+      })
+    })
+
+    var queryCompetitors = firebase.database().ref('/' + this.username + '/competitors');
+    queryCompetitors.once("value").then( snapshot => {
+      this.competitors = 0;
+      snapshot.forEach( childSnapshot => {
+        this.competitors++
+      })
+    })
+
+    var queryPic = firebase.database().ref('users/' + this.username + '/profilePic');
+    queryPic.once("value").then( snapshot => {
+      var pic = snapshot.val();
+      if(pic){
+        this.form.patchValue({ 'profilePic': pic });
+        this.show = false;
+      }
+      //alert(this.form.controls['profilePic'].value)
     })
   }
 
@@ -122,9 +155,11 @@ export class SettingsPage {
         this.progress = this.xcurrent / this.xtotal * 100
       }
     });
+    
   }
 
   getPicture() {
+    this.load = true;
     if (Camera['installed']()) {
       this.camera.getPicture({
         destinationType: this.camera.DestinationType.DATA_URL,
@@ -132,38 +167,58 @@ export class SettingsPage {
         targetHeight: 96
       }).then((data) => {
         this.form.patchValue({ 'profilePic': 'data:image/jpg;base64,' + data });
+
       }, (err) => {
         alert('Unable to take photo');
       })
     } else {
       this.fileInput.nativeElement.click();
     }
+
+
+
   }
 
   processWebImage(event) {
+    //alert(event);
     let reader = new FileReader();
     reader.onload = (readerEvent) => {
 
-      let imageData = (readerEvent.target as any).result;
+      this.imageData = (readerEvent.target as any).result;
       this.show = false;
-      this.form.patchValue({ 'profilePic': imageData });
+      this.form.patchValue({ 'profilePic': this.imageData });
     };
-
     reader.readAsDataURL(event.target.files[0]);
   }
 
   getProfileImageStyle() {
-    return 'url(' + this.form.controls['profilePic'].value + ')'
+
+    try {
+      //this.noLoad();
+      return 'url(' + this.form.controls['profilePic'].value + ')'
+    }
+    catch(err){
+
+    }
+    finally{
+      
+    }
+    
+  }
+
+  noLoad(){
+    this.load = false;
   }
 
   ionViewWillEnter() {
+
     this.ionViewDidLoad();
     // Build an empty form for the template to render
     this.form = this.formBuilder.group({});
 
     this.page = this.navParams.get('page') || this.page;
     this.pageTitleKey = this.navParams.get('pageTitleKey') || this.pageTitleKey;
-
+    
     this.translate.get(this.pageTitleKey).subscribe((res) => {
       this.pageTitle = res;
     })

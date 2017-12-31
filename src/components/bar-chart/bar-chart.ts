@@ -46,7 +46,7 @@ export class BarChartComponent {
     
     this.username = this.user._user;
     var count = 0; 
-    var queryRecords = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '/records');
+    var queryRecords = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '-' + this.exercise.variation + '/records');
     queryRecords.once("value").then( snapshot => {
       this.loop = 0;
       snapshot.forEach( childSnapshot => {

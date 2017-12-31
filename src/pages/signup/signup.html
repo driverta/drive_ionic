@@ -12,13 +12,13 @@
     <ion-list>
 
       <ion-item>
-        <ion-label fixed>{{ 'NAME' | translate }}</ion-label>
-        <ion-input type="text" [(ngModel)]="account.name" name="name"></ion-input>
+        <ion-label fixed>{{ 'USERNAME' | translate }}</ion-label>
+        <ion-input type="text" [(ngModel)]="account.name" name="name" placeholder="{{ ' TestUser1' | translate }}"></ion-input>
       </ion-item>
 
       <ion-item>
         <ion-label fixed>{{ 'EMAIL' | translate }}</ion-label>
-        <ion-input type="email" [(ngModel)]="account.email" name="email"></ion-input>
+        <ion-input type="email" [(ngModel)]="account.email" name="email" placeholder="{{ 'testUser@example.com' | translate }}"></ion-input>
       </ion-item>
       <!--
       <ion-item>

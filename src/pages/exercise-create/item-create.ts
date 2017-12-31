@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Camera } from '@ionic-native/camera';
-import { IonicPage, NavController, ViewController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, ViewController, NavParams, AlertController } from 'ionic-angular';
 import { CustomRecordsPage } from '../custom-records/custom-records';
 
 import firebase from 'firebase';
@@ -22,9 +22,12 @@ export class ItemCreatePage {
   isReadyToSave: boolean;
 
   item: any;
+  lifts = [];
+  setlifts = [];
   myrecords: any
   exercise: { name: string, variation: string, muscle: string, records: any} = {name: "", variation: "", muscle: "Chest", records: this.records._records};
   username = "test";
+  bool = true;
 
   form: FormGroup;
 
@@ -35,7 +38,8 @@ export class ItemCreatePage {
     formBuilder: FormBuilder, 
     public camera: Camera,
     navParams: NavParams,
-    private records: Records) {
+    private records: Records,
+    public alertCtrl: AlertController) {
 
 
     this.form = formBuilder.group({
@@ -53,7 +57,23 @@ export class ItemCreatePage {
   }
 
   ionViewDidLoad() {
+    this.lifts = [];
+    this.setlifts = [];
+    this.username = this.user._user
+    var query1 = firebase.database().ref('/' + this.username + '/exercises');
 
+    query1.once("value").then( snapshot => {
+
+      snapshot.forEach( childSnapshot => {
+
+        var childData1 = childSnapshot.val();
+        
+        this.setlifts.push(childData1);
+        this.lifts = this.setlifts
+
+      });
+
+    });
   }
 
   goToOtherPage() {
@@ -103,12 +123,32 @@ export class ItemCreatePage {
   }
 
   saveExercise() {
-    this.username = this.user._user
+    this.bool = true;
+    this.exercise.records = this.records._records;
+    this.lifts.forEach( value =>{
+      if(value.name == this.exercise.name && value.variation == this.exercise.variation){
+        this.presentAlert();
+        this.bool = false;
+      }
+    })
 
-    var setX = firebase.database().ref('/' + this.username + '/exercises');
-    setX.child(this.exercise.name).set(this.exercise);
+    if(this.bool){
+      var setX = firebase.database().ref('/' + this.username + '/exercises');
+      setX.child(this.exercise.name + '-' + this.exercise.variation).set(this.exercise);
+      this.done();
+    }
+    
 
   }
+
+  presentAlert() {
+  let alert = this.alertCtrl.create({
+    title: 'Duplicate Exercise',
+    subTitle: 'You already have an exercise with this name and Variation',
+    buttons: ['Dismiss']
+  });
+  alert.present();
+}
 
 
 }

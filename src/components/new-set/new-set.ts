@@ -53,8 +53,9 @@ export class NewSetComponent {
         var childData2 = childSnapshot.val();
         var gains = childData2.gains;
         this.gains = this.gains + gains
-        if ( snapshot.numChildren() == this.loop )
+        if ( snapshot.numChildren() == this.loop ) {
           this.setLevel()
+        }
       })
     })
   }
@@ -73,7 +74,10 @@ export class NewSetComponent {
   addSet() {
   	d3.selectAll("svg > *").remove();
     var date = new Date().toISOString();
-    var oneRM = this.weight / (1.0278- (this.reps * .0278));
+    var oneRM = (this.weight * this.reps * .033) + this.weight;
+    if(this.reps == 1){
+      oneRM = this.weight;
+    }
     var gains = 5;
     this.bool = false;
 
@@ -96,16 +100,14 @@ export class NewSetComponent {
     var set = { date: date, weight: this.weight, reps: this.reps, oneRM: oneRM, gains: gains};
     var g = { date: date, gains: gains};
     
-    var history = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '/history');
+    var history = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '-' + this.exercise.variation + '/history');
     history.push(set);
 
     var points = firebase.database().ref('/' + this.username + '/gains');
     points.push(g);
 
-    var records = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '/records');
+    var records = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '-' + this.exercise.variation + '/records');
     records.set(this.records._records);
-
-
 
     this.myEvent.emit(null);
     this.ngOnInit();

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { IonicPage, NavController, ToastController } from 'ionic-angular';
+import { IonicPage, NavController, ToastController, AlertController } from 'ionic-angular';
 
 import firebase from 'firebase';
 
@@ -23,8 +23,8 @@ export class LoginPage {
   // If you're using the username field with or without email, make
   // sure to add it to the type
   account: { email: string, password: string } = {
-    email: 'test@example.com',
-    password: 'test'
+    email: '',
+    password: ''
   };
 
   // Our translated text strings
@@ -33,6 +33,7 @@ export class LoginPage {
   constructor(public navCtrl: NavController,
     public user: User,
     public toastCtrl: ToastController,
+    private alertCtrl: AlertController,
     public translateService: TranslateService) {
 
     this.translateService.get('LOGIN_ERROR').subscribe((value) => {
@@ -61,8 +62,20 @@ export class LoginPage {
     this.authLogin()
       .then(value => {
         this.navCtrl.push(MainPage);
+      }).catch( error => {
+        this.firebaseErrors(error)
       });
   }
+
+  firebaseErrors(error){
+    let alert3 = this.alertCtrl.create({
+      title: error,
+      buttons: ['Ok']
+    });
+    alert3.present();
+    
+  };
+ 
 
   authLogin() : Promise<any> {
     return firebase.auth().signInWithEmailAndPassword(this.account.email, this.account.password);

@@ -53,12 +53,13 @@ export class LineChartComponent {
   public makeChart2() {
   	this.username = this.user._user;
   	this.history._charts = [];
-  	var queryHistory = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '/history');
+  	var queryHistory = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '-' + this.exercise.variation + '/history');
     queryHistory.once("value").then( snapshot => {
     	this.loop = 0;
       snapshot.forEach( childSnapshot => {
       	this.loop++
         var childData1 = childSnapshot.val();
+        
         var s = {date: childData1.date, reps: childData1.reps, weight: childData1.weight, oneRM: childData1.oneRM};
         this.history._charts.push(s); 
         if ( snapshot.numChildren() == this.loop ) {

@@ -29,6 +29,8 @@ export class ListMasterPage {
   about = ["nothing"];
 
   filter: string;
+  show = true;
+  loop = 0;
 
 
   constructor(
@@ -50,15 +52,17 @@ export class ListMasterPage {
     this.setlifts = [];
     this.username = this.user._user
     var query1 = firebase.database().ref('/' + this.username + '/exercises');
-
     query1.once("value").then( snapshot => {
-
+      this.loop = 0;
       snapshot.forEach( childSnapshot => {
-
+        this.loop++
         var childData1 = childSnapshot.val();
         
         this.setlifts.push(childData1);
-        this.lifts = this.setlifts
+        this.lifts = this.setlifts;
+        if ( snapshot.numChildren() == this.loop ) {
+          this.show = false;
+        }
 
       });
 

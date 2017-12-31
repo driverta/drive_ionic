@@ -40,13 +40,12 @@ export class ItemDetailPage {
   ionViewWillEnter() {
     this.username = this.user._user;
     var count = 0; 
-    var queryRecords = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '/records');
+    var queryRecords = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '-' + this.exercise.variation + '/records');
     queryRecords.once("value").then( snapshot => {
       snapshot.forEach( childSnapshot => {
         var childData1 = childSnapshot.val();
         var r = {reps: childData1.reps, weight: childData1.weight, oneRM: childData1.oneRM, records: childData1.records};
         this.records._records[count] = r;
-        //alert(this.records._records[count].records);
         count++     
       });
     });

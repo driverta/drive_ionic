@@ -19,6 +19,8 @@ import { DataService } from '../providers/api/firebase';
 import { Records } from '../providers/records/records';
 import { Levels } from '../providers/levels/levels';
 import { HistoryProvider } from '../providers/history/history';
+import { FeathersProvider } from '../providers/feathers/feathers';
+
 
 // The translate loader needs to know where to load i18n files
 // in Ionic's static asset pipeline.
@@ -76,7 +78,8 @@ export function provideSettings(storage: Storage) {
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     Records,
     Levels,
-    HistoryProvider
+    HistoryProvider,
+    FeathersProvider
   ]
 })
 export class AppModule { }
