@@ -98,7 +98,7 @@ export class NewSetComponent {
     }, 2000);
 
     var set = { date: date, weight: this.weight, reps: this.reps, oneRM: oneRM, gains: gains};
-    var g = { date: date, gains: gains};
+    var g = { date: date, gains: gains, muscle: this.exercise.muscle};
     
     var history = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '-' + this.exercise.variation + '/history');
     history.push(set);

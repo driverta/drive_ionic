@@ -23,6 +23,7 @@ export class ItemDetailPage {
   exercise: any;
   username: any;
   segment = "set";
+  loop = 0;
 
   @ViewChild(BarChartComponent) barChart: BarChartComponent
   @ViewChild(LineChartComponent) lineChart: LineChartComponent
@@ -63,9 +64,25 @@ export class ItemDetailPage {
       { reps: 15, weight: 0, oneRM: 0, records: 0 }
     ];
     this.username = this.user._user;
-    var count = 0; 
-    var queryRecords = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '-' + this.exercise.variation + '/history');
+    var count = 0;
+    var queryRecords = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '-' + this.exercise.variation + '/records');
     queryRecords.once("value").then( snapshot => {
+      this.loop = 0;
+      snapshot.forEach( childSnapshot => {
+        this.loop++
+        var childData1 = childSnapshot.val();
+        this.records._records[this.loop] = childData1;
+        if ( snapshot.numChildren() == this.loop ) {
+          this.getRecords();
+        }
+      });
+    });
+    
+  }
+
+  getRecords() {
+    var queryHistory = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '-' + this.exercise.variation + '/history');
+    queryHistory.once("value").then( snapshot => {
       snapshot.forEach( childSnapshot => {
         var childData1 = childSnapshot.val();
         
