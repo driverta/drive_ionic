@@ -1,12 +1,13 @@
 import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, Nav, NavController, NavParams, AlertController } from 'ionic-angular';
 import { Camera } from '@ionic-native/camera';
 
 import { Settings } from '../../providers/providers';
 import { User } from '../../providers/providers';
 import { Levels } from '../../providers/providers';
+//import { WelcomePage } from '../pages';
 
 import firebase from 'firebase';
 
@@ -23,7 +24,7 @@ import firebase from 'firebase';
 export class SettingsPage {
   // Our local settings object
   @ViewChild('fileInput') fileInput;
-
+  @ViewChild(Nav) nav: Nav;
   xlevel = 1;
   xcurrent = 25;
   xtotal = 100;
@@ -61,6 +62,7 @@ export class SettingsPage {
     public settings: Settings,
     public formBuilder: FormBuilder,
     public navParams: NavParams,
+    private alertCtrl: AlertController,
     public translate: TranslateService,
     public camera: Camera,
     private user: User,
@@ -233,5 +235,34 @@ export class SettingsPage {
 
   ngOnChanges() {
     console.log('Ng All Changes');
+  }
+
+  logOut(){
+    let alert = this.alertCtrl.create({
+      title: 'Logout of ' + this.username + '?',
+      buttons: [
+        {
+          text: 'No',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        },
+        {
+          text: 'Yes',
+          handler: () => {
+            this.reallyLogOut();
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
+
+  reallyLogOut(){
+    localStorage.setItem("var_4","BYE");
+    localStorage.setItem("email","");
+    window.location.reload();
+    this.navCtrl.push("FirstRunPage");
   }
 }

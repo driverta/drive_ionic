@@ -31,6 +31,16 @@
         <ion-input type="password" [(ngModel)]="account.password" name="password"></ion-input>
       </ion-item>
 
+      <ion-item>
+        <ion-label fixed>{{ 'Comfirm Password' | translate }}</ion-label>
+        <ion-input type="password" [(ngModel)]="account.password2" name="password"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Keep me logged in</ion-label>
+        <ion-checkbox ></ion-checkbox>
+      </ion-item>
+
       <div padding>
         <button ion-button color="primary" block>{{ 'SIGNUP_BUTTON' | translate }}</button>
       </div>

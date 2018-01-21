@@ -99,8 +99,6 @@ export class SignupPage {
     name.set(this.account.name);
     var email = firebase.database().ref('/users/' + this.account.name + '/email');
     email.set(this.account.email);
-    var password = firebase.database().ref('/users/' + this.account.name + '/password');
-    password.set(this.account.password);
 
     var setX = firebase.database().ref('/' + this.account.name);
     setX.child('exercises').set('Bench Press');
