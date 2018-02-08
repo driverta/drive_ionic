@@ -5,13 +5,14 @@ records {
 
 	.rectable td {
 		color: black;
-		width: 150px;
+		width: 200px;
 		height: 20px;
 	}
 
-	.rectable th td {
-
+	.rectable th {
+		width: 200px;
 	}
+
 
 	.red {
 		background-color: LightCoral;
@@ -27,5 +28,8 @@ records {
 
 	.silver {
 		background-color: silver;
+	}
+	.scroll {
+		height: 260px;
 	}
 }

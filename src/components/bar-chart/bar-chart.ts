@@ -5,6 +5,8 @@ import  { StatsBarChart } from '../../models/item';
 import { User } from '../../providers/providers';
 import { Records } from '../../providers/providers';
 
+import { SortByRepsPipe } from '../../pipes/sort-by-reps/sort-by-reps'
+
 import * as d3 from 'd3-selection';
 import * as d3Scale from "d3-scale";
 import * as d3Array from "d3-array";
@@ -29,6 +31,7 @@ export class BarChartComponent {
   svg: any;
   g: any;
   loop = 0;
+  checkRec = false;
 
   constructor(
     navParams: NavParams,
@@ -51,9 +54,10 @@ export class BarChartComponent {
       snapshot.forEach( childSnapshot => {
         this.loop++
         var childData1 = childSnapshot.val();
-        
+        this.checkRec = false;
         this.records._records.forEach( (value, index) => {
           if (childData1.reps == value.reps) {
+            this.checkRec = true;
             if (childData1.weight > value.weight) {
               this.records._records[index].weight = childData1.weight;
               this.records._records[index].oneRM = childData1.oneRM;
@@ -61,7 +65,20 @@ export class BarChartComponent {
             }
           }
         });
+        if (this.checkRec == false){
+          this.records._records.push({reps: childData1.reps, weight: childData1.weight, oneRM: childData1.oneRM, records: 1})
+        }
         if ( snapshot.numChildren() == this.loop ) {
+          this.records._records.sort((a: any, b: any) => {
+      
+            if (a.reps < b.reps) {
+              return -1;
+            } else if (a.reps > b.reps) {
+              return 1;
+            } else {
+              return 0;
+            }
+          });
           this.setChart()
         }
       });

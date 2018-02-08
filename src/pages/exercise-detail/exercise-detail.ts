@@ -9,6 +9,7 @@ import { HistoryProvider } from '../../providers/providers';
 
 import { BarChartComponent } from '../../components/bar-chart/bar-chart';
 import { LineChartComponent } from '../../components/line-chart/line-chart';
+import { SortByRepsPipe } from '../../pipes/sort-by-reps/sort-by-reps'
 
 import firebase from 'firebase';
 
@@ -24,6 +25,7 @@ export class ItemDetailPage {
   username: any;
   segment = "set";
   loop = 0;
+  checkRec = false;
 
   @ViewChild(BarChartComponent) barChart: BarChartComponent
   @ViewChild(LineChartComponent) lineChart: LineChartComponent
@@ -40,44 +42,13 @@ export class ItemDetailPage {
 
   ionViewWillEnter() {
     this.records._records = [
-      { reps: 1, weight: 0, oneRM: 0, records: 0 },
-      { reps: 2, weight: 0, oneRM: 0, records: 0 },
-      { reps: 3, weight: 0, oneRM: 0, records: 0 },
-      { reps: 4, weight: 0, oneRM: 0, records: 0 },
-      { reps: 5, weight: 0, oneRM: 0, records: 0 },
-      { reps: 6, weight: 0, oneRM: 0, records: 0 },
-      { reps: 8, weight: 0, oneRM: 0, records: 0 },
-      { reps: 10, weight: 0, oneRM: 0, records: 0 },
-      { reps: 12, weight: 0, oneRM: 0, records: 0 },
-      { reps: 15, weight: 0, oneRM: 0, records: 0 }
+      
     ];
     this.records._chart = [
-      { reps: 1, weight: 0, oneRM: 0, records: 0 },
-      { reps: 2, weight: 0, oneRM: 0, records: 0 },
-      { reps: 3, weight: 0, oneRM: 0, records: 0 },
-      { reps: 4, weight: 0, oneRM: 0, records: 0 },
-      { reps: 5, weight: 0, oneRM: 0, records: 0 },
-      { reps: 6, weight: 0, oneRM: 0, records: 0 },
-      { reps: 8, weight: 0, oneRM: 0, records: 0 },
-      { reps: 10, weight: 0, oneRM: 0, records: 0 },
-      { reps: 12, weight: 0, oneRM: 0, records: 0 },
-      { reps: 15, weight: 0, oneRM: 0, records: 0 }
+      
     ];
     this.username = this.user._user;
-    var count = 0;
-    var queryRecords = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '-' + this.exercise.variation + '/records');
-    queryRecords.once("value").then( snapshot => {
-      this.loop = 0;
-      snapshot.forEach( childSnapshot => {
-        this.loop++
-        var childData1 = childSnapshot.val();
-        this.records._records[this.loop] = childData1;
-        if ( snapshot.numChildren() == this.loop ) {
-          this.getRecords();
-        }
-      });
-    });
-    
+    this.getRecords();
   }
 
   getRecords() {
@@ -85,9 +56,10 @@ export class ItemDetailPage {
     queryHistory.once("value").then( snapshot => {
       snapshot.forEach( childSnapshot => {
         var childData1 = childSnapshot.val();
-        
+        this.checkRec = false;
         this.records._records.forEach( (value, index) => {
           if (childData1.reps == value.reps) {
+            this.checkRec = true;
             if (childData1.weight > value.weight) {
               this.records._records[index].weight = childData1.weight;
               this.records._records[index].oneRM = childData1.oneRM;
@@ -95,6 +67,9 @@ export class ItemDetailPage {
             }
           }
         });
+        if (this.checkRec == false){
+          this.records._records.push({reps: childData1.reps, weight: childData1.weight, oneRM: childData1.oneRM, records: 1})
+        }
       });
     });
     this.barChart.makeChart();

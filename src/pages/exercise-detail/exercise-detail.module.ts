@@ -8,6 +8,8 @@ import { NewSetComponent } from '../../components/new-set/new-set';
 import { HistoryComponent } from '../../components/history/history';
 import { RecordsComponent } from '../../components/records/records';
 import { LineChartComponent } from '../../components/line-chart/line-chart';
+import { PipesModule } from '../../pipes/pipes.module';
+
 
 @NgModule({
   declarations: [
@@ -20,7 +22,8 @@ import { LineChartComponent } from '../../components/line-chart/line-chart';
   ],
   imports: [
     IonicPageModule.forChild(ItemDetailPage),
-    TranslateModule.forChild()
+    TranslateModule.forChild(),
+    PipesModule
   ],
   exports: [
     ItemDetailPage
