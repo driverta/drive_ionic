@@ -26,53 +26,20 @@ export class SignupPage {
   starterBench = {
     name: 'Bench Press',
     variation: 'Barbell', 
-    muscle: 'Chest', 
-    records: [
-      { reps: 1, weight: 0, oneRM: 0, records: 0 },
-      { reps: 2, weight: 0, oneRM: 0, records: 0 },
-      { reps: 3, weight: 0, oneRM: 0, records: 0 },
-      { reps: 4, weight: 0, oneRM: 0, records: 0 },
-      { reps: 5, weight: 0, oneRM: 0, records: 0 },
-      { reps: 6, weight: 0, oneRM: 0, records: 0 },
-      { reps: 8, weight: 0, oneRM: 0, records: 0 },
-      { reps: 10, weight: 0, oneRM: 0, records: 0 },
-      { reps: 12, weight: 0, oneRM: 0, records: 0 },
-      { reps: 15, weight: 0, oneRM: 0, records: 0 }
-    ]};
+    muscle: 'Chest'
+  };
     //history: [{ date: 0, reps: 0, weight: 0, oneRM: 0, gains: 0 }]};
   starterSquat = {
     name: 'Squat',
     variation: 'Barbell',
-    muscle: 'Legs', 
-    records: [
-      { reps: 1, weight: 0, oneRM: 0, records: 0 },
-      { reps: 2, weight: 0, oneRM: 0, records: 0 },
-      { reps: 3, weight: 0, oneRM: 0, records: 0 },
-      { reps: 4, weight: 0, oneRM: 0, records: 0 },
-      { reps: 5, weight: 0, oneRM: 0, records: 0 },
-      { reps: 6, weight: 0, oneRM: 0, records: 0 },
-      { reps: 8, weight: 0, oneRM: 0, records: 0 },
-      { reps: 10, weight: 0, oneRM: 0, records: 0 },
-      { reps: 12, weight: 0, oneRM: 0, records: 0 },
-      { reps: 15, weight: 0, oneRM: 0, records: 0 }
-    ]};
+    muscle: 'Legs'
+  };
     //history: [{ date: 0, reps: 0, weight: 0, oneRM: 0, gains: 0 }]};
   starterDead = {
     name: 'Deadlift',
     variation: 'Barbell',
-    muscle: 'Back', 
-    records: [
-      { reps: 1, weight: 0, oneRM: 0, records: 0 },
-      { reps: 2, weight: 0, oneRM: 0, records: 0 },
-      { reps: 3, weight: 0, oneRM: 0, records: 0 },
-      { reps: 4, weight: 0, oneRM: 0, records: 0 },
-      { reps: 5, weight: 0, oneRM: 0, records: 0 },
-      { reps: 6, weight: 0, oneRM: 0, records: 0 },
-      { reps: 8, weight: 0, oneRM: 0, records: 0 },
-      { reps: 10, weight: 0, oneRM: 0, records: 0 },
-      { reps: 12, weight: 0, oneRM: 0, records: 0 },
-      { reps: 15, weight: 0, oneRM: 0, records: 0 }
-    ]};
+    muscle: 'Back'
+  };
     //history: [{ date: 0, reps: 0, weight: 0, oneRM: 0, gains: 0 }]};
 
   bro: string = "bro";
@@ -102,6 +69,8 @@ export class SignupPage {
     }
     var name = firebase.database().ref('/users/' + this.account.name + '/name');
     name.set(this.account.name);
+    localStorage.setItem("username",this.account.name);
+    
     var email = firebase.database().ref('/users/' + this.account.name + '/email');
     email.set(this.account.email);
 

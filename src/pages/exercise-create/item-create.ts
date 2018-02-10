@@ -25,7 +25,7 @@ export class ItemCreatePage {
   lifts = [];
   setlifts = [];
   myrecords: any
-  exercise: { name: string, variation: string, muscle: string, records: any} = {name: "", variation: "", muscle: "Chest", records: this.records._records};
+  exercise: { name: string, variation: string, muscle: string} = {name: "", variation: "", muscle: "Chest"};
   username = "test";
   bool = true;
 
@@ -94,7 +94,6 @@ export class ItemCreatePage {
 
   saveExercise() {
     this.bool = true;
-    this.exercise.records = this.records._records;
     this.lifts.forEach( value =>{
       if(value.name == this.exercise.name && value.variation == this.exercise.variation){
         this.presentAlert();
