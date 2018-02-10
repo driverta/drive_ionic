@@ -2,6 +2,12 @@
 
   <ion-navbar>
     <ion-title>{{ pageTitle }}</ion-title>
+
+    <ion-buttons right>
+      <button ion-button icon-only (click)="logOut()">
+        <ion-icon name="log-out"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 
 </ion-header>

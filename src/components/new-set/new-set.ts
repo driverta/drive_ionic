@@ -26,6 +26,7 @@ export class NewSetComponent {
   reps = 10;
   bool = false;
   exercise: any;
+  checkRec = false;
 
   @Output() myEvent = new EventEmitter();
 
@@ -80,9 +81,11 @@ export class NewSetComponent {
     }
     var gains = 5;
     this.bool = false;
+    this.checkRec = false;
 
     this.records._records.forEach( (value, index) => {
       if (this.reps == value.reps) {
+        this.checkRec == true
         if (this.weight > value.weight) {
           this.records._records[index].weight = this.weight;
           this.records._records[index].oneRM = oneRM;
@@ -92,22 +95,24 @@ export class NewSetComponent {
         }
       }
     });
+    if (this.checkRec == false){
+      this.records._records.push({reps: this.reps, weight: this.weight, oneRM: oneRM, records: 0})
+      this.bool = true;
+      gains = 10;
+    }
 
     setTimeout(() => {
       this.bool = false;
     }, 2000);
 
     var set = { date: date, weight: this.weight, reps: this.reps, oneRM: oneRM, gains: gains};
-    var g = { date: date, gains: gains};
+    var g = { date: date, gains: gains, muscle: this.exercise.muscle};
     
     var history = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '-' + this.exercise.variation + '/history');
     history.push(set);
 
     var points = firebase.database().ref('/' + this.username + '/gains');
     points.push(g);
-
-    var records = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '-' + this.exercise.variation + '/records');
-    records.set(this.records._records);
 
     this.myEvent.emit(null);
     this.ngOnInit();

@@ -32,7 +32,7 @@ export class TutorialPage {
         console.log('Loaded values', values);
         this.slides = [
           {
-            title: "Welcom to Drive",
+            title: "Welcome to Drive",
             description: "The game of gains",
             image: 'assets/img/barbell-256.png',
           },

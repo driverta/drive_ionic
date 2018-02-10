@@ -5,9 +5,12 @@ import { TranslateService } from '@ngx-translate/core';
 import { Config, Nav, Platform } from 'ionic-angular';
 
 import { FirstRunPage } from '../pages/pages';
+import { MainPage } from '../pages/pages';
 import { Settings } from '../providers/providers';
+import { User } from '../providers/providers';
 
 import { DataService } from '../providers/api/firebase';
+import firebase from 'firebase';
 
 @Component({
   template: `
@@ -32,6 +35,8 @@ import { DataService } from '../providers/api/firebase';
 })
 export class MyApp {
   rootPage = FirstRunPage;
+  tester = ""
+  email = ""
 
   @ViewChild(Nav) nav: Nav;
 
@@ -51,10 +56,40 @@ export class MyApp {
     { title: 'AddCompetitors', component: 'AddCompetitorsPage' }
   ]
 
-  constructor(private translate: TranslateService, private platform: Platform, settings: Settings, private config: Config, private statusBar: StatusBar, private splashScreen: SplashScreen, data: DataService) {
+  constructor(private translate: TranslateService,
+    private platform: Platform,
+    public user: User,
+    settings: Settings,
+    private config: Config,
+    private statusBar: StatusBar,
+    private splashScreen: SplashScreen,
+    data: DataService) {
     this.initTranslate();
     data.init();
 
+    this.tester = localStorage.getItem("var_4");
+      //alert(this.tester)
+      if(this.tester == "HI"){
+        this.setUser();
+        this.rootPage = MainPage;
+      }
+  }
+
+  setUser() {
+    this.email = localStorage.getItem("email");
+    var query1 = firebase.database().ref("/users");
+
+    query1.once("value").then( snapshot => {
+      
+      snapshot.forEach( childSnapshot => {
+        
+        var childData1 = childSnapshot.val();
+        if (childData1.email == this.email) {
+          this.user._user = childData1.name;
+        }
+        //alert(this.user._user);      
+      });
+    });
   }
 
   ionViewDidLoad() {
@@ -63,6 +98,7 @@ export class MyApp {
       // Here you can do any higher level native things you might need.
       this.statusBar.styleDefault();
       this.splashScreen.hide();
+     
     });
   }
 

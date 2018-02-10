@@ -13,6 +13,7 @@ import { MainPage } from '../pages';
   templateUrl: 'signup.html',
 })
 export class SignupPage {
+  confirmPassword = "";
   // The account fields for the login form.
   // If you're using the username field with or without email, make
   // sure to add it to the type
@@ -95,12 +96,14 @@ export class SignupPage {
       this.tooLong()
       return;
     }
+    if(this.account.password != this.confirmPassword){
+      this.badPassword()
+      return;
+    }
     var name = firebase.database().ref('/users/' + this.account.name + '/name');
     name.set(this.account.name);
     var email = firebase.database().ref('/users/' + this.account.name + '/email');
     email.set(this.account.email);
-    var password = firebase.database().ref('/users/' + this.account.name + '/password');
-    password.set(this.account.password);
 
     var setX = firebase.database().ref('/' + this.account.name);
     setX.child('exercises').set('Bench Press');
@@ -146,5 +149,13 @@ export class SignupPage {
     
   }
 
+  badPassword(){
+    let alert = this.alertCtrl.create({
+      title: "Passwords do not match!",
+      buttons: ['Ok']
+    });
+    alert.present();
+    
+  }
 
 }

@@ -18,6 +18,7 @@ export class LoginPage {
 
   username: string;
   users = [];
+  log: boolean = false;
 
   // The account fields for the login form.
   // If you're using the username field with or without email, make
@@ -61,6 +62,7 @@ export class LoginPage {
 
     this.authLogin()
       .then(value => {
+        this.checkLog()
         this.navCtrl.push(MainPage);
       }).catch( error => {
         this.firebaseErrors(error)
@@ -83,5 +85,24 @@ export class LoginPage {
 
   getThingy() {
     return this.username;
+  }
+
+  stayLogged() {
+    if (this.log == false){
+      
+      this.log = true;
+      
+    } else if (this.log == true){
+      
+      this.log = false;
+    }
+    
+  }
+
+  checkLog() {
+    if (this.log == true){
+      localStorage.setItem("var_4","HI");
+      localStorage.setItem("email",this.account.email);
+    }
   }
 }

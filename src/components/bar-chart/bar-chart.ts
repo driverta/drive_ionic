@@ -5,6 +5,8 @@ import  { StatsBarChart } from '../../models/item';
 import { User } from '../../providers/providers';
 import { Records } from '../../providers/providers';
 
+import { SortByRepsPipe } from '../../pipes/sort-by-reps/sort-by-reps'
+
 import * as d3 from 'd3-selection';
 import * as d3Scale from "d3-scale";
 import * as d3Array from "d3-array";
@@ -29,6 +31,7 @@ export class BarChartComponent {
   svg: any;
   g: any;
   loop = 0;
+  checkRec = false;
 
   constructor(
     navParams: NavParams,
@@ -45,18 +48,39 @@ export class BarChartComponent {
   public makeChart() {
     
     this.username = this.user._user;
-    var count = 0; 
-    var queryRecords = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '-' + this.exercise.variation + '/records');
+    var queryRecords = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '-' + this.exercise.variation + '/history');
     queryRecords.once("value").then( snapshot => {
       this.loop = 0;
       snapshot.forEach( childSnapshot => {
         this.loop++
         var childData1 = childSnapshot.val();
-        var r = {reps: childData1.reps, weight: childData1.weight, oneRM: childData1.oneRM, records: childData1.records};
-        this.records._chart[count] = r;
-        if ( snapshot.numChildren() == this.loop )
+        this.checkRec = false;
+        this.records._records.forEach( (value, index) => {
+          if (childData1.reps == value.reps) {
+            this.checkRec = true;
+            if (childData1.weight > value.weight) {
+              this.records._records[index].weight = childData1.weight;
+              this.records._records[index].oneRM = childData1.oneRM;
+              this.records._records[index].records++;
+            }
+          }
+        });
+        if (this.checkRec == false){
+          this.records._records.push({reps: childData1.reps, weight: childData1.weight, oneRM: childData1.oneRM, records: 1})
+        }
+        if ( snapshot.numChildren() == this.loop ) {
+          this.records._records.sort((a: any, b: any) => {
+      
+            if (a.reps < b.reps) {
+              return -1;
+            } else if (a.reps > b.reps) {
+              return 1;
+            } else {
+              return 0;
+            }
+          });
           this.setChart()
-        count++     
+        }
       });
     });
   }
@@ -83,8 +107,8 @@ export class BarChartComponent {
 	initAxis() {
     this.x = d3Scale.scaleBand().rangeRound([0, this.width]).padding(0.1);
     this.y = d3Scale.scaleLinear().rangeRound([this.height, 0]);
-    this.x.domain(this.records._chart.map((d) => d.reps));
-    this.y.domain([0, d3Array.max(this.records._chart, (d) => d.oneRM)]);
+    this.x.domain(this.records._records.map((d) => d.reps));
+    this.y.domain([0, d3Array.max(this.records._records, (d) => d.oneRM)]);
   }
 
   drawAxis() {
@@ -113,7 +137,7 @@ export class BarChartComponent {
 
   drawBars() {
     this.g.selectAll(".bar")
-        .data(this.records._chart)
+        .data(this.records._records)
         .enter().append("rect")
         .attr("class", "bar")
         .attr("x", (d) => this.x(d.reps) )
