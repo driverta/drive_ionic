@@ -23,12 +23,12 @@ import { User } from '../../providers/providers';
 export class ListMasterPage {
   lifts = [{name: "Bench", muscle: "chest"}];
   setlifts = [];
-  username = "test";
+  username = "";
 
   names = ["Lift 1"];
   about = ["nothing"];
 
-  filter: string;
+  filter= "All";
   show = true;
   loop = 0;
 
@@ -47,10 +47,14 @@ export class ListMasterPage {
   /**
    * The view loaded, let's query our items for the list
    */
-  ionViewWillEnter() {
+  ionViewDidLoad() {
+    if(this.user._user){
+      localStorage.setItem("username",this.user._user);
+    }
     this.lifts = [];
     this.setlifts = [];
-    this.username = this.user._user
+    this.username = localStorage.getItem("username");
+    
     var query1 = firebase.database().ref('/' + this.username + '/exercises');
     query1.once("value").then( snapshot => {
       this.loop = 0;
@@ -59,7 +63,8 @@ export class ListMasterPage {
         var childData1 = childSnapshot.val();
         
         this.setlifts.push(childData1);
-        this.lifts = this.setlifts;
+        this.lifts = this.setlifts
+        
         if ( snapshot.numChildren() == this.loop ) {
           this.show = false;
         }
@@ -67,6 +72,7 @@ export class ListMasterPage {
       });
 
     });
+
   }
 
   /**
@@ -74,22 +80,10 @@ export class ListMasterPage {
    * modal and then adds the new item to our data source if the user created one.
    */
   addItem() {
-    this.records._records = [
-      { reps: 1, weight: 0, oneRM: 0, records: 0 },
-      { reps: 2, weight: 0, oneRM: 0, records: 0 },
-      { reps: 3, weight: 0, oneRM: 0, records: 0 },
-      { reps: 4, weight: 0, oneRM: 0, records: 0 },
-      { reps: 5, weight: 0, oneRM: 0, records: 0 },
-      { reps: 6, weight: 0, oneRM: 0, records: 0 },
-      { reps: 8, weight: 0, oneRM: 0, records: 0 },
-      { reps: 10, weight: 0, oneRM: 0, records: 0 },
-      { reps: 12, weight: 0, oneRM: 0, records: 0 },
-      { reps: 15, weight: 0, oneRM: 0, records: 0 }
-    ];
     let addModal = this.modalCtrl.create('ItemCreatePage');
     addModal.onDidDismiss(item => {
       if (item) {
-        this.ionViewWillEnter();
+        this.ionViewDidLoad();
       }
     })
     addModal.present();
@@ -131,7 +125,7 @@ export class ListMasterPage {
         if (childData1['name'].localeCompare(name) == 0) {
           childSnapshot.getRef().remove().then(() => {
             console.log('Write succeeded!');
-            this.ionViewWillEnter();
+            this.ionViewDidLoad();
           });
         }
       });
