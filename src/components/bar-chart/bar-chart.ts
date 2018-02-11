@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import  { StatsBarChart } from '../../models/item';
+import { Storage } from '@ionic/storage';
 
 import { User } from '../../providers/providers';
 import { Records } from '../../providers/providers';
@@ -32,12 +33,14 @@ export class BarChartComponent {
   g: any;
   loop = 0;
   checkRec = false;
+  history = [];
 
   constructor(
     navParams: NavParams,
     public navCtrl: NavController,
     public user: User,
-    private records: Records
+    private records: Records,
+    private storage: Storage
     ) {
 
   	this.width = 1000 - this.margin.left - this.margin.right;
@@ -48,6 +51,38 @@ export class BarChartComponent {
   public makeChart() {
     
     this.username = this.user._user;
+    this.storage.get(this.exercise.name + '/' + this.exercise.variation + '/history').then((val) => {
+      console.log('Your json is', val);
+      if(val){
+        this.history = val;
+      }else {
+        var date = new Date();
+        this.history = [{date:date, reps:0, weight:0, oneRM:0}];
+      }
+      this.loop = 0;
+      this.history.forEach( val => {
+        this.loop++
+        this.checkRec = false;
+        this.records._records.forEach( (value, index) => {
+          if (val.reps == value.reps) {
+            this.checkRec = true;
+            if (val.weight > value.weight) {
+              this.records._records[index].weight = val.weight;
+              this.records._records[index].oneRM = val.oneRM;
+              this.records._records[index].records++;
+            }
+          }
+        });
+        if (this.checkRec == false){
+          this.records._records.push({reps: val.reps, weight: val.weight, oneRM: val.oneRM, records: 1})
+        }
+        if (this.loop == this.history.length){
+          this.sortRecords();
+        }
+      })
+    });
+    
+    /*
     var queryRecords = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '-' + this.exercise.variation + '/history');
     queryRecords.once("value").then( snapshot => {
       this.loop = 0;
@@ -83,6 +118,21 @@ export class BarChartComponent {
         }
       });
     });
+    */
+  }
+
+  sortRecords() {
+    this.records._records.sort((a: any, b: any) => {
+    
+      if (a.reps < b.reps) {
+        return -1;
+      } else if (a.reps > b.reps) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+    this.setChart();
   }
 
   setChart() {

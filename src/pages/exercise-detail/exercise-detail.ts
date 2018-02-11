@@ -1,5 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { Storage } from '@ionic/storage';
 
 import { Items } from '../../providers/providers';
 import { Records } from '../../providers/providers';
@@ -26,6 +27,7 @@ export class ItemDetailPage {
   segment = "set";
   loop = 0;
   checkRec = false;
+  history = [];
 
   @ViewChild(BarChartComponent) barChart: BarChartComponent
   @ViewChild(LineChartComponent) lineChart: LineChartComponent
@@ -35,7 +37,8 @@ export class ItemDetailPage {
     items: Items,
     public records: Records,
     public user: User,
-    public levels: Levels) {
+    public levels: Levels,
+    private storage: Storage) {
 
     this.exercise = navParams.get('item');
   }
@@ -52,6 +55,29 @@ export class ItemDetailPage {
   }
 
   getRecords() {
+    this.storage.get(this.exercise.name + '/' + this.exercise.variation + '/history').then((val) => {
+      console.log('Your json is', val);
+      if (val) {
+        this.history = val;
+        this.history.forEach( val => {
+          this.checkRec = false;
+          this.records._records.forEach( (value, index) => {
+            if (val.reps == value.reps) {
+              this.checkRec = true;
+              if (val.weight > value.weight) {
+                this.records._records[index].weight = val.weight;
+                this.records._records[index].oneRM = val.oneRM;
+                this.records._records[index].records++;
+              }
+            }
+          });
+          if (this.checkRec == false){
+            this.records._records.push({reps: val.reps, weight: val.weight, oneRM: val.oneRM, records: 1})
+          }
+        })
+      }
+    });
+    /*
     var queryHistory = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '-' + this.exercise.variation + '/history');
     queryHistory.once("value").then( snapshot => {
       snapshot.forEach( childSnapshot => {
@@ -72,6 +98,7 @@ export class ItemDetailPage {
         }
       });
     });
+    */
     this.barChart.makeChart();
     this.lineChart.makeChart2();
   }

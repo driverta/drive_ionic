@@ -1,6 +1,7 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 import  { StatsLineChart } from '../../models/item';
 import  { NavParams, AlertController } from 'ionic-angular';
+import { Storage } from '@ionic/storage';
 
 import { HistoryProvider } from '../../providers/providers';
 import { User } from '../../providers/providers';
@@ -24,15 +25,17 @@ export class HistoryComponent {
     navParams: NavParams,
     public user: User,
     private history: HistoryProvider,
-    private alertCtrl: AlertController
+    private alertCtrl: AlertController,
+    private storage: Storage
     ) {
     this.exercise = navParams.get('item');
   }
 
   ngOnInit() {
+
     this.username = this.user._user;
     this.history._history = [];
-
+    /*
     var queryHistory = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '-' + this.exercise.variation + '/history');
     queryHistory.once("value").then( snapshot => {
       snapshot.forEach( childSnapshot => {
@@ -40,6 +43,17 @@ export class HistoryComponent {
         var s = {date: childData1.date, reps: childData1.reps, weight: childData1.weight, oneRM: childData1.oneRM};
         this.history._history.push(s); 
       });
+    });
+    */
+    this.storage.get(this.exercise.name + '/' + this.exercise.variation + '/history').then((val) => {
+      console.log('Your json is', val);
+      if(val){
+        this.history._history = val;
+      }else {
+        var date = new Date();
+        this.history._history = [{date:date, reps:0, weight:0, oneRM:0}];
+      }
+      
     });
   }
 
@@ -69,7 +83,17 @@ export class HistoryComponent {
   deleteSet(x) {
     d3.selectAll("svg > *").remove();
     this.username = this.user._user
-    var set = x;
+    
+    this.history._history.forEach ( (val, index) => {
+      if(val.date == x.date){
+        this.history._history.splice(index, 1);
+        this.storage.set(this.exercise + '/history', this.history._history).then(() => {
+          this.ngOnInit();
+          this.myEvent2.emit(null);
+        });
+      }
+    })
+    /*
     var query1 = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '-' + this.exercise.variation + '/history');
     query1.once("value").then( snapshot => {
 
@@ -85,5 +109,6 @@ export class HistoryComponent {
         }
       });
     });
+    */
   }
 }

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import  { StatsLineChart } from '../../models/item';
+import { Storage } from '@ionic/storage';
 
 import { HistoryProvider } from '../../providers/providers';
 import { User } from '../../providers/providers';
@@ -42,7 +43,8 @@ export class LineChartComponent {
   constructor(
   	navParams: NavParams,
   	public user: User,
-    private history: HistoryProvider
+    private history: HistoryProvider,
+    private storage: Storage
   	) {
   	
   	this.width2 = 1000 - this.margin2.left - this.margin2.right;
@@ -53,6 +55,7 @@ export class LineChartComponent {
   public makeChart2() {
   	this.username = this.user._user;
   	this.history._charts = [];
+    /*
   	var queryHistory = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '-' + this.exercise.variation + '/history');
     queryHistory.once("value").then( snapshot => {
     	this.loop = 0;
@@ -67,6 +70,20 @@ export class LineChartComponent {
         }
       });
     });
+    */
+    
+    this.storage.get(this.exercise.name + '/' + this.exercise.variation + '/history').then((val) => {
+      console.log('Your json is', val);
+       if(val){
+        this.history._charts = val;
+      }else {
+        var date = new Date();
+        this.history._charts = [{date:date, reps:0, weight:0, oneRM:0}];
+      }
+       this.setChart2()      
+    });
+    
+
   }
 
   setChart2() {

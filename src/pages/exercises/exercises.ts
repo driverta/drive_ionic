@@ -6,6 +6,7 @@ import {
   ActionSheetController,
   AlertController
 } from 'ionic-angular';
+import { Storage } from '@ionic/storage';
 
 import { Item } from '../../models/item';
 import { Items } from '../../providers/providers';
@@ -40,7 +41,8 @@ export class ListMasterPage {
     public records: Records,
     public modalCtrl: ModalController,
     private alertCtrl: AlertController,
-    public actShtCtrl: ActionSheetController) {
+    public actShtCtrl: ActionSheetController,
+    private storage: Storage) {
 
   }
 
@@ -54,7 +56,7 @@ export class ListMasterPage {
     this.lifts = [];
     this.setlifts = [];
     this.username = localStorage.getItem("username");
-    
+    /*
     var query1 = firebase.database().ref('/' + this.username + '/exercises');
     query1.once("value").then( snapshot => {
       this.loop = 0;
@@ -72,6 +74,15 @@ export class ListMasterPage {
       });
 
     });
+    */
+    this.storage.get('exercises').then((val) => {
+      console.log('Your json is', val);
+      
+      this.setlifts = val;
+      this.lifts = this.setlifts;
+    });
+
+
 
   }
 
@@ -115,6 +126,17 @@ export class ListMasterPage {
   deleteItem(item) {
     this.username = this.user._user
     var name = item['name'];
+    var variation = item['variation'];
+    
+    this.setlifts.forEach ( (val, index) => {
+      if(val.name == name && val.variation == variation){
+        this.setlifts.splice(index, 1);
+        this.storage.set('exercises', this.setlifts).then(() => {
+          this.ionViewDidLoad();
+        });
+      }
+    })
+    /*
     var query1 = firebase.database().ref('/' + this.username + '/exercises');
     //alert(name);
     query1.once("value").then( snapshot => {
@@ -130,6 +152,7 @@ export class ListMasterPage {
         }
       });
     });
+    */
   }
 
   /**

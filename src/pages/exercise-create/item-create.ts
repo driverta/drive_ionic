@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Camera } from '@ionic-native/camera';
 import { IonicPage, NavController, ViewController, NavParams, AlertController } from 'ionic-angular';
 import { CustomRecordsPage } from '../custom-records/custom-records';
+import { Storage } from '@ionic/storage';
 
 import firebase from 'firebase';
 
@@ -39,7 +40,8 @@ export class ItemCreatePage {
     public camera: Camera,
     navParams: NavParams,
     private records: Records,
-    public alertCtrl: AlertController) {
+    public alertCtrl: AlertController,
+    private storage: Storage) {
 
 
     this.form = formBuilder.group({
@@ -60,6 +62,11 @@ export class ItemCreatePage {
     this.lifts = [];
     this.setlifts = [];
     this.username = this.user._user
+    this.storage.get('exercises').then((val) => {
+      this.setlifts = val;
+      this.lifts = this.setlifts;
+    });
+    /*
     var query1 = firebase.database().ref('/' + this.username + '/exercises');
 
     query1.once("value").then( snapshot => {
@@ -74,6 +81,7 @@ export class ItemCreatePage {
       });
 
     });
+    */
   }
 
   /**
@@ -102,8 +110,13 @@ export class ItemCreatePage {
     })
 
     if(this.bool){
+      /*
       var setX = firebase.database().ref('/' + this.username + '/exercises');
       setX.child(this.exercise.name + '-' + this.exercise.variation).set(this.exercise);
+      */
+      this.lifts.push(this.exercise)
+      this.storage.set('exercises', this.lifts);
+    
       this.done();
     }
     

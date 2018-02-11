@@ -1,5 +1,6 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 import { NavParams, NavController } from 'ionic-angular';
+import { Storage } from '@ionic/storage';
 
 import { User } from '../../providers/providers';
 import { Levels } from '../../providers/providers';
@@ -27,6 +28,7 @@ export class NewSetComponent {
   bool = false;
   exercise: any;
   checkRec = false;
+  history = []
 
   @Output() myEvent = new EventEmitter();
 
@@ -35,7 +37,8 @@ export class NewSetComponent {
   	navParams: NavParams,
   	public user: User,
   	public levels: Levels,
-  	private records: Records
+  	private records: Records,
+    private storage: Storage
   	) {
 
   	this.exercise = navParams.get('item');
@@ -83,39 +86,53 @@ export class NewSetComponent {
     this.bool = false;
     this.checkRec = false;
 
-    this.records._records.forEach( (value, index) => {
-      if (this.reps == value.reps) {
-        this.checkRec == true
-        if (this.weight > value.weight) {
-          this.records._records[index].weight = this.weight;
-          this.records._records[index].oneRM = oneRM;
-          this.records._records[index].records++;
-          gains = 10;
-          this.bool = true;
-        }
-      }
-    });
-    if (this.checkRec == false){
-      this.records._records.push({reps: this.reps, weight: this.weight, oneRM: oneRM, records: 0})
-      this.bool = true;
-      gains = 10;
-    }
-
     setTimeout(() => {
       this.bool = false;
     }, 2000);
 
     var set = { date: date, weight: this.weight, reps: this.reps, oneRM: oneRM, gains: gains};
     var g = { date: date, gains: gains, muscle: this.exercise.muscle};
-    
+
+    this.storage.get(this.exercise.name + '/' + this.exercise.variation + '/history').then((val) => {
+      console.log('Your json is', val);
+      if (val) {
+        this.history = val;
+      }
+      this.history.push(set);
+      this.storage.set(this.exercise.name + '/' + this.exercise.variation + '/history', this.history).then(() => {
+        this.history.forEach( set => {
+          this.checkRec = false;
+          this.records._records.forEach( (value, index) => {
+            if (set.reps == value.reps) {
+              this.checkRec = true;
+              if (set.weight > value.weight) {
+                this.records._records[index].weight = set.weight;
+                this.records._records[index].oneRM = set.oneRM;
+                this.records._records[index].records++;
+                gains = 10
+                this.bool = true;
+              }
+            }
+          });
+          if (this.checkRec == false){
+            this.records._records.push({reps: set.reps, weight: set.weight, oneRM: set.oneRM, records: 1})
+            gains = 10
+            this.bool = true;
+          }
+        })
+      }).then(() => {
+        this.myEvent.emit(null);
+        this.ngOnInit();
+      });
+    });
+    /*
     var history = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '-' + this.exercise.variation + '/history');
     history.push(set);
 
     var points = firebase.database().ref('/' + this.username + '/gains');
     points.push(g);
-
-    this.myEvent.emit(null);
-    this.ngOnInit();
+    */
+    
   }
 
 }

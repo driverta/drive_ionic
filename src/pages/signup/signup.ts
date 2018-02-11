@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { IonicPage, NavController, ToastController, AlertController } from 'ionic-angular';
+import { Storage } from '@ionic/storage';
 
 import firebase from 'firebase';
 
@@ -51,7 +52,8 @@ export class SignupPage {
     public user: User,
     public toastCtrl: ToastController,
     public translateService: TranslateService,
-    public alertCtrl: AlertController) {
+    public alertCtrl: AlertController,
+    private storage: Storage) {
 
     this.translateService.get('SIGNUP_ERROR').subscribe((value) => {
       this.signupErrorString = value;
@@ -67,6 +69,9 @@ export class SignupPage {
       this.badPassword()
       return;
     }
+    var exercises = [this.starterBench, this.starterSquat, this.starterDead]
+    this.storage.set('exercises', exercises);
+
     var name = firebase.database().ref('/users/' + this.account.name + '/name');
     name.set(this.account.name);
     localStorage.setItem("username",this.account.name);
