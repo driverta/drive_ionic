@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { IonicPage, Nav, NavController, NavParams, AlertController } from 'ionic-angular';
 import { Camera } from '@ionic-native/camera';
+import { Storage } from '@ionic/storage';
 
 import { Settings } from '../../providers/providers';
 import { User } from '../../providers/providers';
@@ -66,7 +67,8 @@ export class SettingsPage {
     public translate: TranslateService,
     public camera: Camera,
     private user: User,
-    public levels: Levels) {
+    public levels: Levels,
+    private storage: Storage) {
   }
 
   _buildForm() {
@@ -103,6 +105,7 @@ export class SettingsPage {
     // Build an empty form for the template to render
     this.form = this.formBuilder.group({});
 
+    /*
     var queryGains = firebase.database().ref('/' + this.username + '/gains');
     queryGains.once("value").then( snapshot => {
       this.loop = 0;
@@ -119,6 +122,23 @@ export class SettingsPage {
         if ( snapshot.numChildren() == this.loop )
           this.setLevel()
       })
+    })
+    */
+
+    this.gains = 0;
+    this.records = 0;
+    this.storage.get('gains').then((val) => {
+      //console.log('Your json is', val);
+      if (val) {
+        val.forEach ( (value) => {
+          this.gains = this.gains + value.gains;
+          if (value.gains == 10){
+            this.records++;
+          }
+        })
+      }
+    }).then(() => {
+      this.setLevel();
     })
 
     var queryCompeting = firebase.database().ref('/' + this.username + '/competing');

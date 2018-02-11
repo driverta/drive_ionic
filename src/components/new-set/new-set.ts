@@ -23,12 +23,14 @@ export class NewSetComponent {
 	username: any;
 	loop = 0;
 	gains = 0;
+  g = 0;
 	weight = 100;
   reps = 10;
   bool = false;
   exercise: any;
   checkRec = false;
-  history = []
+  history = [];
+  totalGains = [];
 
   @Output() myEvent = new EventEmitter();
 
@@ -47,7 +49,19 @@ export class NewSetComponent {
 
   ngOnInit() {
   	this.username = this.user._user
+    this.gains = 0
+    this.storage.get('gains').then((val) => {
+      //console.log('Your json is', val);
+      if (val) {
+        val.forEach ( (value) => {
+          this.gains = this.gains + value.gains
+        })
+      }
+    }).then(() => {
+      this.setLevel();
+    })
 
+    /*
   	var queryGains = firebase.database().ref('/' + this.username + '/gains');
     queryGains.once("value").then( snapshot => {
       this.loop = 0;
@@ -62,6 +76,7 @@ export class NewSetComponent {
         }
       })
     })
+    */
   }
 
   setLevel () {
@@ -82,7 +97,7 @@ export class NewSetComponent {
     if(this.reps == 1){
       oneRM = this.weight;
     }
-    var gains = 5;
+    this.g = 5;
     this.bool = false;
     this.checkRec = false;
 
@@ -90,8 +105,7 @@ export class NewSetComponent {
       this.bool = false;
     }, 2000);
 
-    var set = { date: date, weight: this.weight, reps: this.reps, oneRM: oneRM, gains: gains};
-    var g = { date: date, gains: gains, muscle: this.exercise.muscle};
+    var set = { date: date, weight: this.weight, reps: this.reps, oneRM: oneRM, gains: this.g};
 
     this.storage.get(this.exercise.name + '/' + this.exercise.variation + '/history').then((val) => {
       console.log('Your json is', val);
@@ -109,20 +123,32 @@ export class NewSetComponent {
                 this.records._records[index].weight = set.weight;
                 this.records._records[index].oneRM = set.oneRM;
                 this.records._records[index].records++;
-                gains = 10
+                this.g = 10;
                 this.bool = true;
               }
             }
           });
           if (this.checkRec == false){
             this.records._records.push({reps: set.reps, weight: set.weight, oneRM: set.oneRM, records: 1})
-            gains = 10
+            this.g = 10;
             this.bool = true;
           }
         })
       }).then(() => {
         this.myEvent.emit(null);
-        this.ngOnInit();
+        var g = { date: date, gains: this.g, muscle: this.exercise.muscle, exercise: this.exercise.name + '/' + this.exercise.variation};
+        this.storage.get('gains').then((val) => {
+          //console.log('Your json is', val);
+          if (val) {
+            this.totalGains = val;
+          }
+
+          this.totalGains.push(g);
+          this.storage.set('gains', this.totalGains). then(() => {
+            
+            this.ngOnInit();
+          });
+        });
       });
     });
     /*
