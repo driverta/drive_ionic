@@ -3,6 +3,7 @@ import { TranslateModule } from '@ngx-translate/core';
 import { IonicPageModule } from 'ionic-angular';
 
 import { ListMasterPage } from './exercises';
+import { PipesModule } from '../../pipes/pipes.module';
 
 @NgModule({
   declarations: [
@@ -10,7 +11,8 @@ import { ListMasterPage } from './exercises';
   ],
   imports: [
     IonicPageModule.forChild(ListMasterPage),
-    TranslateModule.forChild()
+    TranslateModule.forChild(),
+    PipesModule
   ],
   exports: [
     ListMasterPage

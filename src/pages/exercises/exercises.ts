@@ -11,6 +11,7 @@ import { Storage } from '@ionic/storage';
 import { Item } from '../../models/item';
 import { Items } from '../../providers/providers';
 import { Records } from '../../providers/providers';
+import { KeysPipe } from '../../pipes/keys/keys'
 
 import firebase from 'firebase';
 
@@ -22,8 +23,8 @@ import { User } from '../../providers/providers';
   templateUrl: 'exercises.html'
 })
 export class ListMasterPage {
-  lifts = [{name: "Bench", muscle: "chest"}];
-  setlifts = [];
+  lifts = {};
+  setlifts = {};
   username = "";
 
   names = ["Lift 1"];
@@ -53,8 +54,8 @@ export class ListMasterPage {
     if(this.user._user){
       localStorage.setItem("username",this.user._user);
     }
-    this.lifts = [];
-    this.setlifts = [];
+    this.lifts = {};
+    this.setlifts = {};
     this.username = localStorage.getItem("username");
     /*
     var query1 = firebase.database().ref('/' + this.username + '/exercises');
@@ -77,13 +78,28 @@ export class ListMasterPage {
     */
     this.storage.get('exercises').then((val) => {
       console.log('Your json is', val);
-      
+ 
       this.setlifts = val;
       this.lifts = this.setlifts;
+      var exercises = firebase.database().ref('/' + this.username + '/exercises');
+      exercises.set(this.setlifts);
     });
+  }
 
-
-
+  ionViewDidEnter() {
+    this.storage.get('exercises').then((lifts) => {
+      console.log('Your json is', lifts);
+ 
+      var exercises = firebase.database().ref('/' + this.username + '/exercises');
+      exercises.set(lifts);
+      /*
+      lifts.forEach((lift, index) => {
+        this.storage.get(lift.name + '/' + lift.variation + '/history').then((sets) => {
+          
+        })
+      })
+      */
+    }); 
   }
 
   /**
@@ -128,14 +144,15 @@ export class ListMasterPage {
     var name = item['name'];
     var variation = item['variation'];
     
-    this.setlifts.forEach ( (val, index) => {
-      if(val.name == name && val.variation == variation){
-        this.setlifts.splice(index, 1);
+    Object.keys(this.setlifts).forEach ( (key) => {
+      if(this.setlifts[key].name == name && this.setlifts[key].variation == variation){
+        delete this.setlifts[key];
         this.storage.set('exercises', this.setlifts).then(() => {
           this.ionViewDidLoad();
         });
       }
     })
+    
     /*
     var query1 = firebase.database().ref('/' + this.username + '/exercises');
     //alert(name);
@@ -228,10 +245,11 @@ export class ListMasterPage {
   }
 
   executeFilter(){
-    this.lifts = [];
-    this.setlifts.forEach( (value, index) => {
-      if (value.muscle == this.filter){
-        this.lifts.push(value);
+    this.lifts = {};
+    //alert(this.lifts["Bench Press-Barbell"].name)
+    Object.keys(this.setlifts).forEach( (key, index) => {
+      if (this.setlifts[key].muscle == this.filter){
+        this.lifts[key] = this.setlifts[key]
       }
     });
   }

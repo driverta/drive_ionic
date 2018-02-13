@@ -24,24 +24,27 @@ export class SignupPage {
     password: ''
   };
 
-  starterBench = {
-    name: 'Bench Press',
-    variation: 'Barbell', 
-    muscle: 'Chest'
+  exercises = {
+    "Bench Press-Barbell": { 
+      name: 'Bench Press',
+      variation: 'Barbell', 
+      muscle: 'Chest',
+      history: []
+    },
+    "Squat-Barbell": {
+      name: 'Squat',
+      variation: 'Barbell',
+      muscle: 'Legs',
+      history: []
+    },
+    "Deadlift-Barbell": {
+      name: 'Deadlift',
+      variation: 'Barbell',
+      muscle: 'Back',
+      history: []
+    }
   };
-    //history: [{ date: 0, reps: 0, weight: 0, oneRM: 0, gains: 0 }]};
-  starterSquat = {
-    name: 'Squat',
-    variation: 'Barbell',
-    muscle: 'Legs'
-  };
-    //history: [{ date: 0, reps: 0, weight: 0, oneRM: 0, gains: 0 }]};
-  starterDead = {
-    name: 'Deadlift',
-    variation: 'Barbell',
-    muscle: 'Back'
-  };
-    //history: [{ date: 0, reps: 0, weight: 0, oneRM: 0, gains: 0 }]};
+  
 
   bro: string = "bro";
 
@@ -69,8 +72,8 @@ export class SignupPage {
       this.badPassword()
       return;
     }
-    var exercises = [this.starterBench, this.starterSquat, this.starterDead]
-    this.storage.set('exercises', exercises);
+   
+    this.storage.set('exercises', this.exercises);
 
     var name = firebase.database().ref('/users/' + this.account.name + '/name');
     name.set(this.account.name);
@@ -79,19 +82,8 @@ export class SignupPage {
     var email = firebase.database().ref('/users/' + this.account.name + '/email');
     email.set(this.account.email);
 
-    var setX = firebase.database().ref('/' + this.account.name);
-    setX.child('exercises').set('Bench Press');
-    setX.child('exercises').set('Squat');
-    setX.child('exercises').set('Deadlift');
-
-    var b = firebase.database().ref('/' + this.account.name + '/exercises/Bench Press-Barbell');
-    b.set(this.starterBench);
-
-    var s = firebase.database().ref('/' + this.account.name + '/exercises/Squat-Barbell');
-    s.set(this.starterSquat);
-
-    var d = firebase.database().ref('/' + this.account.name + '/exercises/Deadlift-Barbell');
-    d.set(this.starterDead);
+    var exercises = firebase.database().ref('/' + this.account.name + '/exercises');
+    exercises.set(this.exercises);
 
     var competitors = firebase.database().ref('/' + this.account.name + '/competing');
     competitors.child(this.account.name).set(this.account);

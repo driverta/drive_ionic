@@ -11,13 +11,9 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class Records {
 
-		_records = [
-	    { reps: 0, weight: 0, oneRM: 0, records: 0 },
-	  ];
+		_records = [];
 
-	  _chart = [
-	    { reps: 0, weight: 0, oneRM: 0, records: 0 },
-	  ];
+	  _chart = [];
 
   constructor(public http: Http) {
    

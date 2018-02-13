@@ -107,14 +107,12 @@ export class NewSetComponent {
 
     var set = { date: date, weight: this.weight, reps: this.reps, oneRM: oneRM, gains: this.g};
 
-    this.storage.get(this.exercise.name + '/' + this.exercise.variation + '/history').then((val) => {
+    this.storage.get('exercises').then((val) => {
       console.log('Your json is', val);
-      if (val) {
-        this.history = val;
-      }
-      this.history.push(set);
-      this.storage.set(this.exercise.name + '/' + this.exercise.variation + '/history', this.history).then(() => {
-        this.history.forEach( set => {
+      var key = this.exercise.name + '-' + this.exercise.variation
+      val[key].history.push(set);
+      this.storage.set('exercises', val).then(() => {
+        val[key].history.forEach( set => {
           this.checkRec = false;
           this.records._records.forEach( (value, index) => {
             if (set.reps == value.reps) {

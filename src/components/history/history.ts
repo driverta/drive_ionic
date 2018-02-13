@@ -45,14 +45,10 @@ export class HistoryComponent {
       });
     });
     */
-    this.storage.get(this.exercise.name + '/' + this.exercise.variation + '/history').then((val) => {
+    this.storage.get('exercises').then((val) => {
       console.log('Your json is', val);
-      if(val){
-        this.history._history = val;
-      }else {
-        var date = new Date();
-        this.history._history = [{date:date, reps:0, weight:0, oneRM:0}];
-      }
+      var key = this.exercise.name + '-' + this.exercise.variation
+      this.history._history = val[key].history;
       
     });
   }
@@ -87,10 +83,14 @@ export class HistoryComponent {
     this.history._history.forEach ( (val, index) => {
       if(val.date == x.date){
         this.history._history.splice(index, 1);
-        this.storage.set(this.exercise + '/history', this.history._history).then(() => {
-          this.ngOnInit();
-          this.myEvent2.emit(null);
-        });
+        this.storage.get('exercises').then((val) => {
+          var key = this.exercise.name + '-' + this.exercise.variation
+          val[key].history = this.history._history
+          this.storage.set('exercises', val).then(() => {
+            this.ngOnInit();
+            this.myEvent2.emit(null);
+          });
+        })
       }
     })
     /*

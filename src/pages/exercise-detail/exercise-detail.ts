@@ -55,27 +55,26 @@ export class ItemDetailPage {
   }
 
   getRecords() {
-    this.storage.get(this.exercise.name + '/' + this.exercise.variation + '/history').then((val) => {
+    this.storage.get('exercises').then((val) => {
       console.log('Your json is', val);
-      if (val) {
-        this.history = val;
-        this.history.forEach( val => {
-          this.checkRec = false;
-          this.records._records.forEach( (value, index) => {
-            if (val.reps == value.reps) {
-              this.checkRec = true;
-              if (val.weight > value.weight) {
-                this.records._records[index].weight = val.weight;
-                this.records._records[index].oneRM = val.oneRM;
-                this.records._records[index].records++;
-              }
+      var key = this.exercise.name + '-' + this.exercise.variation
+      val[key].history.forEach( set => {
+        this.checkRec = false;
+        this.records._records.forEach( (value, index) => {
+          if (set.reps == value.reps) {
+            this.checkRec = true;
+            if (set.weight > value.weight) {
+              this.records._records[index].weight = set.weight;
+              this.records._records[index].oneRM = set.oneRM;
+              this.records._records[index].records++;
             }
-          });
-          if (this.checkRec == false){
-            this.records._records.push({reps: val.reps, weight: val.weight, oneRM: val.oneRM, records: 1})
           }
-        })
-      }
+        });
+        if (this.checkRec == false){
+          this.records._records.push({reps: set.reps, weight: set.weight, oneRM: set.oneRM, records: 1})
+        }
+      })
+      
     });
     /*
     var queryHistory = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '-' + this.exercise.variation + '/history');
