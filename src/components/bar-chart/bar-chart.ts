@@ -50,38 +50,31 @@ export class BarChartComponent {
 
   public makeChart() {
     
-    this.username = this.user._user;
-    this.storage.get(this.exercise.name + '/' + this.exercise.variation + '/history').then((val) => {
+    this.username = localStorage.getItem("username");
+    this.getExercises().then((val) => {
       console.log('Your json is', val);
-      if(val){
-        this.history = val;
-      }else {
-        var date = new Date();
-        this.history = [{date:date, reps:0, weight:0, oneRM:0}];
-      }
+      var key = this.exercise.name + '-' + this.exercise.variation
       this.loop = 0;
-      this.history.forEach( val => {
-        this.loop++
+      val[key].history.forEach( set => {
         this.checkRec = false;
         this.records._records.forEach( (value, index) => {
-          if (val.reps == value.reps) {
+          if (set.reps == value.reps) {
             this.checkRec = true;
-            if (val.weight > value.weight) {
-              this.records._records[index].weight = val.weight;
-              this.records._records[index].oneRM = val.oneRM;
+            if (set.weight > value.weight) {
+              this.records._records[index].weight = set.weight;
+              this.records._records[index].oneRM = set.oneRM;
               this.records._records[index].records++;
             }
           }
         });
         if (this.checkRec == false){
-          this.records._records.push({reps: val.reps, weight: val.weight, oneRM: val.oneRM, records: 1})
+          this.records._records.push({reps: set.reps, weight: set.weight, oneRM: set.oneRM, records: 1})
         }
         if (this.loop == this.history.length){
           this.sortRecords();
         }
       })
     });
-    
     /*
     var queryRecords = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '-' + this.exercise.variation + '/history');
     queryRecords.once("value").then( snapshot => {
@@ -194,6 +187,10 @@ export class BarChartComponent {
         .attr("y", (d) => this.y(d.oneRM) )
         .attr("width", this.x.bandwidth())
         .attr("height", (d) => this.height - this.y(d.oneRM) );
+  }
+
+  getExercises(): Promise<any> {
+    return this.storage.get(this.username + '/exercises');
   }
 
 }

@@ -73,10 +73,11 @@ export class SignupPage {
       return;
     }
    
-    this.storage.set('exercises', this.exercises);
+    this.storage.set(this.account.name + '/exercises', this.exercises);
 
     var name = firebase.database().ref('/users/' + this.account.name + '/name');
     name.set(this.account.name);
+    
     localStorage.setItem("username",this.account.name);
     
     var email = firebase.database().ref('/users/' + this.account.name + '/email');

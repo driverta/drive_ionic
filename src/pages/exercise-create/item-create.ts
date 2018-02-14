@@ -23,8 +23,8 @@ export class ItemCreatePage {
   isReadyToSave: boolean;
 
   item: any;
-  lifts = [];
-  setlifts = [];
+  lifts = {};
+  setlifts = {};
   myrecords: any
   exercise: { name: string, variation: string, muscle: string} = {name: "", variation: "", muscle: "Chest"};
   username = "test";
@@ -59,10 +59,10 @@ export class ItemCreatePage {
   }
 
   ionViewDidLoad() {
-    this.lifts = [];
-    this.setlifts = [];
+    this.lifts = {};
+    this.setlifts = {};
     this.username = this.user._user
-    this.storage.get('exercises').then((val) => {
+    this.storage.get(this.username + '/exercises').then((val) => {
       this.setlifts = val;
       this.lifts = this.setlifts;
     });
@@ -102,8 +102,8 @@ export class ItemCreatePage {
 
   saveExercise() {
     this.bool = true;
-    this.lifts.forEach( value =>{
-      if(value.name == this.exercise.name && value.variation == this.exercise.variation){
+    Object.keys(this.lifts).forEach ( (key) => {
+      if(this.lifts[key].name == this.exercise.name && this.lifts[key].variation == this.exercise.variation){
         this.presentAlert();
         this.bool = false;
       }
@@ -114,8 +114,9 @@ export class ItemCreatePage {
       var setX = firebase.database().ref('/' + this.username + '/exercises');
       setX.child(this.exercise.name + '-' + this.exercise.variation).set(this.exercise);
       */
-      this.lifts.push(this.exercise)
-      this.storage.set('exercises', this.lifts);
+      var key = this.exercise.name + '-' + this.exercise.variation
+      this.lifts[key] = this.exercise
+      this.storage.set(this.username + '/exercises', this.lifts);
     
       this.done();
     }

@@ -48,15 +48,14 @@ export class NewSetComponent {
   }
 
   ngOnInit() {
-  	this.username = this.user._user
+  	this.username = localStorage.getItem("username");
+    //alert(this.username);
     this.gains = 0
-    this.storage.get('gains').then((val) => {
+    this.getGains().then((val) => {
       //console.log('Your json is', val);
-      if (val) {
-        val.forEach ( (value) => {
-          this.gains = this.gains + value.gains
-        })
-      }
+      val.forEach ( (value) => {
+        this.gains = this.gains + value.gains
+      })
     }).then(() => {
       this.setLevel();
     })
@@ -107,11 +106,11 @@ export class NewSetComponent {
 
     var set = { date: date, weight: this.weight, reps: this.reps, oneRM: oneRM, gains: this.g};
 
-    this.storage.get('exercises').then((val) => {
-      console.log('Your json is', val);
+    this.getExercises().then((val) => {
+      //console.log('Your json is', val);
       var key = this.exercise.name + '-' + this.exercise.variation
       val[key].history.push(set);
-      this.storage.set('exercises', val).then(() => {
+      this.storage.set(this.username + '/exercises', val).then(() => {
         val[key].history.forEach( set => {
           this.checkRec = false;
           this.records._records.forEach( (value, index) => {
@@ -135,14 +134,11 @@ export class NewSetComponent {
       }).then(() => {
         this.myEvent.emit(null);
         var g = { date: date, gains: this.g, muscle: this.exercise.muscle, exercise: this.exercise.name + '/' + this.exercise.variation};
-        this.storage.get('gains').then((val) => {
+        this.getGains().then((val) => {
           //console.log('Your json is', val);
-          if (val) {
-            this.totalGains = val;
-          }
-
+          this.totalGains = val;
           this.totalGains.push(g);
-          this.storage.set('gains', this.totalGains). then(() => {
+          this.storage.set(this.username + '/gains', this.totalGains). then(() => {
             
             this.ngOnInit();
           });
@@ -157,6 +153,14 @@ export class NewSetComponent {
     points.push(g);
     */
     
+  }
+
+  getExercises(): Promise<any> {
+    return this.storage.get(this.username + '/exercises');
+  }
+
+  getGains(): Promise<any> {
+    return this.storage.get(this.username + '/gains');
   }
 
 }

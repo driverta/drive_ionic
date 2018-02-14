@@ -25,7 +25,7 @@ import { User } from '../../providers/providers';
 export class ListMasterPage {
   lifts = {};
   setlifts = {};
-  username = "";
+  username = "bob";
 
   names = ["Lift 1"];
   about = ["nothing"];
@@ -51,9 +51,11 @@ export class ListMasterPage {
    * The view loaded, let's query our items for the list
    */
   ionViewDidLoad() {
+    /*
     if(this.user._user){
       localStorage.setItem("username",this.user._user);
     }
+    */
     this.lifts = {};
     this.setlifts = {};
     this.username = localStorage.getItem("username");
@@ -76,30 +78,31 @@ export class ListMasterPage {
 
     });
     */
-    this.storage.get('exercises').then((val) => {
-      console.log('Your json is', val);
- 
+    this.getExercises().then((val) => {
       this.setlifts = val;
       this.lifts = this.setlifts;
       var exercises = firebase.database().ref('/' + this.username + '/exercises');
       exercises.set(this.setlifts);
-    });
+    })
+  }
+
+  getExercises(): Promise<any> {
+    return this.storage.get(this.username + '/exercises');
+  }
+
+  getGains(): Promise<any> {
+    return this.storage.get(this.username + '/gains');
   }
 
   ionViewDidEnter() {
-    this.storage.get('exercises').then((lifts) => {
-      console.log('Your json is', lifts);
- 
+    this.getExercises().then((val) => {
       var exercises = firebase.database().ref('/' + this.username + '/exercises');
-      exercises.set(lifts);
-      /*
-      lifts.forEach((lift, index) => {
-        this.storage.get(lift.name + '/' + lift.variation + '/history').then((sets) => {
-          
-        })
-      })
-      */
-    }); 
+      exercises.set(val);
+    })
+    this.getGains().then((val) => {
+      var gains  = firebase.database().ref('/' + this.username + '/gains');
+      gains.set(val);
+    })
   }
 
   /**
@@ -140,14 +143,13 @@ export class ListMasterPage {
   }
 
   deleteItem(item) {
-    this.username = this.user._user
     var name = item['name'];
     var variation = item['variation'];
     
     Object.keys(this.setlifts).forEach ( (key) => {
       if(this.setlifts[key].name == name && this.setlifts[key].variation == variation){
         delete this.setlifts[key];
-        this.storage.set('exercises', this.setlifts).then(() => {
+        this.storage.set(this.username  + '/exercises', this.setlifts).then(() => {
           this.ionViewDidLoad();
         });
       }

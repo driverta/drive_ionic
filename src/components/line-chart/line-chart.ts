@@ -53,7 +53,7 @@ export class LineChartComponent {
   }
 
   public makeChart2() {
-  	this.username = this.user._user;
+  	this.username = localStorage.getItem("username");
   	this.history._charts = [];
     /*
   	var queryHistory = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '-' + this.exercise.variation + '/history');
@@ -71,19 +71,12 @@ export class LineChartComponent {
       });
     });
     */
-    
-    this.storage.get(this.exercise.name + '/' + this.exercise.variation + '/history').then((val) => {
+    this.getExercises().then((val) => {
       console.log('Your json is', val);
-       if(val){
-        this.history._charts = val;
-      }else {
-        var date = new Date();
-        this.history._charts = [{date:date, reps:0, weight:0, oneRM:0}];
-      }
-       this.setChart2()      
+      var key = this.exercise.name + '-' + this.exercise.variation
+      this.history._charts = val[key].history;
+      this.setChart2()
     });
-    
-
   }
 
   setChart2() {
@@ -134,6 +127,10 @@ export class LineChartComponent {
         .datum(this.history._charts)
         .attr("class", "line")
         .attr("d", this.line);
+  }
+
+  getExercises(): Promise<any> {
+    return this.storage.get(this.username + '/exercises');
   }
 
 }

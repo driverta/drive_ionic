@@ -33,8 +33,9 @@ export class HistoryComponent {
 
   ngOnInit() {
 
-    this.username = this.user._user;
+    this.username = localStorage.getItem("username");
     this.history._history = [];
+
     /*
     var queryHistory = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '-' + this.exercise.variation + '/history');
     queryHistory.once("value").then( snapshot => {
@@ -45,7 +46,7 @@ export class HistoryComponent {
       });
     });
     */
-    this.storage.get('exercises').then((val) => {
+    this.getExercises().then((val) => {
       console.log('Your json is', val);
       var key = this.exercise.name + '-' + this.exercise.variation
       this.history._history = val[key].history;
@@ -83,10 +84,10 @@ export class HistoryComponent {
     this.history._history.forEach ( (val, index) => {
       if(val.date == x.date){
         this.history._history.splice(index, 1);
-        this.storage.get('exercises').then((val) => {
+        this.getExercises().then((val) => {
           var key = this.exercise.name + '-' + this.exercise.variation
           val[key].history = this.history._history
-          this.storage.set('exercises', val).then(() => {
+          this.storage.set(this.username + '/exercises', val).then(() => {
             this.ngOnInit();
             this.myEvent2.emit(null);
           });
@@ -110,5 +111,8 @@ export class HistoryComponent {
       });
     });
     */
+  }
+  getExercises(): Promise<any> {
+    return this.storage.get(this.username + '/exercises');
   }
 }
