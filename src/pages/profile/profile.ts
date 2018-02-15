@@ -101,7 +101,7 @@ export class SettingsPage {
   }
 
   ionViewDidLoad() {
-    this.username = this.user._user
+    this.username = this.username = localStorage.getItem("username");
     // Build an empty form for the template to render
     this.form = this.formBuilder.group({});
 
@@ -127,7 +127,7 @@ export class SettingsPage {
 
     this.gains = 0;
     this.records = 0;
-    this.storage.get('gains').then((val) => {
+    this.storage.get(this.username + '/gains').then((val) => {
       //console.log('Your json is', val);
       if (val) {
         val.forEach ( (value) => {
@@ -280,8 +280,9 @@ export class SettingsPage {
   }
 
   reallyLogOut(){
-    localStorage.setItem("var_4","BYE");
+    localStorage.setItem("stay","out");
     localStorage.setItem("email","");
+    localStorage.setItem("status","bad");
     window.location.reload();
     this.navCtrl.push("FirstRunPage");
   }

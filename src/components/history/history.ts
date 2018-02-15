@@ -47,10 +47,15 @@ export class HistoryComponent {
     });
     */
     this.getExercises().then((val) => {
-      console.log('Your json is', val);
-      var key = this.exercise.name + '-' + this.exercise.variation
-      this.history._history = val[key].history;
-      
+      var keyOne = this.exercise.name + '-' + this.exercise.variation
+      var history = val[keyOne].history;
+      //console.log(val[keyOne].history);
+      if (history) {
+        Object.keys(history).forEach ( (keyTwo) => {
+          var set = {date: history[keyTwo].date, reps: history[keyTwo].reps, weight: history[keyTwo].weight, oneRM: history[keyTwo].oneRM}
+          this.history._history.push(set)
+        })
+      }
     });
   }
 

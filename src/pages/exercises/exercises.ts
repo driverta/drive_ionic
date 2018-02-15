@@ -33,6 +33,9 @@ export class ListMasterPage {
   filter= "All";
   show = true;
   loop = 0;
+  gains = 0;
+  status = ""
+  totalGains = [];
 
 
   constructor(
@@ -59,30 +62,76 @@ export class ListMasterPage {
     this.lifts = {};
     this.setlifts = {};
     this.username = localStorage.getItem("username");
-    /*
-    var query1 = firebase.database().ref('/' + this.username + '/exercises');
-    query1.once("value").then( snapshot => {
-      this.loop = 0;
-      snapshot.forEach( childSnapshot => {
-        this.loop++
-        var childData1 = childSnapshot.val();
-        
-        this.setlifts.push(childData1);
-        this.lifts = this.setlifts
-        
-        if ( snapshot.numChildren() == this.loop ) {
-          this.show = false;
-        }
+    
+    this.status = localStorage.getItem("status");
+    alert(this.status);
+    if (this.status == "good") {
+      this.getExercises().then((val) => {
+        this.setlifts = val;
+        this.lifts = this.setlifts;
+        var exercises = firebase.database().ref('/' + this.username + '/exercises');
+        exercises.set(this.setlifts);
+      })
+    } else {
+      localStorage.setItem("status","good");
+      var query1 = firebase.database().ref('/' + this.username + '/exercises');
+      query1.once("value").then( snapshot => {
+        this.loop = 0;
+        snapshot.forEach( childSnapshot => {
+          this.loop++
+          var childData1 = childSnapshot.val();
+          var key = childSnapshot.key;
+          
+          this.setlifts[key] = childData1;
+          this.lifts = this.setlifts
+          
+          
+
+          if ( snapshot.numChildren() == this.loop ) {
+            alert("HERE")
+            this.show = false;
+            this.saveData();
+            
+          }
+
+        });
 
       });
-
-    });
+      
+    }
+    /*
+    
     */
+    /*
     this.getExercises().then((val) => {
       this.setlifts = val;
       this.lifts = this.setlifts;
       var exercises = firebase.database().ref('/' + this.username + '/exercises');
       exercises.set(this.setlifts);
+    })
+    */
+  }
+
+  saveData() {
+    this.storage.set(this.username + '/exercises', this.setlifts)
+    this.storage.set(this.username + '/gains', this.totalGains)
+    var queryGains = firebase.database().ref('/' + this.username + '/gains');
+
+    queryGains.once("value").then( snapshot => {
+      if (!snapshot) {
+        alert("nope")
+      }
+      this.loop = 0;
+      this.gains = 0;
+      snapshot.forEach( childSnapshot => {
+        this.loop++
+        var childData2 = childSnapshot.val();
+        this.totalGains.push(childData2);
+        if ( snapshot.numChildren() == this.loop ) {
+          alert("My Dear")
+          this.storage.set(this.username + '/gains', this.totalGains)
+        }
+      })
     })
   }
 
@@ -95,14 +144,18 @@ export class ListMasterPage {
   }
 
   ionViewDidEnter() {
-    this.getExercises().then((val) => {
-      var exercises = firebase.database().ref('/' + this.username + '/exercises');
-      exercises.set(val);
-    })
-    this.getGains().then((val) => {
-      var gains  = firebase.database().ref('/' + this.username + '/gains');
-      gains.set(val);
-    })
+    this.status = localStorage.getItem("status");
+    if (this.status) {
+    
+      this.getExercises().then((val) => {
+        var exercises = firebase.database().ref('/' + this.username + '/exercises');
+        exercises.set(val);
+      })
+      this.getGains().then((val) => {
+        var gains  = firebase.database().ref('/' + this.username + '/gains');
+        gains.set(val);
+      })
+    }
   }
 
   /**

@@ -57,25 +57,27 @@ export class ItemDetailPage {
 
   getRecords() {
     this.getExercises().then((val) => {
-      console.log('Your json is', val);
-      var key = this.exercise.name + '-' + this.exercise.variation
-      val[key].history.forEach( set => {
-        this.checkRec = false;
-        this.records._records.forEach( (value, index) => {
-          if (set.reps == value.reps) {
-            this.checkRec = true;
-            if (set.weight > value.weight) {
-              this.records._records[index].weight = set.weight;
-              this.records._records[index].oneRM = set.oneRM;
-              this.records._records[index].records++;
+      var keyOne = this.exercise.name + '-' + this.exercise.variation
+      var history = val[keyOne].history;
+      //console.log(val[keyOne].history);
+      if (history) {
+        Object.keys(history).forEach ( (set) => {
+          this.checkRec = false;
+          this.records._records.forEach( (value, index) => {
+            if (history[set].reps == value.reps) {
+              this.checkRec = true;
+              if (history[set].weight > value.weight) {
+                this.records._records[index].weight = history[set].weight;
+                this.records._records[index].oneRM = history[set].oneRM;
+                this.records._records[index].records++;
+              }
             }
+          });
+          if (this.checkRec == false){
+            this.records._records.push({reps: history[set].reps, weight: history[set].weight, oneRM: history[set].oneRM, records: 1})
           }
-        });
-        if (this.checkRec == false){
-          this.records._records.push({reps: set.reps, weight: set.weight, oneRM: set.oneRM, records: 1})
-        }
-      })
-      
+        })
+      }
     });
     /*
     var queryHistory = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '-' + this.exercise.variation + '/history');

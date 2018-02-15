@@ -103,7 +103,7 @@ export class LoginPage {
 
   checkLog() {
     if (this.log == true){
-      localStorage.setItem("var_4","HI");
+      localStorage.setItem("stay","logged");
       localStorage.setItem("email",this.account.email);
     }
   }

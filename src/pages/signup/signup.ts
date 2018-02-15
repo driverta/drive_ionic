@@ -28,23 +28,20 @@ export class SignupPage {
     "Bench Press-Barbell": { 
       name: 'Bench Press',
       variation: 'Barbell', 
-      muscle: 'Chest',
-      history: []
+      muscle: 'Chest'
     },
     "Squat-Barbell": {
       name: 'Squat',
       variation: 'Barbell',
-      muscle: 'Legs',
-      history: []
+      muscle: 'Legs'
     },
     "Deadlift-Barbell": {
       name: 'Deadlift',
       variation: 'Barbell',
-      muscle: 'Back',
-      history: []
+      muscle: 'Back'
     }
   };
-  
+  totalGains = [];
 
   bro: string = "bro";
 
@@ -74,11 +71,13 @@ export class SignupPage {
     }
    
     this.storage.set(this.account.name + '/exercises', this.exercises);
-
+    this.storage.set(this.account.name + '/gains', this.totalGains)
+    
     var name = firebase.database().ref('/users/' + this.account.name + '/name');
     name.set(this.account.name);
     
     localStorage.setItem("username",this.account.name);
+    localStorage.setItem("status","good");
     
     var email = firebase.database().ref('/users/' + this.account.name + '/email');
     email.set(this.account.email);
