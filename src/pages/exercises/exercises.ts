@@ -64,7 +64,7 @@ export class ListMasterPage {
     this.username = localStorage.getItem("username");
     
     this.status = localStorage.getItem("status");
-    alert(this.status);
+    //alert(this.status);
     if (this.status == "good") {
       this.getExercises().then((val) => {
         this.setlifts = val;
@@ -73,7 +73,7 @@ export class ListMasterPage {
         exercises.set(this.setlifts);
       })
     } else {
-      localStorage.setItem("status","good");
+      
       var query1 = firebase.database().ref('/' + this.username + '/exercises');
       query1.once("value").then( snapshot => {
         this.loop = 0;
@@ -88,7 +88,7 @@ export class ListMasterPage {
           
 
           if ( snapshot.numChildren() == this.loop ) {
-            alert("HERE")
+            //alert("HERE")
             this.show = false;
             this.saveData();
             
@@ -113,13 +113,14 @@ export class ListMasterPage {
   }
 
   saveData() {
+    localStorage.setItem("status","good");
     this.storage.set(this.username + '/exercises', this.setlifts)
     this.storage.set(this.username + '/gains', this.totalGains)
     var queryGains = firebase.database().ref('/' + this.username + '/gains');
 
     queryGains.once("value").then( snapshot => {
       if (!snapshot) {
-        alert("nope")
+        //alert("nope")
       }
       this.loop = 0;
       this.gains = 0;
@@ -128,7 +129,7 @@ export class ListMasterPage {
         var childData2 = childSnapshot.val();
         this.totalGains.push(childData2);
         if ( snapshot.numChildren() == this.loop ) {
-          alert("My Dear")
+          //alert("My Dear")
           this.storage.set(this.username + '/gains', this.totalGains)
         }
       })
@@ -145,7 +146,7 @@ export class ListMasterPage {
 
   ionViewDidEnter() {
     this.status = localStorage.getItem("status");
-    if (this.status) {
+    if (this.status = "good") {
     
       this.getExercises().then((val) => {
         var exercises = firebase.database().ref('/' + this.username + '/exercises');
