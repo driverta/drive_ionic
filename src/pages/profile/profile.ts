@@ -141,7 +141,7 @@ export class SettingsPage {
       this.setLevel();
     })
 
-    var queryCompeting = firebase.database().ref('/' + this.username + '/competing');
+    var queryCompeting = firebase.database().ref('/local/' + this.username + '/competing');
     queryCompeting.once("value").then( snapshot => {
       this.competing = 0;
       snapshot.forEach( childSnapshot => {
@@ -149,7 +149,7 @@ export class SettingsPage {
       })
     })
 
-    var queryCompetitors = firebase.database().ref('/' + this.username + '/competitors');
+    var queryCompetitors = firebase.database().ref('/local/' + this.username + '/competitors');
     queryCompetitors.once("value").then( snapshot => {
       this.competitors = 0;
       snapshot.forEach( childSnapshot => {

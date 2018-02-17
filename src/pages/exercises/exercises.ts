@@ -149,11 +149,11 @@ export class ListMasterPage {
     if (this.status = "good") {
     
       this.getExercises().then((val) => {
-        var exercises = firebase.database().ref('/' + this.username + '/exercises');
+        var exercises = firebase.database().ref('/local/' + this.username + '/exercises');
         exercises.set(val);
       })
       this.getGains().then((val) => {
-        var gains  = firebase.database().ref('/' + this.username + '/gains');
+        var gains  = firebase.database().ref('/local/' + this.username + '/gains');
         gains.set(val);
       })
     }

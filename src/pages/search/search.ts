@@ -73,10 +73,10 @@ export class AddCompetitorsPage {
     })
   	
     if(check){
-      var competing = firebase.database().ref('/' + this.username + '/competing');
+      var competing = firebase.database().ref('/local/' + this.username + '/competing');
       competing.child(item.name).set(item);
 
-      var competitors = firebase.database().ref('/' + item.name + '/competitors');
+      var competitors = firebase.database().ref('/local/' + item.name + '/competitors');
       competitors.child(this.username).set(this.username);
       this.playerAdded();
     }
