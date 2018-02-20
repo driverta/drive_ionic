@@ -7,7 +7,6 @@ import { CustomRecordsPage } from '../custom-records/custom-records';
 import firebase from 'firebase';
 
 import { User } from '../../providers/providers';
-import { Records } from '../../providers/providers';
 
 @IonicPage()
 @Component({
@@ -38,7 +37,6 @@ export class ItemCreatePage {
     formBuilder: FormBuilder, 
     public camera: Camera,
     navParams: NavParams,
-    private records: Records,
     public alertCtrl: AlertController) {
 
 

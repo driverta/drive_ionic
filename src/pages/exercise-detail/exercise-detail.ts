@@ -5,11 +5,9 @@ import { Items } from '../../providers/providers';
 import { Records } from '../../providers/providers';
 import { User } from '../../providers/providers';
 import { Levels } from '../../providers/providers';
-import { HistoryProvider } from '../../providers/providers';
 
 import { BarChartComponent } from '../../components/bar-chart/bar-chart';
 import { LineChartComponent } from '../../components/line-chart/line-chart';
-import { SortByRepsPipe } from '../../pipes/sort-by-reps/sort-by-reps'
 
 import firebase from 'firebase';
 

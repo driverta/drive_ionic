@@ -1,11 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import  { StatsBarChart } from '../../models/item';
+import { Component } from '@angular/core';
+import { NavController, NavParams } from 'ionic-angular';
 
 import { User } from '../../providers/providers';
 import { Records } from '../../providers/providers';
-
-import { SortByRepsPipe } from '../../pipes/sort-by-reps/sort-by-reps'
 
 import * as d3 from 'd3-selection';
 import * as d3Scale from "d3-scale";

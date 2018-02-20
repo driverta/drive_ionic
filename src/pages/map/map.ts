@@ -2,8 +2,6 @@ import { Component, ViewChild } from '@angular/core';
 import { CameraPosition, GoogleMap, GoogleMaps, GoogleMapsEvent, LatLng } from '@ionic-native/google-maps';
 import { IonicPage, NavController, Platform } from 'ionic-angular';
 
-declare var google: any;
-
 @IonicPage()
 @Component({
   selector: 'page-map',

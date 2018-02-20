@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import  { StatsLineChart } from '../../models/item';
+import { NavParams } from 'ionic-angular';
 
 import { HistoryProvider } from '../../providers/providers';
 import { User } from '../../providers/providers';

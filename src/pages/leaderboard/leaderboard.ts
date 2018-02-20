@@ -3,7 +3,6 @@ import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angu
 
 import { User } from '../../providers/providers';
 import { Levels } from '../../providers/providers';
-import { SortByGainsPipe } from '../../pipes/sort-by-gains/sort-by-gains'
 
 import firebase from 'firebase';
 
@@ -170,8 +169,6 @@ export class SearchPage {
   }
 
   deleteSet(x) {
-
-    var set = x;
     var query1 = firebase.database().ref('/' + this.username + '/competing');
     query1.once("value").then( snapshot => {
       snapshot.forEach( childSnapshot => {

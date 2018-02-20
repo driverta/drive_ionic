@@ -1,5 +1,4 @@
 import { Component, Output, EventEmitter } from '@angular/core';
-import  { StatsLineChart } from '../../models/item';
 import  { NavParams, AlertController } from 'ionic-angular';
 
 import { HistoryProvider } from '../../providers/providers';
@@ -69,7 +68,6 @@ export class HistoryComponent {
   deleteSet(x) {
     d3.selectAll("svg > *").remove();
     this.username = this.user._user
-    var set = x;
     var query1 = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '-' + this.exercise.variation + '/history');
     query1.once("value").then( snapshot => {
 

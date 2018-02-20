@@ -57,7 +57,6 @@ export class Items {
       this.lifts.push(new Item(item));
     }
 
-    let username = "bob";
   }
 
   query(params?: any) {
