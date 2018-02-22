@@ -156,8 +156,10 @@ export class ListMasterPage {
 
   ionViewDidEnter() {
     this.getExercises().then((val) => {
-      this.setlifts = val;
-      this.lifts = this.setlifts;
+      if (val != null) {
+        this.setlifts = val;
+        this.lifts = this.setlifts;
+      }
     })
     if (this.status == this.username) {
       this.getExercises().then((val) => {
