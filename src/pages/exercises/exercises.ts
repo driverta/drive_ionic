@@ -75,14 +75,13 @@ export class ListMasterPage {
       if (this.status == this.username) {
         this.getExercises().then((val) => {
           console.log(val)
-          alert("hey")
           this.setlifts = val;
           this.lifts = this.setlifts;
+          this.show = false;
           var exercises = firebase.database().ref('/' + this.username + '/exercises');
           exercises.set(this.setlifts);
         })
       } else {
-        alert("no")
         var query1 = firebase.database().ref('/' + this.username + '/exercises');
         query1.once("value").then( snapshot => {
           this.loop = 0;
