@@ -120,7 +120,7 @@ export class NewSetComponent {
       this.getExercises().then((val) => {
         var key = this.exercise.name + '-' + this.exercise.variation
         var history = val[key].history;
-        val[key].history[newDate] = set;
+        val[key].history.push(set);
         this.storage.set(this.username + '/exercises', val).then(() => {
           Object.keys(history).forEach( (set) => {
             this.checkRec = false;

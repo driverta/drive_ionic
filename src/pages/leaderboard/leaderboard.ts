@@ -35,7 +35,7 @@ export class SearchPage {
     this.username = this.user._user;
     this.players = [];
 
-    var queryPlayers = firebase.database().ref('/local/' + this.username + '/competing');
+    var queryPlayers = firebase.database().ref('/' + this.username + '/competing');
     queryPlayers.once("value").then( snapshot => {
       this.loop = 0;
       snapshot.forEach( childSnapshot => {
@@ -53,7 +53,7 @@ export class SearchPage {
 
   getGains() {
     this.players.forEach( (value, index) => {
-      var queryGains = firebase.database().ref('/local/' + value.name + '/gains');
+      var queryGains = firebase.database().ref('/' + value.name + '/gains');
       queryGains.once("value").then( snapshot => {
         this.loop = 0;
         this.gains = 0;
@@ -104,7 +104,7 @@ export class SearchPage {
       this.ionViewWillEnter();
     }else{
       this.players.forEach( (value, index) => {
-      var queryGains = firebase.database().ref('/local' + value.name + '/gains');
+      var queryGains = firebase.database().ref('/' + value.name + '/gains');
       queryGains.once("value").then( snapshot => {
         this.loop = 0;
         this.gains = 0;
@@ -172,7 +172,7 @@ export class SearchPage {
   deleteSet(x) {
 
     var set = x;
-    var query1 = firebase.database().ref('/local/' + this.username + '/competing');
+    var query1 = firebase.database().ref('/' + this.username + '/competing');
     query1.once("value").then( snapshot => {
       snapshot.forEach( childSnapshot => {
         var childData1 = childSnapshot.val();

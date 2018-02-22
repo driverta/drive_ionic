@@ -141,7 +141,7 @@ export class SettingsPage {
       this.setLevel();
     })
 
-    var queryCompeting = firebase.database().ref('/local/' + this.username + '/competing');
+    var queryCompeting = firebase.database().ref('/' + this.username + '/competing');
     queryCompeting.once("value").then( snapshot => {
       this.competing = 0;
       snapshot.forEach( childSnapshot => {
@@ -149,7 +149,7 @@ export class SettingsPage {
       })
     })
 
-    var queryCompetitors = firebase.database().ref('/local/' + this.username + '/competitors');
+    var queryCompetitors = firebase.database().ref('/' + this.username + '/competitors');
     queryCompetitors.once("value").then( snapshot => {
       this.competitors = 0;
       snapshot.forEach( childSnapshot => {
@@ -157,7 +157,7 @@ export class SettingsPage {
       })
     })
 
-    var queryPic = firebase.database().ref('users/' + this.username + '/profilePic');
+    var queryPic = firebase.database().ref('/users/' + this.username + '/profilePic');
     queryPic.once("value").then( snapshot => {
       var pic = snapshot.val();
       if(pic){
@@ -282,7 +282,6 @@ export class SettingsPage {
   reallyLogOut(){
     localStorage.setItem("stay","out");
     localStorage.setItem("email","");
-    localStorage.setItem("status","bad");
     window.location.reload();
     this.navCtrl.push("FirstRunPage");
   }

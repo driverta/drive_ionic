@@ -116,12 +116,11 @@ export class ItemCreatePage {
       */
       var key = this.exercise.name + '-' + this.exercise.variation
       this.lifts[key] = this.exercise
-      this.storage.set(this.username + '/exercises', this.lifts);
-    
-      this.done();
+      console.log(this.lifts);
+      this.storage.set(this.username + '/exercises', this.lifts).then(() =>{
+        this.done();
+      });
     }
-    
-
   }
 
   presentAlert() {
@@ -132,6 +131,4 @@ export class ItemCreatePage {
   });
   alert.present();
 }
-
-
 }

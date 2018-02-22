@@ -26,6 +26,7 @@ export class ListMasterPage {
   lifts = {};
   setlifts = {};
   username = "bob";
+  users = [];
 
   names = ["Lift 1"];
   about = ["nothing"];
@@ -54,30 +55,39 @@ export class ListMasterPage {
    * The view loaded, let's query our items for the list
    */
   ionViewDidLoad() {
-    /*
-    if(this.user._user){
-      localStorage.setItem("username",this.user._user);
-    }
-    */
+    this.username = localStorage.getItem("username");
+    // Get user data status
+    this.getUsers().then((val) => {
+    console.log(val)
+      if (val != null) {
+        this.users = val;
+      }
+      if (this.users.includes(this.username)) {
+        this.status = this.username;
+      }
+      else {
+        this.status = "cloud";
+      }
+    })
+    
+    
     this.lifts = {};
     this.setlifts = {};
-    this.username = localStorage.getItem("username");
     
-    this.status = localStorage.getItem("status");
-    //alert(this.status);
-    if (this.status == "good") {
+    if (this.status == this.username) {
       this.getExercises().then((val) => {
+        console.log(val)
         this.setlifts = val;
         this.lifts = this.setlifts;
         var exercises = firebase.database().ref('/' + this.username + '/exercises');
         exercises.set(this.setlifts);
       })
     } else {
-      
       var query1 = firebase.database().ref('/' + this.username + '/exercises');
       query1.once("value").then( snapshot => {
         this.loop = 0;
         snapshot.forEach( childSnapshot => {
+          console.log(childSnapshot)
           this.loop++
           var childData1 = childSnapshot.val();
           var key = childSnapshot.key;
@@ -85,35 +95,31 @@ export class ListMasterPage {
           this.setlifts[key] = childData1;
           this.lifts = this.setlifts
           
-          
-
           if ( snapshot.numChildren() == this.loop ) {
             //alert("HERE")
             this.show = false;
             this.saveData();
-            
           }
-
         });
-
-      });
-      
+      });  
     }
-    /*
-    
-    */
-    /*
-    this.getExercises().then((val) => {
-      this.setlifts = val;
-      this.lifts = this.setlifts;
-      var exercises = firebase.database().ref('/' + this.username + '/exercises');
-      exercises.set(this.setlifts);
-    })
-    */
   }
 
   saveData() {
-    localStorage.setItem("status","good");
+    // Get user data status
+    this.getUsers().then((val) => {
+      console.log(val)
+      if (val == null) {
+        this.users.push(this.username);
+      }
+      else {
+        this.users = val;
+        this.users.push(this.username);
+      }
+      this.storage.set('/users', this.users);
+      this.status = this.username;
+    })
+    
     this.storage.set(this.username + '/exercises', this.setlifts)
     this.storage.set(this.username + '/gains', this.totalGains)
     var queryGains = firebase.database().ref('/' + this.username + '/gains');
@@ -136,6 +142,10 @@ export class ListMasterPage {
     })
   }
 
+  getUsers(): Promise<any> {
+    return this.storage.get('/users');
+  }
+  
   getExercises(): Promise<any> {
     return this.storage.get(this.username + '/exercises');
   }
@@ -145,15 +155,17 @@ export class ListMasterPage {
   }
 
   ionViewDidEnter() {
-    this.status = localStorage.getItem("status");
-    if (this.status = "good") {
-    
+    this.getExercises().then((val) => {
+      this.setlifts = val;
+      this.lifts = this.setlifts;
+    })
+    if (this.status == this.username) {
       this.getExercises().then((val) => {
-        var exercises = firebase.database().ref('/local/' + this.username + '/exercises');
+        var exercises = firebase.database().ref(this.username + '/exercises');
         exercises.set(val);
       })
       this.getGains().then((val) => {
-        var gains  = firebase.database().ref('/local/' + this.username + '/gains');
+        var gains  = firebase.database().ref(this.username + '/gains');
         gains.set(val);
       })
     }
