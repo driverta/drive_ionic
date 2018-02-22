@@ -56,6 +56,8 @@ export class ListMasterPage {
    */
   ionViewDidLoad() {
     this.username = localStorage.getItem("username");
+    this.lifts = {};
+    this.setlifts = {};
     // Get user data status
     this.getUsers().then((val) => {
     console.log(val)
@@ -68,41 +70,40 @@ export class ListMasterPage {
       else {
         this.status = "cloud";
       }
+    }).then(() => {
+
+      if (this.status == this.username) {
+        this.getExercises().then((val) => {
+          console.log(val)
+          alert("hey")
+          this.setlifts = val;
+          this.lifts = this.setlifts;
+          var exercises = firebase.database().ref('/' + this.username + '/exercises');
+          exercises.set(this.setlifts);
+        })
+      } else {
+        alert("no")
+        var query1 = firebase.database().ref('/' + this.username + '/exercises');
+        query1.once("value").then( snapshot => {
+          this.loop = 0;
+          snapshot.forEach( childSnapshot => {
+            console.log(childSnapshot)
+            this.loop++
+            var childData1 = childSnapshot.val();
+            var key = childSnapshot.key;
+            
+            this.setlifts[key] = childData1;
+            this.lifts = this.setlifts
+            
+            if ( snapshot.numChildren() == this.loop ) {
+              //alert("HERE")
+              this.show = false;
+              this.saveData();
+            }
+          });
+        });  
+      }
     })
-    
-    
-    this.lifts = {};
-    this.setlifts = {};
-    
-    if (this.status == this.username) {
-      this.getExercises().then((val) => {
-        console.log(val)
-        this.setlifts = val;
-        this.lifts = this.setlifts;
-        var exercises = firebase.database().ref('/' + this.username + '/exercises');
-        exercises.set(this.setlifts);
-      })
-    } else {
-      var query1 = firebase.database().ref('/' + this.username + '/exercises');
-      query1.once("value").then( snapshot => {
-        this.loop = 0;
-        snapshot.forEach( childSnapshot => {
-          console.log(childSnapshot)
-          this.loop++
-          var childData1 = childSnapshot.val();
-          var key = childSnapshot.key;
-          
-          this.setlifts[key] = childData1;
-          this.lifts = this.setlifts
-          
-          if ( snapshot.numChildren() == this.loop ) {
-            //alert("HERE")
-            this.show = false;
-            this.saveData();
-          }
-        });
-      });  
-    }
   }
 
   saveData() {
@@ -158,7 +159,7 @@ export class ListMasterPage {
     this.getExercises().then((val) => {
       if (val != null) {
         this.setlifts = val;
-        this.lifts = this.setlifts;
+        
       }
     })
     if (this.status == this.username) {
