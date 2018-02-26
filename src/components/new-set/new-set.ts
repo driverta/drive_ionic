@@ -113,14 +113,14 @@ export class NewSetComponent {
       var key = this.exercise.name + '-' + this.exercise.variation
       var history = val[key].history;
       if(!history){
-        val[key].history = [];
+        val[key].history = {};
         this.storage.set(this.username + '/exercises', val)
       }
     }).then(() => {
       this.getExercises().then((val) => {
         var key = this.exercise.name + '-' + this.exercise.variation
         var history = val[key].history;
-        val[key].history.push(set);
+        val[key].history[newDate] = set;
         this.storage.set(this.username + '/exercises', val).then(() => {
           Object.keys(history).forEach( (set) => {
             this.checkRec = false;

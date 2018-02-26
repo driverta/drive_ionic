@@ -7,6 +7,7 @@ import {
   AlertController
 } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
+import { Platform } from 'ionic-angular';
 
 import { Item } from '../../models/item';
 import { Items } from '../../providers/providers';
@@ -22,6 +23,7 @@ import { User } from '../../providers/providers';
   selector: 'page-exercises',
   templateUrl: 'exercises.html'
 })
+//@Injectable()
 export class ListMasterPage {
   lifts = {};
   setlifts = {};
@@ -47,8 +49,13 @@ export class ListMasterPage {
     public modalCtrl: ModalController,
     private alertCtrl: AlertController,
     public actShtCtrl: ActionSheetController,
-    private storage: Storage) {
-
+    private storage: Storage,
+    private platform: Platform) {
+    this.platform.ready().then((readySource) => {
+      console.log("anything")
+      console.log('Platform ready from', readySource);
+      // Platform now ready, execute any required native code
+    });
   }
 
   /**
@@ -56,11 +63,13 @@ export class ListMasterPage {
    */
   ionViewDidLoad() {
     this.username = localStorage.getItem("username");
+    console.log(this.username);
     this.lifts = {};
     this.setlifts = {};
     // Get user data status
+
     this.getUsers().then((val) => {
-    console.log(val)
+      console.log("Slut");
       if (val != null) {
         this.users = val;
       }
@@ -143,6 +152,8 @@ export class ListMasterPage {
   }
 
   getUsers(): Promise<any> {
+    console.log("at user method");
+    console.log(JSON.stringify(this.storage.get('/users')));
     return this.storage.get('/users');
   }
   
