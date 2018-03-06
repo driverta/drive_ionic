@@ -37,6 +37,15 @@
       </ion-item>
 
       <div padding>
+        <button on-click="termsOfUse()" ion-button type="button" color="primary" block>{{ "Terms of Use" | translate }}</button>
+      </div>
+
+      <ion-item>
+        <ion-label>I Agree to the Terms of Use</ion-label>
+        <ion-checkbox (ionChange)="changeTerms()"></ion-checkbox>
+      </ion-item>
+
+      <div padding>
         <button ion-button color="primary" block>{{ 'SIGNUP_BUTTON' | translate }}</button>
       </div>
 

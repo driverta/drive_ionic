@@ -84,7 +84,7 @@ export class HistoryComponent {
 
   deleteSet(x) {
     d3.selectAll("svg > *").remove();
-    this.username = this.user._user
+    this.username = localStorage.getItem("username");
     
     this.history._history.forEach ( (val, index) => {
       if(val.date == x.date){
