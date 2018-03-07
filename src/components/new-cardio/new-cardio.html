@@ -8,9 +8,13 @@
 		</div>
 		<div class="breaker"></div>
     	<div class="setbet">
-    		<h2>Weight: <input [(ngModel)]="weight" type="number" value="100"></h2>
+    		<h2>Miles: <input [(ngModel)]="miles" type="number" value="2.5"></h2>
     		<br>
-    		<h2>Reps: <input [(ngModel)]="reps" type="number" value="10"></h2>
+    		<h2>Hours: <input [(ngModel)]="hours" type="number" value="0"></h2>
+    		
+    		<h2>Minutes: <input [(ngModel)]="minutes" type="number" value="30"></h2>
+    		
+    		<h2>Seconds: <input [(ngModel)]="seconds" type="number" value="0"></h2>
     		<br>
     		<h2><input (click)="addSet()" type="submit" id="add" value="+"></h2>
     		<br>

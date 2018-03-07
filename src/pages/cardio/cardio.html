@@ -1,0 +1,42 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>{{ exercise.name }}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content scrollY="false">
+
+  <div padding>
+	  <ion-segment [(ngModel)]="segment">
+	    <ion-segment-button (click)="hideCharts()" value="workout">
+	      New Workout
+	    </ion-segment-button>
+	    <ion-segment-button (click)="showLine()" value="history">
+	      History
+	    </ion-segment-button>
+	    <ion-segment-button (click)="showBar()" value="records">
+	      Records
+	    </ion-segment-button>
+	  </ion-segment>
+	</div>
+
+	<div [ngSwitch]="segment">
+	  <ion-list *ngSwitchCase="'workout'">
+	    <new-cardio (myEvent)="ionViewWillEnter();"></new-cardio>
+	  </ion-list>
+
+	  <ion-list *ngSwitchCase="'history'">
+	  	<history (myEvent2)="ionViewWillEnter();"></history>
+	  </ion-list>
+
+	  <ion-list *ngSwitchCase="'records'">
+	    <records></records>
+	  </ion-list>
+
+	  <bar-chart [hidden]="selectedValue!=1" ></bar-chart>
+	  <line-chart [hidden]="selectedValue!=2" ></line-chart>
+
+	</div>
+</ion-content>

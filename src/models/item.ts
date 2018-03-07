@@ -16,6 +16,10 @@ export class Item {
     }
   }
 
+  muscle: any;
+  name: any;
+  variation: any;
+  history: any;
 }
 
 export interface Record {

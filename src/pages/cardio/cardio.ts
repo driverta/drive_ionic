@@ -16,15 +16,15 @@ import firebase from 'firebase';
 
 @IonicPage()
 @Component({
-  selector: 'page-exercise-detail',
-  templateUrl: 'exercise-detail.html'
+  selector: 'page-cardio',
+  templateUrl: 'cardio.html',
 })
-export class ItemDetailPage {
+export class CardioPage {
 
-  selectedValue = 0;
+	selectedValue = 0;
   exercise: any;
   username: any;
-  segment = "set";
+  segment = "workout";
   loop = 0;
   checkRec = false;
   history = [];

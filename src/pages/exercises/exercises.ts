@@ -25,7 +25,7 @@ import { User } from '../../providers/providers';
 })
 //@Injectable()
 export class ListMasterPage {
-  lifts = {};
+  lifts:any = {};
   setlifts = {};
   username = "bob";
   users = [];
@@ -257,9 +257,15 @@ export class ListMasterPage {
    * Navigate to the detail page for this item.
    */
   openItem(item: Item) {
-    this.navCtrl.push('ItemDetailPage', {
-      item: item
-    });
+    if (item.muscle == "Cardio"){
+      this.navCtrl.push('CardioPage', {
+        item: item
+      });
+    }else {
+      this.navCtrl.push('ItemDetailPage', {
+        item: item
+      });
+    }
   }
 
   filterExercises(){

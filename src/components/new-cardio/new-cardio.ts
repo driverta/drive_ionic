@@ -11,10 +11,10 @@ import firebase from 'firebase';
 import * as d3 from 'd3-selection';
 
 @Component({
-  selector: 'new-set',
-  templateUrl: 'new-set.html'
+  selector: 'new-cardio',
+  templateUrl: 'new-cardio.html'
 })
-export class NewSetComponent {
+export class NewCardioComponent {
 
   xlevel = 1;
 	xcurrent = 0;
@@ -24,8 +24,10 @@ export class NewSetComponent {
 	loop = 0;
 	gains = 0;
   g = 0;
-	weight = 100;
-  reps = 10;
+	miles = 100;
+  hours = 10;
+  minutes = 10;
+  seconds = 10;
   bool = false;
   exercise: any;
   checkRec = false;
@@ -73,15 +75,18 @@ export class NewSetComponent {
   }
 
   addSet() {
+  	
   	d3.selectAll("svg > *").remove();
     var date = new Date().toISOString();
     var newDate = date.replace(".", "-")
-    //alert(newDate)
-    var oneRM = (this.weight * this.reps * .033) + this.weight;
-    if(this.reps == 1){
-      oneRM = this.weight;
-    }
-    this.g = 5;
+    var time = this.hours + ":" + this.minutes + ":" + this.seconds;
+    var newMinutes = this.minutes / 60;
+    var newSeconds = this.seconds / 360;
+    var totalHours = this.hours + newMinutes + newSeconds;
+    var mph = this.miles / totalHours;
+    var newHours = this.hours * 60;
+    var minTime = this.minutes + newHours;
+    this.g = minTime
     this.bool = false;
     this.checkRec = false;
 
@@ -89,7 +94,7 @@ export class NewSetComponent {
       this.bool = false;
     }, 2000);
 
-    var set = { date: date, weight: this.weight, reps: this.reps, oneRM: oneRM};
+    var workout = { date: date, time: time, miles: this.miles, mph: mph, minutes: minTime};
 
     this.getExercises().then((val) => {
       //console.log('Your json is', val);
@@ -104,30 +109,31 @@ export class NewSetComponent {
         var key = this.exercise.name + '-' + this.exercise.variation
         var history = val[key].history;
         if (Array.isArray(history)){
-          val[key].history.push(set)
+          val[key].history.push(workout)
         } else {
           
-          val[key].history[newDate] = set;
+          val[key].history[newDate] = workout;
         }
         
         this.storage.set(this.username + '/exercises', val).then(() => {
-          Object.keys(history).forEach( (set) => {
+          Object.keys(history).forEach( (workout) => {
             this.checkRec = false;
             this.records._records.forEach( (value, index) => {
-              if (history[set].reps == value.reps) {
+              if (history[workout].minutes > value.min && history[workout].minutes < value.max) {
                 this.checkRec = true;
-                if (history[set].weight > value.weight) {
-                  this.records._records[index].weight = history[set].weight;
-                  this.records._records[index].oneRM = history[set].oneRM;
+                if (history[workout].mph > value.mph) {
+                  this.records._records[index].miles = history[workout].miles;
+                  this.records._records[index].time = history[workout].time;
+                  this.records._records[index].mph = history[workout].mph;
                   this.records._records[index].records++;
-                  this.g = 10;
+                  this.g = minTime + 100;
                   this.bool = true;
                 }
               }
             });
             if (this.checkRec == false){
-              this.records._records.push({reps: history[set].reps, weight: history[set].weight, oneRM: history[set].oneRM, records: 1})
-              this.g = 10;
+              this.records._records.push({reps: history[workout].reps, weight: history[workout].weight, oneRM: history[workout].oneRM, records: 1})
+              this.g = minTime + 100;
               this.bool = true;
             }
           })
@@ -145,7 +151,16 @@ export class NewSetComponent {
           });
         });
       });
-    });   
+    });
+    /*
+    var history = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '-' + this.exercise.variation + '/history');
+    history.push(set);
+
+    var points = firebase.database().ref('/' + this.username + '/gains');
+    points.push(g);
+    */
+
+    
   }
 
   getExercises(): Promise<any> {
@@ -157,4 +172,3 @@ export class NewSetComponent {
   }
 
 }
-
