@@ -1,5 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { Storage } from '@ionic/storage';
 
 import { Items } from '../../providers/providers';
 import { Records } from '../../providers/providers';
@@ -9,7 +10,7 @@ import { HistoryProvider } from '../../providers/providers';
 
 import { BarChartComponent } from '../../components/bar-chart/bar-chart';
 import { LineChartComponent } from '../../components/line-chart/line-chart';
-import { SortByRepsPipe } from '../../pipes/sort-by-reps/sort-by-reps'
+import { SortByRepsPipe } from '../../pipes/sort-by-reps/sort-by-reps';
 
 import firebase from 'firebase';
 
@@ -26,6 +27,7 @@ export class ItemDetailPage {
   segment = "set";
   loop = 0;
   checkRec = false;
+  history = [];
 
   @ViewChild(BarChartComponent) barChart: BarChartComponent
   @ViewChild(LineChartComponent) lineChart: LineChartComponent
@@ -35,7 +37,8 @@ export class ItemDetailPage {
     items: Items,
     public records: Records,
     public user: User,
-    public levels: Levels) {
+    public levels: Levels,
+    private storage: Storage) {
 
     this.exercise = navParams.get('item');
   }
@@ -47,42 +50,42 @@ export class ItemDetailPage {
     this.records._chart = [
       
     ];
-    this.username = this.user._user;
+    this.username = localStorage.getItem("username");
+    
     this.getRecords();
   }
 
   getRecords() {
-    var queryHistory = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '-' + this.exercise.variation + '/history');
-    queryHistory.once("value").then( snapshot => {
-      snapshot.forEach( childSnapshot => {
-        var childData1 = childSnapshot.val();
-        this.checkRec = false;
-        this.records._records.forEach( (value, index) => {
-          if (childData1.reps == value.reps) {
-            this.checkRec = true;
-            if (childData1.weight > value.weight) {
-              this.records._records[index].weight = childData1.weight;
-              this.records._records[index].oneRM = childData1.oneRM;
-              this.records._records[index].records++;
+    this.getExercises().then((val) => {
+      var keyOne = this.exercise.name + '-' + this.exercise.variation
+      var history = val[keyOne].history;
+      //console.log(val[keyOne].history);
+      if (history) {
+        Object.keys(history).forEach ( (set) => {
+          this.checkRec = false;
+          this.records._records.forEach( (value, index) => {
+            if (history[set].reps == value.reps) {
+              this.checkRec = true;
+              if (history[set].weight > value.weight) {
+                this.records._records[index].weight = history[set].weight;
+                this.records._records[index].oneRM = history[set].oneRM;
+                this.records._records[index].records++;
+              }
             }
+          });
+          if (this.checkRec == false){
+            this.records._records.push({reps: history[set].reps, weight: history[set].weight, oneRM: history[set].oneRM, records: 1})
           }
-        });
-        if (this.checkRec == false){
-          this.records._records.push({reps: childData1.reps, weight: childData1.weight, oneRM: childData1.oneRM, records: 1})
-        }
-      });
+        })
+      }
     });
+
     this.barChart.makeChart();
     this.lineChart.makeChart2();
   }
   
   showBar() {
     this.selectedValue = 1;
-  }
-
-
-  test() {
-    alert("Hi");
   }
 
   showLine() {
@@ -93,4 +96,7 @@ export class ItemDetailPage {
     this.selectedValue = 0;
   }
   
+  getExercises(): Promise<any> {
+    return this.storage.get(this.username + '/exercises');
+  }
 }

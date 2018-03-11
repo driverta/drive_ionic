@@ -1,0 +1,54 @@
+new-cardio {
+	.setbet {
+  	text-align: center;
+  }
+
+  .setbet input {
+  	color: black;
+  }
+
+  #add {
+  	border-radius: 50%;
+  	font-size: 30px;
+  	font-style: bold;
+  	width: 40px;
+    background-color: lightgray;
+  }
+
+  .levels {
+  	text-align: center;
+  }
+
+  .sick {
+  	color: red;
+  }
+
+  #myProgress {
+	  width: 100%;
+	  background-color: #ddd;
+	  border: 1px solid black;
+	}
+
+	#myBar {
+		width: 20%;
+		background-color: red;
+		border: 1px solid black;
+		height: 15px;
+	}
+
+	.breaker {
+	  color: white;
+	  border : 1px solid white;
+	  margin-bottom : 10px;
+	  margin-top: 5px;
+	}
+
+  .animation {
+    text-align: center;
+    animation: bounceInUp 1s;
+  }
+
+  .points {
+    text-align: center;
+  }
+}

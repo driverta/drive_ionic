@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { IonicPage, Nav, NavController, NavParams, AlertController } from 'ionic-angular';
 import { Camera } from '@ionic-native/camera';
+import { Storage } from '@ionic/storage';
 
 import { Settings } from '../../providers/providers';
 import { User } from '../../providers/providers';
@@ -66,7 +67,8 @@ export class SettingsPage {
     public translate: TranslateService,
     public camera: Camera,
     private user: User,
-    public levels: Levels) {
+    public levels: Levels,
+    private storage: Storage) {
   }
 
   _buildForm() {
@@ -99,26 +101,24 @@ export class SettingsPage {
   }
 
   ionViewDidLoad() {
-    this.username = this.user._user
+    this.username = this.username = localStorage.getItem("username");
     // Build an empty form for the template to render
     this.form = this.formBuilder.group({});
 
-    var queryGains = firebase.database().ref('/' + this.username + '/gains');
-    queryGains.once("value").then( snapshot => {
-      this.loop = 0;
-      this.gains = 0;
-      this.records = 0;
-      snapshot.forEach( childSnapshot => {
-        this.loop++
-        var childData1 = childSnapshot.val();
-        var gains = childData1.gains;
-        this.gains = this.gains + gains
-        if (gains == 10){
-          this.records++;
-        }
-        if ( snapshot.numChildren() == this.loop )
-          this.setLevel()
-      })
+    this.gains = 0;
+    this.records = 0;
+    this.storage.get(this.username + '/gains').then((val) => {
+      //console.log('Your json is', val);
+      if (val) {
+        val.forEach ( (value) => {
+          this.gains = this.gains + value.gains;
+          if (value.gains == 10){
+            this.records++;
+          }
+        })
+      }
+    }).then(() => {
+      this.setLevel();
     })
 
     var queryCompeting = firebase.database().ref('/' + this.username + '/competing');
@@ -137,7 +137,7 @@ export class SettingsPage {
       })
     })
 
-    var queryPic = firebase.database().ref('users/' + this.username + '/profilePic');
+    var queryPic = firebase.database().ref('/users/' + this.username + '/profilePic');
     queryPic.once("value").then( snapshot => {
       var pic = snapshot.val();
       if(pic){
@@ -150,7 +150,7 @@ export class SettingsPage {
 
   setLevel () {
     this.levels._levels.forEach( ( value, index) => {
-      if (this.gains > value.totalPoints) {
+      if (this.gains > value.totalPoints -1) {
         this.xcurrent = this.gains - value.totalPoints;
         this.xlevel = value.level;
         this.xtotal = value.levelPoints;
@@ -260,9 +260,13 @@ export class SettingsPage {
   }
 
   reallyLogOut(){
-    localStorage.setItem("var_4","BYE");
+    localStorage.setItem("stay","out");
     localStorage.setItem("email","");
     window.location.reload();
     this.navCtrl.push("FirstRunPage");
+  }
+
+  rules(){
+    this.navCtrl.push('RulesPage');
   }
 }

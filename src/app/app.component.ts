@@ -67,9 +67,9 @@ export class MyApp {
     this.initTranslate();
     data.init();
 
-    this.tester = localStorage.getItem("var_4");
+    this.tester = localStorage.getItem("stay");
       //alert(this.tester)
-      if(this.tester == "HI"){
+      if(this.tester == "logged"){
         this.setUser();
         this.rootPage = MainPage;
       }
@@ -86,6 +86,8 @@ export class MyApp {
         var childData1 = childSnapshot.val();
         if (childData1.email == this.email) {
           this.user._user = childData1.name;
+          localStorage.setItem("username",childData1.name);
+          //this.rootPage = MainPage;
         }
         //alert(this.user._user);      
       });

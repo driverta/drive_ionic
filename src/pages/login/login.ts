@@ -52,6 +52,8 @@ export class LoginPage {
         var childData1 = childSnapshot.val();
         if (childData1.email == this.account.email) {
           this.user._user = childData1.name;
+          localStorage.setItem("username",childData1.name);
+          this.doLogin();
         }
         //alert(this.user._user);      
       });
@@ -101,7 +103,7 @@ export class LoginPage {
 
   checkLog() {
     if (this.log == true){
-      localStorage.setItem("var_4","HI");
+      localStorage.setItem("stay","logged");
       localStorage.setItem("email",this.account.email);
     }
   }

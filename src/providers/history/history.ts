@@ -15,6 +15,10 @@ export class HistoryProvider {
 
 	_charts = [{date: new Date(0), reps: 0, weight: 0, oneRM: 0}]
 
+	_cardio = [{date: new Date(0), miles: 0, time: 0, mph: 0}]
+
+	_cardioCharts = [{date: new Date(0), miles: 0, time: 0, mph: 0}]
+
   constructor(public http: Http) {
   
   }

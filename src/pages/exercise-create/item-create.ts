@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Camera } from '@ionic-native/camera';
 import { IonicPage, NavController, ViewController, NavParams, AlertController } from 'ionic-angular';
 import { CustomRecordsPage } from '../custom-records/custom-records';
+import { Storage } from '@ionic/storage';
 
 import firebase from 'firebase';
 
@@ -22,8 +23,8 @@ export class ItemCreatePage {
   isReadyToSave: boolean;
 
   item: any;
-  lifts = [];
-  setlifts = [];
+  lifts = {};
+  setlifts = {};
   myrecords: any
   exercise: { name: string, variation: string, muscle: string} = {name: "", variation: "", muscle: "Chest"};
   username = "test";
@@ -39,7 +40,8 @@ export class ItemCreatePage {
     public camera: Camera,
     navParams: NavParams,
     private records: Records,
-    public alertCtrl: AlertController) {
+    public alertCtrl: AlertController,
+    private storage: Storage) {
 
 
     this.form = formBuilder.group({
@@ -57,22 +59,12 @@ export class ItemCreatePage {
   }
 
   ionViewDidLoad() {
-    this.lifts = [];
-    this.setlifts = [];
+    this.lifts = {};
+    this.setlifts = {};
     this.username = this.user._user
-    var query1 = firebase.database().ref('/' + this.username + '/exercises');
-
-    query1.once("value").then( snapshot => {
-
-      snapshot.forEach( childSnapshot => {
-
-        var childData1 = childSnapshot.val();
-        
-        this.setlifts.push(childData1);
-        this.lifts = this.setlifts
-
-      });
-
+    this.storage.get(this.username + '/exercises').then((val) => {
+      this.setlifts = val;
+      this.lifts = this.setlifts;
     });
   }
 
@@ -94,20 +86,25 @@ export class ItemCreatePage {
 
   saveExercise() {
     this.bool = true;
-    this.lifts.forEach( value =>{
-      if(value.name == this.exercise.name && value.variation == this.exercise.variation){
+    Object.keys(this.lifts).forEach ( (key) => {
+      if(this.lifts[key].name == this.exercise.name && this.lifts[key].variation == this.exercise.variation){
         this.presentAlert();
         this.bool = false;
       }
     })
 
     if(this.bool){
+      /*
       var setX = firebase.database().ref('/' + this.username + '/exercises');
       setX.child(this.exercise.name + '-' + this.exercise.variation).set(this.exercise);
-      this.done();
+      */
+      var key = this.exercise.name + '-' + this.exercise.variation
+      this.lifts[key] = this.exercise
+      console.log(this.lifts);
+      this.storage.set(this.username + '/exercises', this.lifts).then(() =>{
+        this.done();
+      });
     }
-    
-
   }
 
   presentAlert() {
@@ -118,6 +115,4 @@ export class ItemCreatePage {
   });
   alert.present();
 }
-
-
 }

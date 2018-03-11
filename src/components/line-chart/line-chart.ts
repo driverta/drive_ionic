@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import  { StatsLineChart } from '../../models/item';
+import { Storage } from '@ionic/storage';
 
 import { HistoryProvider } from '../../providers/providers';
 import { User } from '../../providers/providers';
@@ -13,12 +14,6 @@ import * as d3Shape from "d3-shape";
 import * as d3Array from "d3-array";
 import * as d3Axis from "d3-axis";
 
-/**
- * Generated class for the LineChartComponent component.
- *
- * See https://angular.io/api/core/Component for more info on Angular
- * Components.
- */
 @Component({
   selector: 'line-chart',
   templateUrl: 'line-chart.html'
@@ -42,7 +37,8 @@ export class LineChartComponent {
   constructor(
   	navParams: NavParams,
   	public user: User,
-    private history: HistoryProvider
+    private history: HistoryProvider,
+    private storage: Storage
   	) {
   	
   	this.width2 = 1000 - this.margin2.left - this.margin2.right;
@@ -51,22 +47,23 @@ export class LineChartComponent {
   }
 
   public makeChart2() {
-  	this.username = this.user._user;
+  	this.username = localStorage.getItem("username");
   	this.history._charts = [];
-  	var queryHistory = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '-' + this.exercise.variation + '/history');
-    queryHistory.once("value").then( snapshot => {
-    	this.loop = 0;
-      snapshot.forEach( childSnapshot => {
-      	this.loop++
-        var childData1 = childSnapshot.val();
-        
-        var s = {date: childData1.date, reps: childData1.reps, weight: childData1.weight, oneRM: childData1.oneRM};
-        this.history._charts.push(s); 
-        if ( snapshot.numChildren() == this.loop ) {
-          this.setChart2()
-        }
-      });
-    });
+    
+    this.getExercises().then((val) => {
+      var keyOne = this.exercise.name + '-' + this.exercise.variation
+      var history = val[keyOne].history;
+      //console.log(val[keyOne].history);
+      if (history) {
+        Object.keys(history).forEach ( (keyTwo) => {
+          var set = {date: history[keyTwo].date, reps: history[keyTwo].reps, weight: history[keyTwo].weight, oneRM: history[keyTwo].oneRM}
+          this.history._charts.push(set)
+        })
+      }
+    }).then(() => {
+      this.setChart2()
+    })
+    
   }
 
   setChart2() {
@@ -117,6 +114,10 @@ export class LineChartComponent {
         .datum(this.history._charts)
         .attr("class", "line")
         .attr("d", this.line);
+  }
+
+  getExercises(): Promise<any> {
+    return this.storage.get(this.username + '/exercises');
   }
 
 }
