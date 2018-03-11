@@ -77,44 +77,6 @@ export class BarChartComponent {
         })
       }
     });
-    
-    /*
-    var queryRecords = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '-' + this.exercise.variation + '/history');
-    queryRecords.once("value").then( snapshot => {
-      this.loop = 0;
-      snapshot.forEach( childSnapshot => {
-        this.loop++
-        var childData1 = childSnapshot.val();
-        this.checkRec = false;
-        this.records._records.forEach( (value, index) => {
-          if (childData1.reps == value.reps) {
-            this.checkRec = true;
-            if (childData1.weight > value.weight) {
-              this.records._records[index].weight = childData1.weight;
-              this.records._records[index].oneRM = childData1.oneRM;
-              this.records._records[index].records++;
-            }
-          }
-        });
-        if (this.checkRec == false){
-          this.records._records.push({reps: childData1.reps, weight: childData1.weight, oneRM: childData1.oneRM, records: 1})
-        }
-        if ( snapshot.numChildren() == this.loop ) {
-          this.records._records.sort((a: any, b: any) => {
-      
-            if (a.reps < b.reps) {
-              return -1;
-            } else if (a.reps > b.reps) {
-              return 1;
-            } else {
-              return 0;
-            }
-          });
-          this.setChart()
-        }
-      });
-    });
-    */
   }
 
   sortRecords() {

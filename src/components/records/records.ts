@@ -4,7 +4,7 @@ import { NavParams } from 'ionic-angular';
 import { User } from '../../providers/providers';
 import { Records } from '../../providers/providers';
 
-import { SortByRepsPipe } from '../../pipes/sort-by-reps/sort-by-reps'
+import { SortByRepsPipe } from '../../pipes/sort-by-reps/sort-by-reps';
 
 
 @Component({

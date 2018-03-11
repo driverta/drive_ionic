@@ -1,22 +1,27 @@
 import { Component } from '@angular/core';
+import { NavParams } from 'ionic-angular';
 
-/**
- * Generated class for the CardioRecordsComponent component.
- *
- * See https://angular.io/api/core/Component for more info on Angular
- * Components.
- */
+import { User } from '../../providers/providers';
+import { Records } from '../../providers/providers';
+
+import { SortByMinutesPipe } from '../../pipes/sort-by-minutes/sort-by-minutes';
+
+
 @Component({
   selector: 'cardio-records',
   templateUrl: 'cardio-records.html'
 })
 export class CardioRecordsComponent {
 
-  text: string;
+  exercise: any;
+  username: any;
 
-  constructor() {
-    console.log('Hello CardioRecordsComponent Component');
-    this.text = 'Hello World';
+  constructor(
+    navParams: NavParams,
+    public user: User,
+    public records: Records
+    ) {
+    this.exercise = navParams.get('item');
   }
 
 }

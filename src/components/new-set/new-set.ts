@@ -27,6 +27,7 @@ export class NewSetComponent {
 	weight = 100;
   reps = 10;
   bool = false;
+  points = false;
   exercise: any;
   checkRec = false;
   history = [];
@@ -63,7 +64,7 @@ export class NewSetComponent {
 
   setLevel () {
     this.levels._levels.forEach( ( value, index) => {
-      if (this.gains > value.totalPoints) {
+      if (this.gains > value.totalPoints - 1) {
         this.xcurrent = this.gains - value.totalPoints;
         this.xlevel = value.level;
         this.xtotal = value.levelPoints;
@@ -83,10 +84,12 @@ export class NewSetComponent {
     }
     this.g = 5;
     this.bool = false;
+    this.points = true;
     this.checkRec = false;
 
     setTimeout(() => {
       this.bool = false;
+      this.points = false;
     }, 2000);
 
     var set = { date: date, weight: this.weight, reps: this.reps, oneRM: oneRM};

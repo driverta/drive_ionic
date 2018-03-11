@@ -34,6 +34,7 @@ export class SearchPage {
   ionViewWillEnter(){
     this.username = this.user._user;
     this.players = [];
+    this.timeFilter = "All Time"
 
     var queryPlayers = firebase.database().ref('/' + this.username + '/competing');
     queryPlayers.once("value").then( snapshot => {

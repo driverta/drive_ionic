@@ -18,6 +18,7 @@ export class HistoryComponent {
 
   username: any;
   exercise: any;
+  totalGains = [];
 
   @Output() myEvent2 = new EventEmitter();
 
@@ -36,16 +37,6 @@ export class HistoryComponent {
     this.username = localStorage.getItem("username");
     this.history._history = [];
 
-    /*
-    var queryHistory = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '-' + this.exercise.variation + '/history');
-    queryHistory.once("value").then( snapshot => {
-      snapshot.forEach( childSnapshot => {
-        var childData1 = childSnapshot.val();
-        var s = {date: childData1.date, reps: childData1.reps, weight: childData1.weight, oneRM: childData1.oneRM};
-        this.history._history.push(s); 
-      });
-    });
-    */
     this.getExercises().then((val) => {
       var keyOne = this.exercise.name + '-' + this.exercise.variation
       var history = val[keyOne].history;
@@ -97,27 +88,27 @@ export class HistoryComponent {
             this.myEvent2.emit(null);
           });
         })
+        this.getGains().then((gains) => {
+          this.totalGains = gains;
+          this.totalGains.forEach((set, index2) => {
+            if (val.date == set.date){
+              
+              this.totalGains.splice(index2, 1);
+              this.storage.set(this.username + '/gains', this.totalGains). then(() => {
+              
+              this.ngOnInit();
+            });
+            }
+          })
+        })
       }
     })
-    /*
-    var query1 = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '-' + this.exercise.variation + '/history');
-    query1.once("value").then( snapshot => {
 
-      snapshot.forEach( childSnapshot => {
-
-        var childData1 = childSnapshot.val();
-        if (x.date == childData1.date) {
-          childSnapshot.getRef().remove().then(() => {
-            console.log('Write succeeded!');
-            this.ngOnInit();
-            this.myEvent2.emit(null);
-          });
-        }
-      });
-    });
-    */
   }
   getExercises(): Promise<any> {
     return this.storage.get(this.username + '/exercises');
+  }
+  getGains(): Promise<any> {
+    return this.storage.get(this.username + '/gains');
   }
 }

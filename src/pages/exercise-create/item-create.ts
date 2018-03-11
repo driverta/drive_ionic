@@ -66,22 +66,6 @@ export class ItemCreatePage {
       this.setlifts = val;
       this.lifts = this.setlifts;
     });
-    /*
-    var query1 = firebase.database().ref('/' + this.username + '/exercises');
-
-    query1.once("value").then( snapshot => {
-
-      snapshot.forEach( childSnapshot => {
-
-        var childData1 = childSnapshot.val();
-        
-        this.setlifts.push(childData1);
-        this.lifts = this.setlifts
-
-      });
-
-    });
-    */
   }
 
   /**

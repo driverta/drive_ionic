@@ -24,11 +24,12 @@ export class NewCardioComponent {
 	loop = 0;
 	gains = 0;
   g = 0;
-	miles = 100;
-  hours = 10;
-  minutes = 10;
-  seconds = 10;
+	miles = 2.5;
+  hours = 0;
+  minutes = 25;
+  seconds = 0;
   bool = false;
+  points = false;
   exercise: any;
   checkRec = false;
   history = [];
@@ -65,7 +66,7 @@ export class NewCardioComponent {
 
   setLevel () {
     this.levels._levels.forEach( ( value, index) => {
-      if (this.gains > value.totalPoints) {
+      if (this.gains > value.totalPoints - 1) {
         this.xcurrent = this.gains - value.totalPoints;
         this.xlevel = value.level;
         this.xtotal = value.levelPoints;
@@ -85,16 +86,20 @@ export class NewCardioComponent {
     var totalHours = this.hours + newMinutes + newSeconds;
     var mph = this.miles / totalHours;
     var newHours = this.hours * 60;
-    var minTime = this.minutes + newHours;
+    var minSec = this.seconds / 60;
+    var recordTime = this.minutes + newHours + minSec;
+    var minTime = this.minutes + newHours
     this.g = minTime
     this.bool = false;
+    this.points = true;
     this.checkRec = false;
 
     setTimeout(() => {
       this.bool = false;
+      this.points = false;
     }, 2000);
-
-    var workout = { date: date, time: time, miles: this.miles, mph: mph, minutes: minTime};
+    
+    var workout = { date: date, time: time, miles: this.miles, mph: mph, minutes: recordTime};
 
     this.getExercises().then((val) => {
       //console.log('Your json is', val);
@@ -117,25 +122,18 @@ export class NewCardioComponent {
         
         this.storage.set(this.username + '/exercises', val).then(() => {
           Object.keys(history).forEach( (workout) => {
-            this.checkRec = false;
-            this.records._records.forEach( (value, index) => {
+            this.records._cardio.forEach( (value, index) => {
               if (history[workout].minutes > value.min && history[workout].minutes < value.max) {
-                this.checkRec = true;
                 if (history[workout].mph > value.mph) {
-                  this.records._records[index].miles = history[workout].miles;
-                  this.records._records[index].time = history[workout].time;
-                  this.records._records[index].mph = history[workout].mph;
-                  this.records._records[index].records++;
+                  this.records._cardio[index].miles = history[workout].miles;
+                  this.records._cardio[index].time = history[workout].time;
+                  this.records._cardio[index].mph = history[workout].mph;
+                  this.records._cardio[index].records++;
                   this.g = minTime + 100;
                   this.bool = true;
                 }
               }
             });
-            if (this.checkRec == false){
-              this.records._records.push({reps: history[workout].reps, weight: history[workout].weight, oneRM: history[workout].oneRM, records: 1})
-              this.g = minTime + 100;
-              this.bool = true;
-            }
           })
         }).then(() => {
           this.myEvent.emit(null);
@@ -152,15 +150,6 @@ export class NewCardioComponent {
         });
       });
     });
-    /*
-    var history = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '-' + this.exercise.variation + '/history');
-    history.push(set);
-
-    var points = firebase.database().ref('/' + this.username + '/gains');
-    points.push(g);
-    */
-
-    
   }
 
   getExercises(): Promise<any> {

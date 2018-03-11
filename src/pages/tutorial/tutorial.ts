@@ -38,7 +38,7 @@ export class TutorialPage {
           },
           {
             title: "How to earn Gains",
-            description: "Track your workouts and earn 5 gains for every set and 10 gains for every new record.",
+            description: "Lift Weights and earn 5 gains for every set or do Cardio and earn 1 gain for every minute!",
             image: 'assets/img/Target-PNG.png',
           },
           {

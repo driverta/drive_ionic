@@ -105,26 +105,6 @@ export class SettingsPage {
     // Build an empty form for the template to render
     this.form = this.formBuilder.group({});
 
-    /*
-    var queryGains = firebase.database().ref('/' + this.username + '/gains');
-    queryGains.once("value").then( snapshot => {
-      this.loop = 0;
-      this.gains = 0;
-      this.records = 0;
-      snapshot.forEach( childSnapshot => {
-        this.loop++
-        var childData1 = childSnapshot.val();
-        var gains = childData1.gains;
-        this.gains = this.gains + gains
-        if (gains == 10){
-          this.records++;
-        }
-        if ( snapshot.numChildren() == this.loop )
-          this.setLevel()
-      })
-    })
-    */
-
     this.gains = 0;
     this.records = 0;
     this.storage.get(this.username + '/gains').then((val) => {
@@ -170,7 +150,7 @@ export class SettingsPage {
 
   setLevel () {
     this.levels._levels.forEach( ( value, index) => {
-      if (this.gains > value.totalPoints) {
+      if (this.gains > value.totalPoints -1) {
         this.xcurrent = this.gains - value.totalPoints;
         this.xlevel = value.level;
         this.xtotal = value.levelPoints;
@@ -284,5 +264,9 @@ export class SettingsPage {
     localStorage.setItem("email","");
     window.location.reload();
     this.navCtrl.push("FirstRunPage");
+  }
+
+  rules(){
+    this.navCtrl.push('RulesPage');
   }
 }

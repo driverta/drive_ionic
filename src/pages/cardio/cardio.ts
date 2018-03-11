@@ -8,8 +8,8 @@ import { User } from '../../providers/providers';
 import { Levels } from '../../providers/providers';
 import { HistoryProvider } from '../../providers/providers';
 
-import { BarChartComponent } from '../../components/bar-chart/bar-chart';
-import { LineChartComponent } from '../../components/line-chart/line-chart';
+import { CardioBarComponent } from '../../components/cardio-bar/cardio-bar';
+import { CardioLineComponent } from '../../components/cardio-line/cardio-line';
 import { SortByRepsPipe } from '../../pipes/sort-by-reps/sort-by-reps';
 
 import firebase from 'firebase';
@@ -28,9 +28,10 @@ export class CardioPage {
   loop = 0;
   checkRec = false;
   history = [];
+  tempRec = [];
 
-  @ViewChild(BarChartComponent) barChart: BarChartComponent
-  @ViewChild(LineChartComponent) lineChart: LineChartComponent
+  @ViewChild(CardioBarComponent) cardioBar: CardioBarComponent
+  @ViewChild(CardioLineComponent) cardioLine: CardioLineComponent
 
   constructor(public navCtrl: NavController,
     navParams: NavParams,
@@ -44,7 +45,9 @@ export class CardioPage {
   }
 
   ionViewWillEnter() {
-    this.records._records = [
+    this.tempRec = this.records._cardio;
+
+    this.records._cardioRecords = [
       
     ];
     this.records._chart = [
@@ -61,30 +64,38 @@ export class CardioPage {
       var history = val[keyOne].history;
       //console.log(val[keyOne].history);
       if (history) {
-        Object.keys(history).forEach ( (set) => {
-          this.checkRec = false;
-          this.records._records.forEach( (value, index) => {
-            if (history[set].reps == value.reps) {
-              this.checkRec = true;
-              if (history[set].weight > value.weight) {
-                this.records._records[index].weight = history[set].weight;
-                this.records._records[index].oneRM = history[set].oneRM;
-                this.records._records[index].records++;
+        Object.keys(history).forEach( (workout) => {
+          //alert(history[workout].minutes)
+          this.tempRec.forEach( (value, index) => {
+            
+            if (history[workout].minutes >= value.min && history[workout].minutes < value.max) {
+              //alert("in")
+              if (history[workout].mph > value.mph) {
+                this.tempRec[index].miles = history[workout].miles;
+                this.tempRec[index].time = history[workout].time;
+                this.tempRec[index].mph = history[workout].mph;
+                this.tempRec[index].records++;
               }
             }
           });
-          if (this.checkRec == false){
-            this.records._records.push({reps: history[set].reps, weight: history[set].weight, oneRM: history[set].oneRM, records: 1})
-          }
         })
       }
-    });
+    }).then(() => {
+      this.tempRec.forEach ((value) => {
+        if (value.records > 0){
+          //alert(value.records)
+          this.records._cardioRecords.push(value)
+        }
+      })
+      //console.log(this.records._cardioRecords)  
+    })
 
-    this.barChart.makeChart();
-    this.lineChart.makeChart2();
+    this.cardioBar.makeChart();
+    this.cardioLine.makeChart2();
   }
   
   showBar() {
+    
     this.selectedValue = 1;
   }
 

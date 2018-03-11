@@ -14,12 +14,6 @@ import * as d3Shape from "d3-shape";
 import * as d3Array from "d3-array";
 import * as d3Axis from "d3-axis";
 
-/**
- * Generated class for the LineChartComponent component.
- *
- * See https://angular.io/api/core/Component for more info on Angular
- * Components.
- */
 @Component({
   selector: 'line-chart',
   templateUrl: 'line-chart.html'
@@ -55,22 +49,6 @@ export class LineChartComponent {
   public makeChart2() {
   	this.username = localStorage.getItem("username");
   	this.history._charts = [];
-    /*
-  	var queryHistory = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '-' + this.exercise.variation + '/history');
-    queryHistory.once("value").then( snapshot => {
-    	this.loop = 0;
-      snapshot.forEach( childSnapshot => {
-      	this.loop++
-        var childData1 = childSnapshot.val();
-        
-        var s = {date: childData1.date, reps: childData1.reps, weight: childData1.weight, oneRM: childData1.oneRM};
-        this.history._charts.push(s); 
-        if ( snapshot.numChildren() == this.loop ) {
-          this.setChart2()
-        }
-      });
-    });
-    */
     
     this.getExercises().then((val) => {
       var keyOne = this.exercise.name + '-' + this.exercise.variation

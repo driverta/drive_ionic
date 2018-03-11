@@ -71,7 +71,7 @@ export class MyApp {
       //alert(this.tester)
       if(this.tester == "logged"){
         this.setUser();
-        
+        this.rootPage = MainPage;
       }
   }
 
@@ -87,7 +87,7 @@ export class MyApp {
         if (childData1.email == this.email) {
           this.user._user = childData1.name;
           localStorage.setItem("username",childData1.name);
-          this.rootPage = MainPage;
+          //this.rootPage = MainPage;
         }
         //alert(this.user._user);      
       });

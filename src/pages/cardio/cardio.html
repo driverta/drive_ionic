@@ -28,15 +28,15 @@
 	  </ion-list>
 
 	  <ion-list *ngSwitchCase="'history'">
-	  	<history (myEvent2)="ionViewWillEnter();"></history>
+	  	<cardio-history (myEvent2)="ionViewWillEnter();"></cardio-history>
 	  </ion-list>
 
 	  <ion-list *ngSwitchCase="'records'">
-	    <records></records>
+	    <cardio-records></cardio-records>
 	  </ion-list>
 
-	  <bar-chart [hidden]="selectedValue!=1" ></bar-chart>
-	  <line-chart [hidden]="selectedValue!=2" ></line-chart>
+	  <cardio-bar [hidden]="selectedValue!=1" ></cardio-bar>
+	  <cardio-line [hidden]="selectedValue!=2" ></cardio-line>
 
 	</div>
 </ion-content>
