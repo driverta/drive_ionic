@@ -38,6 +38,8 @@ export class SettingsPage {
   competing = 0;
   competitors = 0;
   imageData: any;
+  exercises = 22;
+  medals = 0;
 
   options: any;
 
@@ -268,5 +270,9 @@ export class SettingsPage {
 
   rules(){
     this.navCtrl.push('RulesPage');
+  }
+
+  goToMedals(){
+    this.navCtrl.push('MedalsPage');
   }
 }
