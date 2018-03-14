@@ -37,6 +37,9 @@ export class SettingsPage {
   records = 0;
   competing = 0;
   competitors = 0;
+  competingList = [];
+  competitorsList = [];
+  realCompetitorsList = [];
   imageData: any;
 
   options: any;
@@ -101,6 +104,7 @@ export class SettingsPage {
   }
 
   ionViewDidLoad() {
+    this.competitorsList = [];
     this.username = localStorage.getItem("username");
     // Build an empty form for the template to render
     this.form = this.formBuilder.group({});
@@ -122,19 +126,30 @@ export class SettingsPage {
       this.setLevel();
     })
 
+    
     var queryCompeting = firebase.database().ref('/' + this.username + '/competing');
     queryCompeting.once("value").then( snapshot => {
       this.competing = 0;
+      this.competingList = [];
       snapshot.forEach( childSnapshot => {
+        var childData1 = childSnapshot.val();
+        this.competingList.push(childData1)
+        //console.log(this.competingList)
         this.competing++
+        //console.log(this.competing)
       })
     })
 
+    
     var queryCompetitors = firebase.database().ref('/' + this.username + '/competitors');
     queryCompetitors.once("value").then( snapshot => {
       this.competitors = 0;
+      this.competitorsList = [];
       snapshot.forEach( childSnapshot => {
         this.competitors++
+        var childData1 = childSnapshot.val();
+        this.competitorsList.push(childData1);
+        
       })
     })
 
@@ -214,7 +229,7 @@ export class SettingsPage {
   }
 
   ionViewWillEnter() {
-
+    
     this.ionViewDidLoad();
     // Build an empty form for the template to render
     this.form = this.formBuilder.group({});
@@ -269,5 +284,33 @@ export class SettingsPage {
 
   rules(){
     this.navCtrl.push('RulesPage');
+  }
+
+  goToCompeting(){
+    console.log(this.competingList)
+    this.navCtrl.push('CompetingPage', {
+      list: this.competingList
+    });
+
+  }
+
+  goToCompetitors(){
+    this.realCompetitorsList = [];
+    console.log(this.competitorsList)
+    this.competitorsList.forEach((val) => {
+      this.loop = 0;
+      var queryPic = firebase.database().ref('/users/' + val + '/profilePic');
+      queryPic.once("value").then( snapshot => {
+        var pic = snapshot.val();
+        this.realCompetitorsList.push({name: val, profilePic: pic})
+        this.loop++
+        if (this.loop == this.competitorsList.length){
+          this.navCtrl.push('CompetitorsPage', {
+            list: this.realCompetitorsList,
+            competing: this.competingList
+          });
+        }
+      })
+    })
   }
 }

@@ -28,7 +28,7 @@ export class FriendProfilePage {
   	public levels: Levels) {
 
   	this.user = navParams.get('item');
-  	this.username = this.user.name
+  	this.username = this.user.name;
   }
 
   ionViewDidLoad() {
