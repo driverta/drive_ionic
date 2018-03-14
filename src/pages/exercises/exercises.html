@@ -35,6 +35,9 @@
       </button>
 
       <ion-item-options>
+        <button ion-button color="light"(click)="editExercise(item)">
+          {{ "Edit" }}
+        </button>
         <button ion-button color="danger" (click)="presentConfirm(item)">
           {{ 'DELETE_BUTTON' | translate }}
         </button>

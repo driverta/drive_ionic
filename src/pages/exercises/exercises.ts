@@ -233,24 +233,6 @@ export class ListMasterPage {
         });
       }
     })
-    
-    /*
-    var query1 = firebase.database().ref('/' + this.username + '/exercises');
-    //alert(name);
-    query1.once("value").then( snapshot => {
-
-      snapshot.forEach( childSnapshot => {
-
-        var childData1 = childSnapshot.val();
-        if (childData1['name'].localeCompare(name) == 0) {
-          childSnapshot.getRef().remove().then(() => {
-            console.log('Write succeeded!');
-            this.ionViewDidLoad();
-          });
-        }
-      });
-    });
-    */
   }
 
   /**
@@ -314,6 +296,12 @@ export class ListMasterPage {
             this.executeFilter()          
           }
         },{
+          text: 'Cardio',
+          handler: () => {
+            this.filter = "Cardio";
+            this.executeFilter()          
+          }
+        },{
           text: 'Other',
           handler: () => {
             this.filter = "Other";
@@ -338,6 +326,12 @@ export class ListMasterPage {
       if (this.setlifts[key].muscle == this.filter){
         this.lifts[key] = this.setlifts[key]
       }
+    });
+  }
+
+  editExercise(item){
+    this.navCtrl.push('ItemCreatePage', {
+      item: item
     });
   }
 }

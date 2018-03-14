@@ -29,6 +29,8 @@ export class ItemCreatePage {
   exercise: { name: string, variation: string, muscle: string} = {name: "", variation: "", muscle: "Chest"};
   username = "test";
   bool = true;
+  edit = false;
+  data: any;
 
   form: FormGroup;
 
@@ -43,6 +45,11 @@ export class ItemCreatePage {
     public alertCtrl: AlertController,
     private storage: Storage) {
 
+    this.data = navParams.get('item');
+    if (this.data != null){
+      this.exercise = this.data;
+      this.edit = true;
+    }
 
     this.form = formBuilder.group({
       name: ['', Validators.required],
@@ -58,13 +65,19 @@ export class ItemCreatePage {
     //this.myrecords = navParams.get('records') || records._records;
   }
 
+  ionViewWillEnter() {
+    this.viewCtrl.showBackButton(false);
+  }
+
   ionViewDidLoad() {
+    //console.log(this.exercise)
     this.lifts = {};
     this.setlifts = {};
     this.username = this.user._user
     this.storage.get(this.username + '/exercises').then((val) => {
       this.setlifts = val;
       this.lifts = this.setlifts;
+      console.log(this.lifts);
     });
   }
 
@@ -86,6 +99,7 @@ export class ItemCreatePage {
 
   saveExercise() {
     this.bool = true;
+    
     Object.keys(this.lifts).forEach ( (key) => {
       if(this.lifts[key].name == this.exercise.name && this.lifts[key].variation == this.exercise.variation){
         this.presentAlert();
@@ -94,16 +108,20 @@ export class ItemCreatePage {
     })
 
     if(this.bool){
-      /*
-      var setX = firebase.database().ref('/' + this.username + '/exercises');
-      setX.child(this.exercise.name + '-' + this.exercise.variation).set(this.exercise);
-      */
+      
+      if(this.edit){
+        var oldKey = this.data.name + '-' + this.data.variation;
+        delete this.lifts[oldKey];
+      }
+      
       var key = this.exercise.name + '-' + this.exercise.variation
+      
       this.lifts[key] = this.exercise
-      console.log(this.lifts);
+      
       this.storage.set(this.username + '/exercises', this.lifts).then(() =>{
         this.done();
       });
+
     }
   }
 
