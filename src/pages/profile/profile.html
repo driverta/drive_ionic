@@ -1,7 +1,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>{{ pageTitle }}</ion-title>
+    <ion-title>{{ username }}</ion-title>
 
     <ion-buttons right>
       <button ion-button icon-only (click)="logOut()">
@@ -20,7 +20,6 @@
     <div id="myProgress">
     <div id="myBar" [ngStyle]="{'width.%' : progress}"></div>
   </div>
-  <h1>{{username | uppercase }}</h1>
   <form [formGroup]="form" *ngIf="settingsReady" class="pic">
     <input type="file" #fileInput style="visibility: hidden; height: 0px" name="files[]" (change)="processWebImage($event)" />
     <div class="profile-image-wrapper" (click)="getPicture()">

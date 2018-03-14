@@ -186,4 +186,10 @@ export class SearchPage {
       });
     });
   }
+
+  openItem(item){
+    this.navCtrl.push('FriendProfilePage', {
+      item: item
+    });
+  }
 }

@@ -63,10 +63,6 @@ export class SignupPage {
   }
 
   doSignUp() {
-    if(this.account.name.length > 13){
-      this.tooLong()
-      return;
-    }
     if(this.account.password != this.confirmPassword){
       this.badPassword()
       return;
@@ -109,15 +105,6 @@ export class SignupPage {
       buttons: ['Ok']
     });
     alert3.present();
-    
-  }
-
-  tooLong(){
-    let alert = this.alertCtrl.create({
-      title: "Username cannot be more than 12 characters",
-      buttons: ['Ok']
-    });
-    alert.present();
     
   }
 

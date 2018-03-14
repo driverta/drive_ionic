@@ -1,0 +1,45 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>{{username}}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+
+  <div class="levels">
+      <h2>LEVEL <span class="sick"> {{xlevel}}</span> : <span class="sick">{{xcurrent}}</span> / <span class="sick">{{xtotal}}</span> GAINS</h2>
+    </div>
+    <div id="myProgress">
+    <div id="myBar" [ngStyle]="{'width.%' : progress}"></div>
+  </div>
+  <br>
+    
+  <div class="profile-image-wrapper">
+  	<div class="profile-image" [style.backgroundImage]="getProfileImageStyle()"></div>
+  </div>
+    
+  <div class="stats">
+    <table>
+      <tr>
+        <th>{{competing}}</th>
+        <th>{{competitors}}</th>
+      </tr>
+      <tr>
+        <td>Competing</td>
+        <td>Competitors</td>
+      </tr>
+      <tr>
+        <th>{{records}}</th>
+        <th>{{gains}}</th>
+      </tr>
+      <tr>
+        <td>Records</td>
+        <td>Gains</td>
+      </tr>
+    </table>
+  </div>
+
+</ion-content>

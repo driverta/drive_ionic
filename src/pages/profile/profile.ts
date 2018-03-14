@@ -29,7 +29,7 @@ export class SettingsPage {
   xlevel = 1;
   xcurrent = 25;
   xtotal = 100;
-  progress = 75;
+  progress = 25;
   username = "test"
   rank = "frail body"
   loop = 0;
@@ -101,12 +101,13 @@ export class SettingsPage {
   }
 
   ionViewDidLoad() {
-    this.username = this.username = localStorage.getItem("username");
+    this.username = localStorage.getItem("username");
     // Build an empty form for the template to render
     this.form = this.formBuilder.group({});
 
     this.gains = 0;
     this.records = 0;
+
     this.storage.get(this.username + '/gains').then((val) => {
       //console.log('Your json is', val);
       if (val) {
