@@ -107,12 +107,11 @@ export class SettingsPage {
     this.competitorsList = [];
     this.username = localStorage.getItem("username");
     // Build an empty form for the template to render
-    this.form = this.formBuilder.group({});
-
-    this.gains = 0;
-    this.records = 0;
+    this.form = this.formBuilder.group({});  
 
     this.storage.get(this.username + '/gains').then((val) => {
+      this.gains = 0;
+      this.records = 0;
       //console.log('Your json is', val);
       if (val) {
         val.forEach ( (value) => {
@@ -123,6 +122,7 @@ export class SettingsPage {
         })
       }
     }).then(() => {
+      console.log(this.gains)
       this.setLevel();
     })
 
@@ -312,5 +312,13 @@ export class SettingsPage {
         }
       })
     })
+  }
+
+  goToRecords(){
+    this.navCtrl.push('RecordsPage');
+  }
+
+  goToGains(){
+    this.navCtrl.push('GainsPage');
   }
 }

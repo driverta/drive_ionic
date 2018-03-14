@@ -189,6 +189,8 @@ export class ListMasterPage {
    * modal and then adds the new item to our data source if the user created one.
    */
   addItem() {
+    //this.navCtrl.push('ItemCreatePage');
+    
     let addModal = this.modalCtrl.create('ItemCreatePage');
     addModal.onDidDismiss(item => {
       if (item) {
@@ -196,6 +198,7 @@ export class ListMasterPage {
       }
     })
     addModal.present();
+    
   }
 
   presentConfirm(item) {

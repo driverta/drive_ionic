@@ -50,6 +50,7 @@ export class ItemCreatePage {
       this.exercise = this.data;
       this.edit = true;
     }
+    //this.setlifts = navParams.get('lifts');
 
     this.form = formBuilder.group({
       name: ['', Validators.required],
@@ -71,14 +72,20 @@ export class ItemCreatePage {
 
   ionViewDidLoad() {
     //console.log(this.exercise)
-    this.lifts = {};
-    this.setlifts = {};
-    this.username = this.user._user
-    this.storage.get(this.username + '/exercises').then((val) => {
+
+    //this.lifts = {};
+    //this.setlifts = {};
+    this.username = localStorage.getItem("username");
+    console.log(this.username);
+    
+    this.getExercises().then((val) => {
+      console.log(val)
       this.setlifts = val;
       this.lifts = this.setlifts;
       console.log(this.lifts);
     });
+    
+    console.log(this.setlifts);
   }
 
   /**
@@ -126,11 +133,20 @@ export class ItemCreatePage {
   }
 
   presentAlert() {
-  let alert = this.alertCtrl.create({
-    title: 'Duplicate Exercise',
-    subTitle: 'You already have an exercise with this name and Variation',
-    buttons: ['Dismiss']
-  });
-  alert.present();
-}
+    let alert = this.alertCtrl.create({
+      title: 'Duplicate Exercise',
+      subTitle: 'You already have an exercise with this name and Variation',
+      buttons: ['Dismiss']
+    });
+    alert.present();
+  }
+
+  getExercises(): Promise<any> {
+    this.storage.ready().then(() => {
+      console.log(this.storage.get(this.username + '/exercises'))
+      
+    })
+    return this.storage.get(this.username + '/exercises');
+    
+  }
 }

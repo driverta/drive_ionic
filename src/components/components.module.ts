@@ -9,6 +9,8 @@ import { CardioHistoryComponent } from './cardio-history/cardio-history';
 import { CardioRecordsComponent } from './cardio-records/cardio-records';
 import { CardioBarComponent } from './cardio-bar/cardio-bar';
 import { CardioLineComponent } from './cardio-line/cardio-line';
+import { ProfileRecordsComponent } from './profile-records/profile-records';
+import { ProfileBarComponent } from './profile-bar/profile-bar';
 @NgModule({
 	declarations: [BarChartComponent,
     NewSetComponent,
@@ -19,7 +21,9 @@ import { CardioLineComponent } from './cardio-line/cardio-line';
     CardioHistoryComponent,
     CardioRecordsComponent,
     CardioBarComponent,
-    CardioLineComponent],
+    CardioLineComponent,
+    ProfileRecordsComponent,
+    ProfileBarComponent],
 	imports: [],
 	exports: [BarChartComponent,
     NewSetComponent,
@@ -30,6 +34,8 @@ import { CardioLineComponent } from './cardio-line/cardio-line';
     CardioHistoryComponent,
     CardioRecordsComponent,
     CardioBarComponent,
-    CardioLineComponent]
+    CardioLineComponent,
+    ProfileRecordsComponent,
+    ProfileBarComponent]
 })
 export class ComponentsModule {}
