@@ -6,7 +6,7 @@ import { IonicPage,
 } from 'ionic-angular';
 
 import { Storage } from '@ionic/storage';
-import { KeysPipe } from '../../pipes/keys/keys'
+import { KeysPipe } from '../../pipes/keys/keys';
 
 @IonicPage()
 @Component({
@@ -43,7 +43,8 @@ export class RecordsPage {
 
   openItem(item) {
     if (item.muscle == "Cardio"){
-      this.navCtrl.push('CardioPage', {
+      
+      this.navCtrl.push('RecordCardioDetailPage', {
         item: item
       });
     }else {

@@ -24,20 +24,20 @@
   <div class="stats">
     <table>
       <tr>
-        <th>{{competing}}</th>
-        <th>{{competitors}}</th>
+        <th on-click="goToCompeting();">{{competing}}</th>
+        <th on-click="goToCompetitors();">{{competitors}}</th>
       </tr>
       <tr>
-        <td>Competing</td>
-        <td>Competitors</td>
+        <td on-click="goToCompeting();">Competing</td>
+        <td on-click="goToCompetitors();">Competitors</td>
       </tr>
       <tr>
-        <th>{{records}}</th>
-        <th>{{gains}}</th>
+        <th on-click="goToRecords();">{{records}}</th>
+        <th on-click="goToGains();">{{gains}}</th>
       </tr>
       <tr>
-        <td>Records</td>
-        <td>Gains</td>
+        <td on-click="goToRecords();">Records</td>
+        <td on-click="goToGains();">Gains</td>
       </tr>
     </table>
   </div>
