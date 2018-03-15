@@ -123,7 +123,7 @@ export class NewCardioComponent {
         this.storage.set(this.username + '/exercises', val).then(() => {
           Object.keys(history).forEach( (workout) => {
             this.records._cardio.forEach( (value, index) => {
-              if (history[workout].minutes > value.min && history[workout].minutes < value.max) {
+              if (history[workout].minutes >= value.min && history[workout].minutes < value.max) {
                 if (history[workout].mph > value.mph) {
                   this.records._cardio[index].miles = history[workout].miles;
                   this.records._cardio[index].time = history[workout].time;

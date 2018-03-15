@@ -5,13 +5,6 @@ import { User } from '../../providers/providers';
 
 import firebase from 'firebase';
 
-/**
- * Generated class for the SearchPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
-
 @IonicPage()
 @Component({
   selector: 'page-search',
@@ -63,7 +56,7 @@ export class AddCompetitorsPage {
   addToLeaderboard(item){
     var check = true;
     
-    this.players.forEach( value => {
+    this.users.forEach( value => {
 
       if (value.name == item.name) {
 

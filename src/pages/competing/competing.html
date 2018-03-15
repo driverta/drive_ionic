@@ -1,0 +1,30 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Competing</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+	<ion-list>
+      <ion-item-sliding no-lines *ngFor="let item of list" >
+        <ion-item (click)="openItem(item)" no-lines [ngClass]="{red: item.name == username}">
+          <ion-avatar item-start>
+            <img [src]="item.profilePic" />
+          </ion-avatar>
+          
+          <h1>{{item.name}}</h1>
+          
+        </ion-item>
+      	
+        <ion-item-options>
+          <button ion-button color="danger" (click)="presentConfirm(item)">
+            {{ 'Remove' }}
+          </button>
+        </ion-item-options>
+        
+      </ion-item-sliding>
+    </ion-list>
+</ion-content>
