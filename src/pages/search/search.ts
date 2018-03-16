@@ -23,7 +23,9 @@ export class AddCompetitorsPage {
 
   ionViewWillEnter() {
   	this.users = [];
-    this.username = this.user._user;
+    this.players = [];
+    this.username = localStorage.getItem("username");
+    console.log(this.username)
     var query1 = firebase.database().ref("/users");
 
     query1.once("value").then( snapshot => {
@@ -31,7 +33,21 @@ export class AddCompetitorsPage {
       snapshot.forEach( childSnapshot => {
         
         var childData1 = childSnapshot.val();
+        
         this.users.push(childData1)
+        //alert(this.user._user);      
+      });
+    });
+
+    var query2 = firebase.database().ref("/" + this.username + '/competing');
+
+    query2.once("value").then( snapshot => {
+      
+      snapshot.forEach( childSnapshot => {
+        
+        var childData1 = childSnapshot.val();
+        
+        this.players.push(childData1)
         //alert(this.user._user);      
       });
     });
@@ -55,8 +71,8 @@ export class AddCompetitorsPage {
 
   addToLeaderboard(item){
     var check = true;
-    
-    this.users.forEach( value => {
+    console.log(this.players)
+    this.players.forEach( value => {
 
       if (value.name == item.name) {
 

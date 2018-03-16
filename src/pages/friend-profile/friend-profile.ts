@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { Levels } from '../../providers/providers';
 
 import firebase from 'firebase';
@@ -13,11 +13,13 @@ export class FriendProfilePage {
 
 	username: any;
 	user: any;
+  myUsername: any;
+  players = [];
   rank = "Frail Body"
-  weight = 195
-  height = 6.1
-  gym = "xSport"
-  location = "Fairfax"
+  weight = 0
+  height = 0
+  gym = "gym"
+  location = "location"
 	xlevel = 1;
   xcurrent = 25;
   xtotal = 100;
@@ -33,10 +35,12 @@ export class FriendProfilePage {
 
   constructor(public navCtrl: NavController, 
   	public navParams: NavParams,
-  	public levels: Levels) {
+  	public levels: Levels,
+    public alertCtrl: AlertController) {
 
   	this.user = navParams.get('item');
     this.username = this.user.name;
+    this.myUsername = localStorage.getItem("username");
   }
 
   ionViewDidLoad() {
@@ -83,6 +87,51 @@ export class FriendProfilePage {
         
       })
     })
+
+    var queryWeight = firebase.database().ref('/users/' + this.username + '/weight');
+    queryWeight.once("value").then( snapshot => {
+      var weight = snapshot.val();
+      if (weight){
+        this.weight = weight
+      }
+    })
+
+    var queryHeight = firebase.database().ref('/users/' + this.username + '/height');
+    queryHeight.once("value").then( snapshot => {
+      var height = snapshot.val();
+      if (height){
+        this.height = height
+      }
+    })
+
+    var queryGym = firebase.database().ref('/users/' + this.username + '/gym');
+    queryGym.once("value").then( snapshot => {
+      var gym = snapshot.val();
+      if (gym){
+        this.gym = gym
+      }
+    })
+
+    var queryLocation = firebase.database().ref('/users/' + this.username + '/location');
+    queryLocation.once("value").then( snapshot => {
+      var location = snapshot.val();
+      if (location){
+        this.location = location
+      }
+    })
+
+    var query2 = firebase.database().ref("/" + this.username + '/competing');
+
+    query2.once("value").then( snapshot => {
+      this.players = [];
+      snapshot.forEach( childSnapshot => {
+        
+        var childData1 = childSnapshot.val();
+        
+        this.players.push(childData1)
+        //alert(this.user._user);      
+      });
+    });
   }
 
   setLevel () {
@@ -155,6 +204,44 @@ export class FriendProfilePage {
     this.navCtrl.push('FriendGainsPage', {
       username: this.username
     });
+  }
+
+  addToLeaderboard(){
+    var check = true;
+    
+    this.players.forEach( value => {
+
+      if (value.name == this.username) {
+
+        this.alreadyCompeting();
+        check = false;
+      } 
+    })
+    
+    if(check){
+      var competing = firebase.database().ref('/' + this.username + '/competing');
+      competing.child(this.username).set(this.user);
+
+      var competitors = firebase.database().ref('/' + this.username + '/competitors');
+      competitors.child(this.username).set(this.username);
+      this.playerAdded();
+    }
+  }
+
+  alreadyCompeting() {
+    let alert = this.alertCtrl.create({
+      title: 'You are already Cometing with this player!',
+      buttons: ['Ok']
+    });
+    alert.present();
+  }
+
+  playerAdded() {
+    let alert = this.alertCtrl.create({
+      title: 'Player added to your leaderboard!',
+      buttons: ['Ok']
+    });
+    alert.present();
   }
 
 }

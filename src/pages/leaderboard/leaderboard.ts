@@ -23,7 +23,7 @@ export class SearchPage {
   loop2 = 0;
 
   players= [
-    {name: "tom", level: 3, gains: 100, profilePic: ""}
+    {name: "tom", level: 3, gains: 100, profilePic: "", totalGains: []}
   ]
 
   constructor(public alertCtrl: AlertController, public user: User, public levels: Levels, public navCtrl: NavController, public navParams: NavParams) { }
@@ -32,8 +32,8 @@ export class SearchPage {
     this.navCtrl.push('AddCompetitorsPage')
   }
 
-  ionViewWillEnter(){
-    this.username = this.user._user;
+  ionViewWillLoad(){
+    this.username = localStorage.getItem("username");
     this.players = [];
     this.timeFilter = "All Time"
 
@@ -43,7 +43,7 @@ export class SearchPage {
       snapshot.forEach( childSnapshot => {
         this.loop++
         var childData1 = childSnapshot.val();
-        var data = {name: childData1.name, level: 0, gains: 0, profilePic: ""};
+        var data = {name: childData1.name, level: 0, gains: 0, profilePic: "", totalGains: []};
         this.players.push(data);
         if ( snapshot.numChildren() == this.loop ) {
           this.getGains();
@@ -62,6 +62,7 @@ export class SearchPage {
         snapshot.forEach( childSnapshot => {
           this.loop++
           var childData1 = childSnapshot.val();
+          this.players[index].totalGains.push(childData1)
           var gains = childData1.gains;
           this.gains = this.gains + gains
           if ( snapshot.numChildren() == this.loop ) {
@@ -112,50 +113,43 @@ export class SearchPage {
     lastWeek.setDate(lastWeek.getDate() - 7)
 
     lastMonth.setDate(lastMonth.getDate() - 30)
-    if(ev == "All Time"){
-      this.ionViewWillEnter();
-    }else{
-      this.players.forEach( (value, index) => {
-      var queryGains = firebase.database().ref('/' + value.name + '/gains');
-      queryGains.once("value").then( snapshot => {
-        this.loop = 0;
-        this.gains = 0;
-        snapshot.forEach( childSnapshot => {
-          this.loop++
-          var childData1 = childSnapshot.val();
-          var gains = childData1.gains;
-          var date = childData1.date;
-          var newDate = date.slice(0,10);
-          //alert(newDate);
-          var testDate = new Date(newDate);
-          
-          //alert(testDate);
-          if(ev == "Today"){
+    
+    this.players.forEach( (value, index) => {
+      this.gains = 0
+      value.totalGains.forEach( childData1 => {
+        this.loop++
+        
+        var gains = childData1.gains;
+        var date = childData1.date;
+        var newDate = date.slice(0,10);
+        //alert(newDate);
+        var testDate = new Date(newDate);
 
-            if(newDate == todaysDate) {
-              this.gains = this.gains + gains;
-            }
+        if(ev == "All Time"){
+          this.gains = this.gains + gains;
+        }
+        
+        //alert(testDate);
+        if(ev == "Today"){
+
+          if(newDate == todaysDate) {
+            this.gains = this.gains + gains;
           }
-          if(ev == "Week"){
-            
-            if(testDate > lastWeek) {
-              this.gains = this.gains + gains;
-            }
-          }
-          if(ev == "Month"){
-            if(testDate > lastMonth) {
-              this.gains = this.gains + gains;
-            }
-          }
+        }
+        if(ev == "Week"){
           
-          if ( snapshot.numChildren() == this.loop ) {
-            value.gains = this.gains;
-            
+          if(testDate > lastWeek) {
+            this.gains = this.gains + gains;
           }
-        });
+        }
+        if(ev == "Month"){
+          if(testDate > lastMonth) {
+            this.gains = this.gains + gains;
+          }
+        }
+        value.gains = this.gains;
       });
-    })
-    }
+    });
   }
 
   presentConfirm(x) {
@@ -191,7 +185,7 @@ export class SearchPage {
         if (x.name == childData1.name) {
           childSnapshot.getRef().remove().then(() => {
             console.log('Write succeeded!');
-            this.ionViewWillEnter();
+            this.ionViewWillLoad();
           });
         }
       });
