@@ -2,6 +2,12 @@
 
   <ion-navbar>
     <ion-title>{{username}}</ion-title>
+
+    <ion-buttons right>
+      <button ion-button icon-only (click)="addToLeaderboard();">
+        <ion-icon name="add"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 
 </ion-header>
@@ -10,7 +16,7 @@
 <ion-content>
 
   <div class="levels">
-      <h2>LEVEL <span class="sick"> {{xlevel}}</span> : <span class="sick">{{xcurrent}}</span> / <span class="sick">{{xtotal}}</span> GAINS</h2>
+      <h3>{{rank}} <span class="sick">{{xlevel}}</span> : <span class="sick">{{xcurrent}}</span> / <span class="sick">{{xtotal}}</span> GAINS</h3>
     </div>
     <div id="myProgress">
     <div id="myBar" [ngStyle]="{'width.%' : progress}"></div>
@@ -23,6 +29,15 @@
     
   <div class="stats">
     <table>
+      <tr>
+        <td>{{height}}ft</td>
+        <td>{{gym}}</td>
+      </tr>
+      <tr>
+        <td>{{weight}}lbs</td>
+        <td>{{location}}</td>
+      </tr>
+      <tr>
       <tr>
         <th on-click="goToCompeting();">{{competing}}</th>
         <th on-click="goToCompetitors();">{{competitors}}</th>

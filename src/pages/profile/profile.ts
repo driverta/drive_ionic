@@ -1,7 +1,13 @@
 import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
-import { IonicPage, Nav, NavController, NavParams, AlertController } from 'ionic-angular';
+import { IonicPage,
+  Nav,
+  NavController,
+  NavParams,
+  AlertController,
+  ModalController
+} from 'ionic-angular';
 import { Camera } from '@ionic-native/camera';
 import { Storage } from '@ionic/storage';
 
@@ -12,11 +18,6 @@ import { Levels } from '../../providers/providers';
 
 import firebase from 'firebase';
 
-/**
- * The Settings page is a simple form that syncs with a Settings provider
- * to enable the user to customize settings for the app.
- *
- */
 @IonicPage()
 @Component({
   selector: 'page-profile',
@@ -31,7 +32,11 @@ export class SettingsPage {
   xtotal = 100;
   progress = 25;
   username = "test"
-  rank = "frail body"
+  rank = "Frail Body"
+  weight = 0
+  height = 0
+  gym = "gym"
+  location = "location"
   loop = 0;
   gains = 0;
   records = 0;
@@ -66,6 +71,7 @@ export class SettingsPage {
     public settings: Settings,
     public formBuilder: FormBuilder,
     public navParams: NavParams,
+    public modalCtrl: ModalController,
     private alertCtrl: AlertController,
     public translate: TranslateService,
     public camera: Camera,
@@ -160,7 +166,38 @@ export class SettingsPage {
         this.form.patchValue({ 'profilePic': pic });
         this.show = false;
       }
-      //alert(this.form.controls['profilePic'].value)
+    })
+
+    var queryWeight = firebase.database().ref('/users/' + this.username + '/weight');
+    queryWeight.once("value").then( snapshot => {
+      var weight = snapshot.val();
+      if (weight){
+        this.weight = weight
+      }
+    })
+
+    var queryHeight = firebase.database().ref('/users/' + this.username + '/height');
+    queryHeight.once("value").then( snapshot => {
+      var height = snapshot.val();
+      if (height){
+        this.height = height
+      }
+    })
+
+    var queryGym = firebase.database().ref('/users/' + this.username + '/gym');
+    queryGym.once("value").then( snapshot => {
+      var gym = snapshot.val();
+      if (gym){
+        this.gym = gym
+      }
+    })
+
+    var queryLocation = firebase.database().ref('/users/' + this.username + '/location');
+    queryLocation.once("value").then( snapshot => {
+      var location = snapshot.val();
+      if (location){
+        this.location = location
+      }
     })
   }
 
@@ -172,7 +209,16 @@ export class SettingsPage {
         this.xtotal = value.levelPoints;
         this.progress = this.xcurrent / this.xtotal * 100
       }
-    });
+      if (this.xlevel < 10){
+        this.rank = "FRAIL BODY"
+      } else if ( this.xlevel >= 10 && this.xlevel < 20){
+        this.rank = "GYM RAT"
+      } else if ( this.xlevel >= 20 && this.xlevel < 30){
+        this.rank = "BODYBUILDER"
+      } else if ( this.xlevel > 30){
+        this.rank = "OLYMPIAN"
+      }
+    })
     
   }
 
@@ -320,5 +366,13 @@ export class SettingsPage {
 
   goToGains(){
     this.navCtrl.push('GainsPage');
+  }
+
+  editProfile(){
+    let addModal = this.modalCtrl.create('EditProfilePage');
+    addModal.onDidDismiss(item => {
+      this.ionViewDidLoad();
+    })
+    addModal.present();
   }
 }
