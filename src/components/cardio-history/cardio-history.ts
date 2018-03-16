@@ -35,19 +35,21 @@ export class CardioHistoryComponent {
   ngOnInit() {
 
     this.username = localStorage.getItem("username");
-    this.history._cardio = [];
+    
 
     this.getExercises().then((val) => {
+      this.history._cardio = [];
       var keyOne = this.exercise.name + '-' + this.exercise.variation
       var history = val[keyOne].history;
       //console.log(val[keyOne].history);
       if (history) {
         Object.keys(history).forEach ( (keyTwo) => {
-          var workout = {date: history[keyTwo].date, miles: history[keyTwo].miles, time: history[keyTwo].time, mph: history[keyTwo].mph}
+          var workout = {date: history[keyTwo].date, miles: history[keyTwo].miles, time: history[keyTwo].time, mph: history[keyTwo].mph, minutes: history[keyTwo].minutes}
           this.history._cardio.push(workout)
         })
       }
     });
+    console.log(this.history._cardio)
   }
 
   presentConfirm(x) {

@@ -1,5 +1,5 @@
 import { Component,ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, AlertController, NavController, NavParams } from 'ionic-angular';
 
 import { Records } from '../../providers/providers';
 import { Storage } from '@ionic/storage';
@@ -17,6 +17,9 @@ export class FriendRecordDetailPage {
 
   exercise: any;
   username: any;
+  myUsername: string;
+  bool = true;
+  myLifts:any = {};
   checkRec = false;
 
   @ViewChild(FriendProfileBarComponent) barChart: FriendProfileBarComponent
@@ -24,10 +27,12 @@ export class FriendRecordDetailPage {
   constructor(public navCtrl: NavController,
   	public navParams: NavParams,
   	public records: Records,
+    public alertCtrl: AlertController,
   	private storage: Storage
   	) {
   	this.exercise = navParams.get('item');
     this.username = navParams.get("username");
+    this.myUsername = localStorage.getItem("username");
   }
 
   ionViewWillEnter() {
@@ -39,6 +44,11 @@ export class FriendRecordDetailPage {
     ];
     
     this.getRecords();
+
+    this.getExercises().then((val) => {
+      console.log(val)
+      this.myLifts = val;
+    });
   }
 
   getRecords() {
@@ -68,6 +78,59 @@ export class FriendRecordDetailPage {
       });
     });
     this.barChart.makeChart();
+  }
+
+  saveExercise() {
+    this.bool = true;
+    
+    Object.keys(this.myLifts).forEach ( (key) => {
+      if(this.myLifts[key].name == this.exercise.name && this.myLifts[key].variation == this.exercise.variation){
+        this.presentAlert();
+        this.bool = false;
+      }
+    })
+
+    if(this.bool){
+      if (Array.isArray(this.exercise.history)){
+        this.exercise.history = [];
+      } else {
+        this.exercise.history = {};
+      }
+      
+      var key = this.exercise.name + '-' + this.exercise.variation
+      
+      this.myLifts[key] = this.exercise
+      
+      this.storage.set(this.myUsername + '/exercises', this.myLifts).then(() =>{
+        this.exerciseAdded();
+      });
+
+    }
+  }
+
+  presentAlert() {
+    let alert = this.alertCtrl.create({
+      title: 'Duplicate Exercise',
+      subTitle: 'You already have an exercise with this name and Variation',
+      buttons: ['Dismiss']
+    });
+    alert.present();
+  }
+
+  exerciseAdded() {
+    let alert = this.alertCtrl.create({
+      title: 'Exercise added to your list!',
+      buttons: ['Ok']
+    });
+    alert.present();
+  }
+
+  getExercises(): Promise<any> {
+    this.storage.ready().then(() => {
+      console.log(this.storage.get(this.myUsername + '/exercises'))
+      
+    })
+    return this.storage.get(this.myUsername + '/exercises');
   }
 
 }

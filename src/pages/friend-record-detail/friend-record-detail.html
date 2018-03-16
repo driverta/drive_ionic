@@ -2,6 +2,12 @@
 
   <ion-navbar>
     <ion-title>{{exercise.name}}</ion-title>
+
+    <ion-buttons right>
+      <button ion-button icon-only (click)="saveExercise();">
+        <ion-icon name="add"></ion-icon>
+      </button>
+    </ion-buttons>
   </ion-navbar>
 
 </ion-header>
