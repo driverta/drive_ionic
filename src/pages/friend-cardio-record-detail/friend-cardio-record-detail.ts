@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, AlertController, NavController, NavParams } from 'ionic-angular';
 import  { StatsBarChart } from '../../models/item';
 import { Storage } from '@ionic/storage';
 
@@ -30,6 +30,9 @@ export class FriendCardioRecordDetailPage {
   checkRec = false;
   tempRec = [];
   loop = 0;
+  myUsername: string;
+  bool = true;
+  myLifts:any = {};
 
   width: number;
   height: number;
@@ -46,10 +49,12 @@ export class FriendCardioRecordDetailPage {
   constructor(public navCtrl: NavController,
   	public navParams: NavParams,
   	public records: Records,
+    public alertCtrl: AlertController,
     private storage: Storage
   	) {
   	this.exercise = navParams.get('item');
     this.username = navParams.get("username");
+    this.myUsername = localStorage.getItem("username");
     this.width = 1000 - this.margin.left - this.margin.right;
     this.height = 500 - this.margin.top - this.margin.bottom;
   }
@@ -64,8 +69,12 @@ export class FriendCardioRecordDetailPage {
       
     ];
     
-    
     this.getRecords();
+
+    this.getExercises().then((val) => {
+      console.log(val)
+      this.myLifts = val;
+    });
   }
 
   getRecords() {
@@ -176,4 +185,58 @@ export class FriendCardioRecordDetailPage {
         .attr("width", this.x.bandwidth())
         .attr("height", (d) => this.height - this.y(d.mph) );
   }
+
+  saveExercise() {
+    this.bool = true;
+    
+    Object.keys(this.myLifts).forEach ( (key) => {
+      if(this.myLifts[key].name == this.exercise.name && this.myLifts[key].variation == this.exercise.variation){
+        this.presentAlert();
+        this.bool = false;
+      }
+    })
+
+    if(this.bool){
+      if (Array.isArray(this.exercise.history)){
+        this.exercise.history = [];
+      } else {
+        this.exercise.history = {};
+      }
+
+      var key = this.exercise.name + '-' + this.exercise.variation
+      
+      this.myLifts[key] = this.exercise
+      
+      this.storage.set(this.myUsername + '/exercises', this.myLifts).then(() =>{
+        this.exerciseAdded();
+      });
+
+    }
+  }
+
+  presentAlert() {
+    let alert = this.alertCtrl.create({
+      title: 'Duplicate Exercise',
+      subTitle: 'You already have an exercise with this name and Variation',
+      buttons: ['Dismiss']
+    });
+    alert.present();
+  }
+
+  exerciseAdded() {
+    let alert = this.alertCtrl.create({
+      title: 'Exercise added to your list!',
+      buttons: ['Ok']
+    });
+    alert.present();
+  }
+
+  getExercises(): Promise<any> {
+    this.storage.ready().then(() => {
+      console.log(this.storage.get(this.myUsername + '/exercises'))
+      
+    })
+    return this.storage.get(this.myUsername + '/exercises');
+  }
+
 }

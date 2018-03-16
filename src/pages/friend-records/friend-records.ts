@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage,
+  AlertController,
   NavController,
   NavParams,
   ActionSheetController
@@ -7,6 +8,7 @@ import { IonicPage,
 
 import { KeysPipe } from '../../pipes/keys/keys';
 import firebase from 'firebase';
+import { Storage } from '@ionic/storage';
 
 @IonicPage()
 @Component({
@@ -16,15 +18,21 @@ import firebase from 'firebase';
 export class FriendRecordsPage {
 
   username: string;
+  myUsername: string;
 	lifts:any = {};
   setlifts:any = {};
+  myLifts:any = {};
+  bool = true;
 
   filter= "All";
 
   constructor(public navCtrl: NavController,
   	public navParams: NavParams,
+    private storage: Storage,
+    public alertCtrl: AlertController,
     public actShtCtrl: ActionSheetController) {
   	this.username = navParams.get("username");
+    this.myUsername = localStorage.getItem("username");
 
   }
 
@@ -41,6 +49,11 @@ export class FriendRecordsPage {
         this.lifts = this.setlifts
       
       });
+    });
+
+    this.getExercises().then((val) => {
+      console.log(val)
+      this.myLifts = val;
     });
   }
 
@@ -135,6 +148,59 @@ export class FriendRecordsPage {
         this.lifts[key] = this.setlifts[key]
       }
     });
+  }
+
+  getExercises(): Promise<any> {
+    this.storage.ready().then(() => {
+      console.log(this.storage.get(this.myUsername + '/exercises'))
+      
+    })
+    return this.storage.get(this.myUsername + '/exercises');
+  }
+
+  saveExercise(exercise) {
+    this.bool = true;
+    
+    Object.keys(this.myLifts).forEach ( (key) => {
+      if(this.myLifts[key].name == exercise.name && this.myLifts[key].variation == exercise.variation){
+        this.presentAlert();
+        this.bool = false;
+      }
+    })
+
+    if(this.bool){
+      if (Array.isArray(exercise.history)){
+        exercise.history = [];
+      } else {
+        exercise.history = {};
+      }
+
+      var key = exercise.name + '-' + exercise.variation
+      
+      this.myLifts[key] = exercise
+      
+      this.storage.set(this.myUsername + '/exercises', this.myLifts).then(() =>{
+        this.exerciseAdded();
+      });
+
+    }
+  }
+
+  presentAlert() {
+    let alert = this.alertCtrl.create({
+      title: 'Duplicate Exercise',
+      subTitle: 'You already have an exercise with this name and Variation',
+      buttons: ['Dismiss']
+    });
+    alert.present();
+  }
+
+  exerciseAdded() {
+    let alert = this.alertCtrl.create({
+      title: 'Exercise added to your list!',
+      buttons: ['Ok']
+    });
+    alert.present();
   }
 
 }

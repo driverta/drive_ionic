@@ -45,6 +45,7 @@ export class CardioPage {
   }
 
   ionViewWillEnter() {
+    //alert("HEY")
     this.tempRec = this.records._cardio;
 
     this.records._cardioRecords = [
@@ -54,7 +55,8 @@ export class CardioPage {
       
     ];
     this.username = localStorage.getItem("username");
-    
+    console.log(this.username)
+    console.log(this.exercise)
     this.getRecords();
   }
 
