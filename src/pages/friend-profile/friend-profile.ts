@@ -13,6 +13,11 @@ export class FriendProfilePage {
 
 	username: any;
 	user: any;
+  rank = "Frail Body"
+  weight = 195
+  height = 6.1
+  gym = "xSport"
+  location = "Fairfax"
 	xlevel = 1;
   xcurrent = 25;
   xtotal = 100;
@@ -87,6 +92,15 @@ export class FriendProfilePage {
         this.xlevel = value.level;
         this.xtotal = value.levelPoints;
         this.progress = this.xcurrent / this.xtotal * 100
+      }
+      if (this.xlevel < 10){
+        this.rank = "FRAIL BODY"
+      } else if ( this.xlevel >= 10 && this.xlevel < 20){
+        this.rank = "GYM RAT"
+      } else if ( this.xlevel >= 20 && this.xlevel < 30){
+        this.rank = "BODYBUILDER"
+      } else if ( this.xlevel > 30){
+        this.rank = "OLYMPIAN"
       }
     });
   }

@@ -17,6 +17,7 @@ export class SearchPage {
   currentItems: any = [];
   timeFilter = "All Time"
   username: any;
+  rank = "Frail Body"
   loop = 0;
   gains = 0;
   loop2 = 0;
@@ -87,9 +88,19 @@ export class SearchPage {
   }
 
   setLevel (gains, i) {
+    var xlevel = this.players[i].level
     this.levels._levels.forEach( value => {
       if (gains > value.totalPoints) {
         this.players[i].level = value.level;
+      }
+      if (xlevel < 10){
+        this.rank = "Frail Body"
+      } else if ( xlevel >= 10 && xlevel < 20){
+        this.rank = "Gym Rat"
+      } else if ( xlevel >= 20 && xlevel < 30){
+        this.rank = "Bodybuilder"
+      } else if ( xlevel > 30){
+        this.rank = "Olympian"
       }
     });
   }
