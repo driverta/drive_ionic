@@ -17,6 +17,7 @@ import { CardioProfileRecordsComponent } from './cardio-profile-records/cardio-p
 import { CardioProfileBarComponent } from './cardio-profile-bar/cardio-profile-bar';
 import { FriendCardioProfileBarComponent } from './friend-cardio-profile-bar/friend-cardio-profile-bar';
 import { FriendCardioProfileRecordsComponent } from './friend-cardio-profile-records/friend-cardio-profile-records';
+import { GainsChartComponent } from './gains-chart/gains-chart';
 @NgModule({
 	declarations: [BarChartComponent,
     NewSetComponent,
@@ -35,7 +36,8 @@ import { FriendCardioProfileRecordsComponent } from './friend-cardio-profile-rec
     CardioProfileRecordsComponent,
     CardioProfileBarComponent,
     FriendCardioProfileBarComponent,
-    FriendCardioProfileRecordsComponent],
+    FriendCardioProfileRecordsComponent,
+    GainsChartComponent],
 	imports: [],
 	exports: [BarChartComponent,
     NewSetComponent,
@@ -54,6 +56,7 @@ import { FriendCardioProfileRecordsComponent } from './friend-cardio-profile-rec
     CardioProfileRecordsComponent,
     CardioProfileBarComponent,
     FriendCardioProfileBarComponent,
-    FriendCardioProfileRecordsComponent]
+    FriendCardioProfileRecordsComponent,
+    GainsChartComponent]
 })
 export class ComponentsModule {}
