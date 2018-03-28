@@ -4,6 +4,8 @@ import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angu
 import { User } from '../../providers/providers';
 import firebase from 'firebase';
 
+import { SortByGainsPipe } from '../../pipes/sort-by-gains/sort-by-gains'
+
 /**
  * Generated class for the DiscoverPage page.
  *
@@ -21,22 +23,21 @@ export class DiscoverPage {
   currentItems: any = [];
 	users: any = [];
 	username: any;
-  players = [];
   loop = 0;
-  possibleFriends: any = []; 
+  likelyFriends: any = []; 
   competingFriends: any = []; 
-  competingFriendsOfFriends: any = []; 
+  competingFriendsOfFriends: any = [];
+  x = ["Tom", "matt"];
 
 
   constructor(public alertCtrl: AlertController, public navCtrl: NavController, public navParams: NavParams, public user: User) {
   }
-  
-  fetchLikelyFriends() { 
-    console.log(this.competingFriends)
-  }
 
   ionViewWillEnter() {
   	this.users = [];
+    this.likelyFriends = [];
+    this.competingFriends = [];
+    this.competingFriendsOfFriends = [];
     this.username = this.user._user;
     var query1 = firebase.database().ref("/users");
     var query2 = firebase.database().ref('/' + this.username + '/competing');
@@ -51,19 +52,43 @@ export class DiscoverPage {
     
     query2.once("value").then( snapshot => {
       snapshot.forEach( childSnapshot => {
-        var childData2 = childSnapshot.val();
-        this.competingFriends.push(childData2.name);
+        var competingFriend = childSnapshot.val();
+        this.competingFriends.push(competingFriend.name);
+        this.getFriendsOfFriends(competingFriend.name);
       });
     });
   }
   
-  getFriendOfFriends(friend) {
+  getFriendsOfFriends(friend) {
     var query = firebase.database().ref('/' + friend + '/competing');
-    
+  
     query.once("value").then( snapshot => {
+      var loop = 0;
       snapshot.forEach( childSnapshot => {
-        var childData2 = childSnapshot.val();
-        this.competingFriends.push(childData2.name);
+        var competingFriendOfFriend = childSnapshot.val().name;
+        console.log(competingFriendOfFriend);
+        if (!this.competingFriendsOfFriends.includes(competingFriendOfFriend) && !this.competingFriends.includes(competingFriendOfFriend)) {
+          this.competingFriendsOfFriends.push(competingFriendOfFriend);
+          var likelyFriend = {
+            "name": competingFriendOfFriend,
+            "profilePic": '',
+            "gains": '',
+          };
+          var queryGains = firebase.database().ref('/' + competingFriendOfFriend + '/gains');
+          queryGains.once("value").then( snapshot => {
+            var totalGains = 0;
+            snapshot.forEach( childSnapshot => {
+              var childData1 = childSnapshot.val();
+              totalGains = totalGains + childData1.gains;
+            });
+            likelyFriend.gains = totalGains;
+            var queryGains = firebase.database().ref('/users/' + competingFriendOfFriend + '/profilePic');
+            queryGains.once("value").then( profilePic => {
+              likelyFriend.profilePic = profilePic.val();
+              this.likelyFriends.push(likelyFriend);
+            });
+          });      
+        }  
       });
     });
   }
@@ -87,10 +112,10 @@ export class DiscoverPage {
   addToLeaderboard(item){
     var check = true;
     
-    this.players.forEach( value => {
-
+    this.competingFriends.forEach( value => {
+    
       if (value.name == item.name) {
-
+    
         this.alreadyCompeting();
         check = false;
       } 
@@ -104,7 +129,26 @@ export class DiscoverPage {
       competitors.child(this.username).set(this.username);
       this.playerAdded();
     }
-    
+  }
+  
+  getGains(username): Promise<any> {
+    var queryGains = firebase.database().ref('/' + username + '/gains');
+    queryGains.once("value").then( snapshot => {
+      var totalGains = 0;
+      snapshot.forEach( childSnapshot => {
+        var childData1 = childSnapshot.val();
+        totalGains = totalGains + childData1.gains;
+      });
+      console.log(totalGains);
+      return totalGains;
+    });
+  }
+  
+  getPic(username): Promise<any> {
+    var queryGains = firebase.database().ref('/users/' + username + '/profilePic');
+    queryGains.once("value").then( profilePic => {
+      return profilePic.val()
+    });
   }
 
   alreadyCompeting() {
