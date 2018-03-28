@@ -43,6 +43,7 @@
         <ion-input type="text" [(ngModel)]="info.location" placeholder="fairfax"  formControlName="location"></ion-input>
       </ion-item>
     </ion-list>
+    <h3 *ngIf="show" id="loading">Loading</h3>
   </form>
   
 </ion-content>
