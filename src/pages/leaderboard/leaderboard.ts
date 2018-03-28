@@ -21,9 +21,10 @@ export class SearchPage {
   loop = 0;
   gains = 0;
   loop2 = 0;
+  show = true
 
   players= [
-    {name: "tom", level: 3, gains: 100, profilePic: "", totalGains: []}
+    {name: "tom", level: 3, gains: 100, profilePic: "", totalGains: [], rank: "Frail Body"}
   ]
 
   constructor(public alertCtrl: AlertController, public user: User, public levels: Levels, public navCtrl: NavController, public navParams: NavParams) { }
@@ -32,7 +33,7 @@ export class SearchPage {
     this.navCtrl.push('AddCompetitorsPage')
   }
 
-  ionViewWillLoad(){
+  ionViewWillEnter(){
     this.username = localStorage.getItem("username");
     this.players = [];
     this.timeFilter = "All Time"
@@ -43,7 +44,7 @@ export class SearchPage {
       snapshot.forEach( childSnapshot => {
         this.loop++
         var childData1 = childSnapshot.val();
-        var data = {name: childData1.name, level: 0, gains: 0, profilePic: "", totalGains: []};
+        var data = {name: childData1.name, level: 0, gains: 0, profilePic: "", totalGains: [], rank: "Frail Body"};
         this.players.push(data);
         if ( snapshot.numChildren() == this.loop ) {
           this.getGains();
@@ -66,6 +67,7 @@ export class SearchPage {
           var gains = childData1.gains;
           this.gains = this.gains + gains
           if ( snapshot.numChildren() == this.loop ) {
+            this.show = false;
             value.gains = this.gains
             this.setLevel(this.gains, index)
           }
@@ -89,19 +91,19 @@ export class SearchPage {
   }
 
   setLevel (gains, i) {
-    var xlevel = this.players[i].level
     this.levels._levels.forEach( value => {
       if (gains > value.totalPoints) {
         this.players[i].level = value.level;
+        var xlevel = this.players[i].level
       }
       if (xlevel < 10){
-        this.rank = "Frail Body"
+        this.players[i].rank = "Frail Body"
       } else if ( xlevel >= 10 && xlevel < 20){
-        this.rank = "Gym Rat"
+        this.players[i].rank = "Gym Rat"
       } else if ( xlevel >= 20 && xlevel < 30){
-        this.rank = "Bodybuilder"
+        this.players[i].rank = "Bodybuilder"
       } else if ( xlevel > 30){
-        this.rank = "Olympian"
+        this.players[i].rank = "Olympian"
       }
     });
   }
@@ -185,7 +187,7 @@ export class SearchPage {
         if (x.name == childData1.name) {
           childSnapshot.getRef().remove().then(() => {
             console.log('Write succeeded!');
-            this.ionViewWillLoad();
+            this.ionViewWillEnter();
           });
         }
       });
