@@ -22,6 +22,15 @@ export class GainsPage {
 	week = 0;
 	today = 0;
 
+  chest = 0;
+  back = 0;
+  legs = 0;
+  shoulders = 0;
+  arms = 0;
+  core = 0;
+  other = 0;
+  cardio = 0;
+
   margin = {top: 50, right: 110, bottom: 50, left: 45};
   width: number;
   height: number;
@@ -73,7 +82,17 @@ export class GainsPage {
     this.week = 0;
     this.today = 0;
 
+    this.chest = 0;
+    this.back = 0;
+    this.legs = 0;
+    this.shoulders = 0;
+    this.arms = 0;
+    this.core = 0;
+    this.other = 0;
+    this.cardio = 0;
+
     this.getGains().then((val) => {
+      console.log(val)
       val.forEach((set) => {
       	var newDate = set.date.slice(0,10);
       	var testDate = new Date(newDate);
@@ -92,10 +111,54 @@ export class GainsPage {
           this.today = this.today + set.gains;
         }
 
+        if (set.muscle = "Chest"){
+          this.chest = this.chest + set.gains
+        }
+
+        if (set.muscle = "Back"){
+          this.back = this.back + set.gains
+        }
+
+        if (set.muscle = "Legs"){
+          this.legs = this.legs + set.gains
+        }
+
+        if (set.muscle = "Shoulders"){
+          this.shoulders = this.shoulders + set.gains
+        }
+
+        if (set.muscle = "Arms"){
+          this.arms = this.arms + set.gains
+        }
+
+        if (set.muscle = "Core"){
+          this.core = this.core + set.gains
+        }
+
+        if (set.muscle = "Cardio"){
+          this.cardio = this.cardio + set.gains
+        }
+
+        if (set.muscle = "Other"){
+          this.other = this.other + set.gains
+        }
+
       })
+    }).then(() => {
+      /*
+      this.data[0][0].value = this.chest / this.allTime;
+      this.data[0][1].value = this.back / this.allTime;
+      this.data[0][2].value = this.legs / this.allTime;
+      this.data[0][3].value = this.shoulders / this.allTime;
+      this.data[0][4].value = this.arms / this.allTime;
+      this.data[0][5].value = this.core / this.allTime;
+      this.data[0][6].value = this.other / this.allTime;
+      this.data[0][7].value = this.cardio / this.allTime;
+      */
+      this.radarChart("#gainsChart", this.data, this.radarChartOptions);
     })
 
-    this.radarChart("#gainsChart", this.data, this.radarChartOptions);
+    
   }
 
   getGains(): Promise<any> {
@@ -222,7 +285,7 @@ export class GainsPage {
       .attr("x2", function(d, i){ return rScale(maxValue*1.1) * Math.cos(angleSlice*i - Math.PI/2); })
       .attr("y2", function(d, i){ return rScale(maxValue*1.1) * Math.sin(angleSlice*i - Math.PI/2); })
       .attr("class", "line")
-      .style("stroke", "white")
+      .style("stroke", "black")
       .style("stroke-width", "2px");
 
     //Append the labels at each axis
