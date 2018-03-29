@@ -28,14 +28,14 @@ export class GainsPage {
 
   data = [
     [//iPhone
-    {axis:"Chest",value:0.22},
-    {axis:"Back",value:0.28},
+    {axis:"Chest",value:0.12},
+    {axis:"Back",value:0.18},
     {axis:"Legs",value:0.29},
     {axis:"Shoulders",value:0.17},
     {axis:"Arms",value:0.22},
     {axis:"Core",value:0.02},
     {axis:"Other",value:0.21},
-    {axis:"Cardio",value:0.50}      
+    {axis:"Cardio",value:0.60}      
     ]
   ];
 
@@ -120,7 +120,7 @@ export class GainsPage {
      opacityCircles: 0.1,   //The opacity of the circles of each blob
      strokeWidth: 2,     //The width of the stroke around each blob
      roundStrokes: false,  //If true the area and stroke will follow a round path (cardinal-closed)
-     color: "#CC333F" 
+     color: "red" 
     };
     
     //Put all of the options into a variable called cfg
@@ -131,8 +131,10 @@ export class GainsPage {
     }//if
     
     //If the supplied maxValue is smaller than the actual one, replace by the max in the data
-    var maxValue = Math.max(cfg.maxValue, d3Array.max(data, (i) =>{return d3Array.max(i.map((o) =>{return o.value;}))}));
-      
+    //var maxValue = Math.max(cfg.maxValue, d3Array.max(data, function(i){console.log(i); return d3Array.max(i.map(function(o){ console.log(o); return o.value;}))}));
+    var maxValue = options.maxValue
+    console.log(maxValue)
+
     var allAxis = (data[0].map((i, j) => {return i.axis})),  //Names of each axis
       total = allAxis.length,          //The number of different axes
       radius = Math.min(cfg.w/2, cfg.h/2),   //Radius of the outermost circle
@@ -179,9 +181,9 @@ export class GainsPage {
     var axisGrid = g.append("g").attr("class", "axisWrapper");
     
     //Draw the background circles
-    /*
+    var x = [5,4,3,2,1]
     axisGrid.selectAll(".levels")
-       .data(d3.range(1,(cfg.levels+1)).reverse())
+       .data(x)
        .enter()
       .append("circle")
       .attr("class", "gridCircle")
@@ -193,16 +195,16 @@ export class GainsPage {
 
     //Text indicating at what % each level is
     axisGrid.selectAll(".axisLabel")
-       .data(d3.range(1,(cfg.levels+1)).reverse())
+       .data(x)
        .enter().append("text")
        .attr("class", "axisLabel")
        .attr("x", 4)
        .attr("y", function(d){return -d*radius/cfg.levels;})
        .attr("dy", "0.4em")
        .style("font-size", "10px")
-       .attr("fill", "#737373")
-       .text(function(d,i) { return Format(maxValue * d/cfg.levels); });
-    */
+       .attr("fill", "white")
+       .text(function(d,i) { return (maxValue * d/cfg.levels)* 100 + "%" });
+    
     /////////////////////////////////////////////////////////
     //////////////////// Draw the axes //////////////////////
     /////////////////////////////////////////////////////////
@@ -229,9 +231,9 @@ export class GainsPage {
       .style("font-size", "11px")
       .attr("text-anchor", "middle")
       .attr("dy", "0.35em")
-      .attr("x", function(d, i){ return rScale(maxValue * cfg.labelFactor) * Math.cos(angleSlice*i - Math.PI/2); })
+      .attr("x", (d, i) => { return rScale(maxValue * cfg.labelFactor) * Math.cos(angleSlice*i - Math.PI/2); })
       .attr("y", function(d, i){ return rScale(maxValue * cfg.labelFactor) * Math.sin(angleSlice*i - Math.PI/2); })
-      .text(function(d){return d})
+      .text(function(d: any){ return d})
       .call(wrap, cfg.wrapWidth);
 
     /////////////////////////////////////////////////////////
@@ -241,7 +243,7 @@ export class GainsPage {
     //The radial line function
     var radarLine = d3Shape.radialLine()
       .curve(d3Shape.curveLinearClosed)
-      .radius(function(d) { return rScale(d.value); })
+      .radius(function(d: any) { return rScale(d.value); })
       .angle(function(d,i) {  return i*angleSlice; });
       
     if(cfg.roundStrokes) {
@@ -258,7 +260,7 @@ export class GainsPage {
     blobWrapper
       .append("path")
       .attr("class", "radarArea")
-      .attr("d", function(d,i) { return radarLine(d); })
+      .attr("d", function(d: any, i) { return radarLine(d); })
       .style("fill", function(d,i) { return cfg.color; })
       .style("fill-opacity", cfg.opacityArea)
       /*
@@ -283,7 +285,7 @@ export class GainsPage {
     //Create the outlines  
     blobWrapper.append("path")
       .attr("class", "radarStroke")
-      .attr("d", function(d,i) { return radarLine(d); })
+      .attr("d", function(d: any ,i) { return radarLine(d); })
       .style("stroke-width", cfg.strokeWidth + "px")
       .style("stroke", function(d,i) { return cfg.color; })
       .style("fill", "none")
@@ -291,12 +293,12 @@ export class GainsPage {
     
     //Append the circles
     blobWrapper.selectAll(".radarCircle")
-      .data(function(d,i) { return d; })
+      .data(function(d: any,i) { return d; })
       .enter().append("circle")
       .attr("class", "radarCircle")
       .attr("r", cfg.dotRadius)
-      .attr("cx", function(d,i){ return rScale(d.value) * Math.cos(angleSlice*i - Math.PI/2); })
-      .attr("cy", function(d,i){ return rScale(d.value) * Math.sin(angleSlice*i - Math.PI/2); })
+      .attr("cx", function(d: any,i){ return rScale(d.value) * Math.cos(angleSlice*i - Math.PI/2); })
+      .attr("cy", function(d: any,i){ return rScale(d.value) * Math.sin(angleSlice*i - Math.PI/2); })
       .style("fill", function(d,i,j) { return cfg.color; })
       .style("fill-opacity", 0.8);
 
@@ -311,16 +313,17 @@ export class GainsPage {
       .attr("class", "radarCircleWrapper");
       
     //Append a set of invisible circles on top for the mouseover pop-up
+    /*
     blobCircleWrapper.selectAll(".radarInvisibleCircle")
-      .data(function(d,i) { return d; })
+      .data(function(d: any,i) { return d; })
       .enter().append("circle")
       .attr("class", "radarInvisibleCircle")
       .attr("r", cfg.dotRadius*1.5)
-      .attr("cx", function(d,i){ return rScale(d.value) * Math.cos(angleSlice*i - Math.PI/2); })
-      .attr("cy", function(d,i){ return rScale(d.value) * Math.sin(angleSlice*i - Math.PI/2); })
+      .attr("cx", function(d: any ,i){ return rScale(d.value) * Math.cos(angleSlice*i - Math.PI/2); })
+      .attr("cy", function(d: any,i){ return rScale(d.value) * Math.sin(angleSlice*i - Math.PI/2); })
       .style("fill", "none")
       .style("pointer-events", "all")
-      .on("mouseover", function(d,i) {
+      .on("mouseover", function(d: any,i) {
         var newX =  parseFloat(d3.select(this).attr('cx')) - 10;
         var newY =  parseFloat(d3.select(this).attr('cy')) - 10;
             
@@ -340,13 +343,14 @@ export class GainsPage {
     var tooltip = g.append("text")
       .attr("class", "tooltip")
       .style("opacity", 0);
-    
+    */
     /////////////////////////////////////////////////////////
     /////////////////// Helper Function /////////////////////
     /////////////////////////////////////////////////////////
 
     //Taken from http://bl.ocks.org/mbostock/7555321
-    //Wraps SVG text  
+    //Wraps SVG text 
+    
     function wrap(text, width) {
       text.each(function() {
       var text = d3.select(this),
@@ -363,7 +367,9 @@ export class GainsPage {
       while (word = words.pop()) {
         line.push(word);
         tspan.text(line.join(" "));
-        if (tspan.node().getComputedTextLength() > width) {
+        var node: SVGTSpanElement = <SVGTSpanElement>tspan.node(); 
+        var hasGreaterWidth = node.getComputedTextLength() > width; 
+        if (hasGreaterWidth) {
         line.pop();
         tspan.text(line.join(" "));
         line = [word];
@@ -371,7 +377,8 @@ export class GainsPage {
         }
       }
       });
-    }//wrap  
+    }//wrap
+      
   }
 
 }
