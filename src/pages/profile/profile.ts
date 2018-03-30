@@ -275,7 +275,7 @@ export class SettingsPage {
   }
 
   ionViewWillEnter() {
-    
+    this.username = localStorage.getItem("username");
     this.ionViewDidLoad();
     // Build an empty form for the template to render
     this.form = this.formBuilder.group({});

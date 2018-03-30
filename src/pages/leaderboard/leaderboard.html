@@ -31,7 +31,7 @@
           
           <h1>{{item.name}}
             <div id="gains">{{item.gains}}</div>
-            <h3>{{rank}} {{item.level}}</h3>
+            <h3>{{item.rank}} {{item.level}}</h3>
           </h1>
         </ion-item>
       
@@ -43,5 +43,6 @@
         
       </ion-item-sliding>
     </ion-list>
+    <h3 *ngIf="show" id="loading">Loading</h3>
   </div>
 </ion-content>
