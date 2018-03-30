@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, ActionSheetController, NavController, NavParams } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 
 import * as d3 from 'd3-selection';
@@ -22,6 +22,9 @@ export class GainsPage {
 	week = 0;
 	today = 0;
 
+  exercises = {};
+  xGains = 0
+
   chest = 0;
   back = 0;
   legs = 0;
@@ -30,6 +33,8 @@ export class GainsPage {
   core = 0;
   other = 0;
   cardio = 0;
+
+  filter = "";
 
   margin = {top: 50, right: 110, bottom: 50, left: 45};
   width: number;
@@ -43,7 +48,6 @@ export class GainsPage {
     {axis:"Shoulders",value:0.17},
     {axis:"Arms",value:0.22},
     {axis:"Core",value:0.02},
-    {axis:"Other",value:0.21},
     {axis:"Cardio",value:0.60}      
     ]
   ];
@@ -60,6 +64,7 @@ export class GainsPage {
 
   constructor(public navCtrl: NavController,
   	public navParams: NavParams,
+    public actShtCtrl: ActionSheetController,
   	private storage: Storage) {
 
   	this.username = localStorage.getItem("username");
@@ -71,6 +76,17 @@ export class GainsPage {
   }
 
   ionViewDidLoad() {
+    this.data = [
+      [//iPhone
+      {axis:"Chest",value:0.12},
+      {axis:"Back",value:0.18},
+      {axis:"Legs",value:0.29},
+      {axis:"Shoulders",value:0.17},
+      {axis:"Arms",value:0.22},
+      {axis:"Core",value:0.02},
+      {axis:"Cardio",value:0.60}      
+      ]
+    ];
     var todaysDate = new Date().toISOString().slice(0,10);
     var lastWeek = new Date();
     var lastMonth = new Date();
@@ -99,62 +115,45 @@ export class GainsPage {
 
       	this.allTime = this.allTime + set.gains;
 
-      	if(testDate > lastMonth) {
-          this.month = this.month + set.gains;
-        }
-
-        if(testDate > lastWeek) {
-          this.week = this.week + set.gains;
-        }
-
-        if(newDate == todaysDate) {
-          this.today = this.today + set.gains;
-        }
-
-        if (set.muscle = "Chest"){
+        if (set.muscle == "Chest"){
           this.chest = this.chest + set.gains
         }
 
-        if (set.muscle = "Back"){
+        if (set.muscle == "Back"){
           this.back = this.back + set.gains
         }
 
-        if (set.muscle = "Legs"){
+        if (set.muscle == "Legs"){
           this.legs = this.legs + set.gains
         }
 
-        if (set.muscle = "Shoulders"){
+        if (set.muscle == "Shoulders"){
           this.shoulders = this.shoulders + set.gains
         }
 
-        if (set.muscle = "Arms"){
+        if (set.muscle == "Arms"){
           this.arms = this.arms + set.gains
         }
 
-        if (set.muscle = "Core"){
+        if (set.muscle == "Core"){
           this.core = this.core + set.gains
         }
 
-        if (set.muscle = "Cardio"){
+        if (set.muscle == "Cardio"){
           this.cardio = this.cardio + set.gains
-        }
-
-        if (set.muscle = "Other"){
-          this.other = this.other + set.gains
         }
 
       })
     }).then(() => {
-      /*
+      
       this.data[0][0].value = this.chest / this.allTime;
       this.data[0][1].value = this.back / this.allTime;
       this.data[0][2].value = this.legs / this.allTime;
       this.data[0][3].value = this.shoulders / this.allTime;
       this.data[0][4].value = this.arms / this.allTime;
       this.data[0][5].value = this.core / this.allTime;
-      this.data[0][6].value = this.other / this.allTime;
-      this.data[0][7].value = this.cardio / this.allTime;
-      */
+      this.data[0][6].value = this.cardio / this.allTime;
+      
       this.radarChart("#gainsChart", this.data, this.radarChartOptions);
     })
 
@@ -165,11 +164,113 @@ export class GainsPage {
     return this.storage.get(this.username + '/gains');
   }
 
+  filterGains(){
+    let actionSheet = this.actShtCtrl.create({
+      title: 'Filter Exercises By Muscle Group',
+      buttons: [
+        {
+          text: 'All',
+          handler: () => {
+            this.ionViewDidLoad();
+          }
+        },{
+          text: 'Chest',
+          handler: () => {
+            this.filter = "Chest";
+            this.executeFilter()
+          }
+        },{
+          text: 'Back',
+          handler: () => {
+            this.filter = "Back";
+            this.executeFilter()          
+          }
+        },{
+          text: 'Legs',
+          handler: () => {
+            this.filter = "Legs";
+            this.executeFilter()          
+          }
+        },{
+          text: 'Core',
+          handler: () => {
+            this.filter = "Core";
+            this.executeFilter()          
+          }
+        },{
+          text: 'Shoulders',
+          handler: () => {
+           this.filter = "Shoulders";
+            this.executeFilter()
+          }
+        },{
+          text: 'Arms',
+          handler: () => {
+            this.filter = "Arms";
+            this.executeFilter()          
+          }
+        },{
+          text: 'Cardio',
+          handler: () => {
+            this.filter = "Cardio";
+            this.executeFilter()          
+          }
+        },{
+          text: 'Other',
+          handler: () => {
+            this.filter = "Other";
+            this.executeFilter()          
+          }
+        },{
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        }
+      ]
+    });
+    actionSheet.present();
+  }
+
+  executeFilter(){
+    this.data[0] = [];
+    this.exercises = {};
+    this.xGains = 0;
+    this.getGains().then((val) => {
+      console.log(val)
+      val.forEach((set) => {
+        if (set.muscle == this.filter) {
+          if (typeof set.exercise == "string"){
+            this.xGains = this.xGains + set.gains
+            if (this.exercises[set.exercise]){
+              this.exercises[set.exercise] = this.exercises[set.exercise] + set.gains;
+            } else {
+              this.exercises[set.exercise] = set.gains;
+            }
+          }
+        }
+      })
+    }).then(() => {
+      Object.keys(this.exercises).forEach ( (key) => {
+        var name = key
+        var percent = this.exercises[key] / this.xGains;
+        //onsole.log(percent)
+        var d = {axis: name, value: percent}
+        this.data[0].push(d)
+        
+      }) 
+    }).then(() => {
+      console.log(this.data)
+      this.radarChart("#gainsChart", this.data, this.radarChartOptions);
+    })
+  }
+
   radarChart(id, data, options){
     //alert("HERE")
-    console.log(id);
-    console.log(data);
-    console.log(options);
+    //console.log(id);
+    //console.log(data);
+    //console.log(options);
     var cfg = {
      w: 600,        //Width of the circle
      h: 600,        //Height of the circle

@@ -1,6 +1,11 @@
 <ion-header>
 
   <ion-navbar>
+  	<ion-buttons right>
+      <button ion-button icon-only (click)="filterGains()">
+        <ion-icon name="funnel"></ion-icon>
+      </button>
+    </ion-buttons>
     <ion-title>Gains</ion-title>
   </ion-navbar>
 
@@ -8,27 +13,10 @@
 
 
 <ion-content padding>
-	<div class="stats">
-		<table>
-			<tr>
-				<th>{{allTime}}</th>
-				<th>{{month}}</th>
-			</tr>
-			<tr>
-				<td>All Time</td>
-				<td>This Month</td>
-			</tr>
-			<tr>
-				<th>{{week}}</th>
-				<th>{{today}}</th>
-			</tr>
-			<tr>
-				<td>This Week</td>
-				<td>Today</td>
-			</tr>
-		</table>
-	</div>
+	
 	<ion-item no-lines>
-		<svg id="gainsChart"></svg>
+		<div id="chart">
+			<svg id="gainsChart"></svg>
+		</div>
 	</ion-item>
 </ion-content>
