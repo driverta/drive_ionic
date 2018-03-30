@@ -17,11 +17,13 @@ export class AddCompetitorsPage {
 	username: any;
   players = [];
   loop = 0;
+  show = true;
 
   constructor(public alertCtrl: AlertController, public navCtrl: NavController, public navParams: NavParams, public user: User) {
   }
 
   ionViewWillEnter() {
+    this.show = true;
   	this.users = [];
     this.players = [];
     this.username = localStorage.getItem("username");
@@ -29,12 +31,15 @@ export class AddCompetitorsPage {
     var query1 = firebase.database().ref("/users");
 
     query1.once("value").then( snapshot => {
-      
+      this.loop = 0;
       snapshot.forEach( childSnapshot => {
         
         var childData1 = childSnapshot.val();
-        
+        this.loop++;
         this.users.push(childData1)
+        if ( snapshot.numChildren() == this.loop ) {
+          this.show = false;
+        }
         //alert(this.user._user);      
       });
     });
