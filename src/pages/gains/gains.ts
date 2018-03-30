@@ -18,9 +18,6 @@ export class GainsPage {
 	username: string;
 	gains = 0
 	allTime = 0;
-	month = 0;
-	week = 0;
-	today = 0;
 
   exercises = {};
   xGains = 0
@@ -59,7 +56,7 @@ export class GainsPage {
     maxValue: 0.5,
     levels: 5,
     roundStrokes: true,
-    color: "#CC333F"
+    color: "red"
   };
 
   constructor(public navCtrl: NavController,
@@ -87,16 +84,8 @@ export class GainsPage {
       {axis:"Cardio",value:0.60}      
       ]
     ];
-    var todaysDate = new Date().toISOString().slice(0,10);
-    var lastWeek = new Date();
-    var lastMonth = new Date();
-    lastWeek.setDate(lastWeek.getDate() - 7)
-    lastMonth.setDate(lastMonth.getDate() - 30)
 
     this.allTime = 0;
-    this.month = 0;
-    this.week = 0;
-    this.today = 0;
 
     this.chest = 0;
     this.back = 0;
@@ -110,8 +99,6 @@ export class GainsPage {
     this.getGains().then((val) => {
       console.log(val)
       val.forEach((set) => {
-      	var newDate = set.date.slice(0,10);
-      	var testDate = new Date(newDate);
 
       	this.allTime = this.allTime + set.gains;
 
@@ -153,6 +140,8 @@ export class GainsPage {
       this.data[0][4].value = this.arms / this.allTime;
       this.data[0][5].value = this.core / this.allTime;
       this.data[0][6].value = this.cardio / this.allTime;
+
+      console.log(this.data)
       
       this.radarChart("#gainsChart", this.data, this.radarChartOptions);
     })
