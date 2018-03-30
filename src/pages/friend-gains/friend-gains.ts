@@ -89,6 +89,15 @@ export class FriendGainsPage {
     this.sets = {};
     this.allTime = 0;
 
+    this.chest = 0;
+    this.back = 0;
+    this.legs = 0;
+    this.shoulders = 0;
+    this.arms = 0;
+    this.core = 0;
+    this.other = 0;
+    this.cardio = 0;
+
     var queryGains = firebase.database().ref('/' + this.username + '/gains');
     queryGains.once("value").then( snapshot => {
       snapshot.forEach( childSnapshot => {

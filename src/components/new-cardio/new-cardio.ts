@@ -89,7 +89,7 @@ export class NewCardioComponent {
     var minSec = this.seconds / 60;
     var recordTime = this.minutes + newHours + minSec;
     var minTime = this.minutes + newHours
-    this.g = minTime
+    this.g = minTime * 2
     this.bool = false;
     this.points = true;
     this.checkRec = false;
@@ -129,7 +129,7 @@ export class NewCardioComponent {
                   this.records._cardio[index].time = history[workout].time;
                   this.records._cardio[index].mph = history[workout].mph;
                   this.records._cardio[index].records++;
-                  this.g = minTime + 100;
+                  this.g = minTime * 4;
                   this.bool = true;
                 }
               }

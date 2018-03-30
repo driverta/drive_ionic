@@ -21,7 +21,7 @@ export class SearchPage {
   loop = 0;
   gains = 0;
   loop2 = 0;
-  show = true
+  show = true;
 
   players= [
     {name: "tom", level: 3, gains: 100, profilePic: "", totalGains: [], rank: "Frail Body"}
@@ -34,6 +34,7 @@ export class SearchPage {
   }
 
   ionViewWillEnter(){
+    this.show = true;
     this.username = localStorage.getItem("username");
     this.players = [];
     this.timeFilter = "All Time"
