@@ -66,7 +66,6 @@ export class DiscoverPage {
       var loop = 0;
       snapshot.forEach( childSnapshot => {
         var competingFriendOfFriend = childSnapshot.val().name;
-        console.log(competingFriendOfFriend);
         if (!this.competingFriendsOfFriends.includes(competingFriendOfFriend) && !this.competingFriends.includes(competingFriendOfFriend)) {
           this.competingFriendsOfFriends.push(competingFriendOfFriend);
           var likelyFriend = {
