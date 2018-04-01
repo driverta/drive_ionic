@@ -32,7 +32,7 @@
     "@ngx-translate/http-loader": "0.0.3",
     "angular": "^1.6.9",
     "animate.css": "^3.5.2",
-    "cordova-android": "6.2.3",
+    "cordova-android": "6.3.0",
     "cordova-plugin-device": "^1.1.7",
     "cordova-plugin-firebase": "^0.1.25",
     "cordova-plugin-splashscreen": "^4.1.0",
