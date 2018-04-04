@@ -46,7 +46,7 @@
           <td>Gains</td>
           <td></td>
         </tr>
-        <tr *ngFor="let player of likelyFriends | sortByGains" [ngClass]="{red: x.name == username}">
+        <tr *ngFor="let player of likelyFriends | sortByGains" [ngClass]="{red: player.name == username}">
           <td>
             <ion-item no-lines>
               <ion-avatar>

@@ -27,7 +27,6 @@ export class DiscoverPage {
   likelyFriends: any = []; 
   competingFriends: any = []; 
   competingFriendsOfFriends: any = [];
-  x = ["Tom", "matt"];
 
 
   constructor(public alertCtrl: AlertController, public navCtrl: NavController, public navParams: NavParams, public user: User) {
@@ -69,9 +68,9 @@ export class DiscoverPage {
         if (!this.competingFriendsOfFriends.includes(competingFriendOfFriend) && !this.competingFriends.includes(competingFriendOfFriend)) {
           this.competingFriendsOfFriends.push(competingFriendOfFriend);
           var likelyFriend = {
-            "name": competingFriendOfFriend,
-            "profilePic": '',
-            "gains": '',
+            name: competingFriendOfFriend,
+            profilePic: '',
+            gains: 0,
           };
           var queryGains = firebase.database().ref('/' + competingFriendOfFriend + '/gains');
           queryGains.once("value").then( snapshot => {
@@ -84,6 +83,7 @@ export class DiscoverPage {
             var queryGains = firebase.database().ref('/users/' + competingFriendOfFriend + '/profilePic');
             queryGains.once("value").then( profilePic => {
               likelyFriend.profilePic = profilePic.val();
+              console.log(likelyFriend);
               this.likelyFriends.push(likelyFriend);
             });
           });      
@@ -130,25 +130,25 @@ export class DiscoverPage {
     }
   }
   
-  getGains(username): Promise<any> {
-    var queryGains = firebase.database().ref('/' + username + '/gains');
-    queryGains.once("value").then( snapshot => {
-      var totalGains = 0;
-      snapshot.forEach( childSnapshot => {
-        var childData1 = childSnapshot.val();
-        totalGains = totalGains + childData1.gains;
-      });
-      console.log(totalGains);
-      return totalGains;
-    });
-  }
+  // getGains(username): Promise<any> {
+  //   var queryGains = firebase.database().ref('/' + username + '/gains');
+  //   queryGains.once("value").then( snapshot => {
+  //     var totalGains = 0;
+  //     snapshot.forEach( childSnapshot => {
+  //       var childData1 = childSnapshot.val();
+  //       totalGains = totalGains + childData1.gains;
+  //     });
+  //     console.log(totalGains);
+  //     return totalGains;
+  //   });
+  // }
   
-  getPic(username): Promise<any> {
-    var queryGains = firebase.database().ref('/users/' + username + '/profilePic');
-    queryGains.once("value").then( profilePic => {
-      return profilePic.val()
-    });
-  }
+  // getPic(username): Promise<any> {
+  //   var queryGains = firebase.database().ref('/users/' + username + '/profilePic');
+  //   queryGains.once("value").then( profilePic => {
+  //     return profilePic.val()
+  //   });
+  // }
 
   alreadyCompeting() {
     let alert = this.alertCtrl.create({
