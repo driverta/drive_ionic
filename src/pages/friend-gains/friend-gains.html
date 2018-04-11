@@ -1,0 +1,21 @@
+<ion-header>
+
+  <ion-navbar>
+  	<ion-buttons right>
+      <button ion-button icon-only (click)="filterGains()">
+        <ion-icon name="funnel"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title>Gains</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+	<ion-item no-lines>
+		<div id="chart">
+			<svg id="gainsChart2"></svg>
+		</div>
+	</ion-item>
+</ion-content>

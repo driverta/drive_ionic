@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.drive.fitness" version="0.1.5" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.drive.fitness" version="0.1.9" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Drive Fitness</name>
     <description>An awesome Ionic/Cordova app.</description>
     <author email="hi@ionicframework" href="http://ionicframework.com/">Ionic Framework Team</author>
@@ -31,6 +31,24 @@
         <icon density="xhdpi" src="resources/android/icon/Drive_Art96x96.png" />
         <icon density="xxhdpi" src="resources/android/icon/Drive_Art144x144.png" />
         <icon density="xxxhdpi" src="resources/android/icon/Drive_Art192x192.png" />
+        <splash density="land-ldpi" src="resources/android/splash/320x240.png" />
+        <splash density="land-mdpi" src="resources/android/splash/480x320.png" />
+        <splash density="land-hdpi" src="resources/android/splash/800x400.png" />
+        <splash density="land-xhdpi" src="resources/android/splash/1280x720.png" />
+        <splash density="land-xxhdpi" src="resources/android/splash/1600x960.png" />
+        <splash density="land-xxxhdpi" src="resources/android/splash/1920x1280.png" />
+        <splash density="port-ldpi" src="resources/android/splash/240x320.png" />
+        <splash density="port-mdpi" src="resources/android/splash/320x480.png" />
+        <splash density="port-hdpi" src="resources/android/splash/480x800.png" />
+        <splash density="port-xhdpi" src="resources/android/splash/720x1280.png" />
+        <splash density="port-xxhdpi" src="resources/android/splash/960x1600.png" />
+        <splash density="port-xxxhdpi" src="resources/android/splash/1280x1920.png" />
+        <icon density="ldpi" src="resources/android/icon/drawable-ldpi-icon.png" />
+        <icon density="mdpi" src="resources/android/icon/drawable-mdpi-icon.png" />
+        <icon density="hdpi" src="resources/android/icon/drawable-hdpi-icon.png" />
+        <icon density="xhdpi" src="resources/android/icon/drawable-xhdpi-icon.png" />
+        <icon density="xxhdpi" src="resources/android/icon/drawable-xxhdpi-icon.png" />
+        <icon density="xxxhdpi" src="resources/android/icon/drawable-xxxhdpi-icon.png" />
         <splash density="land-ldpi" src="resources/android/splash/drawable-land-ldpi-screen.png" />
         <splash density="land-mdpi" src="resources/android/splash/drawable-land-mdpi-screen.png" />
         <splash density="land-hdpi" src="resources/android/splash/drawable-land-hdpi-screen.png" />
@@ -80,12 +98,12 @@
         <splash height="2732" src="resources/ios/splash/Default@2x~universal~anyany.png" width="2732" />
     </platform>
     <allow-navigation href="http://10.0.0.126:8100" />
+    <engine name="android" spec="6.3.0" />
     <plugin name="cordova-plugin-firebase" spec="^0.1.25" />
     <plugin name="ionic-plugin-keyboard" spec="^2.2.1" />
-    <plugin name="cordova-plugin-whitelist" spec="^1.3.1" />
+    <plugin name="cordova-plugin-whitelist" spec="^1.3.3" />
     <plugin name="cordova-plugin-statusbar" spec="^2.2.2" />
-    <plugin name="cordova-plugin-device" spec="^1.1.4" />
-    <plugin name="cordova-plugin-splashscreen" spec="^4.0.3" />
+    <plugin name="cordova-plugin-device" spec="^1.1.7" />
+    <plugin name="cordova-plugin-splashscreen" spec="^4.1.0" />
     <plugin name="cordova-sqlite-storage" spec="^2.2.1" />
-    <engine name="android" spec="6.2.3" />
 </widget>

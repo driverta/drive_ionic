@@ -17,12 +17,14 @@ export class SearchPage {
   currentItems: any = [];
   timeFilter = "All Time"
   username: any;
+  rank = "Frail Body"
   loop = 0;
   gains = 0;
   loop2 = 0;
+  show = true;
 
   players= [
-    {name: "tom", level: 3, gains: 100, profilePic: ""}
+    {name: "tom", level: 3, gains: 100, profilePic: "", totalGains: [], rank: "Frail Body"}
   ]
 
   constructor(public alertCtrl: AlertController, public user: User, public levels: Levels, public navCtrl: NavController, public navParams: NavParams) { }
@@ -32,7 +34,8 @@ export class SearchPage {
   }
 
   ionViewWillEnter(){
-    this.username = this.user._user;
+    this.show = true;
+    this.username = localStorage.getItem("username");
     this.players = [];
     this.timeFilter = "All Time"
 
@@ -42,7 +45,7 @@ export class SearchPage {
       snapshot.forEach( childSnapshot => {
         this.loop++
         var childData1 = childSnapshot.val();
-        var data = {name: childData1.name, level: 0, gains: 0, profilePic: ""};
+        var data = {name: childData1.name, level: 0, gains: 0, profilePic: "", totalGains: [], rank: "Frail Body"};
         this.players.push(data);
         if ( snapshot.numChildren() == this.loop ) {
           this.getGains();
@@ -61,9 +64,11 @@ export class SearchPage {
         snapshot.forEach( childSnapshot => {
           this.loop++
           var childData1 = childSnapshot.val();
+          this.players[index].totalGains.push(childData1)
           var gains = childData1.gains;
           this.gains = this.gains + gains
           if ( snapshot.numChildren() == this.loop ) {
+            this.show = false;
             value.gains = this.gains
             this.setLevel(this.gains, index)
           }
@@ -90,6 +95,16 @@ export class SearchPage {
     this.levels._levels.forEach( value => {
       if (gains > value.totalPoints) {
         this.players[i].level = value.level;
+        var xlevel = this.players[i].level
+      }
+      if (xlevel < 10){
+        this.players[i].rank = "Frail Body"
+      } else if ( xlevel >= 10 && xlevel < 20){
+        this.players[i].rank = "Gym Rat"
+      } else if ( xlevel >= 20 && xlevel < 30){
+        this.players[i].rank = "Bodybuilder"
+      } else if ( xlevel > 30){
+        this.players[i].rank = "Olympian"
       }
     });
   }
@@ -101,50 +116,43 @@ export class SearchPage {
     lastWeek.setDate(lastWeek.getDate() - 7)
 
     lastMonth.setDate(lastMonth.getDate() - 30)
-    if(ev == "All Time"){
-      this.ionViewWillEnter();
-    }else{
-      this.players.forEach( (value, index) => {
-      var queryGains = firebase.database().ref('/' + value.name + '/gains');
-      queryGains.once("value").then( snapshot => {
-        this.loop = 0;
-        this.gains = 0;
-        snapshot.forEach( childSnapshot => {
-          this.loop++
-          var childData1 = childSnapshot.val();
-          var gains = childData1.gains;
-          var date = childData1.date;
-          var newDate = date.slice(0,10);
-          //alert(newDate);
-          var testDate = new Date(newDate);
-          
-          //alert(testDate);
-          if(ev == "Today"){
+    
+    this.players.forEach( (value, index) => {
+      this.gains = 0
+      value.totalGains.forEach( childData1 => {
+        this.loop++
+        
+        var gains = childData1.gains;
+        var date = childData1.date;
+        var newDate = date.slice(0,10);
+        //alert(newDate);
+        var testDate = new Date(newDate);
 
-            if(newDate == todaysDate) {
-              this.gains = this.gains + gains;
-            }
+        if(ev == "All Time"){
+          this.gains = this.gains + gains;
+        }
+        
+        //alert(testDate);
+        if(ev == "Today"){
+
+          if(newDate == todaysDate) {
+            this.gains = this.gains + gains;
           }
-          if(ev == "Week"){
-            
-            if(testDate > lastWeek) {
-              this.gains = this.gains + gains;
-            }
-          }
-          if(ev == "Month"){
-            if(testDate > lastMonth) {
-              this.gains = this.gains + gains;
-            }
-          }
+        }
+        if(ev == "Week"){
           
-          if ( snapshot.numChildren() == this.loop ) {
-            value.gains = this.gains;
-            
+          if(testDate > lastWeek) {
+            this.gains = this.gains + gains;
           }
-        });
+        }
+        if(ev == "Month"){
+          if(testDate > lastMonth) {
+            this.gains = this.gains + gains;
+          }
+        }
+        value.gains = this.gains;
       });
-    })
-    }
+    });
   }
 
   presentConfirm(x) {
@@ -184,6 +192,12 @@ export class SearchPage {
           });
         }
       });
+    });
+  }
+
+  openItem(item){
+    this.navCtrl.push('FriendProfilePage', {
+      item: item
     });
   }
 }

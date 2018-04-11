@@ -1,0 +1,19 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>{{exercise.name}}</ion-title>
+
+    <ion-buttons right>
+      <button ion-button icon-only (click)="saveExercise();">
+        <ion-icon name="add"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+	<friend-profile-records></friend-profile-records>
+	<friend-profile-bar></friend-profile-bar>
+</ion-content>

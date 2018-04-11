@@ -1,5 +1,5 @@
 import { Component, Output, EventEmitter } from '@angular/core';
-import { NavParams, NavController } from 'ionic-angular';
+import { NavParams, NavController, AlertController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 
 import { User } from '../../providers/providers';
@@ -39,6 +39,7 @@ export class NewSetComponent {
     public navCtrl: NavController,
   	navParams: NavParams,
   	public user: User,
+    public alertCtrl: AlertController,
   	public levels: Levels,
   	private records: Records,
     private storage: Storage
@@ -70,7 +71,15 @@ export class NewSetComponent {
         this.xtotal = value.levelPoints;
         this.progress = this.xcurrent / this.xtotal * 100
       }
-    });
+    })
+    this.getLevel().then((val) => {
+      if (val){
+        if (this.xlevel > val){
+          this.newLevel(this.xlevel)
+        }
+      }
+      this.storage.set(this.username + '/level', this.xlevel);
+    })
   }
 
   addSet() {
@@ -157,6 +166,20 @@ export class NewSetComponent {
 
   getGains(): Promise<any> {
     return this.storage.get(this.username + '/gains');
+  }
+
+  getLevel(): Promise<any> {
+    return this.storage.get(this.username + '/level');
+  }
+
+  newLevel(level){
+    let alert = this.alertCtrl.create({
+      title: "CONGRATULATIONS!" ,
+      message: "You are now a Level " + level,
+      buttons: ['Ok']
+    });
+    alert.present();
+    
   }
 
 }

@@ -1,0 +1,76 @@
+page-friend-cardio-record-detail {
+		.item-detail {
+    
+  }
+
+  body {
+		cursor: auto;
+	}
+
+	.bold {
+		font-style: bold;
+	}
+
+	#oneRM {
+		margin-top: 300px;
+	}
+
+	.bold {
+		font-style: bold;
+	}
+
+	.hide {
+	  display: none;
+	}
+
+	.axis-title text{
+		fill: white;
+		font-size: 30px;
+	}
+
+	.axis text{
+		fill: white;
+		font-size: 35px;
+	}
+
+	svg {
+		width: 100%;
+	}
+
+	.rectable {
+		text-align: center;
+	}
+
+	.rectable td {
+		color: black;
+		width: 200px;
+		height: 20px;
+	}
+
+	.rectable th {
+		width: 200px;
+	}
+
+
+	.red {
+		background-color: LightCoral;
+	}
+
+	.green {
+		background-color: LightGreen;
+	}
+
+	.gold {
+		background-color: gold;
+	}
+
+	.silver {
+		background-color: silver;
+	}
+	.scroll {
+		height: 260px;
+	}
+	.bar {
+		fill: red;
+	}
+}

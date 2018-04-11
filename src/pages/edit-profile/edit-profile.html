@@ -1,0 +1,49 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Edit Profile</ion-title>
+    <ion-buttons start>
+      <button ion-button (click)="cancel()">
+        <span color="primary" showWhen="ios">
+          {{ 'CANCEL_BUTTON' | translate }}
+        </span>
+        <ion-icon name="md-close" showWhen="android,windows"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-buttons end>
+      <button ion-button (click)="changeData();" [disabled]="!isReadyToSave" strong>
+        <span color="primary" showWhen="ios">
+          {{ 'DONE_BUTTON' | translate }}
+        </span>
+        <ion-icon name="md-checkmark" showWhen="core,android,windows"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+  <form *ngIf="form" [formGroup]="form" (ngSubmit)="changeData()">
+    <ion-list>
+      <ion-item>
+      <ion-label fixed>Weight:</ion-label>
+        <ion-input type="text" [(ngModel)]="info.weight" placeholder="195" formControlName="weight"></ion-input>
+      </ion-item>
+      <ion-item>
+      	<ion-label fixed>Height:</ion-label>
+        <ion-input type="text" [(ngModel)]="info.height" placeholder="6.1" formControlName="height"></ion-input>
+      </ion-item>
+      <ion-item>
+      	<ion-label fixed>Gym:</ion-label>
+        <ion-input type="text" [(ngModel)]="info.gym" placeholder="xSport" formControlName="gym"></ion-input>
+      </ion-item>
+      <ion-item>
+      	<ion-label fixed>Location:</ion-label>
+        <ion-input type="text" [(ngModel)]="info.location" placeholder="fairfax"  formControlName="location"></ion-input>
+      </ion-item>
+    </ion-list>
+    <h3 *ngIf="show" id="loading">Loading</h3>
+  </form>
+  
+</ion-content>
