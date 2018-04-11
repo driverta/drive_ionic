@@ -13,9 +13,6 @@
       <ion-segment-button  value="discover_people">
         People
       </ion-segment-button>
-      <ion-segment-button (click)="fetchLikelyExcercises()" value="discover_excercises">
-        Excercises
-      </ion-segment-button>
     </ion-segment>
   </div>
   
@@ -66,5 +63,6 @@
       </table>
 
     </ion-list>
+    <h3 *ngIf="show" id="loading">Loading</h3>
 	</div>
 </ion-content>

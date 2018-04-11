@@ -27,12 +27,14 @@ export class DiscoverPage {
   likelyFriends: any = []; 
   competingFriends: any = []; 
   competingFriendsOfFriends: any = [];
-
+  show = true;
+  segment = "discover_people";
 
   constructor(public alertCtrl: AlertController, public navCtrl: NavController, public navParams: NavParams, public user: User) {
   }
 
   ionViewWillEnter() {
+    this.show = true;
   	this.users = [];
     this.likelyFriends = [];
     this.competingFriends = [];
@@ -73,7 +75,9 @@ export class DiscoverPage {
             gains: 0,
           };
           var queryGains = firebase.database().ref('/' + competingFriendOfFriend + '/gains');
+          var loop = 0;
           queryGains.once("value").then( snapshot => {
+            loop++;
             var totalGains = 0;
             snapshot.forEach( childSnapshot => {
               var childData1 = childSnapshot.val();
@@ -85,6 +89,9 @@ export class DiscoverPage {
               likelyFriend.profilePic = profilePic.val();
               console.log(likelyFriend);
               this.likelyFriends.push(likelyFriend);
+              if (loop == snapshot.numChildren()) {
+                this.show = false;
+              }
             });
           });      
         }  
