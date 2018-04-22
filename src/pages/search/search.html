@@ -13,7 +13,8 @@
     <ion-item no-lines *ngFor="let item of currentItems">
       
       <ion-avatar item-start>
-        <img [src]="item.profilePic" />
+            <img *ngIf="item.profilePic != null" [src]="item.profilePic" />
+            <ion-icon *ngIf="item.profilePic == null" class="default-img" name="contact"></ion-icon>
       </ion-avatar>
       
 	    <h2>{{item.name}}

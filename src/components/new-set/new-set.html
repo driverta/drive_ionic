@@ -1,5 +1,4 @@
-<div>
-  <ion-item no-lines>
+<div class="container">
     	<div class="levels">
     		<h2>LEVEL <span class="sick"> {{xlevel}}</span> : <span class="sick">{{xcurrent}}</span> / <span class="sick">{{xtotal}}</span> GAINS</h2>
     	</div>
@@ -7,13 +6,26 @@
 			<div id="myBar" [ngStyle]="{'width.%' : progress}"></div>
 		</div>
 		<div class="breaker"></div>
+		<br />
+		<div class="container fields">
     	<div class="setbet">
-    		<h2>Weight: <input [(ngModel)]="weight" type="number" value="100"></h2>
-    		<br>
-    		<h2>Reps: <input [(ngModel)]="reps" type="number" value="10"></h2>
-    		<br>
-    		<h2><input (click)="addSet()" type="submit" id="add" value="+"></h2>
-    		<br>
+          <ion-item class="no-padding">
+            <ion-label floating>Weight</ion-label>
+            <ion-input [(ngModel)]="weight" type="number"></ion-input>
+		  </ion-item>
+		  
+		  <ion-item class="no-padding">
+            <ion-label floating>Reps</ion-label>
+            <ion-input [(ngModel)]="reps" type="number"></ion-input>
+		  </ion-item>
+		  
+		  <br>
+
+		  <button ion-button icon-only (click)="addSet()" type="submit" id="add">
+	        <ion-icon name="add"></ion-icon>
+		  </button>
+
+    	<br>
     	</div>
     	<br>
     	<br>
@@ -22,6 +34,6 @@
     	</div>
         <div *ngIf="points" class="points">
             <h1>+ {{g}} gains!</h1>
-        </div>
-    </ion-item>
+		</div>
+	</div>
 </div>

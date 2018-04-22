@@ -24,8 +24,8 @@ export class NewSetComponent {
 	loop = 0;
 	gains = 0;
   g = 0;
-	weight = 100;
-  reps = 10;
+	weight: number;
+  reps: number;
   bool = false;
   points = false;
   exercise: any;
