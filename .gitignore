@@ -2,3 +2,6 @@
 # http://git-scm.com/docs/gitignore
 
 .sourcemaps/*
+www/*
+node_modules/*
+
