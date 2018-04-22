@@ -47,7 +47,8 @@
           <td>
             <ion-item no-lines>
               <ion-avatar>
-                <img [src]="player.profilePic" />
+                <img *ngIf="player.profilePic != null" [src]="player.profilePic" />
+                <ion-icon class="default-img" *ngIf="player.profilePic == null" name="contact"></ion-icon>
               </ion-avatar>
             </ion-item>
           </td>
