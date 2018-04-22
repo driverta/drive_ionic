@@ -22,28 +22,27 @@
       <ion-option>All Time</ion-option>
     </ion-select>
 
-    <table>
-      <tr>
-        <td>Gains</td>
-        <td></td>
-        <td></td>
-        <td>Level</td>
-      </tr>
-      <tr *ngFor="let x of players | sortByGains" [ngClass]="{red: x.name == username}">
-        <td>{{x.gains}}</td>
-        <td>
-          <ion-item no-lines>
-            <ion-avatar>
-              <img [src]="x.profilePic" />
-            </ion-avatar>
-          </ion-item>
-        </td>
-        <td>{{x.name}}</td>
-        <td>{{x.level}}</td>
-        <td>
-          <input type="button" value="X" class="remove" (click)="presentConfirm(x)">
-        </td>
-      </tr>
-    </table>
+    <ion-list>
+      <ion-item-sliding no-lines *ngFor="let item of players | sortByGains" >
+        <ion-item (click)="openItem(item)" no-lines [ngClass]="{red: item.name == username}">
+          <ion-avatar item-start>
+            <img [src]="item.profilePic" />
+          </ion-avatar>
+          
+          <h1>{{item.name}}
+            <div id="gains">{{item.gains}}</div>
+            <h3>{{item.rank}} {{item.level}}</h3>
+          </h1>
+        </ion-item>
+      
+        <ion-item-options>
+          <button ion-button color="danger" (click)="presentConfirm(item)">
+            {{ 'Remove' | translate }}
+          </button>
+        </ion-item-options>
+        
+      </ion-item-sliding>
+    </ion-list>
+    <h3 *ngIf="show" id="loading">Loading</h3>
   </div>
 </ion-content>

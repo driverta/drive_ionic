@@ -1,7 +1,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>{{ pageTitle }}</ion-title>
+    <ion-title>{{ username }}</ion-title>
 
     <ion-buttons right>
       <button ion-button icon-only (click)="logOut()">
@@ -15,12 +15,11 @@
 <ion-content>
 
   <div class="levels">
-      <h2>LEVEL <span class="sick"> {{xlevel}}</span> : <span class="sick">{{xcurrent}}</span> / <span class="sick">{{xtotal}}</span> GAINS</h2>
+      <h3>{{rank}} <span class="sick">{{xlevel}}</span> : <span class="sick">{{xcurrent}}</span> / <span class="sick">{{xtotal}}</span> GAINS</h3>
     </div>
     <div id="myProgress">
     <div id="myBar" [ngStyle]="{'width.%' : progress}"></div>
   </div>
-  <h1>{{username | uppercase }}</h1>
   <form [formGroup]="form" *ngIf="settingsReady" class="pic">
     <input type="file" #fileInput style="visibility: hidden; height: 0px" name="files[]" (change)="processWebImage($event)" />
     <div class="profile-image-wrapper" (click)="getPicture()">
@@ -36,25 +35,33 @@
   <div class="stats">
     <table>
       <tr>
-        <th>{{competing}}</th>
-        <th>{{competitors}}</th>
+        <td>{{height}}ft</td>
+        <td>{{gym}}</td>
       </tr>
       <tr>
-        <td>Competing</td>
-        <td>Competitors</td>
+        <td>{{weight}}lbs</td>
+        <td>{{location}}</td>
       </tr>
       <tr>
-        <th>{{records}}</th>
-        <th>{{gains}}</th>
+        <th id="rules"><button on-click="rules()" ion-button type="button" color="primary" block>{{ "Rules" | translate }}</button></th>
+        <th id="edit"><button on-click="editProfile()" ion-button type="button" color="primary" block>{{ "Edit Profile" | translate }}</button></th>
+      <tr>
+        <th on-click="goToCompeting();">{{competing}}</th>
+        <th on-click="goToCompetitors();">{{competitors}}</th>
       </tr>
       <tr>
-        <td>Records</td>
-        <td>Gains</td>
+        <td on-click="goToCompeting();">Competing</td>
+        <td on-click="goToCompetitors();">Competitors</td>
+      </tr>
+      <tr>
+        <th on-click="goToRecords();">{{records}}</th>
+        <th on-click="goToGains();">{{gains}}</th>
+      </tr>
+      <tr>
+        <td on-click="goToRecords();">Records</td>
+        <td on-click="goToGains();">Gains</td>
       </tr>
     </table>
-  </div>
-  <div padding>
-    <button on-click="rules()" ion-button type="button" color="primary" block>{{ "Rules" | translate }}</button>
   </div>
 
 </ion-content>

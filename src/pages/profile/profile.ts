@@ -1,7 +1,13 @@
 import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
-import { IonicPage, Nav, NavController, NavParams, AlertController } from 'ionic-angular';
+import { IonicPage,
+  Nav,
+  NavController,
+  NavParams,
+  AlertController,
+  ModalController
+} from 'ionic-angular';
 import { Camera } from '@ionic-native/camera';
 import { Storage } from '@ionic/storage';
 
@@ -12,11 +18,6 @@ import { Levels } from '../../providers/providers';
 
 import firebase from 'firebase';
 
-/**
- * The Settings page is a simple form that syncs with a Settings provider
- * to enable the user to customize settings for the app.
- *
- */
 @IonicPage()
 @Component({
   selector: 'page-profile',
@@ -29,14 +30,21 @@ export class SettingsPage {
   xlevel = 1;
   xcurrent = 25;
   xtotal = 100;
-  progress = 75;
+  progress = 25;
   username = "test"
-  rank = "frail body"
+  rank = "Frail Body"
+  weight = 0
+  height = 0
+  gym = "gym"
+  location = "location"
   loop = 0;
   gains = 0;
   records = 0;
   competing = 0;
   competitors = 0;
+  competingList = [];
+  competitorsList = [];
+  realCompetitorsList = [];
   imageData: any;
 
   options: any;
@@ -63,6 +71,7 @@ export class SettingsPage {
     public settings: Settings,
     public formBuilder: FormBuilder,
     public navParams: NavParams,
+    public modalCtrl: ModalController,
     private alertCtrl: AlertController,
     public translate: TranslateService,
     public camera: Camera,
@@ -101,13 +110,14 @@ export class SettingsPage {
   }
 
   ionViewDidLoad() {
-    this.username = this.username = localStorage.getItem("username");
+    this.competitorsList = [];
+    this.username = localStorage.getItem("username");
     // Build an empty form for the template to render
-    this.form = this.formBuilder.group({});
+    this.form = this.formBuilder.group({});  
 
-    this.gains = 0;
-    this.records = 0;
     this.storage.get(this.username + '/gains').then((val) => {
+      this.gains = 0;
+      this.records = 0;
       //console.log('Your json is', val);
       if (val) {
         val.forEach ( (value) => {
@@ -118,22 +128,34 @@ export class SettingsPage {
         })
       }
     }).then(() => {
+      console.log(this.gains)
       this.setLevel();
     })
 
+    
     var queryCompeting = firebase.database().ref('/' + this.username + '/competing');
     queryCompeting.once("value").then( snapshot => {
       this.competing = 0;
+      this.competingList = [];
       snapshot.forEach( childSnapshot => {
+        var childData1 = childSnapshot.val();
+        this.competingList.push(childData1)
+        //console.log(this.competingList)
         this.competing++
+        //console.log(this.competing)
       })
     })
 
+    
     var queryCompetitors = firebase.database().ref('/' + this.username + '/competitors');
     queryCompetitors.once("value").then( snapshot => {
       this.competitors = 0;
+      this.competitorsList = [];
       snapshot.forEach( childSnapshot => {
         this.competitors++
+        var childData1 = childSnapshot.val();
+        this.competitorsList.push(childData1);
+        
       })
     })
 
@@ -144,7 +166,38 @@ export class SettingsPage {
         this.form.patchValue({ 'profilePic': pic });
         this.show = false;
       }
-      //alert(this.form.controls['profilePic'].value)
+    })
+
+    var queryWeight = firebase.database().ref('/users/' + this.username + '/weight');
+    queryWeight.once("value").then( snapshot => {
+      var weight = snapshot.val();
+      if (weight){
+        this.weight = weight
+      }
+    })
+
+    var queryHeight = firebase.database().ref('/users/' + this.username + '/height');
+    queryHeight.once("value").then( snapshot => {
+      var height = snapshot.val();
+      if (height){
+        this.height = height
+      }
+    })
+
+    var queryGym = firebase.database().ref('/users/' + this.username + '/gym');
+    queryGym.once("value").then( snapshot => {
+      var gym = snapshot.val();
+      if (gym){
+        this.gym = gym
+      }
+    })
+
+    var queryLocation = firebase.database().ref('/users/' + this.username + '/location');
+    queryLocation.once("value").then( snapshot => {
+      var location = snapshot.val();
+      if (location){
+        this.location = location
+      }
     })
   }
 
@@ -156,7 +209,16 @@ export class SettingsPage {
         this.xtotal = value.levelPoints;
         this.progress = this.xcurrent / this.xtotal * 100
       }
-    });
+      if (this.xlevel < 10){
+        this.rank = "FRAIL BODY"
+      } else if ( this.xlevel >= 10 && this.xlevel < 20){
+        this.rank = "GYM RAT"
+      } else if ( this.xlevel >= 20 && this.xlevel < 30){
+        this.rank = "BODYBUILDER"
+      } else if ( this.xlevel > 30){
+        this.rank = "OLYMPIAN"
+      }
+    })
     
   }
 
@@ -213,7 +275,7 @@ export class SettingsPage {
   }
 
   ionViewWillEnter() {
-
+    this.username = localStorage.getItem("username");
     this.ionViewDidLoad();
     // Build an empty form for the template to render
     this.form = this.formBuilder.group({});
@@ -268,5 +330,49 @@ export class SettingsPage {
 
   rules(){
     this.navCtrl.push('RulesPage');
+  }
+
+  goToCompeting(){
+    console.log(this.competingList)
+    this.navCtrl.push('CompetingPage', {
+      list: this.competingList
+    });
+
+  }
+
+  goToCompetitors(){
+    this.realCompetitorsList = [];
+    console.log(this.competitorsList)
+    this.competitorsList.forEach((val) => {
+      this.loop = 0;
+      var queryPic = firebase.database().ref('/users/' + val + '/profilePic');
+      queryPic.once("value").then( snapshot => {
+        var pic = snapshot.val();
+        this.realCompetitorsList.push({name: val, profilePic: pic})
+        this.loop++
+        if (this.loop == this.competitorsList.length){
+          this.navCtrl.push('CompetitorsPage', {
+            list: this.realCompetitorsList,
+            competing: this.competingList
+          });
+        }
+      })
+    })
+  }
+
+  goToRecords(){
+    this.navCtrl.push('RecordsPage');
+  }
+
+  goToGains(){
+    this.navCtrl.push('GainsPage');
+  }
+
+  editProfile(){
+    let addModal = this.modalCtrl.create('EditProfilePage');
+    addModal.onDidDismiss(item => {
+      this.ionViewDidLoad();
+    })
+    addModal.present();
   }
 }

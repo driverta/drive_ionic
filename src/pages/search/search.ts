@@ -5,13 +5,6 @@ import { User } from '../../providers/providers';
 
 import firebase from 'firebase';
 
-/**
- * Generated class for the SearchPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
-
 @IonicPage()
 @Component({
   selector: 'page-search',
@@ -24,21 +17,42 @@ export class AddCompetitorsPage {
 	username: any;
   players = [];
   loop = 0;
+  show = true;
 
   constructor(public alertCtrl: AlertController, public navCtrl: NavController, public navParams: NavParams, public user: User) {
   }
 
   ionViewWillEnter() {
+    this.show = true;
   	this.users = [];
-    this.username = this.user._user;
+    this.players = [];
+    this.username = localStorage.getItem("username");
+    console.log(this.username)
     var query1 = firebase.database().ref("/users");
 
     query1.once("value").then( snapshot => {
+      this.loop = 0;
+      snapshot.forEach( childSnapshot => {
+        
+        var childData1 = childSnapshot.val();
+        this.loop++;
+        this.users.push(childData1)
+        if ( snapshot.numChildren() == this.loop ) {
+          this.show = false;
+        }
+        //alert(this.user._user);      
+      });
+    });
+
+    var query2 = firebase.database().ref("/" + this.username + '/competing');
+
+    query2.once("value").then( snapshot => {
       
       snapshot.forEach( childSnapshot => {
         
         var childData1 = childSnapshot.val();
-        this.users.push(childData1)
+        
+        this.players.push(childData1)
         //alert(this.user._user);      
       });
     });
@@ -62,7 +76,7 @@ export class AddCompetitorsPage {
 
   addToLeaderboard(item){
     var check = true;
-    
+    console.log(this.players)
     this.players.forEach( value => {
 
       if (value.name == item.name) {

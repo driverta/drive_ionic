@@ -14,6 +14,8 @@ import { MainPage } from '../pages';
   templateUrl: 'signup.html',
 })
 export class SignupPage {
+  loop = 0;
+  show = false;
   confirmPassword = "";
   // The account fields for the login form.
   // If you're using the username field with or without email, make
@@ -63,10 +65,27 @@ export class SignupPage {
   }
 
   doSignUp() {
-    if(this.account.name.length > 13){
-      this.tooLong()
-      return;
-    }
+    this.show = true;
+    var query1 = firebase.database().ref('/users');
+      query1.once("value").then( snapshot => {
+        this.loop = 0;
+        snapshot.forEach( childSnapshot => {
+          var childData1 = childSnapshot.val();
+          this.loop++
+          if ( this.account.name == childData1.name ) {
+            this.show = false;
+            this.repeatUsername()
+            return;
+          } 
+          if ( snapshot.numChildren() == this.loop && this.show == true) {
+            this.signUp();
+          }
+        });
+      });
+  }
+
+  signUp(){
+
     if(this.account.password != this.confirmPassword){
       this.badPassword()
       return;
@@ -112,15 +131,6 @@ export class SignupPage {
     
   }
 
-  tooLong(){
-    let alert = this.alertCtrl.create({
-      title: "Username cannot be more than 12 characters",
-      buttons: ['Ok']
-    });
-    alert.present();
-    
-  }
-
   badPassword(){
     let alert = this.alertCtrl.create({
       title: "Passwords do not match!",
@@ -144,8 +154,15 @@ export class SignupPage {
       title: "You must agree to the terms of use.",
       buttons: ['Ok']
     });
-    alert.present();
-    
+    alert.present(); 
+  }
+
+  repeatUsername(){
+    let alert = this.alertCtrl.create({
+      title: "Someone is already using this username.",
+      buttons: ['Ok']
+    });
+    alert.present(); 
   }
 
   termsOfUse(){
