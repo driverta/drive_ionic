@@ -14,5 +14,15 @@
 
 
 <ion-content padding>
-
+<h1 style="text-align: center;">Total exercises:</h1>
+<h1 style="text-align: center;">{{this.medal1}}</h1>
+<div *ngIf="this.medal1 > 20">
+	<img src="assets/img/medals/medal1.png"/>
+</div>
+<div *ngIf="this.medal1 > 30">
+	<img src="assets/img/medals/medal2.png"/>
+</div>
+<div *ngIf="this.medal1 > 40">
+	<img src="assets/img/medals/medal3.png"/>
+</div>
 </ion-content>
