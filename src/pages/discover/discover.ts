@@ -6,6 +6,9 @@ import firebase from 'firebase';
 
 import { SortByGainsPipe } from '../../pipes/sort-by-gains/sort-by-gains'
 
+import { ProvidersUserProvider } from '../../providers/providers-user/providers-user';
+import { UserModel } from '../../models/users';
+
 /**
  * Generated class for the DiscoverPage page.
  *
@@ -21,7 +24,7 @@ import { SortByGainsPipe } from '../../pipes/sort-by-gains/sort-by-gains'
 export class DiscoverPage {
   
   currentItems: any = [];
-	users: any = [];
+	users: UserModel[];
 	username: any;
   loop = 0;
   likelyFriends: any = []; 
@@ -30,7 +33,7 @@ export class DiscoverPage {
   show = true;
   segment = "discover_people";
 
-  constructor(public alertCtrl: AlertController, public navCtrl: NavController, public navParams: NavParams, public user: User) {
+  constructor(public alertCtrl: AlertController, public navCtrl: NavController, public navParams: NavParams, public user: User, private userService: ProvidersUserProvider) {
   }
 
   ionViewWillEnter() {
@@ -43,13 +46,12 @@ export class DiscoverPage {
     var query1 = firebase.database().ref("/users");
     var query2 = firebase.database().ref('/' + this.username + '/competing');
 
-    query1.once("value").then( snapshot => {
-      
-      snapshot.forEach( childSnapshot => {
-        var childData1 = childSnapshot.val();
-        this.users.push(childData1);
-      });
+    this.userService.getAllUsers().subscribe(data => {
+      this.users = data;
+      console.log(data);
     });
+
+
     
     query2.once("value").then( snapshot => {
       snapshot.forEach( childSnapshot => {
@@ -106,13 +108,14 @@ export class DiscoverPage {
       return;
     }
     this.currentItems = this.users.filter((v) => {
-    if(v.name && val) {
-      if (v.name.toLowerCase().indexOf(val.toLowerCase()) > -1) {
+    if(v.username && val) {
+      if (v.username.toLowerCase().indexOf(val.toLowerCase()) > -1) {
         return true;
 	      }
 	    return false;
 	    }
 	  });
+    console.log(this.currentItems);
   }
     
   addToLeaderboard(item){
