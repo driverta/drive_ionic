@@ -24,14 +24,16 @@ export class NewSetComponent {
 	loop = 0;
 	gains = 0;
   g = 0;
-	weight = 100;
-  reps = 10;
+	weight: any;
+  reps: any;
   bool = false;
   points = false;
   exercise: any;
   checkRec = false;
   history = [];
   totalGains = [];
+
+  private invalid: boolean = false;
 
   @Output() myEvent = new EventEmitter();
 
@@ -83,11 +85,16 @@ export class NewSetComponent {
   }
 
   addSet() {
+    if(this.weight == null || this.reps == null){
+        this.invalid = true; 
+    }
+    else{
+      
   	d3.selectAll("svg > *").remove();
     var date = new Date().toISOString();
     var newDate = date.replace(".", "-")
     //alert(newDate)
-    var oneRM = (this.weight * this.reps * .033) + this.weight;
+    var oneRM = (Number(this.weight) * Number(this.reps) * .033) + Number(this.weight);
     if(this.reps == 1){
       oneRM = this.weight;
     }
@@ -157,7 +164,8 @@ export class NewSetComponent {
           });
         });
       });
-    });   
+    }); 
+  }  
   }
 
   getExercises(): Promise<any> {

@@ -1,27 +1,44 @@
-<div>
-  <ion-item no-lines>
-    	<div class="levels">
-    		<h2>LEVEL <span class="sick"> {{xlevel}}</span> : <span class="sick">{{xcurrent}}</span> / <span class="sick">{{xtotal}}</span> GAINS</h2>
-    	</div>
-    	<div id="myProgress">
-			<div id="myBar" [ngStyle]="{'width.%' : progress}"></div>
+<div class="container">
+	<div class="levels">
+		<h2>LEVEL
+			<span class="sick"> {{xlevel}}</span> :
+			<span class="sick">{{xcurrent}}</span> /
+			<span class="sick">{{xtotal}}</span> GAINS</h2>
+	</div>
+	<div id="myProgress">
+		<div id="myBar" [ngStyle]="{'width.%' : progress}"></div>
+	</div>
+	<div class="breaker"></div>
+	<br />
+	<div class="container fields">
+		<div class="setbet">
+			<ion-item class="no-padding">
+				<ion-label floating>Weight</ion-label>
+				<ion-input [(ngModel)]="weight" type="number" #weightField="ngModel" required></ion-input>
+			</ion-item>
+
+			<div *ngIf="invalid && weightField.invalid" class="error-msg">Please enter a valid Weight</div>
+
+			<ion-item class="no-padding">
+				<ion-label floating>Reps</ion-label>
+				<ion-input [(ngModel)]="reps" type="number" required #repField="ngModel"></ion-input>
+			</ion-item>
+			<div *ngIf="invalid && repField.invalid" class="error-msg">Please enter number of Reps</div>
+			<br>
+			<br>
+			<button ion-button icon-only type="submit" id="add" (click)="addSet()">
+				<ion-icon name="add"></ion-icon>
+			</button>
+
+			<br>
 		</div>
-		<div class="breaker"></div>
-    	<div class="setbet">
-    		<h2>Weight: <input [(ngModel)]="weight" type="number" value="100"></h2>
-    		<br>
-    		<h2>Reps: <input [(ngModel)]="reps" type="number" value="10"></h2>
-    		<br>
-    		<h2><input (click)="addSet()" type="submit" id="add" value="+"></h2>
-    		<br>
-    	</div>
-    	<br>
-    	<br>
-    	<div *ngIf="bool" class="animation">
-    		<h1>NEW RECORD!</h1>
-    	</div>
-        <div *ngIf="points" class="points">
-            <h1>+ {{g}} gains!</h1>
-        </div>
-    </ion-item>
+		<br>
+		<br>
+		<div *ngIf="bool" class="animation">
+			<h1>NEW RECORD!</h1>
+		</div>
+		<div *ngIf="points" class="points">
+			<h1>+ {{g}} gains!</h1>
+		</div>
+	</div>
 </div>

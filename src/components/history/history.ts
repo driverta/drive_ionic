@@ -53,7 +53,7 @@ export class HistoryComponent {
   presentConfirm(x) {
     let alert = this.alertCtrl.create({
       title: 'Delete?',
-      message: 'Do you want to delete this set (' + x.weight + ' x ' + x.reps + ') and loose these gains?',
+      message: 'Do you want to delete this set (' + x.weight + ' x ' + x.reps + ') and lose these gains?',
       buttons: [
         {
           text: 'Cancel',

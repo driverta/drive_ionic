@@ -4,16 +4,13 @@ new-set {
   }
 
   .setbet input {
-  	color: black;
-  }
-
-  #add {
-  	border-radius: 50%;
-  	font-size: 30px;
-  	font-style: bold;
-  	width: 40px;
-    background-color: lightgray;
-  }
+  	color: white;
+	}
+	
+	.fields{
+		padding-right:5%;
+		padding-left:5%;
+	}
 
   .levels {
   	text-align: center;
@@ -51,4 +48,20 @@ new-set {
   .points {
     text-align: center;
   }
+
+	.text-input::-moz-placeholder {
+		color: white;
+	}
+	
+	.text-input:-ms-input-placeholder {
+		color: white;
+	}
+	
+	.text-input::-webkit-input-placeholder {
+		color: white;
+	}
+
+	.set-fields{
+		color: white;
+	}
 }
