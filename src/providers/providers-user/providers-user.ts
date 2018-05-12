@@ -12,14 +12,23 @@ import { UserModel } from '../../models/users';
 @Injectable()
 export class ProvidersUserProvider {
 
-			private url = "http://driveapi-env.y7mz5ppbve.us-east-2.elasticbeanstalk.com/";
+  //	private url = "http://driveapi-env.y7mz5ppbve.us-east-2.elasticbeanstalk.com/";
+  private url = "http://localhost:8080/api/";
 
   constructor(public http: Http) {
     console.log('Hello ProvidersUserProvider Provider');
   }
 
-  getAllUsers(): Observable<UserModel[]>{
-  		return this.http.get(this.url+"getUsers").map((res:Response) => res.json());
+  getAllUsers(): Observable<UserModel[]> {
+    return this.http.get(this.url + "getUsers").map((res: Response) => res.json());
+  }
+
+  getOneUser(username): Observable<UserModel> {
+    return this.http.get(this.url + "getUserByUsername?username=" + username).map((res: Response) => res.json());
+  }
+
+  createUser(user){
+    this.http.get(this.url + "create?user=" + user).map((res: Response) => res.json());
   }
 
 }
