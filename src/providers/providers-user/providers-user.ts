@@ -27,8 +27,7 @@ export class ProvidersUserProvider {
     return this.http.get(this.url + "getUserByUsername?username=" + username).map((res: Response) => res.json());
   }
 
-  createUser(user){
-    this.http.get(this.url + "create?user=" + user).map((res: Response) => res.json());
+  createUser(user): Observable<Response>{
+    return this.http.post(this.url + "createUser", user);
   }
-
 }

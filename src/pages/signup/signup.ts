@@ -62,20 +62,14 @@ export class SignupPage {
     public alertCtrl: AlertController,
     private storage: Storage,
     private userService: ProvidersUserProvider) {
-
     this.translateService.get('SIGNUP_ERROR').subscribe((value) => {
       this.signupErrorString = value;
     })
-
-    
-    this.userService.getAllUsers().subscribe(data => {
-      this.users = data;
-    });
   }
 
   doSignUp() {
     this.userService.getOneUser(this.account.name).subscribe(data => {
-      if(data == null){
+      if(data.username === "alreadyexists"){
         this.signUp();
       }
       else{
@@ -85,7 +79,7 @@ export class SignupPage {
   }
 
   signUp(){
-
+    this.show = true;
     if(this.account.password != this.confirmPassword){
       this.badPassword()
       return;
@@ -97,8 +91,7 @@ export class SignupPage {
 
     let user = new UserModel();
     user.username = this.account.name;
-    this.userService.createUser(user);
-    console.log(user);
+    this.userService.createUser(user).subscribe(response => console.log(response));
    
     // this.storage.set(this.account.name + '/exercises', this.exercises);
     // this.storage.set(this.account.name + '/gains', this.totalGains)
@@ -118,13 +111,13 @@ export class SignupPage {
     // var competitors = firebase.database().ref('/' + this.account.name + '/competing');
     // competitors.child(this.account.name).set(this.account);
 
-    // firebase.auth().createUserWithEmailAndPassword(this.account.email, this.account.password)
-    //   .then(value => {
-    //     this.user._user = this.account.name;
-    //     this.navCtrl.push(MainPage);
-    //   }).catch( error => {
-    //     this.firebaseErrors(error)
-    //   });
+    firebase.auth().createUserWithEmailAndPassword(this.account.email, this.account.password)
+       .then(value => {
+         this.user._user = this.account.name;
+         this.navCtrl.push(MainPage);
+       }).catch( error => {
+         this.firebaseErrors(error)
+       });
   }
 
   firebaseErrors(error){
