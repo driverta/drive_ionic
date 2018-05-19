@@ -1,7 +1,7 @@
 <div>
   <ion-item >
     <div class="scrollingtable">
-      <table id="headers">
+      <table class="table table-bordered" id="headers">
         <tr>
           <th>Date</th>
           <th>Weight</th>
@@ -23,6 +23,40 @@
           </tr>
         </table>
       </ion-scroll>
-    </div>
-  </ion-item>
+    </div></ion-item>
+  <!-- <table class="table">
+    <tr>
+      <th>Date</th>
+      <th>Weight</th>
+      <th>Reps</th>
+      <th>1RM</th>
+    </tr>
+  </table>
+
+  <ion-scroll scrollY="true" class="scroll">
+    <ion-list>
+
+      <ion-item-sliding *ngFor="let x of history._history.reverse()">
+
+        <ion-item>
+          <h2>{{x.date | date: 'MM/dd'}}</h2>
+            
+          {{x.weight}} {{x.reps}}
+          <span class="historyItem">
+            
+          </span>
+          <ion-note class="historyItem">
+            
+          </ion-note>
+          <span class="historyItem">{{x.oneRM.toFixed(1)}}</span>
+        </ion-item>
+
+        <ion-item-options>
+          <button danger (click)="presentConfirm(x)"> Delete</button>
+        </ion-item-options>
+      </ion-item-sliding>
+
+    </ion-list>
+  </ion-scroll> -->
+
 </div>

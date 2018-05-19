@@ -17,6 +17,10 @@ import { KeysPipe } from '../../pipes/keys/keys'
 import firebase from 'firebase';
 
 import { User } from '../../providers/providers';
+import { ExerciseProvider } from '../../providers/exercise/exercise';
+import { ProvidersUserProvider } from '../../providers/providers-user/providers-user';
+import { UserModel } from '../../models/users';
+import { Exercise } from '../../models/Exercise';
 
 @IonicPage()
 @Component({
@@ -40,6 +44,9 @@ export class ListMasterPage {
   status = ""
   totalGains = [];
 
+  private User: UserModel;
+  private exercises: Exercise[];
+
 
   constructor(
     public navCtrl: NavController,
@@ -50,7 +57,9 @@ export class ListMasterPage {
     private alertCtrl: AlertController,
     public actShtCtrl: ActionSheetController,
     private storage: Storage,
-    private platform: Platform) {
+    private platform: Platform,
+    private exerciseService: ExerciseProvider,
+    private userService: ProvidersUserProvider) {
     this.platform.ready().then((readySource) => {
       console.log("anything")
       console.log('Platform ready from', readySource);
@@ -62,6 +71,24 @@ export class ListMasterPage {
    * The view loaded, let's query our items for the list
    */
   ionViewDidLoad() {
+    
+  	this.userService.getOneUser(this.username).subscribe(data => {
+      this.User = data;
+      console.log(this.User.id)
+      this.exerciseService.getExercisesByUserId(this.User.id).subscribe(exercises => {
+        this.exercises = exercises;
+        console.log(this.exercises)
+      });
+    });
+    
+
+
+
+
+
+
+
+
     this.username = localStorage.getItem("username");
     console.log(this.username);
     this.lifts = {};
