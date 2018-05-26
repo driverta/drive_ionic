@@ -78,6 +78,7 @@ export class ItemCreatePage {
     this.username = localStorage.getItem("username");
     console.log(this.username);
     
+    /*
     this.getExercises().then((val) => {
       console.log(val)
       this.setlifts = val;
@@ -86,6 +87,7 @@ export class ItemCreatePage {
     });
     
     console.log(this.setlifts);
+    */
   }
 
   /**
@@ -125,9 +127,11 @@ export class ItemCreatePage {
       
       this.lifts[key] = this.exercise
       
+      /*
       this.storage.set(this.username + '/exercises', this.lifts).then(() =>{
         this.done();
       });
+      */
 
     }
   }
@@ -141,6 +145,7 @@ export class ItemCreatePage {
     alert.present();
   }
 
+  /*
   getExercises(): Promise<any> {
     this.storage.ready().then(() => {
       console.log(this.storage.get(this.username + '/exercises'))
@@ -149,4 +154,5 @@ export class ItemCreatePage {
     return this.storage.get(this.username + '/exercises');
     
   }
+  */
 }

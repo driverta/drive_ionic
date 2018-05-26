@@ -50,6 +50,7 @@ export class LineChartComponent {
   	this.username = localStorage.getItem("username");
   	this.history._charts = [];
     
+    /*
     this.getExercises().then((val) => {
       var keyOne = this.exercise.name + '-' + this.exercise.variation
       var history = val[keyOne].history;
@@ -63,6 +64,7 @@ export class LineChartComponent {
     }).then(() => {
       this.setChart2()
     })
+    */
     
   }
 
@@ -116,8 +118,10 @@ export class LineChartComponent {
         .attr("d", this.line);
   }
 
+  /*
   getExercises(): Promise<any> {
     return this.storage.get(this.username + '/exercises');
   }
+  */
 
 }

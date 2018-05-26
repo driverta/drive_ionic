@@ -53,6 +53,7 @@ export class FriendCardioProfileBarComponent {
 
   public makeChart() {
     
+    /*
     var queryHistory = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '-' + this.exercise.variation + '/history');
     queryHistory.once("value").then( snapshot => {
     	this.loop = 0;
@@ -83,6 +84,7 @@ export class FriendCardioProfileBarComponent {
         } 
       })
     })
+    */
   }
 
   sortRecords() {

@@ -55,7 +55,9 @@ export class ItemDetailPage {
     this.getRecords();
   }
 
+
   getRecords() {
+    /*
     this.getExercises().then((val) => {
       var keyOne = this.exercise.name + '-' + this.exercise.variation
       var history = val[keyOne].history;
@@ -79,6 +81,7 @@ export class ItemDetailPage {
         })
       }
     });
+    */
 
     this.barChart.makeChart();
     this.lineChart.makeChart2();
@@ -96,7 +99,9 @@ export class ItemDetailPage {
     this.selectedValue = 0;
   }
   
+  /*
   getExercises(): Promise<any> {
     return this.storage.get(this.username + '/exercises');
   }
+  */
 }

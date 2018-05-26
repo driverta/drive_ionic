@@ -115,6 +115,7 @@ export class SettingsPage {
     // Build an empty form for the template to render
     this.form = this.formBuilder.group({});  
 
+    /*
     this.storage.get(this.username + '/gains').then((val) => {
       this.gains = 0;
       this.records = 0;
@@ -199,6 +200,7 @@ export class SettingsPage {
         this.location = location
       }
     })
+    */
   }
 
   setLevel () {
@@ -343,6 +345,7 @@ export class SettingsPage {
   goToCompetitors(){
     this.realCompetitorsList = [];
     console.log(this.competitorsList)
+    /*
     this.competitorsList.forEach((val) => {
       this.loop = 0;
       var queryPic = firebase.database().ref('/users/' + val + '/profilePic');
@@ -358,6 +361,7 @@ export class SettingsPage {
         }
       })
     })
+    */
   }
 
   goToRecords(){

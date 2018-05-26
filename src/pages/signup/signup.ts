@@ -66,6 +66,7 @@ export class SignupPage {
 
   doSignUp() {
     this.show = true;
+    /*
     var query1 = firebase.database().ref('/users');
       query1.once("value").then( snapshot => {
         this.loop = 0;
@@ -82,6 +83,7 @@ export class SignupPage {
           }
         });
       });
+    */
   }
 
   signUp(){
@@ -94,16 +96,19 @@ export class SignupPage {
       this.noTerms()
       return;
     }
-   
+    
+    /*
     this.storage.set(this.account.name + '/exercises', this.exercises);
     this.storage.set(this.account.name + '/gains', this.totalGains)
     
     var name = firebase.database().ref('/users/' + this.account.name + '/name');
     name.set(this.account.name);
+    */
     
     localStorage.setItem("username",this.account.name);
     localStorage.setItem("status","good");
     
+    /*
     var email = firebase.database().ref('/users/' + this.account.name + '/email');
     email.set(this.account.email);
 
@@ -112,7 +117,7 @@ export class SignupPage {
 
     var competitors = firebase.database().ref('/' + this.account.name + '/competing');
     competitors.child(this.account.name).set(this.account);
-
+    */
     firebase.auth().createUserWithEmailAndPassword(this.account.email, this.account.password)
       .then(value => {
         this.user._user = this.account.name;
@@ -120,7 +125,9 @@ export class SignupPage {
       }).catch( error => {
         this.firebaseErrors(error)
       });
+    
   }
+
 
   firebaseErrors(error){
     let alert3 = this.alertCtrl.create({

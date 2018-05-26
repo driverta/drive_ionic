@@ -44,11 +44,13 @@ export class FriendCompetingPage {
     })
   	
     if(check){
+      /*
       var competing = firebase.database().ref('/' + this.username + '/competing');
       competing.child(item.name).set(item);
 
       var competitors = firebase.database().ref('/' + item.name + '/competitors');
       competitors.child(this.username).set(this.username);
+      */
       this.playerAdded();
     }
   }

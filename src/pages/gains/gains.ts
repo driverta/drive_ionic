@@ -96,6 +96,7 @@ export class GainsPage {
     this.other = 0;
     this.cardio = 0;
 
+    /*
     this.getGains().then((val) => {
       console.log(val)
       val.forEach((set) => {
@@ -145,13 +146,14 @@ export class GainsPage {
       
       this.radarChart("#gainsChart", this.data, this.radarChartOptions);
     })
-
-    
+    */  
   }
 
+  /*
   getGains(): Promise<any> {
     return this.storage.get(this.username + '/gains');
   }
+  */
 
   filterGains(){
     let actionSheet = this.actShtCtrl.create({
@@ -222,7 +224,9 @@ export class GainsPage {
     actionSheet.present();
   }
 
+  
   executeFilter(){
+    /*
     this.data[0] = [];
     this.exercises = {};
     this.xGains = 0;
@@ -253,6 +257,7 @@ export class GainsPage {
       console.log(this.data)
       this.radarChart("#gainsChart", this.data, this.radarChartOptions);
     })
+    */
   }
 
   radarChart(id, data, options){

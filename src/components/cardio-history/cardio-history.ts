@@ -36,7 +36,7 @@ export class CardioHistoryComponent {
 
     this.username = localStorage.getItem("username");
     
-
+    /*
     this.getExercises().then((val) => {
       this.history._cardio = [];
       var keyOne = this.exercise.name + '-' + this.exercise.variation
@@ -49,6 +49,7 @@ export class CardioHistoryComponent {
         })
       }
     });
+    */
     console.log(this.history._cardio)
   }
 
@@ -82,6 +83,7 @@ export class CardioHistoryComponent {
     this.history._cardio.forEach ( (val, index) => {
       if(val.date == x.date){
         this.history._cardio.splice(index, 1);
+        /*
         this.getExercises().then((val) => {
           var key = this.exercise.name + '-' + this.exercise.variation
           val[key].history = this.history._cardio
@@ -90,6 +92,7 @@ export class CardioHistoryComponent {
             this.myEvent2.emit(null);
           });
         })
+
         this.getGains().then((gains) => {
           this.totalGains = gains;
           this.totalGains.forEach((set, index2) => {
@@ -103,14 +106,17 @@ export class CardioHistoryComponent {
             }
           })
         })
+        */
       }
     })
 
   }
+  /*
   getExercises(): Promise<any> {
     return this.storage.get(this.username + '/exercises');
   }
   getGains(): Promise<any> {
     return this.storage.get(this.username + '/gains');
   }
+  */
 }

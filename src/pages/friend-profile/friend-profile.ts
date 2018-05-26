@@ -44,6 +44,7 @@ export class FriendProfilePage {
   }
 
   ionViewDidLoad() {
+    /*
     var queryGains = firebase.database().ref('/' + this.username + '/gains');
     queryGains.once("value").then( snapshot => {
       this.loop = 0;
@@ -132,6 +133,7 @@ export class FriendProfilePage {
         //alert(this.user._user);      
       });
     });
+    */
   }
 
   setLevel () {
@@ -177,6 +179,7 @@ export class FriendProfilePage {
   goToCompetitors(){
     this.realCompetitorsList = [];
     console.log(this.competitorsList)
+    /*
     this.competitorsList.forEach((val) => {
       this.loop = 0;
       var queryPic = firebase.database().ref('/users/' + val + '/profilePic');
@@ -192,6 +195,7 @@ export class FriendProfilePage {
         }
       })
     })
+    */
   }
 
   goToRecords(){
@@ -219,11 +223,13 @@ export class FriendProfilePage {
     })
     
     if(check){
+      /*
       var competing = firebase.database().ref('/' + this.username + '/competing');
       competing.child(this.username).set(this.user);
 
       var competitors = firebase.database().ref('/' + this.username + '/competitors');
       competitors.child(this.username).set(this.username);
+      */
       this.playerAdded();
     }
   }

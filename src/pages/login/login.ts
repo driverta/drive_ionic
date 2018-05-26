@@ -43,6 +43,7 @@ export class LoginPage {
   }
 
   setUser() {
+    /*
     var query1 = firebase.database().ref("/users");
 
     query1.once("value").then( snapshot => {
@@ -58,6 +59,7 @@ export class LoginPage {
         //alert(this.user._user);      
       });
     });
+    */
   }
 
   doLogin() {

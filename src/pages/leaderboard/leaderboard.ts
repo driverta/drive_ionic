@@ -39,6 +39,7 @@ export class SearchPage {
     this.players = [];
     this.timeFilter = "All Time"
 
+    /*
     var queryPlayers = firebase.database().ref('/' + this.username + '/competing');
     queryPlayers.once("value").then( snapshot => {
       this.loop = 0;
@@ -53,10 +54,12 @@ export class SearchPage {
         }
       });
     });
+    */
   }
 
   getGains() {
     this.players.forEach( (value, index) => {
+      /*
       var queryGains = firebase.database().ref('/' + value.name + '/gains');
       queryGains.once("value").then( snapshot => {
         this.loop = 0;
@@ -74,11 +77,13 @@ export class SearchPage {
           }
         });
       });
+      */
     })
   }
 
   getPic() {
     this.players.forEach( value => {
+      /*
       var queryGains = firebase.database().ref('/users');
       queryGains.once("value").then( snapshot => {
         snapshot.forEach( childSnapshot => {
@@ -88,6 +93,7 @@ export class SearchPage {
           }
         });
       });
+      */
     })
   }
 
@@ -181,6 +187,7 @@ export class SearchPage {
   deleteSet(x) {
 
     var set = x;
+    /*
     var query1 = firebase.database().ref('/' + this.username + '/competing');
     query1.once("value").then( snapshot => {
       snapshot.forEach( childSnapshot => {
@@ -193,6 +200,7 @@ export class SearchPage {
         }
       });
     });
+    */
   }
 
   openItem(item){

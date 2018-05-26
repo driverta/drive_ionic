@@ -45,14 +45,17 @@ export class FriendRecordDetailPage {
     
     this.getRecords();
 
+    /*
     this.getExercises().then((val) => {
       console.log(val)
       this.myLifts = val;
     });
+    */
   }
 
   getRecords() {
     
+    /*
     var queryHistory = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '-' + this.exercise.variation + '/history');
     
     queryHistory.once("value").then( snapshot => {
@@ -77,6 +80,7 @@ export class FriendRecordDetailPage {
         }
       });
     });
+    */
     this.barChart.makeChart();
   }
 
@@ -101,9 +105,11 @@ export class FriendRecordDetailPage {
       
       this.myLifts[key] = this.exercise
       
+      /*
       this.storage.set(this.myUsername + '/exercises', this.myLifts).then(() =>{
         this.exerciseAdded();
       });
+      */
 
     }
   }
@@ -125,6 +131,7 @@ export class FriendRecordDetailPage {
     alert.present();
   }
 
+  /*
   getExercises(): Promise<any> {
     this.storage.ready().then(() => {
       console.log(this.storage.get(this.myUsername + '/exercises'))
@@ -132,5 +139,6 @@ export class FriendRecordDetailPage {
     })
     return this.storage.get(this.myUsername + '/exercises');
   }
+  */
 
 }

@@ -52,6 +52,7 @@ export class CardioProfileBarComponent {
 
   public makeChart() {
     this.username = localStorage.getItem("username");
+    /*
     this.getExercises().then((val) => {
       var keyOne = this.exercise.name + '-' + this.exercise.variation
       var history = val[keyOne].history;
@@ -81,6 +82,7 @@ export class CardioProfileBarComponent {
         })
       }
     })
+    */
   }
 
   sortRecords() {
@@ -158,8 +160,10 @@ export class CardioProfileBarComponent {
         .attr("height", (d) => this.height - this.y(d.mph) );
   }
 
+  /*
   getExercises(): Promise<any> {
     return this.storage.get(this.username + '/exercises');
   }
+  */
 
 }

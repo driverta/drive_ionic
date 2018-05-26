@@ -68,6 +68,7 @@ export class ListMasterPage {
     this.setlifts = {};
     // Get user data status
 
+    /*
     this.getUsers().then((val) => {
       console.log("Slut");
       if (val != null) {
@@ -112,10 +113,12 @@ export class ListMasterPage {
         });  
       }
     })
+    */
   }
 
   saveData() {
     // Get user data status
+    /*
     this.getUsers().then((val) => {
       console.log(val)
       if (val == null) {
@@ -149,8 +152,10 @@ export class ListMasterPage {
         }
       })
     })
+    */
   }
 
+  /*
   getUsers(): Promise<any> {
     console.log("at user method");
     console.log(JSON.stringify(this.storage.get('/users')));
@@ -164,8 +169,10 @@ export class ListMasterPage {
   getGains(): Promise<any> {
     return this.storage.get(this.username + '/gains');
   }
+  */
 
   ionViewDidEnter() {
+    /*
     this.getExercises().then((val) => {
       if (val != null) {
         this.setlifts = val;
@@ -182,6 +189,7 @@ export class ListMasterPage {
         gains.set(val);
       })
     }
+    */
   }
 
   /**
@@ -231,9 +239,11 @@ export class ListMasterPage {
     Object.keys(this.setlifts).forEach ( (key) => {
       if(this.setlifts[key].name == name && this.setlifts[key].variation == variation){
         delete this.setlifts[key];
+        /*
         this.storage.set(this.username  + '/exercises', this.setlifts).then(() => {
           this.ionViewDidLoad();
         });
+        */
       }
     })
   }

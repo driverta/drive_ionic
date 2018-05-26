@@ -31,15 +31,19 @@ export class RecordsPage {
 
   ionViewDidLoad() {
   	console.log(this.username)
+    /*
     this.getExercises().then((val) => {
       this.setlifts = val;
       this.lifts = this.setlifts
     })
+    */
   }
 
+  /*
   getExercises(): Promise<any> {
     return this.storage.get(this.username + '/exercises');
   }
+  */
 
   openItem(item) {
     if (item.muscle == "Cardio"){
