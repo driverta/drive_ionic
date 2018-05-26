@@ -4,7 +4,7 @@ import { IonicPage, NavController, ToastController, AlertController } from 'ioni
 
 import firebase from 'firebase';
 
-import { User } from '../../providers/providers';
+import { User, ProvidersUserProvider } from '../../providers/providers';
 import { MainPage } from '../pages';
 
 
@@ -35,7 +35,8 @@ export class LoginPage {
     public user: User,
     public toastCtrl: ToastController,
     private alertCtrl: AlertController,
-    public translateService: TranslateService) {
+    public translateService: TranslateService,
+    public userService: ProvidersUserProvider) {
 
     this.translateService.get('LOGIN_ERROR').subscribe((value) => {
       this.loginErrorString = value;
@@ -43,20 +44,9 @@ export class LoginPage {
   }
 
   setUser() {
-    var query1 = firebase.database().ref("/users");
-
-    query1.once("value").then( snapshot => {
-      
-      snapshot.forEach( childSnapshot => {
-        
-        var childData1 = childSnapshot.val();
-        if (childData1.email == this.account.email) {
-          this.user._user = childData1.name;
-          localStorage.setItem("username",childData1.name);
-          this.doLogin();
-        }
-        //alert(this.user._user);      
-      });
+    this.userService.getUserByEmail(this.account.email).subscribe(data =>{
+      this.userService.setUser(data);
+      this.doLogin();
     });
   }
 
