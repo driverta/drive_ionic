@@ -42,6 +42,11 @@ export class ProvidersUserProvider {
     return this.http.get(this.url + "getUserExercises?id=" + this.user.id).map((res: Response) => res.json());
   }
 
+  addLiftingHistory(lf){
+    lf.user_id=this.user.id;
+    return this.http.post(this.url + "addLiftingHistory", lf);
+  }
+
   getExercise(mgId, name, variation): Observable<Exercise> {
     return this.http.get(this.url + "getExercise?muscleGroup=" + mgId + "&name=" + name.encodeURI() + "&variation=" + variation.encodeURI()).map((res: Response) => res.json());
   }
