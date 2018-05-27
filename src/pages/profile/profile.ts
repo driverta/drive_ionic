@@ -103,8 +103,8 @@ export class SettingsPage {
     // Watch the form for changes, and
     this.form.valueChanges.subscribe((v) => {
       this.settings.merge(this.form.value);
-      var pic = firebase.database().ref('/users/' + this.username + '/profilePic');
-      pic.set(this.form.controls['profilePic'].value);
+      //var pic = firebase.database().ref('/users/' + this.username + '/profilePic');
+      //pic.set(this.form.controls['profilePic'].value);
       console.log(group.profilePic);
     });
   }

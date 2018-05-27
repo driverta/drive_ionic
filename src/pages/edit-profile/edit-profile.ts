@@ -102,6 +102,7 @@ export class EditProfilePage {
   	this.done();
   }
 
+  /*
   getUsers(): Promise<any> {
     return this.storage.get('/users');
   }
@@ -113,6 +114,7 @@ export class EditProfilePage {
   getGains(): Promise<any> {
     return this.storage.get(this.username + '/gains');
   }
+  */
 
   repeatUsername(){
     let alert = this.alertCtrl.create({
