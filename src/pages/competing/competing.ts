@@ -57,6 +57,7 @@ export class CompetingPage {
   deleteSet(x) {
 
     var set = x;
+    /*
     var query1 = firebase.database().ref('/' + this.username + '/competing');
     query1.once("value").then( snapshot => {
       snapshot.forEach( childSnapshot => {
@@ -74,6 +75,7 @@ export class CompetingPage {
         }
       });
     });
+    */
   }
 
 }

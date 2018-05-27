@@ -50,6 +50,7 @@ export class ProfileBarComponent {
 
   public makeChart() {
     this.username = localStorage.getItem("username");
+    /*
     this.getExercises().then((val) => {
       var keyOne = this.exercise.name + '-' + this.exercise.variation
       var history = val[keyOne].history;
@@ -77,6 +78,7 @@ export class ProfileBarComponent {
         })
       }
     });
+    */
   }
 
   sortRecords() {
@@ -154,8 +156,10 @@ export class ProfileBarComponent {
         .attr("height", (d) => this.height - this.y(d.oneRM) );
   }
 
+  /*
   getExercises(): Promise<any> {
     return this.storage.get(this.username + '/exercises');
   }
+  */
 
 }

@@ -44,6 +44,7 @@ export class RecordCardioDetailPage {
   }
 
   getRecords() {
+    /*
     this.getExercises().then((val) => {
       var keyOne = this.exercise.name + '-' + this.exercise.variation
       var history = val[keyOne].history;
@@ -74,12 +75,14 @@ export class RecordCardioDetailPage {
       })
       //console.log(this.records._cardioRecords)  
     })
+    */
 
     this.cardioBar.makeChart();
   }
   
+  /*
   getExercises(): Promise<any> {
     return this.storage.get(this.username + '/exercises');
   }
-
+  */
 }

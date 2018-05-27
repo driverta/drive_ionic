@@ -98,6 +98,7 @@ export class FriendGainsPage {
     this.other = 0;
     this.cardio = 0;
 
+    /*
     var queryGains = firebase.database().ref('/' + this.username + '/gains');
     queryGains.once("value").then( snapshot => {
       snapshot.forEach( childSnapshot => {
@@ -151,7 +152,9 @@ export class FriendGainsPage {
       
       this.radarChart("#gainsChart2", this.data, this.radarChartOptions);
     })
+    */
   }
+
 
   filterGains(){
     let actionSheet = this.actShtCtrl.create({

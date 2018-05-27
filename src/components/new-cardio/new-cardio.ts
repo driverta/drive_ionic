@@ -56,6 +56,7 @@ export class NewCardioComponent {
     this.username = localStorage.getItem("username");
     //alert(this.username);
     this.gains = 0
+    /*
     this.getGains().then((val) => {
       //console.log('Your json is', val);
       val.forEach((value) => {
@@ -64,6 +65,7 @@ export class NewCardioComponent {
     }).then(() => {
       this.setLevel();
     })
+    */
   }
 
   setLevel() {
@@ -121,6 +123,7 @@ export class NewCardioComponent {
 
       var workout = { date: date, time: time, miles: this.miles, mph: mph, minutes: recordTime };
 
+      /*
       this.getExercises().then((val) => {
         //console.log('Your json is', val);
         var key = this.exercise.name + '-' + this.exercise.variation
@@ -170,6 +173,7 @@ export class NewCardioComponent {
           });
         });
       });
+      */
     }
   }
 
@@ -192,6 +196,7 @@ export class NewCardioComponent {
     return result;
   }
 
+  /*
   getExercises(): Promise<any> {
     return this.storage.get(this.username + '/exercises');
   }
@@ -199,5 +204,6 @@ export class NewCardioComponent {
   getGains(): Promise<any> {
     return this.storage.get(this.username + '/gains');
   }
+  */
 
 }

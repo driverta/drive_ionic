@@ -110,6 +110,8 @@ export class NewSetComponent {
 
     var set = { date: date, weight: this.weight, reps: this.reps, oneRM: oneRM};
 
+
+/*
     this.getExercises().then((val) => {
       //console.log('Your json is', val);
       var key = this.exercise.name + '-' + this.exercise.variation
@@ -164,10 +166,12 @@ export class NewSetComponent {
           });
         });
       });
-    }); 
+    });
+    */ 
   }  
   }
 
+  /*
   getExercises(): Promise<any> {
     return this.storage.get(this.username + '/exercises');
   }
@@ -179,6 +183,7 @@ export class NewSetComponent {
   getLevel(): Promise<any> {
     return this.storage.get(this.username + '/level');
   }
+  */
 
   newLevel(level){
     let alert = this.alertCtrl.create({

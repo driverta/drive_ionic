@@ -50,6 +50,7 @@ export class CardioLineComponent {
   	this.username = localStorage.getItem("username");
   	this.history._cardioCharts = [];
     
+    /*
     this.getExercises().then((val) => {
       var keyOne = this.exercise.name + '-' + this.exercise.variation
       var history = val[keyOne].history;
@@ -64,6 +65,7 @@ export class CardioLineComponent {
     }).then(() => {
       this.setChart2()
     })
+    */
     
   }
 
@@ -117,8 +119,10 @@ export class CardioLineComponent {
         .attr("d", this.line);
   }
 
+  /*
   getExercises(): Promise<any> {
     return this.storage.get(this.username + '/exercises');
   }
+  */
 
 }

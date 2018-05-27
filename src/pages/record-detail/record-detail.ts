@@ -41,6 +41,7 @@ export class RecordDetailPage {
   }
 
   getRecords() {
+    /*
     this.getExercises().then((val) => {
       var keyOne = this.exercise.name + '-' + this.exercise.variation
       var history = val[keyOne].history;
@@ -66,10 +67,13 @@ export class RecordDetailPage {
     });
 
     this.barChart.makeChart();
+    */
   }
   
+  /*
   getExercises(): Promise<any> {
     return this.storage.get(this.username + '/exercises');
   }
+  */
 
 }

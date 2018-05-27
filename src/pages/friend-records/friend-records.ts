@@ -37,6 +37,7 @@ export class FriendRecordsPage {
   }
 
   ionViewDidLoad() {
+    /*
   	var query1 = firebase.database().ref('/' + this.username + '/exercises');
     query1.once("value").then( snapshot => {
       
@@ -55,6 +56,7 @@ export class FriendRecordsPage {
       console.log(val)
       this.myLifts = val;
     });
+    */
   }
 
   openItem(item) {
@@ -150,6 +152,7 @@ export class FriendRecordsPage {
     });
   }
 
+  /*
   getExercises(): Promise<any> {
     this.storage.ready().then(() => {
       console.log(this.storage.get(this.myUsername + '/exercises'))
@@ -157,6 +160,7 @@ export class FriendRecordsPage {
     })
     return this.storage.get(this.myUsername + '/exercises');
   }
+  */
 
   saveExercise(exercise) {
     this.bool = true;
@@ -179,9 +183,11 @@ export class FriendRecordsPage {
       
       this.myLifts[key] = exercise
       
+      /*
       this.storage.set(this.myUsername + '/exercises', this.myLifts).then(() =>{
         this.exerciseAdded();
       });
+      */
 
     }
   }

@@ -39,7 +39,8 @@ export class CompetitorsPage {
         check = false;
       } 
     })
-  	
+
+  	/*
     if(check){
       var competing = firebase.database().ref('/' + this.username + '/competing');
       competing.child(item.name).set(item);
@@ -48,6 +49,7 @@ export class CompetitorsPage {
       competitors.child(this.username).set(this.username);
       this.playerAdded();
     }
+    */
   }
 
   alreadyCompeting() {

@@ -28,6 +28,7 @@ export class AddCompetitorsPage {
     this.players = [];
     this.username = localStorage.getItem("username");
     console.log(this.username)
+    /*
     var query1 = firebase.database().ref("/users");
 
     query1.once("value").then( snapshot => {
@@ -56,6 +57,7 @@ export class AddCompetitorsPage {
         //alert(this.user._user);      
       });
     });
+    */
   }
 
   getItems(ev) {
@@ -87,11 +89,13 @@ export class AddCompetitorsPage {
     })
   	
     if(check){
+      /*
       var competing = firebase.database().ref('/' + this.username + '/competing');
       competing.child(item.name).set(item);
 
       var competitors = firebase.database().ref('/' + item.name + '/competitors');
       competitors.child(this.username).set(this.username);
+      */
       this.playerAdded();
     }
   	
