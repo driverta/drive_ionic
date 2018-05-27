@@ -72,22 +72,12 @@ export class ListMasterPage {
    */
   ionViewDidLoad() {
     
-  	this.userService.getOneUser(this.username).subscribe(data => {
-      this.User = data;
-      console.log(this.User.id)
-      this.exerciseService.getExercisesByUserId(this.User.id).subscribe(exercises => {
+    console.log(this.userService.getUser().email);
+
+      this.userService.getExercises().subscribe(exercises => {
         this.exercises = exercises;
         console.log(this.exercises)
       });
-    });
-    
-
-
-
-
-
-
-
 
     this.username = localStorage.getItem("username");
     console.log(this.username);
@@ -110,7 +100,6 @@ export class ListMasterPage {
 
       if (this.status == this.username) {
         this.getExercises().then((val) => {
-          console.log(val)
           this.setlifts = val;
           this.lifts = this.setlifts;
           this.show = false;
@@ -122,7 +111,7 @@ export class ListMasterPage {
         query1.once("value").then( snapshot => {
           this.loop = 0;
           snapshot.forEach( childSnapshot => {
-            console.log(childSnapshot)
+
             this.loop++
             var childData1 = childSnapshot.val();
             var key = childSnapshot.key;
@@ -144,7 +133,6 @@ export class ListMasterPage {
   saveData() {
     // Get user data status
     this.getUsers().then((val) => {
-      console.log(val)
       if (val == null) {
         this.users.push(this.username);
       }

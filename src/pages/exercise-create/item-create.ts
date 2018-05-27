@@ -7,8 +7,11 @@ import { Storage } from '@ionic/storage';
 
 import firebase from 'firebase';
 
-import { User } from '../../providers/providers';
+import { User, ProvidersUserProvider } from '../../providers/providers';
 import { Records } from '../../providers/providers';
+import { Exercise } from '../../models/Exercise';
+import { ExerciseProvider } from '../../providers/exercise/exercise';
+import { MuscleGroup} from '../../models/MuscleGroupModel';
 
 @IonicPage()
 @Component({
@@ -34,6 +37,10 @@ export class ItemCreatePage {
 
   form: FormGroup;
 
+  private mg: MuscleGroup[];
+
+  private mgSelect: MuscleGroup;
+
   constructor(
     public navCtrl: NavController,
     public user: User,
@@ -43,7 +50,9 @@ export class ItemCreatePage {
     navParams: NavParams,
     private records: Records,
     public alertCtrl: AlertController,
-    private storage: Storage) {
+    private storage: Storage,
+    private userService: ProvidersUserProvider,
+    private exerciseService: ExerciseProvider) {
 
     this.data = navParams.get('item');
     if (this.data != null){
@@ -55,7 +64,7 @@ export class ItemCreatePage {
     this.form = formBuilder.group({
       name: ['', Validators.required],
       variation: [''],
-      muscle: ['']
+      muscle: MuscleGroup
     });
 
     // Watch the form for changes, and
@@ -77,6 +86,10 @@ export class ItemCreatePage {
     //this.setlifts = {};
     this.username = localStorage.getItem("username");
     console.log(this.username);
+
+    this.exerciseService.getAllMuscleGroups().subscribe(data =>{
+      this.mg = data;
+    })
     
     this.getExercises().then((val) => {
       console.log(val)
@@ -113,6 +126,16 @@ export class ItemCreatePage {
         this.bool = false;
       }
     })
+
+    var newExercise = new Exercise;
+    newExercise.exerciseName = this.exercise.name;
+    newExercise.variation = this.exercise.variation;
+    newExercise.MuscleGroup = this.mgSelect;
+    console.log(newExercise);
+
+    this.exerciseService.createExercise(this.userService.getUser().id, newExercise).subscribe(data =>{
+    })
+
 
     if(this.bool){
       

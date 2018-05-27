@@ -27,27 +27,19 @@
   <form *ngIf="form" [formGroup]="form" (ngSubmit)="createItem()">
     <ion-list>
       <ion-item no-lines>Name:</ion-item>
-      <ion-item >
+      <ion-item>
         <ion-input type="text" [(ngModel)]="exercise.name" placeholder="{{ 'E.g. Shoulder Press' | translate }}" formControlName="name"></ion-input>
       </ion-item>
       <ion-item no-lines>Variation:</ion-item>
       <ion-item>
         <ion-input type="text" [(ngModel)]="exercise.variation" placeholder="{{ 'E.g. Dumbbell' | translate }}" formControlName="variation"></ion-input>
       </ion-item>
-      <ion-item no-lines>Muscle Group:</ion-item>
-      <div class="select">
-        <ion-select [(ngModel)]="exercise.muscle" formControlName="muscle">
-          <ion-option>Chest</ion-option>
-          <ion-option>Back</ion-option>
-          <ion-option>Legs</ion-option>
-          <ion-option>Core</ion-option>
-          <ion-option>Shoulders</ion-option>
-          <ion-option>Arms</ion-option>
-          <ion-option>Cardio</ion-option>
-          <ion-option>Other</ion-option>
+      <ion-item no-lines>
+        <ion-select [(ngModel)] = "mgSelect" [ngModelOptions]="{standalone: true}">
+          <ion-label>Muscle Group:</ion-label>
+          <ion-option *ngFor="let group of mg"  [value]="group">{{group.muscleGroupName}}</ion-option>
         </ion-select>
-      </div>
+      </ion-item>
     </ion-list>
   </form>
-  
 </ion-content>

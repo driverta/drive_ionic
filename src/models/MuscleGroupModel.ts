@@ -1,4 +1,4 @@
-export class MuscleGroupModel {
+export class MuscleGroup {
     id: number;
     muscleGroupName: string;
   }

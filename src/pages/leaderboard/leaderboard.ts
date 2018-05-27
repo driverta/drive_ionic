@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 
-import { User } from '../../providers/providers';
+import { User, ProvidersUserProvider } from '../../providers/providers';
 import { Levels } from '../../providers/providers';
 import { SortByGainsPipe } from '../../pipes/sort-by-gains/sort-by-gains'
 
 import firebase from 'firebase';
+import { UserModel } from '../../models/users';
 
 @IonicPage()
 @Component({
@@ -22,12 +23,13 @@ export class SearchPage {
   gains = 0;
   loop2 = 0;
   show = true;
+  competingUsers: UserModel[] = new Array<UserModel>();
 
   players= [
     {name: "tom", level: 3, gains: 100, profilePic: "", totalGains: [], rank: "Frail Body"}
   ]
 
-  constructor(public alertCtrl: AlertController, public user: User, public levels: Levels, public navCtrl: NavController, public navParams: NavParams) { }
+  constructor(public alertCtrl: AlertController, public user: User, public levels: Levels, public navCtrl: NavController, public navParams: NavParams, public userService: ProvidersUserProvider) { }
 
   addCompetitors() {
     this.navCtrl.push('AddCompetitorsPage')
@@ -38,6 +40,11 @@ export class SearchPage {
     this.username = localStorage.getItem("username");
     this.players = [];
     this.timeFilter = "All Time"
+
+
+    this.userService.getCompetingUsers(this.userService.getUser.name).subscribe(data =>{
+      this.competingUsers = data;
+    });
 
     var queryPlayers = firebase.database().ref('/' + this.username + '/competing');
     queryPlayers.once("value").then( snapshot => {
