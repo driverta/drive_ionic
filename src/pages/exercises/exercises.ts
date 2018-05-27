@@ -181,6 +181,8 @@ export class ListMasterPage {
   }
 
   ionViewDidEnter() {
+
+    this.ionViewDidLoad();
     this.getExercises().then((val) => {
       if (val != null) {
         this.setlifts = val;
@@ -240,17 +242,12 @@ export class ListMasterPage {
   }
 
   deleteItem(item) {
-    var name = item['name'];
-    var variation = item['variation'];
-    
-    Object.keys(this.setlifts).forEach ( (key) => {
-      if(this.setlifts[key].name == name && this.setlifts[key].variation == variation){
-        delete this.setlifts[key];
-        this.storage.set(this.username  + '/exercises', this.setlifts).then(() => {
-          this.ionViewDidLoad();
-        });
+    this.userService.removeExercise(item.id).subscribe(data =>
+      {
+      this.ionViewDidLoad();
       }
-    })
+    );
+
   }
 
   /**
@@ -349,7 +346,7 @@ export class ListMasterPage {
 
   editExercise(item){
     this.navCtrl.push('ItemCreatePage', {
-      item: item
+      exercise: item
     });
   }
 }

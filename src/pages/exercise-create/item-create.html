@@ -28,14 +28,14 @@
     <ion-list>
       <ion-item no-lines>Name:</ion-item>
       <ion-item>
-        <ion-input type="text" [(ngModel)]="exercise.name" placeholder="{{ 'E.g. Shoulder Press' | translate }}" formControlName="name"></ion-input>
+        <ion-input type="text" required [(ngModel)]="exercise.name" placeholder="{{ 'E.g. Shoulder Press' | translate }}" formControlName="name"></ion-input>
       </ion-item>
       <ion-item no-lines>Variation:</ion-item>
       <ion-item>
-        <ion-input type="text" [(ngModel)]="exercise.variation" placeholder="{{ 'E.g. Dumbbell' | translate }}" formControlName="variation"></ion-input>
+        <ion-input type="text" required [(ngModel)]="exercise.variation" placeholder="{{ 'E.g. Dumbbell' | translate }}" formControlName="variation"></ion-input>
       </ion-item>
       <ion-item no-lines>
-        <ion-select [(ngModel)] = "mgSelect" [ngModelOptions]="{standalone: true}">
+        <ion-select  [compareWith]="setMG" required [(ngModel)] = "mgSelect" [ngModelOptions]="{standalone: true}">
           <ion-label>Muscle Group:</ion-label>
           <ion-option *ngFor="let group of mg"  [value]="group">{{group.muscleGroupName}}</ion-option>
         </ion-select>

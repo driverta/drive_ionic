@@ -6,7 +6,7 @@ import { Config, Nav, Platform } from 'ionic-angular';
 
 import { FirstRunPage } from '../pages/pages';
 import { MainPage } from '../pages/pages';
-import { Settings } from '../providers/providers';
+import { Settings, ProvidersUserProvider } from '../providers/providers';
 import { User } from '../providers/providers';
 
 import { DataService } from '../providers/api/firebase';
@@ -63,7 +63,8 @@ export class MyApp {
     private config: Config,
     private statusBar: StatusBar,
     private splashScreen: SplashScreen,
-    data: DataService) {
+    data: DataService,
+    private userService: ProvidersUserProvider) {
     this.initTranslate();
     data.init();
 
@@ -77,6 +78,11 @@ export class MyApp {
 
   setUser() {
     this.email = localStorage.getItem("email");
+
+    this.userService.getUserByEmail(this.email).subscribe(data =>{
+      this.userService.setUser(data);
+    })
+
     var query1 = firebase.database().ref("/users");
 
     query1.once("value").then( snapshot => {

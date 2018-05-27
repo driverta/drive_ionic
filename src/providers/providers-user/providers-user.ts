@@ -50,6 +50,10 @@ export class ProvidersUserProvider {
     return this.http.post(this.url + "createUser", user);
   }
 
+  removeExercise(exId): Observable<Response>{
+    return this.http.get(this.url + "removeExercise?userID=" + this.user.id + "&exID=" + exId);
+  }
+
   setUser(newUser){
     this.user = newUser;
   }
