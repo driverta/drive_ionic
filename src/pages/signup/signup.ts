@@ -7,6 +7,8 @@ import firebase from 'firebase';
 
 import { User } from '../../providers/providers';
 import { MainPage } from '../pages';
+import { ProvidersUserProvider } from '../../providers/providers-user/providers-user';
+import { UserModel } from '../../models/users';
 
 @IonicPage()
 @Component({
@@ -48,6 +50,7 @@ export class SignupPage {
   bro: string = "bro";
 
   terms = false;
+  users: UserModel[];
 
   // Our translated text strings
   private signupErrorString: string;
@@ -57,35 +60,26 @@ export class SignupPage {
     public toastCtrl: ToastController,
     public translateService: TranslateService,
     public alertCtrl: AlertController,
-    private storage: Storage) {
-
+    private storage: Storage,
+    private userService: ProvidersUserProvider) {
     this.translateService.get('SIGNUP_ERROR').subscribe((value) => {
       this.signupErrorString = value;
     })
   }
 
   doSignUp() {
-    this.show = true;
-    var query1 = firebase.database().ref('/users');
-      query1.once("value").then( snapshot => {
-        this.loop = 0;
-        snapshot.forEach( childSnapshot => {
-          var childData1 = childSnapshot.val();
-          this.loop++
-          if ( this.account.name == childData1.name ) {
-            this.show = false;
-            this.repeatUsername()
-            return;
-          } 
-          if ( snapshot.numChildren() == this.loop && this.show == true) {
-            this.signUp();
-          }
-        });
-      });
+    this.userService.getOneUser(this.account.name).subscribe(data => {
+      if(data.username === "alreadyexists"){
+        this.signUp();
+      }
+      else{
+        this.repeatUsername();
+        this.show = false;
+      }});
   }
 
   signUp(){
-
+    this.show = true;
     if(this.account.password != this.confirmPassword){
       this.badPassword()
       return;
@@ -94,32 +88,36 @@ export class SignupPage {
       this.noTerms()
       return;
     }
+
+    let user = new UserModel();
+    user.username = this.account.name;
+    this.userService.createUser(user).subscribe(response => console.log(response));
    
-    this.storage.set(this.account.name + '/exercises', this.exercises);
-    this.storage.set(this.account.name + '/gains', this.totalGains)
+    // this.storage.set(this.account.name + '/exercises', this.exercises);
+    // this.storage.set(this.account.name + '/gains', this.totalGains)
     
-    var name = firebase.database().ref('/users/' + this.account.name + '/name');
-    name.set(this.account.name);
+    // var name = firebase.database().ref('/users/' + this.account.name + '/name');
+    // name.set(this.account.name);
     
-    localStorage.setItem("username",this.account.name);
-    localStorage.setItem("status","good");
+    // localStorage.setItem("username",this.account.name);
+    // localStorage.setItem("status","good");
     
-    var email = firebase.database().ref('/users/' + this.account.name + '/email');
-    email.set(this.account.email);
+    // var email = firebase.database().ref('/users/' + this.account.name + '/email');
+    // email.set(this.account.email);
 
-    var exercises = firebase.database().ref('/' + this.account.name + '/exercises');
-    exercises.set(this.exercises);
+    // var exercises = firebase.database().ref('/' + this.account.name + '/exercises');
+    // exercises.set(this.exercises);
 
-    var competitors = firebase.database().ref('/' + this.account.name + '/competing');
-    competitors.child(this.account.name).set(this.account);
+    // var competitors = firebase.database().ref('/' + this.account.name + '/competing');
+    // competitors.child(this.account.name).set(this.account);
 
     firebase.auth().createUserWithEmailAndPassword(this.account.email, this.account.password)
-      .then(value => {
-        this.user._user = this.account.name;
-        this.navCtrl.push(MainPage);
-      }).catch( error => {
-        this.firebaseErrors(error)
-      });
+       .then(value => {
+         this.user._user = this.account.name;
+         this.navCtrl.push(MainPage);
+       }).catch( error => {
+         this.firebaseErrors(error)
+       });
   }
 
   firebaseErrors(error){

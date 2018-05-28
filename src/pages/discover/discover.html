@@ -1,0 +1,69 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Discover</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+  <div padding>
+    <ion-segment [(ngModel)]="segment">
+      <ion-segment-button  value="discover_people">
+        People
+      </ion-segment-button>
+    </ion-segment>
+  </div>
+  
+  <div [ngSwitch]="segment">
+    <ion-list *ngSwitchCase="'discover_people'">
+      <ion-searchbar (ionInput)="getItems($event)" placeholder="search usernames to compete with friends"></ion-searchbar>
+      <ion-list>
+        <ion-item *ngFor="let item of currentItems">
+          
+          <ion-avatar item-start>
+            <img [src]="item.profilePic" />
+          </ion-avatar>
+          
+          <h2>{{item.username}}
+            <button ion-button icon-only (click)="addToLeaderboard(item)">
+              <ion-icon name="add"></ion-icon>
+            </button>
+          </h2>
+            
+          <ion-note item-end *ngIf="item.note">{{item.note}}</ion-note>
+        </ion-item>
+      </ion-list>
+      
+      <table>
+        <tr>
+          <td></td>
+          <td>Player</td>
+          <td>Gains</td>
+          <td></td>
+        </tr>
+        <tr *ngFor="let player of likelyFriends | sortByGains" [ngClass]="{red: player.name == username}">
+          <td>
+            <ion-item no-lines>
+              <ion-avatar>
+                <img *ngIf="player.profilePic != null" [src]="player.profilePic" />
+                <ion-icon class="default-img" *ngIf="player.profilePic == null" name="contact"></ion-icon>
+              </ion-avatar>
+            </ion-item>
+          </td>
+          <td>{{player.name}}</td>
+          <td>{{player.gains}}</td>
+
+          <td>
+            <button ion-button icon-only (click)="addToLeaderboard(player)">
+              <ion-icon name="add"></ion-icon>
+            </button>
+          </td>
+        </tr>
+      </table>
+
+    </ion-list>
+    <h3 *ngIf="show" id="loading">Loading</h3>
+	</div>
+</ion-content>

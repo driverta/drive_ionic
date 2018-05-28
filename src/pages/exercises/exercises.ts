@@ -17,6 +17,10 @@ import { KeysPipe } from '../../pipes/keys/keys'
 import firebase from 'firebase';
 
 import { User } from '../../providers/providers';
+import { ExerciseProvider } from '../../providers/exercise/exercise';
+import { ProvidersUserProvider } from '../../providers/providers-user/providers-user';
+import { UserModel } from '../../models/users';
+import { Exercise } from '../../models/Exercise';
 
 @IonicPage()
 @Component({
@@ -40,6 +44,9 @@ export class ListMasterPage {
   status = ""
   totalGains = [];
 
+  private User: UserModel;
+  private exercises: Exercise[];
+
 
   constructor(
     public navCtrl: NavController,
@@ -50,7 +57,9 @@ export class ListMasterPage {
     private alertCtrl: AlertController,
     public actShtCtrl: ActionSheetController,
     private storage: Storage,
-    private platform: Platform) {
+    private platform: Platform,
+    private exerciseService: ExerciseProvider,
+    private userService: ProvidersUserProvider) {
     this.platform.ready().then((readySource) => {
       console.log("anything")
       console.log('Platform ready from', readySource);
@@ -62,6 +71,14 @@ export class ListMasterPage {
    * The view loaded, let's query our items for the list
    */
   ionViewDidLoad() {
+    
+    console.log(this.userService.getUser().email);
+
+      this.userService.getExercises().subscribe(exercises => {
+        this.exercises = exercises;
+        console.log(this.exercises)
+      });
+
     this.username = localStorage.getItem("username");
     console.log(this.username);
     this.lifts = {};
@@ -83,7 +100,6 @@ export class ListMasterPage {
 
       if (this.status == this.username) {
         this.getExercises().then((val) => {
-          console.log(val)
           this.setlifts = val;
           this.lifts = this.setlifts;
           this.show = false;
@@ -95,7 +111,7 @@ export class ListMasterPage {
         query1.once("value").then( snapshot => {
           this.loop = 0;
           snapshot.forEach( childSnapshot => {
-            console.log(childSnapshot)
+
             this.loop++
             var childData1 = childSnapshot.val();
             var key = childSnapshot.key;
@@ -117,7 +133,6 @@ export class ListMasterPage {
   saveData() {
     // Get user data status
     this.getUsers().then((val) => {
-      console.log(val)
       if (val == null) {
         this.users.push(this.username);
       }
@@ -166,6 +181,8 @@ export class ListMasterPage {
   }
 
   ionViewDidEnter() {
+
+    this.ionViewDidLoad();
     this.getExercises().then((val) => {
       if (val != null) {
         this.setlifts = val;
@@ -225,32 +242,27 @@ export class ListMasterPage {
   }
 
   deleteItem(item) {
-    var name = item['name'];
-    var variation = item['variation'];
-    
-    Object.keys(this.setlifts).forEach ( (key) => {
-      if(this.setlifts[key].name == name && this.setlifts[key].variation == variation){
-        delete this.setlifts[key];
-        this.storage.set(this.username  + '/exercises', this.setlifts).then(() => {
-          this.ionViewDidLoad();
-        });
+    this.userService.removeExercise(item.id).subscribe(data =>
+      {
+      this.ionViewDidLoad();
       }
-    })
+    );
+
   }
 
   /**
    * Navigate to the detail page for this item.
    */
-  openItem(item: Item) {
-    if (item.muscle == "Cardio"){
-      this.navCtrl.push('CardioPage', {
-        item: item
-      });
-    }else {
+  openItem(item) {
+    // if (item.muscle == "Cardio"){
+    //   this.navCtrl.push('CardioPage', {
+    //     item: item
+    //   });
+    // }else {
       this.navCtrl.push('ItemDetailPage', {
-        item: item
+        exercise: item
       });
-    }
+   
   }
 
   filterExercises(){
@@ -334,7 +346,7 @@ export class ListMasterPage {
 
   editExercise(item){
     this.navCtrl.push('ItemCreatePage', {
-      item: item
+      exercise: item
     });
   }
 }

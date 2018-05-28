@@ -2,13 +2,14 @@ import { Component, Output, EventEmitter } from '@angular/core';
 import { NavParams, NavController, AlertController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 
-import { User } from '../../providers/providers';
+import { User, ProvidersUserProvider } from '../../providers/providers';
 import { Levels } from '../../providers/providers';
 import { Records } from '../../providers/providers';
 
 import firebase from 'firebase';
 
 import * as d3 from 'd3-selection';
+import { LiftingHistory } from '../../models/LiftingHistory';
 
 @Component({
   selector: 'new-set',
@@ -33,7 +34,11 @@ export class NewSetComponent {
   history = [];
   totalGains = [];
 
-  private invalid: boolean = false;
+
+  lf: LiftingHistory;
+
+  //private invalid: boolean = false;
+
 
   @Output() myEvent = new EventEmitter();
 
@@ -44,7 +49,8 @@ export class NewSetComponent {
     public alertCtrl: AlertController,
   	public levels: Levels,
   	private records: Records,
-    private storage: Storage
+    private storage: Storage,
+    private userService: ProvidersUserProvider
   	) {
 
   	this.exercise = navParams.get('item');
@@ -85,6 +91,23 @@ export class NewSetComponent {
   }
 
   addSet() {
+
+    this.lf = new LiftingHistory();
+    this.lf.reps = this.reps;
+    this.lf.weight = this.weight;
+    this.lf.user_id = this.userService.getUser().id;
+    var date;
+    date = new Date();
+    date = date.getUTCFullYear() + '-' +
+            ('00' + (date.getUTCMonth() + 1)).slice(-2) + '-' +
+            ('00' + date.getUTCDate()).slice(-2);   
+    this.lf.date = date
+    console.log( this.userService.getUser().id);
+    this.lf.oneRepMax =  (this.weight * this.reps * .033) + this.weight;
+    this.lf.exercise = this.exercise;
+    console.log(this.lf);
+    this.userService.addLiftingHistory(this.lf).subscribe();
+
     if(this.weight == null || this.reps == null){
         this.invalid = true; 
     }

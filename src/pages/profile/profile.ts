@@ -329,7 +329,7 @@ export class SettingsPage {
   }
 
   rules(){
-    this.navCtrl.push('RulesPage');
+    this.navCtrl.push('UsersPage');
   }
 
   goToCompeting(){

@@ -41,6 +41,7 @@ export class ItemDetailPage {
     private storage: Storage) {
 
     this.exercise = navParams.get('item');
+    console.log(this.exercise);
   }
 
   ionViewWillEnter() {

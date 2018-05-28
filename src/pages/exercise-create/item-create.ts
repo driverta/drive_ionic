@@ -7,8 +7,11 @@ import { Storage } from '@ionic/storage';
 
 import firebase from 'firebase';
 
-import { User } from '../../providers/providers';
+import { User, ProvidersUserProvider } from '../../providers/providers';
 import { Records } from '../../providers/providers';
+import { Exercise } from '../../models/Exercise';
+import { ExerciseProvider } from '../../providers/exercise/exercise';
+import { MuscleGroup } from '../../models/MuscleGroupModel';
 
 @IonicPage()
 @Component({
@@ -26,7 +29,7 @@ export class ItemCreatePage {
   lifts = {};
   setlifts = {};
   myrecords: any
-  exercise: { name: string, variation: string, muscle: string} = {name: "", variation: "", muscle: "Chest"};
+  exercise: { name: string, variation: string, muscle: string } = { name: "", variation: "", muscle: "Chest" };
   username = "test";
   bool = true;
   edit = false;
@@ -34,20 +37,29 @@ export class ItemCreatePage {
 
   form: FormGroup;
 
+  private mg: MuscleGroup[];
+
+  private mgSelect: MuscleGroup;
+
   constructor(
     public navCtrl: NavController,
     public user: User,
-    public viewCtrl: ViewController, 
-    formBuilder: FormBuilder, 
+    public viewCtrl: ViewController,
+    formBuilder: FormBuilder,
     public camera: Camera,
     navParams: NavParams,
     private records: Records,
     public alertCtrl: AlertController,
-    private storage: Storage) {
+    private storage: Storage,
+    private userService: ProvidersUserProvider,
+    private exerciseService: ExerciseProvider) {
 
-    this.data = navParams.get('item');
-    if (this.data != null){
-      this.exercise = this.data;
+    this.data = navParams.get('exercise');
+    console.log(this.data);
+    if (this.data != null) {
+      this.exercise.name = this.data.exerciseName;
+      this.exercise.variation = this.data.variation;
+      this.mgSelect = this.data.MuscleGroup;
       this.edit = true;
     }
     //this.setlifts = navParams.get('lifts');
@@ -55,7 +67,7 @@ export class ItemCreatePage {
     this.form = formBuilder.group({
       name: ['', Validators.required],
       variation: [''],
-      muscle: ['']
+      muscle: MuscleGroup
     });
 
     // Watch the form for changes, and
@@ -71,20 +83,20 @@ export class ItemCreatePage {
   }
 
   ionViewDidLoad() {
-    //console.log(this.exercise)
-
-    //this.lifts = {};
-    //this.setlifts = {};
     this.username = localStorage.getItem("username");
     console.log(this.username);
-    
+
+    this.exerciseService.getAllMuscleGroups().subscribe(data => {
+      this.mg = data;
+    })
+
     this.getExercises().then((val) => {
       console.log(val)
       this.setlifts = val;
       this.lifts = this.setlifts;
       console.log(this.lifts);
     });
-    
+
     console.log(this.setlifts);
   }
 
@@ -106,30 +118,60 @@ export class ItemCreatePage {
 
   saveExercise() {
     this.bool = true;
-    
-    Object.keys(this.lifts).forEach ( (key) => {
-      if(this.lifts[key].name == this.exercise.name && this.lifts[key].variation == this.exercise.variation){
-        this.presentAlert();
-        this.bool = false;
+
+
+    this.userService.getExercises().subscribe(exercises => {
+      for (let exercise of exercises) {
+        if (exercise.exerciseName == this.exercise.name
+          && exercise.variation == this.exercise.variation
+          && exercise.MuscleGroup.id == this.mgSelect.id) {
+          this.presentAlert();
+          this.bool = false;
+        }
+      }
+
+      if (this.bool) {
+        var newExercise = new Exercise;
+        newExercise.exerciseName = this.exercise.name;
+        newExercise.variation = this.exercise.variation;
+        newExercise.MuscleGroup = this.mgSelect;
+        this.exerciseService.createExercise(this.userService.getUser().id, newExercise).subscribe(data => {
+          if(this.edit){
+            this.userService.removeExercise(this.data.id).subscribe(data =>{
+              
+            })
+          }
+            this.done();
+          
+
+
+        })
       }
     })
 
-    if(this.bool){
-      
-      if(this.edit){
-        var oldKey = this.data.name + '-' + this.data.variation;
-        delete this.lifts[oldKey];
-      }
-      
-      var key = this.exercise.name + '-' + this.exercise.variation
-      
-      this.lifts[key] = this.exercise
-      
-      this.storage.set(this.username + '/exercises', this.lifts).then(() =>{
-        this.done();
-      });
 
-    }
+
+
+    // if(this.bool){
+
+      // if(this.edit){
+      //   var oldKey = this.data.name + '-' + this.data.variation;
+      //   delete this.lifts[oldKey];
+      // }
+
+    //   var key = this.exercise.name + '-' + this.exercise.variation
+
+    //   this.lifts[key] = this.exercise
+
+    //   this.storage.set(this.username + '/exercises', this.lifts).then(() =>{
+    //     this.done();
+    //   });
+
+    // }
+  }
+
+  setMG(item1, item2){
+    return item1 && item2 && (item1.id === item2.id)
   }
 
   presentAlert() {
@@ -144,9 +186,9 @@ export class ItemCreatePage {
   getExercises(): Promise<any> {
     this.storage.ready().then(() => {
       console.log(this.storage.get(this.username + '/exercises'))
-      
+
     })
     return this.storage.get(this.username + '/exercises');
-    
+
   }
 }

@@ -20,7 +20,8 @@ import { Records } from '../providers/records/records';
 import { Levels } from '../providers/levels/levels';
 import { HistoryProvider } from '../providers/history/history';
 import { FeathersProvider } from '../providers/feathers/feathers';
-
+import { ProvidersUserProvider } from '../providers/providers-user/providers-user';
+import { ExerciseProvider } from '../providers/exercise/exercise';
 
 // The translate loader needs to know where to load i18n files
 // in Ionic's static asset pipeline.
@@ -73,13 +74,15 @@ export function provideSettings(storage: Storage) {
     GoogleMaps,
     SplashScreen,
     StatusBar,
+    ProvidersUserProvider,
     { provide: Settings, useFactory: provideSettings, deps: [Storage] },
     // Keep this to enable Ionic's runtime error handling during development
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     Records,
     Levels,
     HistoryProvider,
-    FeathersProvider
+    FeathersProvider,
+    ExerciseProvider
   ]
 })
 export class AppModule { }

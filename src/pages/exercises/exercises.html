@@ -17,28 +17,29 @@
   </ion-navbar>
 
 </ion-header>
-
+<pre>{{exercises | json}}</pre>
 <ion-content>
   <ion-list>
     <div id='reCont'>
       <button id="refresh" *ngIf="show" (click)="ionViewDidLoad()">Refresh
       </button>
     </div>
-    <ion-item-sliding *ngFor="let item of lifts | keys">
-      <button ion-item (click)="openItem(item)">
+    <ion-item-sliding *ngFor="let exercise of exercises">
+      <button ion-item (click)="openItem(exercise)">
         <!--<ion-avatar item-start>
         </ion-avatar>-->
 
-        <h2 >{{item.name}}</h2>
-        <p>{{item.variation}}</p>
-        <ion-note item-end *ngIf="item.note">{{item.note}}</ion-note>
+        <h2 >{{exercise.exerciseName}}</h2>
+        <p>{{exercise.variation}}</p>
       </button>
+        <!-- <ion-note item-end *ngIf="item.note">{{item.note}}</ion-note>
+       -->
 
       <ion-item-options>
-        <button ion-button color="light"(click)="editExercise(item)">
+        <button ion-button color="light"(click)="editExercise(exercise)">
           {{ "Edit" }}
         </button>
-        <button ion-button color="danger" (click)="presentConfirm(item)">
+        <button ion-button color="danger" (click)="presentConfirm(exercise)">
           {{ 'DELETE_BUTTON' | translate }}
         </button>
       </ion-item-options>
