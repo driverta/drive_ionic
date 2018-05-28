@@ -42,7 +42,7 @@ export class SearchPage {
     this.timeFilter = "All Time"
 
 
-    this.userService.getCompetingUsers(this.userService.getId().id).subscribe(data =>{
+    this.userService.getCompetingUsers(this.userService.getUser().id).subscribe(data =>{
       this.competingUsers = data;
     });
 
