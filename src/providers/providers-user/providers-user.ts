@@ -34,8 +34,12 @@ export class ProvidersUserProvider {
     return this.http.get(this.url + "getUserByEmail?email=" + email).map((res: Response) => res.json());
   }
 
-  getCompetingUsers(username): Observable<UserModel[]> {
-    return this.http.get(this.url + "getUserCompeting?username=" + username).map((res: Response) => res.json());
+  getCompetingUsers(userId): Observable<UserModel[]> {
+    return this.http.get(this.url + "getUserCompeting?userId=" + userId).map((res: Response) => res.json());
+  }
+  
+  getCompetitors(userId): Observable<UserModel[]> {
+    return this.http.get(this.url + "getUserCompetitors?userId=" + userId).map((res: Response) => res.json());
   }
 
   getExercises(): Observable<Exercise[]> {
