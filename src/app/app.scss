@@ -14,3 +14,20 @@
 // To declare rules for a specific mode, create a child rule
 // for the .md, .ios, or .wp mode classes. The mode class is
 // automatically applied to the <body> element in the app.
+
+.no-padding{
+    padding: 0px;
+}
+
+.error-msg{
+    margin-top: 2%;
+}
+
+ion-title {
+	text-align: center;
+}
+
+.fields{
+    padding-right:5%;
+    padding-left:5%;
+}
