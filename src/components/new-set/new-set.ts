@@ -21,7 +21,7 @@ export class NewSetComponent {
 	xcurrent = 0;
 	xtotal = 0;
 	progress = 0;
-	username: any;
+	user: any;
 	loop = 0;
 	gains = 0;
   g = 0;
@@ -45,7 +45,6 @@ export class NewSetComponent {
   constructor(
     public navCtrl: NavController,
   	navParams: NavParams,
-  	public user: User,
     public alertCtrl: AlertController,
   	public levels: Levels,
   	private records: Records,
@@ -53,22 +52,26 @@ export class NewSetComponent {
     private userService: ProvidersUserProvider
   	) {
 
-  	this.exercise = navParams.get('item');
+    this.exercise = navParams.get('item');
+    this.user = userService.getUser();
  
   }
 
   ngOnInit() {
-  	this.username = localStorage.getItem("username");
+  	// this.username = localStorage.getItem("username");
     //alert(this.username);
-    this.gains = 0
-    this.getGains().then((val) => {
-      //console.log('Your json is', val);
-      val.forEach ( (value) => {
-        this.gains = this.gains + value.gains
-      })
-    }).then(() => {
-      this.setLevel();
-    })
+    this.userService.getTotalGains(this.user.id).subscribe(totalGains => {
+      console.log(totalGains);
+      this.gains = totalGains;
+    });;
+    // this.getGains().then((val) => {
+    //   //console.log('Your json is', val);
+    //   val.forEach ( (value) => {
+    //     this.gains = this.gains + value.gains
+    //   })
+    // }).then(() => {
+    //   this.setLevel();
+    // })
   }
 
   setLevel () {

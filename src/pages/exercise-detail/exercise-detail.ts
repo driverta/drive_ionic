@@ -27,6 +27,7 @@ export class ItemDetailPage {
 
   selectedValue = 0;
   exercise: any;
+  user: any;
   username: any;
   segment = "set";
   loop = 0;
@@ -40,7 +41,6 @@ export class ItemDetailPage {
     navParams: NavParams,
     items: Items,
     public records: Records,
-    public user: User,
     public levels: Levels,
     private platform: Platform,
     private userService: ProvidersUserProvider) {
@@ -49,6 +49,8 @@ export class ItemDetailPage {
         console.log('Platform ready from', readySource);
         // Platform now ready, execute any required native code
       });
+      this.exercise = navParams.get('exercise');
+      this.user = userService.getUser();
     }
 
   ionViewWillEnter() {
