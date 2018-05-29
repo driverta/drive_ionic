@@ -9,7 +9,7 @@ import { Records } from '../../providers/providers';
 import firebase from 'firebase';
 
 import * as d3 from 'd3-selection';
-import { LiftingHistory } from '../../models/LiftingHistory';
+import { LiftingHistoryModel } from '../../models/LiftingHistory';
 
 @Component({
   selector: 'new-set',
@@ -35,7 +35,7 @@ export class NewSetComponent {
   totalGains = [];
 
 
-  lf: LiftingHistory;
+  lf: LiftingHistoryModel;
 
   //private invalid: boolean = false;
 
@@ -53,7 +53,7 @@ export class NewSetComponent {
     private userService: ProvidersUserProvider
   	) {
 
-  	this.exercise = navParams.get('item');
+  	this.exercise = navParams.get('exercise');
  
   }
 
@@ -91,22 +91,26 @@ export class NewSetComponent {
   }
 
   addSet() {
-
-    this.lf = new LiftingHistory();
-    this.lf.reps = this.reps;
-    this.lf.weight = this.weight;
-    this.lf.user_id = this.userService.getUser().id;
-    var date;
-    date = new Date();
-    date = date.getUTCFullYear() + '-' +
-            ('00' + (date.getUTCMonth() + 1)).slice(-2) + '-' +
-            ('00' + date.getUTCDate()).slice(-2);   
-    this.lf.date = date
-    console.log( this.userService.getUser().id);
-    this.lf.oneRepMax =  (this.weight * this.reps * .033) + this.weight;
-    this.lf.exercise = this.exercise;
-    console.log(this.lf);
-    this.userService.addLiftingHistory(this.lf).subscribe();
+    if (this.exercise.MuscleGroup.muscleGroupName == 'Cardio') {
+      
+    } else {
+      this.lf = new LiftingHistoryModel();
+      this.lf.reps = this.reps;
+      this.lf.weight = this.weight;
+      this.lf.user_id = this.userService.getUser().id;
+      var date;
+      date = new Date();
+      date = date.getUTCFullYear() + '-' +
+              ('00' + (date.getUTCMonth() + 1)).slice(-2) + '-' +
+              ('00' + date.getUTCDate()).slice(-2);   
+      this.lf.date = date
+      console.log( this.userService.getUser().id);
+      this.lf.oneRepMax =  (this.weight * this.reps * .033) + this.weight;
+      this.lf.exercise = this.exercise;
+      console.log(this.lf);
+      this.userService.addLiftingHistory(this.lf).subscribe();
+      d3.selectAll("svg > *").remove();
+    }
     /*
     if(this.weight == null || this.reps == null){
         this.invalid = true; 

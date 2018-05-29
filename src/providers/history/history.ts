@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { Http, Response } from '@angular/http';
 import 'rxjs/add/operator/map';
+import { Observable } from 'rxjs/Observable';
+import { CardioHistoryModel } from '../../models/CardioHistory';
+import { LiftingHistoryModel } from '../../models/LiftingHistory';
+
 
 /*
   Generated class for the HistoryProvider provider.
@@ -10,6 +14,11 @@ import 'rxjs/add/operator/map';
 */
 @Injectable()
 export class HistoryProvider {
+	
+	cardioHistory: CardioHistoryModel = new CardioHistoryModel(); 
+	
+	liftingHistory: LiftingHistoryModel = new LiftingHistoryModel(); 
+
 
 	_history = [{date: new Date(0), reps: 0, weight: 0, oneRM: 0}]
 
@@ -22,5 +31,14 @@ export class HistoryProvider {
   constructor(public http: Http) {
   
   }
-
+	//	private url = "http://driveapi-env.y7mz5ppbve.us-east-2.elasticbeanstalk.com/";
+	private url = "http://localhost:8080/api/";
+	
+	getCardioExerciseHistory(userId, exerciseId): Observable<CardioHistoryModel[]> {
+    return this.http.get(this.url + "getCardioHistoryByExercise?userId=" + userId + "&exerciseId=" + exerciseId).map((res: Response) => res.json());
+  }
+	
+	getLiftingExerciseHistory(userId, exerciseId): Observable<LiftingHistoryModel[]> {
+    return this.http.get(this.url + "getLiftingHistoryByExercise?userId=" + userId + "&exerciseId=" + exerciseId).map((res: Response) => res.json());
+  }
 }

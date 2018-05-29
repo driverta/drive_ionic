@@ -258,8 +258,10 @@ export class ListMasterPage {
     //     item: item
     //   });
     // }else {
+      console.log(item);
       this.navCtrl.push('ItemDetailPage', {
-        exercise: item
+        exercise: item,
+        user: this.userService.getUser()
       });
    
   }

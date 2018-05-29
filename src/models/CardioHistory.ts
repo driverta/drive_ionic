@@ -1,12 +1,12 @@
 import { Exercise } from "./Exercise";
 
-export class LiftingHistoryModel {
+export class CardioHistoryModel {
     id: number;
     date: any;
-    weight: number;
     gains: number;
-    reps: number;
+    mph: number;
     user_id: number;
-    oneRepMax: number;
+    miles: number;
+    minutes: number;
     exercise: Exercise;
   }

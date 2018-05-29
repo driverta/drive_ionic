@@ -47,7 +47,8 @@ export class ProvidersUserProvider {
   }
 
   addLiftingHistory(lf){
-    lf.user_id=this.user.id;
+    // lf.user_id=this.user.id;
+    console.log(lf);
     return this.http.post(this.url + "addLiftingHistory", lf);
   }
 
