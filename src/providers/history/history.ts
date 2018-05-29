@@ -14,6 +14,11 @@ import { LiftingHistoryModel } from '../../models/LiftingHistory';
 */
 @Injectable()
 export class HistoryProvider {
+	
+	cardioHistory: CardioHistoryModel = new CardioHistoryModel(); 
+	
+	liftingHistory: LiftingHistoryModel = new LiftingHistoryModel(); 
+
 
 	cardioHistory: CardioHistoryModel = new CardioHistoryModel();
 
@@ -33,11 +38,19 @@ export class HistoryProvider {
   }
 	//	private url = "http://driveapi-env.y7mz5ppbve.us-east-2.elasticbeanstalk.com/";
 	private url = "http://localhost:8080/api/";
+<<<<<<< HEAD
 
 	getCardioExerciseHistory(userId, exerciseId): Observable<CardioHistoryModel[]> {
     return this.http.get(this.url + "getCardioHistoryByExercise?userId=" + userId + "&exerciseId=" + exerciseId).map((res: Response) => res.json());
   }
 
+=======
+	
+	getCardioExerciseHistory(userId, exerciseId): Observable<CardioHistoryModel[]> {
+    return this.http.get(this.url + "getCardioHistoryByExercise?userId=" + userId + "&exerciseId=" + exerciseId).map((res: Response) => res.json());
+  }
+	
+>>>>>>> 13ad5182e7f69b8ccec11a87fdd2884c0d1fc878
 	getLiftingExerciseHistory(userId, exerciseId): Observable<LiftingHistoryModel[]> {
     return this.http.get(this.url + "getLiftingHistoryByExercise?userId=" + userId + "&exerciseId=" + exerciseId).map((res: Response) => res.json());
   }

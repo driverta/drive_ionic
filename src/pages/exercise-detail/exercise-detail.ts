@@ -51,7 +51,6 @@ export class ItemDetailPage {
       });
       this.exercise = navParams.get('exercise')
       this.user = navParams.get('user')
-
     }
 
   ionViewWillEnter() {

@@ -52,8 +52,7 @@ export class NewSetComponent {
     private storage: Storage,
     private userService: ProvidersUserProvider
   	) {
-
-	this.exercise = navParams.get('exercise');
+  	this.exercise = navParams.get('exercise');
  
   }
 
@@ -103,6 +102,7 @@ export class NewSetComponent {
       date = date.getUTCFullYear() + '-' +
               ('00' + (date.getUTCMonth() + 1)).slice(-2) + '-' +
               ('00' + date.getUTCDate()).slice(-2);
+              ('00' + date.getUTCDate()).slice(-2);   
       this.lf.date = date
       console.log( this.userService.getUser().id);
       this.lf.oneRepMax =  (this.weight * this.reps * .033) + this.weight;
