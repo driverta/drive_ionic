@@ -26,29 +26,32 @@ import firebase from 'firebase';
 export class ItemDetailPage {
 
   selectedValue = 0;
-  exercise: any;
   username: any;
   segment = "set";
   loop = 0;
   checkRec = false;
   history = [];
+  exercise: any;
+  user: any;
 
-  // @ViewChild(BarChartComponent) barChart: BarChartComponent
-  // @ViewChild(LineChartComponent) lineChart: LineChartComponent
+  @ViewChild(BarChartComponent) barChart: BarChartComponent
+  @ViewChild(LineChartComponent) lineChart: LineChartComponent
 
   constructor(public navCtrl: NavController,
     navParams: NavParams,
     items: Items,
     public records: Records,
-    public user: User,
     public levels: Levels,
     private platform: Platform,
-    private userService: ProvidersUserProvider) {
+    private userService: ProvidersUserProvider,
+    private historyService: HistoryProvider) {
       this.platform.ready().then((readySource) => {
-        console.log("anything")
         console.log('Platform ready from', readySource);
         // Platform now ready, execute any required native code
       });
+      this.exercise = navParams.get('exercise')
+      this.user = navParams.get('user')
+
     }
 
   ionViewWillEnter() {
@@ -63,15 +66,15 @@ export class ItemDetailPage {
   }
 
   getRecords() {
-    // this.userService.getExercises().subscribe(exercises => {
-    //   this.exercises = exercises;
-    // });
-    console.log("here");
-    console.log(this.exercise);
-    
-    
-    
-    
+    if (this.exercise.MuscleGroup.muscleGroupName == 'Cardio') {
+      this.historyService.getCardioExerciseHistory(this.user.id, this.exercise.id).subscribe(cardioHistory => {
+        console.log(cardioHistory);
+      });
+    } else {
+      this.historyService.getLiftingExerciseHistory(this.user.id, this.exercise.id).subscribe(liftingHistory => {
+      });
+    }
+
     
     // this.getExercises().then((val) => {
     //   var keyOne = this.exercise.name + '-' + this.exercise.variation
