@@ -142,9 +142,6 @@ export class ItemCreatePage {
             })
           }
             this.done();
-          
-
-
         })
       }
     })
