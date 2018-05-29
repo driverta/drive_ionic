@@ -8,6 +8,7 @@ import { SortByGainsPipe } from '../../pipes/sort-by-gains/sort-by-gains'
 
 import { ProvidersUserProvider } from '../../providers/providers-user/providers-user';
 import { UserModel } from '../../models/users';
+import { CompetingModel } from '../../models/competing';
 
 /**
  * Generated class for the DiscoverPage page.
@@ -25,7 +26,10 @@ export class DiscoverPage {
   
   currentItems: any = [];
 	users: UserModel[];
+  competing: CompetingModel[];
 	username: any;
+  userId: number;
+  id: number;
   loop = 0;
   likelyFriends: any = []; 
   competingFriends: any = []; 
@@ -33,7 +37,11 @@ export class DiscoverPage {
   show = true;
   segment = "discover_people";
 
-  constructor(public alertCtrl: AlertController, public navCtrl: NavController, public navParams: NavParams, public user: User, private userService: ProvidersUserProvider) {
+  constructor(public alertCtrl: AlertController,
+    public navCtrl: NavController,
+    public navParams: NavParams,
+    public user: User,
+    private userService: ProvidersUserProvider) {
   }
 
   ionViewWillEnter() {
@@ -42,64 +50,66 @@ export class DiscoverPage {
     this.likelyFriends = [];
     this.competingFriends = [];
     this.competingFriendsOfFriends = [];
-    this.username = this.user._user;
+    this.username = this.userService.getUser().username;
+    this.userId = this.userService.getUser().id;
     var query1 = firebase.database().ref("/users");
     var query2 = firebase.database().ref('/' + this.username + '/competing');
 
     this.userService.getAllUsers().subscribe(data => {
       this.users = data;
-      console.log(data);
+      this.show = false;
+      
     });
 
 
     
-    query2.once("value").then( snapshot => {
-      snapshot.forEach( childSnapshot => {
-        var competingFriend = childSnapshot.val();
-        this.competingFriends.push(competingFriend.name);
-        this.getFriendsOfFriends(competingFriend.name);
-      });
-    });
+    // query2.once("value").then( snapshot => {
+    //   snapshot.forEach( childSnapshot => {
+    //     var competingFriend = childSnapshot.val();
+    //     this.competingFriends.push(competingFriend.name);
+    //     this.getFriendsOfFriends(competingFriend.name);
+    //   });
+    // });
   }
   
-  getFriendsOfFriends(friend) {
-    var query = firebase.database().ref('/' + friend + '/competing');
+  // getFriendsOfFriends(friend) {
+  //   var query = firebase.database().ref('/' + friend + '/competing');
   
-    query.once("value").then( snapshot => {
-      var loop = 0;
-      snapshot.forEach( childSnapshot => {
-        var competingFriendOfFriend = childSnapshot.val().name;
-        if (!this.competingFriendsOfFriends.includes(competingFriendOfFriend) && !this.competingFriends.includes(competingFriendOfFriend)) {
-          this.competingFriendsOfFriends.push(competingFriendOfFriend);
-          var likelyFriend = {
-            name: competingFriendOfFriend,
-            profilePic: '',
-            gains: 0,
-          };
-          var queryGains = firebase.database().ref('/' + competingFriendOfFriend + '/gains');
-          var loop = 0;
-          queryGains.once("value").then( snapshot => {
-            loop++;
-            var totalGains = 0;
-            snapshot.forEach( childSnapshot => {
-              var childData1 = childSnapshot.val();
-              totalGains = totalGains + childData1.gains;
-            });
-            likelyFriend.gains = totalGains;
-            var queryGains = firebase.database().ref('/users/' + competingFriendOfFriend + '/profilePic');
-            queryGains.once("value").then( profilePic => {
-              likelyFriend.profilePic = profilePic.val();
-              console.log(likelyFriend);
-              this.likelyFriends.push(likelyFriend);
-              if (loop == snapshot.numChildren()) {
-                this.show = false;
-              }
-            });
-          });      
-        }  
-      });
-    });
-  }
+  //   query.once("value").then( snapshot => {
+  //     var loop = 0;
+  //     snapshot.forEach( childSnapshot => {
+  //       var competingFriendOfFriend = childSnapshot.val().name;
+  //       if (!this.competingFriendsOfFriends.includes(competingFriendOfFriend) && !this.competingFriends.includes(competingFriendOfFriend)) {
+  //         this.competingFriendsOfFriends.push(competingFriendOfFriend);
+  //         var likelyFriend = {
+  //           name: competingFriendOfFriend,
+  //           profilePic: '',
+  //           gains: 0,
+  //         };
+  //         var queryGains = firebase.database().ref('/' + competingFriendOfFriend + '/gains');
+  //         var loop = 0;
+  //         queryGains.once("value").then( snapshot => {
+  //           loop++;
+  //           var totalGains = 0;
+  //           snapshot.forEach( childSnapshot => {
+  //             var childData1 = childSnapshot.val();
+  //             totalGains = totalGains + childData1.gains;
+  //           });
+  //           likelyFriend.gains = totalGains;
+  //           var queryGains = firebase.database().ref('/users/' + competingFriendOfFriend + '/profilePic');
+  //           queryGains.once("value").then( profilePic => {
+  //             likelyFriend.profilePic = profilePic.val();
+  //             console.log(likelyFriend);
+  //             this.likelyFriends.push(likelyFriend);
+  //             if (loop == snapshot.numChildren()) {
+  //               this.show = false;
+  //             }
+  //           });
+  //         });      
+  //       }  
+  //     });
+  //   });
+  // }
   
   getItems(ev) {
     let val = ev.target.value;
@@ -119,8 +129,19 @@ export class DiscoverPage {
   }
     
   addToLeaderboard(item){
+    this.id = item.id;
+    let competing = new CompetingModel;
+    //competing = {userId: this.userId, competingUserId: this.id}
+    competing.id = this.userId;
+    competing.competingUser = this.id
+    console.log(competing);
+    this.userService.addCompetingUser(competing).subscribe(data => {
+      console.log(data);
+    })
+
     var check = true;
-    
+
+    ////////// needs work ////////
     this.competingFriends.forEach( value => {
     
       if (value.name == item.name) {
@@ -129,7 +150,8 @@ export class DiscoverPage {
         check = false;
       } 
     })
-    
+    ///////////////////
+    let user = this.username;
     if(check){
       
       // var competing = firebase.database().ref('/' + this.username + '/competing');

@@ -3,6 +3,10 @@ import { AlertController, IonicPage, NavController, NavParams } from 'ionic-angu
 
 import firebase from 'firebase';
 
+import { ProvidersUserProvider } from '../../providers/providers-user/providers-user';
+import { UserModel } from '../../models/users';
+import { CompetingModel } from '../../models/competing';
+
 @IonicPage()
 @Component({
   selector: 'page-friend-competing',
@@ -12,17 +16,29 @@ export class FriendCompetingPage {
 
   list = [];
   username: string;
+  users: UserModel[];
+  competing: CompetingModel[];
+  userId: number;
+  id: number;
+  user: any;
 
   constructor(public navCtrl: NavController,
   	public navParams: NavParams,
-  	public alertCtrl: AlertController) {
+  	public alertCtrl: AlertController,
+    private userService: ProvidersUserProvider) {
   	
-  	this.list = navParams.get('list');
-  	this.username = localStorage.getItem("username");
+  	//this.list = navParams.get('list');
+  	this.username = this.userService.getUser().username;
+    this.userId = this.userService.getUser().id;
+    this.user = navParams.get('item');
+    this.list = navParams.get('list');
   }
 
   ionViewDidLoad() {
-    console.log(this.list);
+    // console.log(this.list);
+    // this.userService.getCompetingUsers(this.user).subscribe(data => {
+    //   this.list = data
+    // })
   }
 
   openItem(item){
@@ -32,6 +48,9 @@ export class FriendCompetingPage {
   }
 
   addToLeaderboard(item){
+    this.id = item.id;
+    let competing = new CompetingModel;
+    competing = {id: this.userId, competingUser: this.id}
     var check = true;
     
     this.list.forEach( value => {
@@ -44,11 +63,14 @@ export class FriendCompetingPage {
     })
   	
     if(check){
-      var competing = firebase.database().ref('/' + this.username + '/competing');
-      competing.child(item.name).set(item);
+      this.userService.addCompetingUser(competing).subscribe(data => {
 
-      var competitors = firebase.database().ref('/' + item.name + '/competitors');
-      competitors.child(this.username).set(this.username);
+      })
+      // var competing = firebase.database().ref('/' + this.username + '/competing');
+      // competing.child(item.name).set(item);
+
+      // var competitors = firebase.database().ref('/' + item.name + '/competitors');
+      // competitors.child(this.username).set(this.username);
       this.playerAdded();
     }
   }

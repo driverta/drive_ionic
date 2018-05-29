@@ -3,6 +3,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IonicPage, NavController, ViewController, NavParams, AlertController } from 'ionic-angular';
 import { CustomRecordsPage } from '../custom-records/custom-records';
 import { Storage } from '@ionic/storage';
+import { ProvidersUserProvider } from '../../providers/providers-user/providers-user';
+
 
 import firebase from 'firebase';
 
@@ -30,6 +32,7 @@ export class EditProfilePage {
   data: any;
   competitorsList = [];
   competingList = [];
+  userData: any;
 
   form: FormGroup;
 
@@ -39,7 +42,10 @@ export class EditProfilePage {
     formBuilder: FormBuilder,
     navParams: NavParams,
     public alertCtrl: AlertController,
-    private storage: Storage) {
+    private storage: Storage,
+    private userService: ProvidersUserProvider) {
+
+    this.userData = this.userService.getUser();
 
     this.form = formBuilder.group({
       username: [''],
@@ -62,9 +68,9 @@ export class EditProfilePage {
   }
 
   ionViewDidLoad() {
-    this.username = localStorage.getItem("username");
-    this.info.username = this.username;
-    console.log(this.username);
+    // this.username = localStorage.getItem("username");
+    // this.info.username = this.username;
+    // console.log(this.username);
   }
 
   /**
@@ -205,17 +211,23 @@ export class EditProfilePage {
     }
     */
 
-  	var weight = firebase.database().ref('/users/' + this.info.username + '/weight');
-  	weight.set(this.info.weight);
+    this.userData.weight = this.info.weight;
+    this.userData.height = this.info.height;
+    this.userData.gym = this.info.gym;
+    this.userData.location = this.info.location;
+    this.userService.createUser(this.userData).subscribe(response => console.log(response));
 
-  	var height = firebase.database().ref('/users/' + this.info.username + '/height');
-  	height.set(this.info.height);
+  	// var weight = firebase.database().ref('/users/' + this.info.username + '/weight');
+  	// weight.set(this.info.weight);
 
-  	var gym = firebase.database().ref('/users/' + this.info.username + '/gym');
-  	gym.set(this.info.gym);
+  	// var height = firebase.database().ref('/users/' + this.info.username + '/height');
+  	// height.set(this.info.height);
 
-  	var location = firebase.database().ref('/users/' + this.info.username + '/location');
-  	location.set(this.info.location);
+  	// var gym = firebase.database().ref('/users/' + this.info.username + '/gym');
+  	// gym.set(this.info.gym);
+
+  	// var location = firebase.database().ref('/users/' + this.info.username + '/location');
+  	// location.set(this.info.location);
 
   	this.done();
   }

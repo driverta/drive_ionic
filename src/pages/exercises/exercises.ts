@@ -29,8 +29,6 @@ import { Exercise } from '../../models/Exercise';
 })
 //@Injectable()
 export class ListMasterPage {
-  lifts:any = {};
-  setlifts = {};
   username = "bob";
   users = [];
 
@@ -43,6 +41,8 @@ export class ListMasterPage {
   gains = 0;
   status = ""
   totalGains = [];
+
+  filteredExercises = [];
 
   private User: UserModel;
   private exercises: Exercise[];
@@ -77,6 +77,7 @@ export class ListMasterPage {
     
     this.userService.getExercises().subscribe(exercises => {
       this.exercises = exercises;
+      this.filteredExercises = exercises;
       this.show = false;
     });
 
@@ -271,7 +272,7 @@ export class ListMasterPage {
         {
           text: 'All',
           handler: () => {
-            this.lifts = this.setlifts
+            this.filteredExercises = this.exercises
           }
         },{
           text: 'Chest',
@@ -334,13 +335,18 @@ export class ListMasterPage {
   }
 
   executeFilter(){
-    this.lifts = {};
-    //alert(this.lifts["Bench Press-Barbell"].name)
-    Object.keys(this.setlifts).forEach( (key, index) => {
-      if (this.setlifts[key].muscle == this.filter){
-        this.lifts[key] = this.setlifts[key]
+    this.filteredExercises = [];
+    this.exercises.forEach((exercise) => {
+      if (exercise.MuscleGroup.muscleGroupName == this.filter){
+          this.filteredExercises.push(exercise);
       }
-    });
+    })
+    //alert(this.lifts["Bench Press-Barbell"].name)
+    // Object.keys(this.setlifts).forEach( (key, index) => {
+    //   if (this.setlifts[key].muscle == this.filter){
+    //     this.lifts[key] = this.setlifts[key]
+    //   }
+    // });
   }
 
   editExercise(item){

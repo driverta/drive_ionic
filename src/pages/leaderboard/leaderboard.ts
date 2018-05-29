@@ -44,23 +44,24 @@ export class SearchPage {
 
     this.userService.getCompetingUsers(this.userService.getUser().id).subscribe(data =>{
       this.competingUsers = data;
+      this.show = false;
       console.log(data)
     });
 
-    var queryPlayers = firebase.database().ref('/' + this.username + '/competing');
-    queryPlayers.once("value").then( snapshot => {
-      this.loop = 0;
-      snapshot.forEach( childSnapshot => {
-        this.loop++
-        var childData1 = childSnapshot.val();
-        var data = {name: childData1.name, level: 0, gains: 0, profilePic: "", totalGains: [], rank: "Frail Body"};
-        this.players.push(data);
-        if ( snapshot.numChildren() == this.loop ) {
-          this.getGains();
-          this.getPic();
-        }
-      });
-    });
+    // var queryPlayers = firebase.database().ref('/' + this.username + '/competing');
+    // queryPlayers.once("value").then( snapshot => {
+    //   this.loop = 0;
+    //   snapshot.forEach( childSnapshot => {
+    //     this.loop++
+    //     var childData1 = childSnapshot.val();
+    //     var data = {name: childData1.name, level: 0, gains: 0, profilePic: "", totalGains: [], rank: "Frail Body"};
+    //     this.players.push(data);
+    //     if ( snapshot.numChildren() == this.loop ) {
+    //       this.getGains();
+    //       this.getPic();
+    //     }
+    //   });
+    // });
   }
 
   getGains() {

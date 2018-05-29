@@ -37,6 +37,14 @@ export class ProvidersUserProvider {
   getCompetingUsers(userId): Observable<UserModel[]> {
     return this.http.get(this.url + "getUserCompeting?userId=" + userId).map((res: Response) => res.json());
   }
+
+  addCompetingUser(competing): Observable<Response>{
+    return this.http.post(this.url + "createCompeting", competing);
+  }
+
+  removeCompetingUser(competingUserID): Observable<Response>{
+    return this.http.get(this.url + "removeCompeting?userID=" + this.user.id + "&competingUserID=" + competingUserID);
+  }
   
   getCompetitors(userId): Observable<UserModel[]> {
     return this.http.get(this.url + "getUserCompetitors?userId=" + userId).map((res: Response) => res.json());

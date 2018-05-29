@@ -9,6 +9,9 @@ import { User } from '../../providers/providers';
 import { MainPage } from '../pages';
 import { ProvidersUserProvider } from '../../providers/providers-user/providers-user';
 import { UserModel } from '../../models/users';
+import { ExerciseProvider } from '../../providers/exercise/exercise';
+import { Exercise } from '../../models/Exercise';
+import { MuscleGroup } from '../../models/MuscleGroupModel';
 
 @IonicPage()
 @Component({
@@ -28,23 +31,23 @@ export class SignupPage {
     password: ''
   };
 
-  exercises = {
-    "Bench Press-Barbell": { 
-      name: 'Bench Press',
-      variation: 'Barbell', 
-      muscle: 'Chest'
-    },
-    "Squat-Barbell": {
-      name: 'Squat',
-      variation: 'Barbell',
-      muscle: 'Legs'
-    },
-    "Deadlift-Barbell": {
-      name: 'Deadlift',
-      variation: 'Barbell',
-      muscle: 'Back'
-    }
-  };
+  // exercises = {
+  //   "Bench Press-Barbell": { 
+  //     name: 'Bench Press',
+  //     variation: 'Barbell', 
+  //     muscle: 'Chest'
+  //   },
+  //   "Squat-Barbell": {
+  //     name: 'Squat',
+  //     variation: 'Barbell',
+  //     muscle: 'Legs'
+  //   },
+  //   "Deadlift-Barbell": {
+  //     name: 'Deadlift',
+  //     variation: 'Barbell',
+  //     muscle: 'Back'
+  //   }
+  // };
   totalGains = [];
 
   bro: string = "bro";
@@ -55,13 +58,16 @@ export class SignupPage {
   // Our translated text strings
   private signupErrorString: string;
 
+  private mg: MuscleGroup;
+
   constructor(public navCtrl: NavController,
     public user: User,
     public toastCtrl: ToastController,
     public translateService: TranslateService,
     public alertCtrl: AlertController,
     private storage: Storage,
-    private userService: ProvidersUserProvider) {
+    private userService: ProvidersUserProvider,
+    private exerciseService: ExerciseProvider) {
     this.translateService.get('SIGNUP_ERROR').subscribe((value) => {
       this.signupErrorString = value;
     })
@@ -96,6 +102,33 @@ export class SignupPage {
     this.userService.getUserByEmail(this.account.email).subscribe(data =>{
       this.userService.setUser(data);
     });
+
+    var bench = new Exercise;
+    bench.exerciseName = "Bench Press";
+    bench.variation = "Barbell";
+    this.mg = {id: 1, muscleGroupName: "Chest"}
+    bench.MuscleGroup = this.mg;
+    this.exerciseService.createExercise(this.userService.getUser().id, bench).subscribe(data => {
+        //console.log(data)
+    })
+
+    var squat = new Exercise;
+    squat.exerciseName = "Squat";
+    squat.variation = "Barbell";
+    this.mg = {id: 3, muscleGroupName: "Legs"}
+    squat.MuscleGroup = this.mg;
+    this.exerciseService.createExercise(this.userService.getUser().id, squat).subscribe(data => {
+        //console.log(data)
+    })
+
+    var deadlift = new Exercise;
+    deadlift.exerciseName = "Deadlift";
+    deadlift.variation = "Barbell";
+    this.mg = {id: 2, muscleGroupName: "Back"}
+    deadlift.MuscleGroup = this.mg;
+    this.exerciseService.createExercise(this.userService.getUser().id, deadlift).subscribe(data => {
+        //console.log(data)
+    })
    
     // this.storage.set(this.account.name + '/exercises', this.exercises);
     // this.storage.set(this.account.name + '/gains', this.totalGains)

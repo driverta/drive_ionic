@@ -24,7 +24,7 @@
       <button id="refresh" *ngIf="show" (click)="ionViewDidLoad()">Refresh
       </button>
     </div>
-    <ion-item-sliding *ngFor="let exercise of exercises">
+    <ion-item-sliding *ngFor="let exercise of filteredExercises">
       <button ion-item (click)="openItem(exercise)">
         <!--<ion-avatar item-start>
         </ion-avatar>-->

@@ -47,7 +47,7 @@ export class SettingsPage {
   competitorsList = [];
   realCompetitorsList = [];
   imageData: any;
-
+  userData: any;
   options: any;
 
   show: boolean = true;
@@ -80,6 +80,8 @@ export class SettingsPage {
     public levels: Levels,
     private storage: Storage,
     private userService: ProvidersUserProvider) {
+
+    this.userData = this.userService.getUser();
   }
 
   _buildForm() {
@@ -114,9 +116,9 @@ export class SettingsPage {
   ionViewDidLoad() {
     this.competitorsList = [];
     this.username = this.userService.getUser().username;
-    console.log(this.username)
+    //console.log(this.username)
     this.userService.getOneUser(this.username).subscribe(data => {
-      console.log(data);
+
       this.weight = data.weight;
       this.height = data.height;
       this.gym = data.gym;
@@ -126,23 +128,28 @@ export class SettingsPage {
     // Build an empty form for the template to render
     this.form = this.formBuilder.group({});  
 
-    this.storage.get(this.username + '/gains').then((val) => {
-      this.gains = 0;
-      this.records = 0;
-      //console.log('Your json is', val);
-      if (val) {
-        val.forEach ( (value) => {
-          this.gains = this.gains + value.gains;
-          if (value.gains == 10){
-            this.records++;
-          }
-        })
-      }
-    }).then(() => {
-      console.log(this.gains)
-      this.setLevel();
-    })
+    // this.storage.get(this.username + '/gains').then((val) => {
+    //   this.gains = 0;
+    //   this.records = 0;
+    //   //console.log('Your json is', val);
+    //   if (val) {
+    //     val.forEach ( (value) => {
+    //       this.gains = this.gains + value.gains;
+    //       if (value.gains == 10){
+    //         this.records++;
+    //       }
+    //     })
+    //   }
+    // }).then(() => {
+    //   console.log(this.gains)
+    //   this.setLevel();
+    // })
 
+    this.userService.getCompetingUsers(this.userData.id).subscribe(data => {
+      this.competingList = data;
+      //console.log(this.competingList);
+      this.competing = this.competingList.length;
+    })
     
     // var queryCompeting = firebase.database().ref('/' + this.username + '/competing');
     // queryCompeting.once("value").then( snapshot => {
@@ -157,7 +164,12 @@ export class SettingsPage {
     //   })
     // })
 
-    
+    this.userService.getCompetitors(this.userData.id).subscribe(data => {
+      this.competitorsList = data;
+      console.log(this.competitorsList);
+      this.competitors = this.competitorsList.length;
+    })
+
     // var queryCompetitors = firebase.database().ref('/' + this.username + '/competitors');
     // queryCompetitors.once("value").then( snapshot => {
     //   this.competitors = 0;
@@ -352,23 +364,26 @@ export class SettingsPage {
   }
 
   goToCompetitors(){
-    this.realCompetitorsList = [];
-    console.log(this.competitorsList)
-    this.competitorsList.forEach((val) => {
-      this.loop = 0;
-      var queryPic = firebase.database().ref('/users/' + val + '/profilePic');
-      queryPic.once("value").then( snapshot => {
-        var pic = snapshot.val();
-        this.realCompetitorsList.push({name: val, profilePic: pic})
-        this.loop++
-        if (this.loop == this.competitorsList.length){
-          this.navCtrl.push('CompetitorsPage', {
-            list: this.realCompetitorsList,
-            competing: this.competingList
-          });
-        }
-      })
-    })
+    this.navCtrl.push('CompetitorsPage', {
+      list: this.competitorsList
+    });
+    // this.realCompetitorsList = [];
+    // console.log(this.competitorsList)
+    // this.competitorsList.forEach((val) => {
+    //   this.loop = 0;
+    //   var queryPic = firebase.database().ref('/users/' + val + '/profilePic');
+    //   queryPic.once("value").then( snapshot => {
+    //     var pic = snapshot.val();
+    //     this.realCompetitorsList.push({name: val, profilePic: pic})
+    //     this.loop++
+    //     if (this.loop == this.competitorsList.length){
+    //       this.navCtrl.push('CompetitorsPage', {
+    //         list: this.realCompetitorsList,
+    //         competing: this.competingList
+    //       });
+    //     }
+    //   })
+    // })
   }
 
   goToRecords(){

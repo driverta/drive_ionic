@@ -23,16 +23,18 @@
     </ion-select>
 
     <ion-list>
-      <ion-item-sliding no-lines *ngFor="let item of players | sortByGains" >
+      <ion-item-sliding no-lines *ngFor="let item of competingUsers | sortByGains" >
         <ion-item (click)="openItem(item)" no-lines [ngClass]="{red: item.name == username}">
           <ion-avatar item-start>
             <img *ngIf="item.profilePic != null" [src]="item.profilePic" />
             <ion-icon *ngIf="item.profilePic == null" class="default-img" name="contact"></ion-icon>
           </ion-avatar>
           
-          <h1>{{item.name}}
+          <h1>{{item.username}}
+          <!--
             <div id="gains">{{item.gains}}</div>
             <h3>{{item.rank}} {{item.level}}</h3>
+          -->
           </h1>
         </ion-item>
       

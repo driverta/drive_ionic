@@ -83,21 +83,20 @@ export class ItemCreatePage {
   }
 
   ionViewDidLoad() {
-    this.username = localStorage.getItem("username");
-    console.log(this.username);
 
     this.exerciseService.getAllMuscleGroups().subscribe(data => {
       this.mg = data;
+      console.log(this.mg)
     })
 
-    this.getExercises().then((val) => {
-      console.log(val)
-      this.setlifts = val;
-      this.lifts = this.setlifts;
-      console.log(this.lifts);
-    });
+    // this.getExercises().then((val) => {
+    //   console.log(val)
+    //   this.setlifts = val;
+    //   this.lifts = this.setlifts;
+    //   console.log(this.lifts);
+    // });
 
-    console.log(this.setlifts);
+    // console.log(this.setlifts);
   }
 
   /**
