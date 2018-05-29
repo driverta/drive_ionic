@@ -107,7 +107,7 @@ export class NewSetComponent {
     this.lf.exercise = this.exercise;
     console.log(this.lf);
     this.userService.addLiftingHistory(this.lf).subscribe();
-
+    /*
     if(this.weight == null || this.reps == null){
         this.invalid = true; 
     }
@@ -188,7 +188,8 @@ export class NewSetComponent {
         });
       });
     }); 
-  }  
+    }
+    */  
   }
 
   getExercises(): Promise<any> {

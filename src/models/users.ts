@@ -6,5 +6,6 @@ export class UserModel {
   age: number;
   height: string;
   weight: number;
+  gym: string;
   profilePic: string;
 }
