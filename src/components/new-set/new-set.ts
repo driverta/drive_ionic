@@ -107,7 +107,6 @@ export class NewSetComponent {
     this.lf.exercise = this.exercise;
     console.log(this.lf);
     this.userService.addLiftingHistory(this.lf).subscribe();
-<<<<<<< HEAD
     /*
     if(this.weight == null || this.reps == null){
         this.invalid = true; 
@@ -191,7 +190,6 @@ export class NewSetComponent {
     }); 
     }
     */  
-=======
 
   //   if(this.weight == null || this.reps == null){
   //       this.invalid = true; 
@@ -274,7 +272,6 @@ export class NewSetComponent {
   //     });
   //   }); 
   // }  
->>>>>>> a419b3c0c27112de55e7a4a45e90493d59a1b7a8
   }
 
   getExercises(): Promise<any> {
