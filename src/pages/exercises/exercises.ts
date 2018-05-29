@@ -74,97 +74,98 @@ export class ListMasterPage {
     
     console.log(this.userService.getUser().email);
 
-      this.userService.getExercises().subscribe(exercises => {
-        this.exercises = exercises;
-        console.log(this.exercises)
-      });
-
-    this.username = localStorage.getItem("username");
-    console.log(this.username);
-    this.lifts = {};
-    this.setlifts = {};
-    // Get user data status
-
-    this.getUsers().then((val) => {
-      console.log("Slut");
-      if (val != null) {
-        this.users = val;
-      }
-      if (this.users.includes(this.username)) {
-        this.status = this.username;
-      }
-      else {
-        this.status = "cloud";
-      }
-    }).then(() => {
-
-      if (this.status == this.username) {
-        this.getExercises().then((val) => {
-          this.setlifts = val;
-          this.lifts = this.setlifts;
-          this.show = false;
-          var exercises = firebase.database().ref('/' + this.username + '/exercises');
-          exercises.set(this.setlifts);
-        })
-      } else {
-        var query1 = firebase.database().ref('/' + this.username + '/exercises');
-        query1.once("value").then( snapshot => {
-          this.loop = 0;
-          snapshot.forEach( childSnapshot => {
-
-            this.loop++
-            var childData1 = childSnapshot.val();
-            var key = childSnapshot.key;
-            
-            this.setlifts[key] = childData1;
-            this.lifts = this.setlifts
-            
-            if ( snapshot.numChildren() == this.loop ) {
-              //alert("HERE")
-              this.show = false;
-              this.saveData();
-            }
-          });
-        });  
-      }
-    })
-  }
-
-  saveData() {
-    // Get user data status
-    this.getUsers().then((val) => {
-      if (val == null) {
-        this.users.push(this.username);
-      }
-      else {
-        this.users = val;
-        this.users.push(this.username);
-      }
-      this.storage.set('/users', this.users);
-      this.status = this.username;
-    })
     
-    this.storage.set(this.username + '/exercises', this.setlifts)
-    this.storage.set(this.username + '/gains', this.totalGains)
-    var queryGains = firebase.database().ref('/' + this.username + '/gains');
+    this.userService.getExercises().subscribe(exercises => {
+      this.exercises = exercises;
+      this.show = false;
+    });
 
-    queryGains.once("value").then( snapshot => {
-      if (!snapshot) {
-        //alert("nope")
-      }
-      this.loop = 0;
-      this.gains = 0;
-      snapshot.forEach( childSnapshot => {
-        this.loop++
-        var childData2 = childSnapshot.val();
-        this.totalGains.push(childData2);
-        if ( snapshot.numChildren() == this.loop ) {
-          //alert("My Dear")
-          this.storage.set(this.username + '/gains', this.totalGains)
-        }
-      })
-    })
+    // this.username = localStorage.getItem("username");
+    // console.log(this.username);
+    // this.lifts = {};
+    // this.setlifts = {};
+    // // Get user data status
+    // 
+    // this.getUsers().then((val) => {
+    //   console.log("Slut");
+    //   if (val != null) {
+    //     this.users = val;
+    //   }
+    //   if (this.users.includes(this.username)) {
+    //     this.status = this.username;
+    //   }
+    //   else {
+    //     this.status = "cloud";
+    //   }
+    // }).then(() => {
+    // 
+    //   if (this.status == this.username) {
+    //     this.getExercises().then((val) => {
+    //       this.setlifts = val;
+    //       this.lifts = this.setlifts;
+    //       this.show = false;
+    //       var exercises = firebase.database().ref('/' + this.username + '/exercises');
+    //       exercises.set(this.setlifts);
+    //     })
+    //   } else {
+    //     var query1 = firebase.database().ref('/' + this.username + '/exercises');
+    //     query1.once("value").then( snapshot => {
+    //       this.loop = 0;
+    //       snapshot.forEach( childSnapshot => {
+    // 
+    //         this.loop++
+    //         var childData1 = childSnapshot.val();
+    //         var key = childSnapshot.key;
+    // 
+    //         this.setlifts[key] = childData1;
+    //         this.lifts = this.setlifts
+    // 
+    //         if ( snapshot.numChildren() == this.loop ) {
+    //           //alert("HERE")
+    //           this.show = false;
+    //           this.saveData();
+    //         }
+    //       });
+    //     });  
+    //   }
+    // })
   }
+
+  // saveData() {
+  //   // Get user data status
+  //   this.getUsers().then((val) => {
+  //     if (val == null) {
+  //       this.users.push(this.username);
+  //     }
+  //     else {
+  //       this.users = val;
+  //       this.users.push(this.username);
+  //     }
+  //     this.storage.set('/users', this.users);
+  //     this.status = this.username;
+  //   })
+  // 
+  //   this.storage.set(this.username + '/exercises', this.setlifts)
+  //   this.storage.set(this.username + '/gains', this.totalGains)
+  //   var queryGains = firebase.database().ref('/' + this.username + '/gains');
+  // 
+  //   queryGains.once("value").then( snapshot => {
+  //     if (!snapshot) {
+  //       //alert("nope")
+  //     }
+  //     this.loop = 0;
+  //     this.gains = 0;
+  //     snapshot.forEach( childSnapshot => {
+  //       this.loop++
+  //       var childData2 = childSnapshot.val();
+  //       this.totalGains.push(childData2);
+  //       if ( snapshot.numChildren() == this.loop ) {
+  //         //alert("My Dear")
+  //         this.storage.set(this.username + '/gains', this.totalGains)
+  //       }
+  //     })
+  //   })
+  // }
 
   getUsers(): Promise<any> {
     console.log("at user method");
@@ -172,34 +173,34 @@ export class ListMasterPage {
     return this.storage.get('/users');
   }
   
-  getExercises(): Promise<any> {
-    return this.storage.get(this.username + '/exercises');
-  }
+  // getExercises(): Promise<any> {
+  //   return this.storage.get(this.username + '/exercises');
+  // }
 
   getGains(): Promise<any> {
     return this.storage.get(this.username + '/gains');
   }
 
-  ionViewDidEnter() {
-
-    this.ionViewDidLoad();
-    this.getExercises().then((val) => {
-      if (val != null) {
-        this.setlifts = val;
-        
-      }
-    })
-    if (this.status == this.username) {
-      this.getExercises().then((val) => {
-        var exercises = firebase.database().ref(this.username + '/exercises');
-        exercises.set(val);
-      })
-      this.getGains().then((val) => {
-        var gains  = firebase.database().ref(this.username + '/gains');
-        gains.set(val);
-      })
-    }
-  }
+  // ionViewDidEnter() {
+  // 
+  //   this.ionViewDidLoad();
+  //   this.getExercises().then((val) => {
+  //     if (val != null) {
+  //       this.setlifts = val;
+  // 
+  //     }
+  //   })
+  //   if (this.status == this.username) {
+  //     this.getExercises().then((val) => {
+  //       var exercises = firebase.database().ref(this.username + '/exercises');
+  //       exercises.set(val);
+  //     })
+  //     this.getGains().then((val) => {
+  //       var gains  = firebase.database().ref(this.username + '/gains');
+  //       gains.set(val);
+  //     })
+  //   }
+  // }
 
   /**
    * Prompt the user to add a new item. This shows our ItemCreatePage in a
@@ -207,7 +208,6 @@ export class ListMasterPage {
    */
   addItem() {
     //this.navCtrl.push('ItemCreatePage');
-    
     let addModal = this.modalCtrl.create('ItemCreatePage');
     addModal.onDidDismiss(item => {
       if (item) {
@@ -215,7 +215,6 @@ export class ListMasterPage {
       }
     })
     addModal.present();
-    
   }
 
   presentConfirm(item) {

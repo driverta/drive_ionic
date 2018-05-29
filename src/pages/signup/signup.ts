@@ -91,7 +91,9 @@ export class SignupPage {
 
     let user = new UserModel();
     user.username = this.account.name;
+    user.email = this.account.email;
     this.userService.createUser(user).subscribe(response => console.log(response));
+    this.userService.setUser(data);
    
     // this.storage.set(this.account.name + '/exercises', this.exercises);
     // this.storage.set(this.account.name + '/gains', this.totalGains)
