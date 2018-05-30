@@ -4,6 +4,7 @@ import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
 import { UserModel } from '../../models/users';
 import { Exercise } from '../../models/Exercise';
+import { LiftingHistory } from '../../models/LiftingHistory';
 /*
   Generated class for the ProvidersUserProvider provider.
 
@@ -45,6 +46,10 @@ export class ProvidersUserProvider {
   addLiftingHistory(lf){
     lf.user_id=this.user.id;
     return this.http.post(this.url + "addLiftingHistory", lf);
+  }
+
+  getLiftingHistoryByIdAndExercise(ex: Exercise): Observable<LiftingHistory[]>{
+    return this.http.get(this.url + "getLiftingHistoryByExercise?userId=" + this.user.id + "&exerciseId=" + ex.id ).map((res: Response) => res.json());
   }
 
   getExercise(mgId, name, variation): Observable<Exercise> {

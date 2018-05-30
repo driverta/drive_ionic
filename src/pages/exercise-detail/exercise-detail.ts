@@ -40,7 +40,7 @@ export class ItemDetailPage {
     public levels: Levels,
     private storage: Storage) {
 
-    this.exercise = navParams.get('item');
+    this.exercise = navParams.get('exercise');
     console.log(this.exercise);
   }
 

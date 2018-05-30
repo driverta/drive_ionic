@@ -53,8 +53,8 @@ export class NewSetComponent {
     private userService: ProvidersUserProvider
   	) {
 
-  	this.exercise = navParams.get('item');
- 
+  	this.exercise = navParams.get('exercise');
+      console.log('exercise')
   }
 
   ngOnInit() {
@@ -96,6 +96,7 @@ export class NewSetComponent {
     this.lf.reps = this.reps;
     this.lf.weight = this.weight;
     this.lf.user_id = this.userService.getUser().id;
+    console.log("here:" + this.lf.user_id)
     var date;
     date = new Date();
     date = date.getUTCFullYear() + '-' +
@@ -103,18 +104,18 @@ export class NewSetComponent {
             ('00' + date.getUTCDate()).slice(-2);   
     this.lf.date = date
     console.log( this.userService.getUser().id);
-    this.lf.oneRepMax =  (this.weight * this.reps * .033) + this.weight;
+    this.lf.oneRepMax =  parseInt((this.weight * this.reps * .033) + this.weight);
     this.lf.exercise = this.exercise;
     console.log(this.lf);
     this.userService.addLiftingHistory(this.lf).subscribe();
 
     if(this.weight == null || this.reps == null){
-        this.invalid = true; 
+      //  this.invalid = true; 
     }
     else{
       
   	d3.selectAll("svg > *").remove();
-    var date = new Date().toISOString();
+    let date = new Date().toISOString();
     var newDate = date.replace(".", "-")
     //alert(newDate)
     var oneRM = (Number(this.weight) * Number(this.reps) * .033) + Number(this.weight);

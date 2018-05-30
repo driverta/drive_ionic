@@ -3,12 +3,13 @@ import  { StatsLineChart } from '../../models/item';
 import  { NavParams, AlertController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 
-import { HistoryProvider } from '../../providers/providers';
+import { HistoryProvider, ProvidersUserProvider } from '../../providers/providers';
 import { User } from '../../providers/providers';
 
 import firebase from 'firebase';
 
 import * as d3 from 'd3-selection';
+import { LiftingHistory } from '../../models/LiftingHistory';
 
 @Component({
   selector: 'history',
@@ -16,6 +17,7 @@ import * as d3 from 'd3-selection';
 })
 export class HistoryComponent {
 
+  liftingHistory: LiftingHistory[];
   username: any;
   exercise: any;
   totalGains = [];
@@ -27,12 +29,24 @@ export class HistoryComponent {
     public user: User,
     private history: HistoryProvider,
     private alertCtrl: AlertController,
-    private storage: Storage
+    private storage: Storage,
+    private userService: ProvidersUserProvider
     ) {
-    this.exercise = navParams.get('item');
+    this.exercise = navParams.get('exercise');
+    console.log(this.exercise);
   }
 
+
+
   ngOnInit() {
+
+
+    this.userService.getLiftingHistoryByIdAndExercise(this.exercise).subscribe(data =>{
+      this.liftingHistory = data;
+      console.log(this.liftingHistory);
+    })
+
+    
 
     this.username = localStorage.getItem("username");
     this.history._history = [];
