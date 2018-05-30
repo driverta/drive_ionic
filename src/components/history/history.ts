@@ -48,20 +48,20 @@ export class HistoryComponent {
 
     
 
-    this.username = localStorage.getItem("username");
-    this.history._history = [];
+    // this.username = localStorage.getItem("username");
+    // this.history._history = [];
 
-    this.getExercises().then((val) => {
-      var keyOne = this.exercise.name + '-' + this.exercise.variation
-      var history = val[keyOne].history;
-      //console.log(val[keyOne].history);
-      if (history) {
-        Object.keys(history).forEach ( (keyTwo) => {
-          var set = {date: history[keyTwo].date, reps: history[keyTwo].reps, weight: history[keyTwo].weight, oneRM: history[keyTwo].oneRM}
-          this.history._history.push(set)
-        })
-      }
-    });
+    // this.getExercises().then((val) => {
+    //   var keyOne = this.exercise.name + '-' + this.exercise.variation
+    //   var history = val[keyOne].history;
+    //   //console.log(val[keyOne].history);
+    //   if (history) {
+    //     Object.keys(history).forEach ( (keyTwo) => {
+    //       var set = {date: history[keyTwo].date, reps: history[keyTwo].reps, weight: history[keyTwo].weight, oneRM: history[keyTwo].oneRM}
+    //       this.history._history.push(set)
+    //     })
+    //   }
+    // });
   }
 
   presentConfirm(x) {

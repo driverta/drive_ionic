@@ -8,7 +8,6 @@ import { Records } from '../../providers/providers';
 import { User } from '../../providers/providers';
 import { Levels } from '../../providers/providers';
 import { HistoryProvider } from '../../providers/providers';
-import { ProvidersUserProvider } from '../../providers/providers-user/providers-user';
 import { UserModel } from '../../models/users';
 import { Exercise } from '../../models/Exercise';
 
@@ -47,7 +46,7 @@ export class ItemDetailPage {
     items: Items,
     public records: Records,
     public levels: Levels,
-    private platform: Platform
+    private platform: Platform,
     private storage: Storage,
     private userService: ProvidersUserProvider) {
     this.platform.ready().then((readySource) => {
@@ -82,7 +81,7 @@ export class ItemDetailPage {
   getRecords() {
 
     for(let history of this.liftingHistory){
-      console.log("here");
+      //console.log("here");
   
       this.checkRec =false;
       for(let record of this.records._records){
@@ -93,7 +92,7 @@ export class ItemDetailPage {
             record.oneRepMax = history.oneRepMax;
             record.records++;
           }
-          console.log(this.checkRec);
+          //console.log(this.checkRec);
         }
       }
       if (this.checkRec == false){
@@ -132,8 +131,8 @@ export class ItemDetailPage {
     //   }
     // });
 
-    this.barChart.makeChart();
-    this.lineChart.makeChart2();
+    // this.barChart.makeChart();
+    // this.lineChart.makeChart2();
   }
   
   showBar() {

@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { UserModel } from '../../models/users';
 import { Exercise } from '../../models/Exercise';
 import { LiftingHistory } from '../../models/LiftingHistory';
-import { CardioHistory, CardioHistory } from '../../models/CardioHistory';
+import { CardioHistory } from '../../models/CardioHistory';
 /*
   Generated class for the ProvidersUserProvider provider.
 

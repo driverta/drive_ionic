@@ -93,16 +93,35 @@ export class NewSetComponent {
     this.lf.oneRepMax =  parseInt((this.weight * this.reps * .033) + this.weight);
     this.lf.exercise = this.exercise;
     this.lf.gains = 5;
+    this.checkRec =false;
+    this.points = true;
     for(let record of this.records._records){
-      if(record.reps == this.lf.reps && record.weight < this.lf.weight){
-      this.lf.gains = 10;
-      this.records._records.push({reps: this.lf.reps, weight: this.lf.weight, oneRepMax: this.lf.oneRepMax, records: 1})
+      if(record.reps == this.lf.reps){
+        this.checkRec = true;
+        if (record.weight < this.lf.weight){
+          this.lf.gains = 10;
+          this.bool = true;
+          record.weight = this.lf.weight;
+          record.oneRepMax = this.lf.oneRepMax;
+          record.records++;
+        }
       }
     }
+    if (this.checkRec == false){
+      this.lf.gains = 10;
+      this.bool = true;
+      this.records._records.push({reps: this.lf.reps, weight: this.lf.weight, oneRepMax: this.lf.oneRepMax, records: 1})
+    }
 
+    setTimeout(() => {
+      this.bool = false;
+      this.points = false;
+    }, 2000);
 
     console.log(this.lf);
     this.userService.addLiftingHistory(this.lf).subscribe();
+    this.myEvent.emit(null);
+    this.ngOnInit();
 
     /*
     if(this.weight == null || this.reps == null){
