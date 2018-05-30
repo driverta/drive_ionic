@@ -8,4 +8,5 @@ export class LiftingHistory {
     user_id: number;
     oneRepMax: number;
     exercise: Exercise;
+    gains: number;
   }

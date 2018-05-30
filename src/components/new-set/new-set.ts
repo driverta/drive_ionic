@@ -52,9 +52,11 @@ export class NewSetComponent {
     private userService: ProvidersUserProvider
   	) {
 
-    this.exercise = navParams.get('item');
+
+  	this.exercise = navParams.get('exercise');
+
     this.user = userService.getUser();
- 
+
   }
 
   ngOnInit() {
@@ -88,19 +90,28 @@ export class NewSetComponent {
             ('00' + (date.getUTCMonth() + 1)).slice(-2) + '-' +
             ('00' + date.getUTCDate()).slice(-2);   
     this.lf.date = date
-    console.log( this.userService.getUser().id);
-    this.lf.oneRepMax =  (this.weight * this.reps * .033) + this.weight;
+    this.lf.oneRepMax =  parseInt((this.weight * this.reps * .033) + this.weight);
     this.lf.exercise = this.exercise;
+    this.lf.gains = 5;
+    for(let record of this.records._records){
+      if(record.reps == this.lf.reps && record.weight < this.lf.weight){
+      this.lf.gains = 10;
+      this.records._records.push({reps: this.lf.reps, weight: this.lf.weight, oneRepMax: this.lf.oneRepMax, records: 1})
+      }
+    }
+
+
     console.log(this.lf);
     this.userService.addLiftingHistory(this.lf).subscribe();
+
     /*
     if(this.weight == null || this.reps == null){
-        this.invalid = true; 
+      //  this.invalid = true; 
     }
     else{
       
   	d3.selectAll("svg > *").remove();
-    var date = new Date().toISOString();
+    let date = new Date().toISOString();
     var newDate = date.replace(".", "-")
     //alert(newDate)
     var oneRM = (Number(this.weight) * Number(this.reps) * .033) + Number(this.weight);

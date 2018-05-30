@@ -21,7 +21,9 @@ export class RecordsComponent {
     public user: User,
     public records: Records
     ) {
-    this.exercise = navParams.get('item');
+    this.exercise = navParams.get('exercise');
+    console.log(this.exercise);
+    console.log(records._records);
   }
 
 }
