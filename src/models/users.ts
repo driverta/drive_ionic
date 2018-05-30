@@ -8,4 +8,9 @@ export class UserModel {
   weight: number;
   gym: string;
   profilePic: string;
+  gainsToday: number;
+  gainsWeek: number;
+  gainsMonth: number;
+  gainsTotal: number;
+  gains: number;
 }

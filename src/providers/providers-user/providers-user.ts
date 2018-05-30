@@ -26,6 +26,10 @@ export class ProvidersUserProvider {
     return this.http.get(this.url + "getUsers").map((res: Response) => res.json());
   }
 
+  getLeaderboardData(userId): Observable<UserModel[]> {
+    return this.http.get(this.url + "getLeaderboardData?userId=" + userId).map((res: Response) => res.json());
+  }
+
   getOneUser(username): Observable<UserModel> {
     return this.http.get(this.url + "getUserByUsername?username=" + username).map((res: Response) => res.json());
   }

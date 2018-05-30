@@ -58,20 +58,11 @@ export class NewSetComponent {
   }
 
   ngOnInit() {
-  	// this.username = localStorage.getItem("username");
-    //alert(this.username);
     this.userService.getTotalGains(this.user.id).subscribe(totalGains => {
       console.log(totalGains);
       this.gains = totalGains;
+      this.setLevel();
     });;
-    // this.getGains().then((val) => {
-    //   //console.log('Your json is', val);
-    //   val.forEach ( (value) => {
-    //     this.gains = this.gains + value.gains
-    //   })
-    // }).then(() => {
-    //   this.setLevel();
-    // })
   }
 
   setLevel () {
@@ -82,14 +73,6 @@ export class NewSetComponent {
         this.xtotal = value.levelPoints;
         this.progress = this.xcurrent / this.xtotal * 100
       }
-    })
-    this.getLevel().then((val) => {
-      if (val){
-        if (this.xlevel > val){
-          this.newLevel(this.xlevel)
-        }
-      }
-      this.storage.set(this.username + '/level', this.xlevel);
     })
   }
 
@@ -277,17 +260,17 @@ export class NewSetComponent {
   // }  
   }
 
-  getExercises(): Promise<any> {
-    return this.storage.get(this.username + '/exercises');
-  }
+  // getExercises(): Promise<any> {
+  //   return this.storage.get(this.user + '/exercises');
+  // }
 
-  getGains(): Promise<any> {
-    return this.storage.get(this.username + '/gains');
-  }
+  // getGains(): Promise<any> {
+  //   return this.storage.get(this.username + '/gains');
+  // }
 
-  getLevel(): Promise<any> {
-    return this.storage.get(this.username + '/level');
-  }
+  // getLevel(): Promise<any> {
+  //   return this.storage.get(this.username + '/level');
+  // }
 
   newLevel(level){
     let alert = this.alertCtrl.create({

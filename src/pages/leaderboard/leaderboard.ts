@@ -23,6 +23,10 @@ export class SearchPage {
   gains = 0;
   loop2 = 0;
   show = true;
+  total = false;
+  week = false;
+  month = false;
+  day = false;
   competingUsers: UserModel[] = new Array<UserModel>();
 
   players= [
@@ -42,48 +46,11 @@ export class SearchPage {
     this.timeFilter = "All Time"
 
 
-    this.userService.getCompetingUsers(this.userService.getUser().id).subscribe(data =>{
+    this.userService.getLeaderboardData(this.userService.getUser().id).subscribe(data =>{
       this.competingUsers = data;
       this.show = false;
-      console.log(data)
+      this.filterDay('All Time');
     });
-
-    // var queryPlayers = firebase.database().ref('/' + this.username + '/competing');
-    // queryPlayers.once("value").then( snapshot => {
-    //   this.loop = 0;
-    //   snapshot.forEach( childSnapshot => {
-    //     this.loop++
-    //     var childData1 = childSnapshot.val();
-    //     var data = {name: childData1.name, level: 0, gains: 0, profilePic: "", totalGains: [], rank: "Frail Body"};
-    //     this.players.push(data);
-    //     if ( snapshot.numChildren() == this.loop ) {
-    //       this.getGains();
-    //       this.getPic();
-    //     }
-    //   });
-    // });
-  }
-
-  getGains() {
-    this.players.forEach( (value, index) => {
-      var queryGains = firebase.database().ref('/' + value.name + '/gains');
-      queryGains.once("value").then( snapshot => {
-        this.loop = 0;
-        this.gains = 0;
-        snapshot.forEach( childSnapshot => {
-          this.loop++
-          var childData1 = childSnapshot.val();
-          this.players[index].totalGains.push(childData1)
-          var gains = childData1.gains;
-          this.gains = this.gains + gains
-          if ( snapshot.numChildren() == this.loop ) {
-            this.show = false;
-            value.gains = this.gains
-            this.setLevel(this.gains, index)
-          }
-        });
-      });
-    })
   }
 
   getPic() {
@@ -119,48 +86,21 @@ export class SearchPage {
   }
 
   filterDay(ev) {
-    var todaysDate = new Date().toISOString().slice(0,10);
-    var lastWeek = new Date();
-    var lastMonth = new Date();
-    lastWeek.setDate(lastWeek.getDate() - 7)
-
-    lastMonth.setDate(lastMonth.getDate() - 30)
-    
-    this.players.forEach( (value, index) => {
-      this.gains = 0
-      value.totalGains.forEach( childData1 => {
-        this.loop++
-        
-        var gains = childData1.gains;
-        var date = childData1.date;
-        var newDate = date.slice(0,10);
-        //alert(newDate);
-        var testDate = new Date(newDate);
-
-        if(ev == "All Time"){
-          this.gains = this.gains + gains;
-        }
-        
-        //alert(testDate);
-        if(ev == "Today"){
-
-          if(newDate == todaysDate) {
-            this.gains = this.gains + gains;
-          }
-        }
-        if(ev == "Week"){
-          
-          if(testDate > lastWeek) {
-            this.gains = this.gains + gains;
-          }
-        }
-        if(ev == "Month"){
-          if(testDate > lastMonth) {
-            this.gains = this.gains + gains;
-          }
-        }
-        value.gains = this.gains;
-      });
+    this.competingUsers.forEach((user) =>{
+      switch(ev) {
+        case "Today":
+          user.gains = user.gainsToday;
+          break;
+        case "Week":
+          user.gains = user.gainsWeek;
+          break;
+        case "Month":
+          user.gains = user.gainsMonth;
+          break;
+        default:
+          user.gains = user.gainsTotal;
+          break;
+      }
     });
   }
 

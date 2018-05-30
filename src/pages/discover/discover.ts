@@ -139,28 +139,28 @@ export class DiscoverPage {
       console.log(data);
     })
 
-    var check = true;
+    // var check = true;
 
     ////////// needs work ////////
-    this.competingFriends.forEach( value => {
+    // this.competingFriends.forEach( value => {
     
-      if (value.name == item.name) {
+    //   if (value.name == item.name) {
     
-        this.alreadyCompeting();
-        check = false;
-      } 
-    })
+    //     this.alreadyCompeting();
+    //     check = false;
+    //   } 
+    // })
     ///////////////////
-    let user = this.username;
-    if(check){
+    // let user = this.username;
+    // if(check){
       
-      // var competing = firebase.database().ref('/' + this.username + '/competing');
-      // competing.child(item.name).set(item);
+    //   // var competing = firebase.database().ref('/' + this.username + '/competing');
+    //   // competing.child(item.name).set(item);
 
-      // var competitors = firebase.database().ref('/' + item.name + '/competitors');
-      // competitors.child(this.username).set(this.username);
-      this.playerAdded();
-    }
+    //   // var competitors = firebase.database().ref('/' + item.name + '/competitors');
+    //   // competitors.child(this.username).set(this.username);
+    //   // this.playerAdded();
+    // }
   }
   
   // getGains(username): Promise<any> {
