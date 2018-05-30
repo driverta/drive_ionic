@@ -9,11 +9,13 @@
 
 <ion-content>
   <div padding>
+    <!--
     <ion-segment [(ngModel)]="segment">
       <ion-segment-button  value="discover_people">
         People
       </ion-segment-button>
     </ion-segment>
+    -->
   </div>
   
   <div [ngSwitch]="segment">
@@ -35,7 +37,7 @@
           <ion-note item-end *ngIf="item.note">{{item.note}}</ion-note>
         </ion-item>
       </ion-list>
-      
+      <!--
       <table>
         <tr>
           <td></td>
@@ -62,7 +64,7 @@
           </td>
         </tr>
       </table>
-
+      -->
     </ion-list>
     <h3 *ngIf="show" id="loading">Loading</h3>
 	</div>

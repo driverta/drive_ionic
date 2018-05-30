@@ -1,12 +1,16 @@
 import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
+import { Platform } from 'ionic-angular';
 
 import { Items, ProvidersUserProvider } from '../../providers/providers';
 import { Records } from '../../providers/providers';
 import { User } from '../../providers/providers';
 import { Levels } from '../../providers/providers';
 import { HistoryProvider } from '../../providers/providers';
+import { ProvidersUserProvider } from '../../providers/providers-user/providers-user';
+import { UserModel } from '../../models/users';
+import { Exercise } from '../../models/Exercise';
 
 import { BarChartComponent } from '../../components/bar-chart/bar-chart';
 import { LineChartComponent } from '../../components/line-chart/line-chart';
@@ -24,27 +28,35 @@ export class ItemDetailPage {
 
   selectedValue = 0;
   exercise: any;
+  user: any;
   username: any;
   segment = "set";
   loop = 0;
   checkRec = false;
   history = [];
 
+
   liftingHistory: LiftingHistory[];
 
   @ViewChild(BarChartComponent) barChart: BarChartComponent
   @ViewChild(LineChartComponent) lineChart: LineChartComponent
 
+
   constructor(public navCtrl: NavController,
     navParams: NavParams,
     items: Items,
     public records: Records,
-    public user: User,
     public levels: Levels,
+    private platform: Platform
     private storage: Storage,
     private userService: ProvidersUserProvider) {
-
+    this.platform.ready().then((readySource) => {
+        console.log("anything")
+        console.log('Platform ready from', readySource);
+        // Platform now ready, execute any required native code
+      });
     this.exercise = navParams.get('exercise');
+    this.user = userService.getUser();
     console.log(this.exercise);
   }
 
@@ -55,9 +67,6 @@ export class ItemDetailPage {
     this.records._chart = [
       
     ];
-    this.username = localStorage.getItem("username");
-
-
     
     this.userService.getLiftingHistoryByIdAndExercise(this.exercise).subscribe(data =>{
       this.liftingHistory = data;
@@ -95,7 +104,9 @@ export class ItemDetailPage {
     }
 
 
-
+    // this.userService.getExercises().subscribe(exercises => {
+    //   this.exercises = exercises;
+    // });
 
     // this.getExercises().then((val) => {
     //   var keyOne = this.exercise.name + '-' + this.exercise.variation
@@ -137,7 +148,7 @@ export class ItemDetailPage {
     this.selectedValue = 0;
   }
   
-  getExercises(): Promise<any> {
-    return this.storage.get(this.username + '/exercises');
-  }
+  // getExercises(): Promise<any> {
+  //   return this.storage.get(this.username + '/exercises');
+  // }
 }

@@ -7,6 +7,8 @@ import { IonicPage,
 
 import { Storage } from '@ionic/storage';
 import { KeysPipe } from '../../pipes/keys/keys';
+import { ProvidersUserProvider } from '../../providers/providers-user/providers-user';
+import { Exercise } from '../../models/Exercise';
 
 @IonicPage()
 @Component({
@@ -16,25 +18,33 @@ import { KeysPipe } from '../../pipes/keys/keys';
 export class RecordsPage {
 
 	username: string;
-	lifts:any = {};
-  setlifts:any = {};
+	//lifts:any = {};
+  //setlifts:any = {};
 
   filter= "All";
+
+  filteredExercises = [];
+
+  private exercises: Exercise[];
 
   constructor(public navCtrl: NavController,
   	public navParams: NavParams,
   	private storage: Storage,
-    public actShtCtrl: ActionSheetController) {
-  	this.username = localStorage.getItem("username");
+    public actShtCtrl: ActionSheetController,
+    private userService: ProvidersUserProvider) {
+  	//this.username = localStorage.getItem("username");
 
   }
 
   ionViewDidLoad() {
-  	console.log(this.username)
-    this.getExercises().then((val) => {
-      this.setlifts = val;
-      this.lifts = this.setlifts
-    })
+  	this.userService.getExercises().subscribe(exercises => {
+      this.exercises = exercises;
+      this.filteredExercises = exercises;
+    });
+    // this.getExercises().then((val) => {
+    //   this.setlifts = val;
+    //   this.lifts = this.setlifts
+    // })
   }
 
   getExercises(): Promise<any> {
@@ -61,7 +71,7 @@ export class RecordsPage {
         {
           text: 'All',
           handler: () => {
-            this.lifts = this.setlifts
+            this.filteredExercises = this.exercises
           }
         },{
           text: 'Chest',
@@ -124,13 +134,12 @@ export class RecordsPage {
   }
 
   executeFilter(){
-    this.lifts = {};
-    //alert(this.lifts["Bench Press-Barbell"].name)
-    Object.keys(this.setlifts).forEach( (key, index) => {
-      if (this.setlifts[key].muscle == this.filter){
-        this.lifts[key] = this.setlifts[key]
+    this.filteredExercises = [];
+    this.exercises.forEach((exercise) => {
+      if (exercise.MuscleGroup.muscleGroupName == this.filter){
+          this.filteredExercises.push(exercise);
       }
-    });
+    })
   }
 
 }

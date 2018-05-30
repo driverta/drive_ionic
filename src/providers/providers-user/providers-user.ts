@@ -28,6 +28,10 @@ export class ProvidersUserProvider {
     return this.http.get(this.url + "getUsers").map((res: Response) => res.json());
   }
 
+  getLeaderboardData(userId): Observable<UserModel[]> {
+    return this.http.get(this.url + "getLeaderboardData?userId=" + userId).map((res: Response) => res.json());
+  }
+
   getOneUser(username): Observable<UserModel> {
     return this.http.get(this.url + "getUserByUsername?username=" + username).map((res: Response) => res.json());
   }
@@ -36,8 +40,20 @@ export class ProvidersUserProvider {
     return this.http.get(this.url + "getUserByEmail?email=" + email).map((res: Response) => res.json());
   }
 
-  getCompetingUsers(username): Observable<UserModel[]> {
-    return this.http.get(this.url + "getUserCompeting?username=" + username).map((res: Response) => res.json());
+  getCompetingUsers(userId): Observable<UserModel[]> {
+    return this.http.get(this.url + "getUserCompeting?userId=" + userId).map((res: Response) => res.json());
+  }
+
+  addCompetingUser(competing): Observable<Response>{
+    return this.http.post(this.url + "createCompeting", competing);
+  }
+
+  removeCompetingUser(competingUserID): Observable<Response>{
+    return this.http.get(this.url + "removeCompeting?userID=" + this.user.id + "&competingUserID=" + competingUserID);
+  }
+  
+  getCompetitors(userId): Observable<UserModel[]> {
+    return this.http.get(this.url + "getUserCompetitors?userId=" + userId).map((res: Response) => res.json());
   }
 
   getExercises(): Observable<Exercise[]> {
@@ -66,6 +82,10 @@ export class ProvidersUserProvider {
 
   getExercise(mgId, name, variation): Observable<Exercise> {
     return this.http.get(this.url + "getExercise?muscleGroup=" + mgId + "&name=" + name.encodeURI() + "&variation=" + variation.encodeURI()).map((res: Response) => res.json());
+  }
+
+  getTotalGains(userId): Observable<number> {
+    return this.http.get(this.url + "getUserGainsTotal?userId=" + userId).map((res: Response) => res.json());
   }
 
   createUser(user): Observable<Response>{

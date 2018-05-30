@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { Http, Response } from '@angular/http';
 import 'rxjs/add/operator/map';
+import { Observable } from 'rxjs/Observable';
+import { LiftingHistory } from '../../models/LiftingHistory';
+import { CardioHistory } from '../../models/CardioHistory';
 
 /*
   Generated class for the HistoryProvider provider.
@@ -10,6 +13,10 @@ import 'rxjs/add/operator/map';
 */
 @Injectable()
 export class HistoryProvider {
+
+	liftingHistory: LiftingHistory = new LiftingHistory(); 
+
+	cardioHistory: CardioHistory = new CardioHistory();
 
 	_history = [{date: new Date(0), reps: 0, weight: 0, oneRM: 0}]
 
@@ -21,6 +28,15 @@ export class HistoryProvider {
 
   constructor(public http: Http) {
   
-  }
+	}
+	
+	private url = "http://localhost:8080/api/";
 
+	getLiftingHistoryByExercise(userId, exerciseId): Observable<LiftingHistory[]> {
+    return this.http.get(this.url + "getLiftingHistoryByExercise?userId=" + userId + '&exerciseId=' + exerciseId).map((res: Response) => res.json());
+	}
+	
+	getCardioHistoryByExercise(userId, exerciseId): Observable<CardioHistory[]> {
+    return this.http.get(this.url + "getCardioHistoryByExercise?userId=" + userId + '&exerciseId=' + exerciseId).map((res: Response) => res.json());
+  }
 }

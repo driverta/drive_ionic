@@ -11,12 +11,14 @@
 	<ion-list>
       <ion-item-sliding no-lines *ngFor="let item of list" >
         <ion-item (click)="openItem(item)" no-lines [ngClass]="{red: item.name == username}">
+
+        <!--
           <ion-avatar item-start>
                         <img *ngIf="item.profilePic != null" [src]="item.profilePic" />
             <ion-icon *ngIf="item.profilePic == null" class="default-img" name="contact"></ion-icon>
           </ion-avatar>
-          
-          <h1>{{item.name}}</h1>
+        -->  
+          <h1>{{item.username}}</h1>
           
         </ion-item>
       	

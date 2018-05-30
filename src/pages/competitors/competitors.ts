@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { AlertController, IonicPage, NavController, NavParams } from 'ionic-angular';
 
 import firebase from 'firebase';
+import { CompetingModel } from '../../models/competing';
+import { ProvidersUserProvider } from '../../providers/providers-user/providers-user';
 
 @IonicPage()
 @Component({
@@ -13,14 +15,18 @@ export class CompetitorsPage {
 	list = [];
 	competing = [];
 	username: string;
+  id: number;
+  competingOne: CompetingModel[];
+  userId: number;
 
   constructor(public navCtrl: NavController,
   	public navParams: NavParams,
-  	public alertCtrl: AlertController) {
+  	public alertCtrl: AlertController,
+    private userService: ProvidersUserProvider) {
 
   	this.list = navParams.get('list');
-  	this.competing = navParams.get('competing');
-  	this.username = localStorage.getItem("username");
+  	this.username = this.userService.getUser().username;
+    this.userId = this.userService.getUser().id;
 
   }
 
@@ -29,8 +35,13 @@ export class CompetitorsPage {
   }
 
   addToLeaderboard(item){
+    this.id = item.id;
+    let competing = new CompetingModel;
+    competing.id = this.userId;
+    competing.competingUser = this.id
     var check = true;
     
+    /////// needs work /////
     this.competing.forEach( value => {
 
       if (value.name == item.name) {
@@ -39,13 +50,17 @@ export class CompetitorsPage {
         check = false;
       } 
     })
-  	
-    if(check){
-      var competing = firebase.database().ref('/' + this.username + '/competing');
-      competing.child(item.name).set(item);
+  	/////////////
 
-      var competitors = firebase.database().ref('/' + item.name + '/competitors');
-      competitors.child(this.username).set(this.username);
+    if(check){
+      this.userService.addCompetingUser(competing).subscribe(data => {
+
+      })
+      // var competing = firebase.database().ref('/' + this.username + '/competing');
+      // competing.child(item.name).set(item);
+
+      // var competitors = firebase.database().ref('/' + item.name + '/competitors');
+      // competitors.child(this.username).set(this.username);
       this.playerAdded();
     }
   }
