@@ -2,7 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 
-import { Items } from '../../providers/providers';
+import { Items, ProvidersUserProvider } from '../../providers/providers';
 import { Records } from '../../providers/providers';
 import { User } from '../../providers/providers';
 import { Levels } from '../../providers/providers';
@@ -13,6 +13,7 @@ import { LineChartComponent } from '../../components/line-chart/line-chart';
 import { SortByRepsPipe } from '../../pipes/sort-by-reps/sort-by-reps';
 
 import firebase from 'firebase';
+import { LiftingHistory } from '../../models/LiftingHistory';
 
 @IonicPage()
 @Component({
@@ -29,6 +30,8 @@ export class ItemDetailPage {
   checkRec = false;
   history = [];
 
+  liftingHistory: LiftingHistory[];
+
   @ViewChild(BarChartComponent) barChart: BarChartComponent
   @ViewChild(LineChartComponent) lineChart: LineChartComponent
 
@@ -38,7 +41,8 @@ export class ItemDetailPage {
     public records: Records,
     public user: User,
     public levels: Levels,
-    private storage: Storage) {
+    private storage: Storage,
+    private userService: ProvidersUserProvider) {
 
     this.exercise = navParams.get('exercise');
     console.log(this.exercise);
@@ -52,34 +56,70 @@ export class ItemDetailPage {
       
     ];
     this.username = localStorage.getItem("username");
+
+
     
-    this.getRecords();
+    this.userService.getLiftingHistoryByIdAndExercise(this.exercise).subscribe(data =>{
+      this.liftingHistory = data;
+      console.log(this.liftingHistory);
+        
+      this.getRecords();
+    })
+
+
+  
   }
 
   getRecords() {
-    this.getExercises().then((val) => {
-      var keyOne = this.exercise.name + '-' + this.exercise.variation
-      var history = val[keyOne].history;
-      //console.log(val[keyOne].history);
-      if (history) {
-        Object.keys(history).forEach ( (set) => {
-          this.checkRec = false;
-          this.records._records.forEach( (value, index) => {
-            if (history[set].reps == value.reps) {
-              this.checkRec = true;
-              if (history[set].weight > value.weight) {
-                this.records._records[index].weight = history[set].weight;
-                this.records._records[index].oneRM = history[set].oneRM;
-                this.records._records[index].records++;
-              }
-            }
-          });
-          if (this.checkRec == false){
-            this.records._records.push({reps: history[set].reps, weight: history[set].weight, oneRM: history[set].oneRM, records: 1})
+
+    for(let history of this.liftingHistory){
+      console.log("here");
+  
+      this.checkRec =false;
+      for(let record of this.records._records){
+        if(history.reps == record.reps){
+          this.checkRec = true;
+          if(history.weight > record.weight){
+            record.weight = history.weight;
+            record.oneRepMax = history.oneRepMax;
+            record.records++;
           }
-        })
+          console.log(this.checkRec);
+        }
       }
-    });
+      if (this.checkRec == false){
+
+        this.records._records.push({reps: history.reps, weight: history.weight, oneRepMax: history.oneRepMax, records: 1})
+      }
+      
+    }
+
+
+
+
+    // this.getExercises().then((val) => {
+    //   var keyOne = this.exercise.name + '-' + this.exercise.variation
+    //   var history = val[keyOne].history;
+    //   //console.log(val[keyOne].history);
+    //   if (history) {
+    //     Object.keys(history).forEach ( (set) => {
+    //       this.checkRec = false;
+    //       this.records._records.forEach( (value, index) => {
+    //         if (history[set].reps == value.reps) {
+    //           this.checkRec = true;
+    //           if (history[set].weight > value.weight) {
+    //             this.records._records[index].weight = history[set].weight;
+    //             this.records._records[index].oneRM = history[set].oneRM;
+    //             this.records._records[index].records++;
+    //           }
+    //         }
+    //       });
+    //       if (this.checkRec == false){
+    //         this.records._records.push({reps: history[set].reps, weight: history[set].weight, oneRM: history[set].oneRM, records: 1})
+    //       }
+    //     })
+    //   }
+    // });
 
     this.barChart.makeChart();
     this.lineChart.makeChart2();

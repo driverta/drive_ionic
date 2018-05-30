@@ -96,18 +96,30 @@ export class NewSetComponent {
     this.lf.reps = this.reps;
     this.lf.weight = this.weight;
     this.lf.user_id = this.userService.getUser().id;
-    console.log("here:" + this.lf.user_id)
     var date;
     date = new Date();
     date = date.getUTCFullYear() + '-' +
             ('00' + (date.getUTCMonth() + 1)).slice(-2) + '-' +
             ('00' + date.getUTCDate()).slice(-2);   
     this.lf.date = date
-    console.log( this.userService.getUser().id);
     this.lf.oneRepMax =  parseInt((this.weight * this.reps * .033) + this.weight);
     this.lf.exercise = this.exercise;
+    this.lf.gains = 5;
+    for(let record of this.records._records){
+      if(record.reps == this.lf.reps && record.weight < this.lf.weight){
+      this.lf.gains = 10;
+      this.records._records.push({reps: this.lf.reps, weight: this.lf.weight, oneRepMax: this.lf.oneRepMax, records: 1})
+      }
+    }
+
+
     console.log(this.lf);
     this.userService.addLiftingHistory(this.lf).subscribe();
+
+
+
+
+
 
     if(this.weight == null || this.reps == null){
       //  this.invalid = true; 
