@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { UserModel } from '../../models/users';
 import { Exercise } from '../../models/Exercise';
 import { LiftingHistory } from '../../models/LiftingHistory';
+import { CardioHistory, CardioHistory } from '../../models/CardioHistory';
 /*
   Generated class for the ProvidersUserProvider provider.
 
@@ -51,6 +52,17 @@ export class ProvidersUserProvider {
   getLiftingHistoryByIdAndExercise(ex: Exercise): Observable<LiftingHistory[]>{
     return this.http.get(this.url + "getLiftingHistoryByExercise?userId=" + this.user.id + "&exerciseId=" + ex.id ).map((res: Response) => res.json());
   }
+
+  
+  getCardioHistryByIdAndExercise(ex: Exercise): Observable<CardioHistory[]>{
+    return this.http.get(this.url + "getCardioHistoryByExercise?userId=" + this.user.id + "&exerciseId=" + ex.id ).map((res: Response) => res.json());
+  }
+
+  addCardioHistory(cardioHistory: CardioHistory){
+    cardioHistory.user_id=this.user.id;
+    return this.http.post(this.url + "addCardioHistory", cardioHistory);
+  }
+
 
   getExercise(mgId, name, variation): Observable<Exercise> {
     return this.http.get(this.url + "getExercise?muscleGroup=" + mgId + "&name=" + name.encodeURI() + "&variation=" + variation.encodeURI()).map((res: Response) => res.json());
