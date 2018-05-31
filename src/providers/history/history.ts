@@ -38,5 +38,13 @@ export class HistoryProvider {
 	
 	getCardioHistoryByExercise(userId, exerciseId): Observable<CardioHistory[]> {
     return this.http.get(this.url + "getCardioHistoryByExercise?userId=" + userId + '&exerciseId=' + exerciseId).map((res: Response) => res.json());
+	}
+	
+	getCardioHistory(userId): Observable<CardioHistory[]> {
+    return this.http.get(this.url + "getCardioHistoryById?userId=" + userId).map((res: Response) => res.json());
+	}
+	
+	getLiftingHistory(userId): Observable<LiftingHistory[]> {
+    return this.http.get(this.url + "getUserLiftingHistory?userId=" + userId).map((res: Response) => res.json());
   }
 }
