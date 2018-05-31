@@ -90,7 +90,8 @@ export class NewSetComponent {
             ('00' + (date.getUTCMonth() + 1)).slice(-2) + '-' +
             ('00' + date.getUTCDate()).slice(-2);   
     this.lf.date = date
-    this.lf.oneRepMax =  parseInt((this.weight * this.reps * .033) + this.weight);
+    var oneRepMaxFirstStep =  (this.weight * this.reps * .033);
+    this.lf.oneRepMax = parseInt(this.weight) + oneRepMaxFirstStep;
     this.lf.exercise = this.exercise;
     this.lf.gains = 5;
     this.checkRec =false;

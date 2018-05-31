@@ -3,7 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import  { StatsLineChart } from '../../models/item';
 import { Storage } from '@ionic/storage';
 
-import { HistoryProvider } from '../../providers/providers';
+import { HistoryProvider, ProvidersUserProvider } from '../../providers/providers';
 import { User } from '../../providers/providers';
 
 import firebase from 'firebase';
@@ -14,12 +14,15 @@ import * as d3Shape from "d3-shape";
 import * as d3Array from "d3-array";
 import * as d3Axis from "d3-axis";
 
+import { LiftingHistory } from '../../models/LiftingHistory';
+
 @Component({
   selector: 'line-chart',
   templateUrl: 'line-chart.html'
 })
 export class LineChartComponent {
 
+  liftingHistory: LiftingHistory[];
 	username: any;
   exercise: any;
 
@@ -38,35 +41,42 @@ export class LineChartComponent {
   	navParams: NavParams,
   	public user: User,
     private history: HistoryProvider,
-    private storage: Storage
+    private storage: Storage,
+    private userService: ProvidersUserProvider
   	) {
   	
   	this.width2 = 1000 - this.margin2.left - this.margin2.right;
     this.height2 = 500 - this.margin2.top - this.margin2.bottom;
-    this.exercise = navParams.get('item');
+    this.exercise = navParams.get('exercise');
   }
 
   public makeChart2() {
-  	this.username = localStorage.getItem("username");
-  	this.history._charts = [];
+  	// this.username = localStorage.getItem("username");
+  	// this.history._charts = [];
     
-    this.getExercises().then((val) => {
-      var keyOne = this.exercise.name + '-' + this.exercise.variation
-      var history = val[keyOne].history;
-      //console.log(val[keyOne].history);
-      if (history) {
-        Object.keys(history).forEach ( (keyTwo) => {
-          var set = {date: history[keyTwo].date, reps: history[keyTwo].reps, weight: history[keyTwo].weight, oneRM: history[keyTwo].oneRM}
-          this.history._charts.push(set)
-        })
-      }
-    }).then(() => {
-      this.setChart2()
+    // this.getExercises().then((val) => {
+    //   var keyOne = this.exercise.name + '-' + this.exercise.variation
+    //   var history = val[keyOne].history;
+    //   //console.log(val[keyOne].history);
+    //   if (history) {
+    //     Object.keys(history).forEach ( (keyTwo) => {
+    //       var set = {date: history[keyTwo].date, reps: history[keyTwo].reps, weight: history[keyTwo].weight, oneRM: history[keyTwo].oneRM}
+    //       this.history._charts.push(set)
+    //     })
+    //   }
+    // }).then(() => {
+    //   this.setChart2()
+    // })
+
+    this.userService.getLiftingHistoryByIdAndExercise(this.exercise).subscribe(data =>{
+      this.liftingHistory = data;
+      this.setChart2();
     })
     
   }
 
   setChart2() {
+    console.log(this.liftingHistory);
   	this.initSvg()
     this.initAxis();
     this.drawAxis();
@@ -86,8 +96,8 @@ export class LineChartComponent {
   initAxis() {
     this.x2 = d3Scale.scaleBand().rangeRound([0, this.width2]).padding(0.1);
     this.y2 = d3Scale.scaleLinear().rangeRound([this.height2, 0]);
-    this.x2.domain(this.history._charts.map((d) => d.date));
-    this.y2.domain([0, d3Array.max(this.history._charts, (d) => d.oneRM)]);
+    this.x2.domain(this.liftingHistory.map((d) => d.date));
+    this.y2.domain([0, d3Array.max(this.liftingHistory, (d) => d.oneRepMax)]);
   }
 
   drawAxis() {
@@ -107,17 +117,17 @@ export class LineChartComponent {
   drawLine() {
     this.line = d3Shape.line()
         .x( (d: any) => this.x2(d.date) )
-        .y( (d: any) => this.y2(d.oneRM) );
+        .y( (d: any) => this.y2(d.oneRepMax) );
 
     
     this.g2.append("path")
-        .datum(this.history._charts)
+        .datum(this.liftingHistory)
         .attr("class", "line")
         .attr("d", this.line);
   }
 
-  getExercises(): Promise<any> {
-    return this.storage.get(this.username + '/exercises');
-  }
+  // getExercises(): Promise<any> {
+  //   return this.storage.get(this.username + '/exercises');
+  // }
 
 }

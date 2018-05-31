@@ -6,7 +6,10 @@ import { Storage } from '@ionic/storage';
 import { User } from '../../providers/providers';
 import { Records } from '../../providers/providers';
 
-import { SortByRepsPipe } from '../../pipes/sort-by-reps/sort-by-reps'
+import { SortByRepsPipe } from '../../pipes/sort-by-reps/sort-by-reps';
+import { HistoryProvider, ProvidersUserProvider } from '../../providers/providers';
+
+import { LiftingHistory } from '../../models/LiftingHistory';
 
 import * as d3 from 'd3-selection';
 import * as d3Scale from "d3-scale";
@@ -21,6 +24,7 @@ import firebase from 'firebase';
 })
 export class BarChartComponent {
 
+  liftingHistory: LiftingHistory[];
 	username: any;
   exercise:any;
 
@@ -40,43 +44,72 @@ export class BarChartComponent {
     public navCtrl: NavController,
     public user: User,
     private records: Records,
-    private storage: Storage
+    private storage: Storage,
+    private userService: ProvidersUserProvider
     ) {
 
   	this.width = 1000 - this.margin.left - this.margin.right;
     this.height = 500 - this.margin.top - this.margin.bottom;
-    this.exercise = navParams.get('item');
+    this.exercise = navParams.get('exercise');
   }
 
   public makeChart() {
-    this.username = localStorage.getItem("username");
-    this.getExercises().then((val) => {
-      var keyOne = this.exercise.name + '-' + this.exercise.variation
-      var history = val[keyOne].history;
-      this.loop = 0;
-      //console.log(val[keyOne].history);
-      if (history) {
-        Object.keys(history).forEach ( (set) => {
-          this.checkRec = false;
-          this.records._records.forEach( (value, index) => {
-            if (history[set].reps == value.reps) {
-              this.checkRec = true;
-              if (history[set].weight > value.weight) {
-                this.records._records[index].weight = history[set].weight;
-                this.records._records[index].oneRM = history[set].oneRM;
-                this.records._records[index].records++;
-              }
-            }
-          });
-          if (this.checkRec == false){
-            this.records._records.push({reps: history[set].reps, weight: history[set].weight, oneRM: history[set].oneRM, records: 1})
+    this.userService.getLiftingHistoryByIdAndExercise(this.exercise).subscribe(data =>{
+      this.liftingHistory = data;
+      console.log(this.liftingHistory);
+      this.getRecords();
+    })
+    // this.username = localStorage.getItem("username");
+    // this.getExercises().then((val) => {
+    //   var keyOne = this.exercise.name + '-' + this.exercise.variation
+    //   var history = val[keyOne].history;
+    //   this.loop = 0;
+    //   //console.log(val[keyOne].history);
+    //   if (history) {
+    //     Object.keys(history).forEach ( (set) => {
+    //       this.checkRec = false;
+    //       this.records._records.forEach( (value, index) => {
+    //         if (history[set].reps == value.reps) {
+    //           this.checkRec = true;
+    //           if (history[set].weight > value.weight) {
+    //             this.records._records[index].weight = history[set].weight;
+    //             this.records._records[index].oneRM = history[set].oneRM;
+    //             this.records._records[index].records++;
+    //           }
+    //         }
+    //       });
+    //       if (this.checkRec == false){
+    //         this.records._records.push({reps: history[set].reps, weight: history[set].weight, oneRM: history[set].oneRM, records: 1})
+    //       }
+    //       if (this.loop == this.history.length){
+    //         this.sortRecords();
+    //       }
+    //     })
+    //   }
+    // });
+  }
+
+  getRecords() {
+
+    for(let history of this.liftingHistory){
+  
+      this.checkRec =false;
+      for(let record of this.records._records){
+        if(history.reps == record.reps){
+          this.checkRec = true;
+          if(history.weight > record.weight){
+            record.weight = history.weight;
+            record.oneRepMax = history.oneRepMax;
+            record.records++;
           }
-          if (this.loop == this.history.length){
-            this.sortRecords();
-          }
-        })
+        }
       }
-    });
+      if (this.checkRec == false){
+
+        this.records._records.push({reps: history.reps, weight: history.weight, oneRepMax: history.oneRepMax, records: 1})
+      }
+    }
+    this.sortRecords();
   }
 
   sortRecords() {
@@ -94,7 +127,7 @@ export class BarChartComponent {
   }
 
   setChart() {
-    //d3.selectAll("svg > *").remove();
+    d3.selectAll("svg > *").remove();
     this.initSvg()
     this.initAxis();
     this.drawAxis();
@@ -116,7 +149,7 @@ export class BarChartComponent {
     this.x = d3Scale.scaleBand().rangeRound([0, this.width]).padding(0.1);
     this.y = d3Scale.scaleLinear().rangeRound([this.height, 0]);
     this.x.domain(this.records._records.map((d) => d.reps));
-    this.y.domain([0, d3Array.max(this.records._records, (d) => d.oneRM)]);
+    this.y.domain([0, d3Array.max(this.records._records, (d) => d.oneRepMax)]);
   }
 
   drawAxis() {
@@ -149,9 +182,9 @@ export class BarChartComponent {
         .enter().append("rect")
         .attr("class", "bar")
         .attr("x", (d) => this.x(d.reps) )
-        .attr("y", (d) => this.y(d.oneRM) )
+        .attr("y", (d) => this.y(d.oneRepMax) )
         .attr("width", this.x.bandwidth())
-        .attr("height", (d) => this.height - this.y(d.oneRM) );
+        .attr("height", (d) => this.height - this.y(d.oneRepMax) );
   }
 
   getExercises(): Promise<any> {

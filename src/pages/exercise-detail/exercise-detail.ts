@@ -69,13 +69,10 @@ export class ItemDetailPage {
     
     this.userService.getLiftingHistoryByIdAndExercise(this.exercise).subscribe(data =>{
       this.liftingHistory = data;
-      console.log(this.liftingHistory);
+      console.log("Here");
         
       this.getRecords();
     })
-
-
-  
   }
 
   getRecords() {
@@ -99,6 +96,7 @@ export class ItemDetailPage {
 
         this.records._records.push({reps: history.reps, weight: history.weight, oneRepMax: history.oneRepMax, records: 1})
       }
+      console.log(this.records._records);
       
     }
 
@@ -131,8 +129,8 @@ export class ItemDetailPage {
     //   }
     // });
 
-    // this.barChart.makeChart();
-    // this.lineChart.makeChart2();
+    this.barChart.makeChart();
+    this.lineChart.makeChart2();
   }
   
   showBar() {
