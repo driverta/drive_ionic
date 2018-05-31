@@ -10,6 +10,7 @@ import firebase from 'firebase';
 
 import * as d3 from 'd3-selection';
 import { LiftingHistory } from '../../models/LiftingHistory';
+import { UserModel } from '../../models/users';
 
 @Component({
   selector: 'history',
@@ -20,48 +21,29 @@ export class HistoryComponent {
   liftingHistory: LiftingHistory[];
   username: any;
   exercise: any;
+  user: any;
   totalGains = [];
 
   @Output() myEvent2 = new EventEmitter();
 
   constructor(
     navParams: NavParams,
-    public user: User,
-    private history: HistoryProvider,
+    private historyService: HistoryProvider,
     private alertCtrl: AlertController,
     private storage: Storage,
     private userService: ProvidersUserProvider
     ) {
     this.exercise = navParams.get('exercise');
-    console.log(this.exercise);
+    this.user = userService.getUser();
   }
 
 
 
   ngOnInit() {
-
-
     this.userService.getLiftingHistoryByIdAndExercise(this.exercise).subscribe(data =>{
       this.liftingHistory = data;
       console.log(this.liftingHistory);
     })
-
-    
-
-    // this.username = localStorage.getItem("username");
-    // this.history._history = [];
-
-    // this.getExercises().then((val) => {
-    //   var keyOne = this.exercise.name + '-' + this.exercise.variation
-    //   var history = val[keyOne].history;
-    //   //console.log(val[keyOne].history);
-    //   if (history) {
-    //     Object.keys(history).forEach ( (keyTwo) => {
-    //       var set = {date: history[keyTwo].date, reps: history[keyTwo].reps, weight: history[keyTwo].weight, oneRM: history[keyTwo].oneRM}
-    //       this.history._history.push(set)
-    //     })
-    //   }
-    // });
   }
 
   presentConfirm(x) {
@@ -89,40 +71,10 @@ export class HistoryComponent {
 
   deleteSet(x) {
     d3.selectAll("svg > *").remove();
-    this.username = localStorage.getItem("username");
-    
-    this.history._history.forEach ( (val, index) => {
-      if(val.date == x.date){
-        this.history._history.splice(index, 1);
-        this.getExercises().then((val) => {
-          var key = this.exercise.name + '-' + this.exercise.variation
-          val[key].history = this.history._history
-          this.storage.set(this.username + '/exercises', val).then(() => {
-            this.ngOnInit();
-            this.myEvent2.emit(null);
-          });
-        })
-        this.getGains().then((gains) => {
-          this.totalGains = gains;
-          this.totalGains.forEach((set, index2) => {
-            if (val.date == set.date){
-              
-              this.totalGains.splice(index2, 1);
-              this.storage.set(this.username + '/gains', this.totalGains). then(() => {
-              
-              this.ngOnInit();
-            });
-            }
-          })
-        })
-      }
-    })
-
-  }
-  getExercises(): Promise<any> {
-    return this.storage.get(this.username + '/exercises');
-  }
-  getGains(): Promise<any> {
-    return this.storage.get(this.username + '/gains');
+    this.username = this.user.username
+    this.historyService.removeLiftingHistory(x).subscribe(data => {
+      this.ngOnInit();
+      console.log(data);
+    });
   }
 }

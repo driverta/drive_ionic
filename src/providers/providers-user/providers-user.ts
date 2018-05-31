@@ -70,7 +70,7 @@ export class ProvidersUserProvider {
   }
 
   
-  getCardioHistryByIdAndExercise(ex: Exercise): Observable<CardioHistory[]>{
+  getCardioHistoryByIdAndExercise(ex: Exercise): Observable<CardioHistory[]>{
     return this.http.get(this.url + "getCardioHistoryByExercise?userId=" + this.user.id + "&exerciseId=" + ex.id ).map((res: Response) => res.json());
   }
 

@@ -53,17 +53,17 @@ export class NewCardioComponent {
   }
 
   ngOnInit() {
-    this.username = localStorage.getItem("username");
-    //alert(this.username);
-    this.gains = 0
-    this.getGains().then((val) => {
-      //console.log('Your json is', val);
-      val.forEach((value) => {
-        this.gains = this.gains + value.gains
-      })
-    }).then(() => {
-      this.setLevel();
-    })
+    // this.username = localStorage.getItem("username");
+    // //alert(this.username);
+    // this.gains = 0
+    // this.getGains().then((val) => {
+    //   //console.log('Your json is', val);
+    //   val.forEach((value) => {
+    //     this.gains = this.gains + value.gains
+    //   })
+    // }).then(() => {
+    //   this.setLevel();
+    // })
   }
 
   setLevel() {

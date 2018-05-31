@@ -93,7 +93,6 @@ export class ItemDetailPage {
         }
       }
       if (this.checkRec == false){
-
         this.records._records.push({reps: history.reps, weight: history.weight, oneRepMax: history.oneRepMax, records: 1})
       }
       console.log(this.records._records);

@@ -253,16 +253,16 @@ export class ListMasterPage {
   /**
    * Navigate to the detail page for this item.
    */
-  openItem(item) {
-    // if (item.muscle == "Cardio"){
-    //   this.navCtrl.push('CardioPage', {
-    //     item: item
-    //   });
-    // }else {
-      this.navCtrl.push('ItemDetailPage', {
-        exercise: item
+  openItem(exercise) {
+    if (exercise.MuscleGroup.muscleGroupName == 'Cardio') {
+      this.navCtrl.push('CardioPage', {
+        exercise: exercise
       });
-   
+    } else {
+      this.navCtrl.push('ItemDetailPage', {
+        exercise: exercise
+      });
+    }
   }
 
   filterExercises(){
