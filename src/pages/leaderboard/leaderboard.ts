@@ -7,6 +7,7 @@ import { SortByGainsPipe } from '../../pipes/sort-by-gains/sort-by-gains'
 
 import firebase from 'firebase';
 import { UserModel } from '../../models/users';
+import { CompetingModel } from '../../models/competing';
 
 @IonicPage()
 @Component({
@@ -17,7 +18,8 @@ export class SearchPage {
 
   currentItems: any = [];
   timeFilter = "All Time"
-  username: any;
+  user: any;
+  username: String;
   rank = "Frail Body"
   loop = 0;
   gains = 0;
@@ -33,7 +35,14 @@ export class SearchPage {
     {name: "tom", level: 3, gains: 100, profilePic: "", totalGains: [], rank: "Frail Body"}
   ]
 
-  constructor(public alertCtrl: AlertController, public user: User, public levels: Levels, public navCtrl: NavController, public navParams: NavParams, public userService: ProvidersUserProvider) { }
+  constructor(
+    public alertCtrl: AlertController, 
+    public levels: Levels, 
+    public navCtrl: NavController, 
+    public navParams: NavParams, 
+    public userService: ProvidersUserProvider) {
+      this.user = this.userService.getUser();
+    }
 
   addCompetitors() {
     this.navCtrl.push('AddCompetitorsPage')
@@ -41,7 +50,7 @@ export class SearchPage {
 
   ionViewWillEnter(){
     this.show = true;
-    this.username = localStorage.getItem("username");
+    this.username = this.user.username;
     this.players = [];
     this.timeFilter = "All Time"
 
@@ -119,7 +128,7 @@ export class SearchPage {
         {
           text: 'Delete',
           handler: () => {
-            this.deleteSet(x);
+            this.removeCompetingUser(x);
           }
         }
       ]
@@ -127,21 +136,14 @@ export class SearchPage {
     alert.present();
   }
 
-  deleteSet(x) {
-
-    var set = x;
-    var query1 = firebase.database().ref('/' + this.username + '/competing');
-    query1.once("value").then( snapshot => {
-      snapshot.forEach( childSnapshot => {
-        var childData1 = childSnapshot.val();
-        if (x.name == childData1.name) {
-          childSnapshot.getRef().remove().then(() => {
-            console.log('Write succeeded!');
-            this.ionViewWillEnter();
-          });
-        }
-      });
-    });
+  removeCompetingUser(competingUser) {
+    let competing = new CompetingModel;
+    competing.id = this.user.id;
+    competing.competingUser = competingUser.id
+    this.userService.removeCompetingUser(competing).subscribe(data => {
+      console.log(data);
+      this.ionViewWillEnter();
+    })
   }
 
   openItem(item){
