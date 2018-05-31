@@ -3,6 +3,7 @@ import { AlertController, IonicPage, NavController, NavParams } from 'ionic-angu
 
 import firebase from 'firebase';
 import { ProvidersUserProvider } from '../../providers/providers-user/providers-user';
+import { CompetingModel } from '../../models/competing';
 
 @IonicPage()
 @Component({
@@ -62,28 +63,12 @@ export class CompetingPage {
   }
 
   removeCompetingUser(competingUser) {
-    console.log(competingUser);
-    this.userService.getCompetingUsers(competingUser.id).subscribe(data => {
+    let competing = new CompetingModel;
+    competing.id = this.user.id;
+    competing.competingUser = competingUser.id
+    this.userService.removeCompetingUser(competing).subscribe(data => {
+      console.log(data);
       this.ionViewDidLoad();
     })
-    // var set = x;
-    // var query1 = firebase.database().ref('/' + this.username + '/competing');
-    // query1.once("value").then( snapshot => {
-    //   snapshot.forEach( childSnapshot => {
-    //     var childData1 = childSnapshot.val();
-    //     if (x.name == childData1.name) {
-    //       childSnapshot.getRef().remove().then(() => {
-    //         console.log('Write succeeded!');
-    //         this.list.forEach( (val, index) => {
-    //         	if (val.name == childData1.name){
-    //         		this.list.splice(index, 1);
-    //         		this.ionViewDidLoad();
-    //         	}
-    //         })
-    //       });
-    //     }
-    //   });
-    // });
   }
-
 }
