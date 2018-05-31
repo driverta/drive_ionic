@@ -1,6 +1,10 @@
 import { Component } from '@angular/core';
 import { IonicPage, ActionSheetController, NavController, NavParams } from 'ionic-angular';
+import { User, ProvidersUserProvider, HistoryProvider } from '../../providers/providers';
 import { Storage } from '@ionic/storage';
+import { CardioHistory } from '../../models/CardioHistory';
+import { LiftingHistory } from '../../models/LiftingHistory';
+
 
 import * as d3 from 'd3-selection';
 import * as d3Scale from "d3-scale";
@@ -15,7 +19,7 @@ import * as d3Axis from "d3-axis";
 })
 export class GainsPage {
 
-	username: string;
+	user: any;
 	gains = 0
 	allTime = 0;
 
@@ -30,6 +34,8 @@ export class GainsPage {
   core = 0;
   other = 0;
   cardio = 0;
+  cardioHistory: CardioHistory[] = new Array<CardioHistory>();
+  liftingHistory: LiftingHistory[] = new Array<LiftingHistory>();
 
   filter = "";
 
@@ -62,14 +68,17 @@ export class GainsPage {
   constructor(public navCtrl: NavController,
   	public navParams: NavParams,
     public actShtCtrl: ActionSheetController,
-  	private storage: Storage) {
+    private storage: Storage,
+    private userService: ProvidersUserProvider,
+    private historyService: HistoryProvider) {
 
-  	this.username = localStorage.getItem("username");
+  	this.user = this.userService.getUser();
     this.width = Math.min(700, window.innerWidth - 10) - this.margin.left - this.margin.right,
     this.height = Math.min(this.width, window.innerHeight - this.margin.top - this.margin.bottom - 20);
     this.radarChartOptions.w = this.width;
     this.radarChartOptions.h = this.height;
     this.radarChartOptions.margin = this.margin;
+    
   }
 
   ionViewDidLoad() {
@@ -95,44 +104,38 @@ export class GainsPage {
     this.core = 0;
     this.other = 0;
     this.cardio = 0;
+    
 
-    this.getGains().then((val) => {
-      console.log(val)
-      val.forEach((set) => {
-
-      	this.allTime = this.allTime + set.gains;
-
-        if (set.muscle == "Chest"){
-          this.chest = this.chest + set.gains
-        }
-
-        if (set.muscle == "Back"){
-          this.back = this.back + set.gains
-        }
-
-        if (set.muscle == "Legs"){
-          this.legs = this.legs + set.gains
-        }
-
-        if (set.muscle == "Shoulders"){
-          this.shoulders = this.shoulders + set.gains
-        }
-
-        if (set.muscle == "Arms"){
-          this.arms = this.arms + set.gains
-        }
-
-        if (set.muscle == "Core"){
-          this.core = this.core + set.gains
-        }
-
-        if (set.muscle == "Cardio"){
-          this.cardio = this.cardio + set.gains
-        }
-
-      })
-    }).then(() => {
-      
+    this.historyService.getCardioHistory(this.user.id).subscribe((cardioHistory) => {
+      this.cardioHistory = cardioHistory;
+      this.cardioHistory.forEach(ch => {
+        this.cardio += ch.gains;
+      });
+      this.historyService.getLiftingHistory(this.user.id).subscribe((liftingHistory) => {
+        this.liftingHistory = liftingHistory;
+        this.liftingHistory.forEach(lh =>{
+          switch(lh.exercise.MuscleGroup.muscleGroupName) {
+            case "Chest":
+              this.chest += lh.gains;
+              break;
+            case "Back":
+              this.back += lh.gains;
+              break;
+            case "Legs":
+              this.legs += lh.gains;
+              break;
+            case "Shoulders":
+              this.shoulders += lh.gains;
+              break;
+            case "Arms":
+              this.arms += lh.gains;
+              break;
+            case "Core":
+              this.core += lh.gains;
+              break;
+          }
+      });
+      this.allTime = this.cardio + this.back + this.chest + this.arms + this.core + this.arms + this.shoulders + this.legs;
       this.data[0][0].value = this.chest / this.allTime;
       this.data[0][1].value = this.back / this.allTime;
       this.data[0][2].value = this.legs / this.allTime;
@@ -140,17 +143,10 @@ export class GainsPage {
       this.data[0][4].value = this.arms / this.allTime;
       this.data[0][5].value = this.core / this.allTime;
       this.data[0][6].value = this.cardio / this.allTime;
-
-      console.log(this.data)
-      
+      console.log(this.allTime);
       this.radarChart("#gainsChart", this.data, this.radarChartOptions);
-    })
-
-    
-  }
-
-  getGains(): Promise<any> {
-    return this.storage.get(this.username + '/gains');
+      });
+    });
   }
 
   filterGains(){
@@ -226,40 +222,28 @@ export class GainsPage {
     this.data[0] = [];
     this.exercises = {};
     this.xGains = 0;
-    this.getGains().then((val) => {
-      console.log(val)
-      val.forEach((set) => {
-        if (set.muscle == this.filter) {
-          if (typeof set.exercise == "string"){
-            this.xGains = this.xGains + set.gains
-            if (this.exercises[set.exercise]){
-              this.exercises[set.exercise] = this.exercises[set.exercise] + set.gains;
-            } else {
-              this.exercises[set.exercise] = set.gains;
-            }
-          }
+
+    this.liftingHistory.forEach(lf =>{
+      if (lf.exercise.MuscleGroup.muscleGroupName == this.filter) {
+        this.xGains += lf.gains;
+        if (this.exercises[lf.exercise.exerciseName]){
+          this.exercises[lf.exercise.exerciseName] += lf.gains;
+        } else {
+          this.exercises[lf.exercise.exerciseName] = lf.gains;
         }
-      })
-    }).then(() => {
-      Object.keys(this.exercises).forEach ( (key) => {
-        var name = key
-        var percent = this.exercises[key] / this.xGains;
-        //onsole.log(percent)
-        var d = {axis: name, value: percent}
-        this.data[0].push(d)
-        
-      }) 
-    }).then(() => {
-      console.log(this.data)
-      this.radarChart("#gainsChart", this.data, this.radarChartOptions);
-    })
+      }
+    });
+    console.log(this.xGains);
+    Object.keys(this.exercises).forEach ((key) => {
+      var percent = this.exercises[key] / this.xGains;
+      console.log(percent)
+      var d = {axis: key, value: percent}
+      this.data[0].push(d)
+    });
+    this.radarChart("#gainsChart", this.data, this.radarChartOptions);
   }
 
   radarChart(id, data, options){
-    //alert("HERE")
-    //console.log(id);
-    //console.log(data);
-    //console.log(options);
     var cfg = {
      w: 600,        //Width of the circle
      h: 600,        //Height of the circle
