@@ -71,7 +71,7 @@ export class ListMasterPage {
    * The view loaded, let's query our items for the list
    */
   ionViewDidLoad() {
-    
+    //console.log(this.records._cardioRecs)
     console.log(this.userService.getUser().email);
 
     
@@ -254,6 +254,7 @@ export class ListMasterPage {
    * Navigate to the detail page for this item.
    */
   openItem(exercise) {
+    //console.log(this.records._cardioRecs)
     if (exercise.MuscleGroup.muscleGroupName == 'Cardio') {
       this.navCtrl.push('CardioPage', {
         exercise: exercise

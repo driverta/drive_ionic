@@ -49,6 +49,7 @@ export class SettingsPage {
   imageData: any;
   userData: any;
   options: any;
+  exercisesLength = 0;
 
   show: boolean = true;
   load: boolean = true;
@@ -185,6 +186,7 @@ export class SettingsPage {
     // var queryPic = firebase.database().ref('/users/' + this.username + '/profilePic');
     // queryPic.once("value").then( snapshot => {
     //   var pic = snapshot.val();
+    //   console.log(pic);
     //   if(pic){
     //     this.form.patchValue({ 'profilePic': pic });
     //     this.show = false;
@@ -222,6 +224,10 @@ export class SettingsPage {
     //     this.location = location
     //   }
     // })
+
+    this.userService.getExercises().subscribe(exercises => {
+      this.exercisesLength = exercises.length;
+    });
   }
 
   setLevel () {

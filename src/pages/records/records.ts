@@ -51,15 +51,16 @@ export class RecordsPage {
     return this.storage.get(this.username + '/exercises');
   }
 
-  openItem(item) {
-    if (item.muscle == "Cardio"){
-      
+  openItem(exercise) {
+    console.log(exercise.MuscleGroup.muscleGroupName)
+    if (exercise.MuscleGroup.muscleGroupName == "Cardio"){
+      console.log("KiLL M3")
       this.navCtrl.push('RecordCardioDetailPage', {
-        item: item
+        exercise: exercise
       });
     }else {
       this.navCtrl.push('RecordDetailPage', {
-        item: item
+        exercise: exercise
       });
     }
   }

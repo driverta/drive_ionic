@@ -74,9 +74,10 @@ export class ProvidersUserProvider {
     return this.http.get(this.url + "getCardioHistoryByExercise?userId=" + this.user.id + "&exerciseId=" + ex.id ).map((res: Response) => res.json());
   }
 
-  addCardioHistory(cardioHistory: CardioHistory){
-    cardioHistory.user_id=this.user.id;
-    return this.http.post(this.url + "addCardioHistory", cardioHistory);
+  addCardioHistory(cardio){
+    cardio.user_id=this.user.id;
+    console.log(this.user.id)
+    return this.http.post(this.url + "addCardioHistory", cardio);
   }
 
 

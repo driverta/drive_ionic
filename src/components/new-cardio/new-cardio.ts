@@ -2,13 +2,15 @@ import { Component, Output, EventEmitter } from '@angular/core';
 import { NavParams, NavController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 
-import { User } from '../../providers/providers';
+import { User, ProvidersUserProvider } from '../../providers/providers';
 import { Levels } from '../../providers/providers';
 import { Records } from '../../providers/providers';
 
 import firebase from 'firebase';
 
 import * as d3 from 'd3-selection';
+
+import { CardioHistory } from '../../models/CardioHistory';
 
 @Component({
   selector: 'new-cardio',
@@ -34,6 +36,12 @@ export class NewCardioComponent {
   checkRec = false;
   history = [];
   totalGains = [];
+  user: any;
+  tempRec = [];
+  cardioRecords = [];
+
+  cardioHistory: CardioHistory[];
+  cardio: CardioHistory;
 
   private invalid: boolean = false;
 
@@ -42,17 +50,51 @@ export class NewCardioComponent {
   constructor(
     public navCtrl: NavController,
     navParams: NavParams,
-    public user: User,
     public levels: Levels,
     private records: Records,
-    private storage: Storage
+    private storage: Storage,
+    private userService: ProvidersUserProvider
   ) {
 
-    this.exercise = navParams.get('item');
-
+    this.exercise = navParams.get('exercise');
+    this.user = userService.getUser();
   }
 
   ngOnInit() {
+    this.tempRec = [
+      {min: 0, max: 5, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 5, max: 10, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 10, max: 15, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 15, max: 20, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 20, max: 25, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 25, max: 30, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 30, max: 35, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 35, max: 40, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 40, max: 45, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 45, max: 50, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 50, max: 55, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 55, max: 60, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 60, max: 65, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 65, max: 70, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 70, max: 75, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 75, max: 80, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 80, max: 85, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 85, max: 90, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 90, max: 95, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 95, max: 100, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 100, max: 105, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 105, max: 110, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 110, max: 115, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 115, max: 120, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 120, max: 1000, miles: 0, time: 0, mph: 0, records: 0}
+  
+    ]
+
+    this.records._records = [
+      
+    ];
+    this.cardioRecords = [
+    ];
     // this.username = localStorage.getItem("username");
     // //alert(this.username);
     // this.gains = 0
@@ -64,9 +106,20 @@ export class NewCardioComponent {
     // }).then(() => {
     //   this.setLevel();
     // })
+    this.userService.getTotalGains(this.user.id).subscribe(totalGains => {
+      console.log(totalGains);
+      this.gains = totalGains;
+      this.setLevel();
+    });;
+
+    this.userService.getCardioHistoryByIdAndExercise(this.exercise).subscribe(data =>{
+      this.cardioHistory = data;
+      //this.getRecords();
+    })
   }
 
   setLevel() {
+    console.log(this.records._cardioRecs)
     this.levels._levels.forEach((value, index) => {
       if (this.gains > value.totalPoints - 1) {
         this.xcurrent = this.gains - value.totalPoints;
@@ -75,6 +128,33 @@ export class NewCardioComponent {
         this.progress = this.xcurrent / this.xtotal * 100
       }
     });
+  }
+
+  getRecords() {
+    console.log(this.records._cardioRecs)
+    for(let history of this.cardioHistory){
+  
+      this.checkRec =false;
+      //console.log(this.tempRec)
+      //for(let record of this.records._records){
+        this.tempRec.forEach( (value, index) => {
+          
+          if (history.minutes >= value.min && history.minutes < value.max) {
+            if (history.mph > value.mph) {
+              
+              this.tempRec[index].miles = history.miles;
+              this.tempRec[index].mph = history.mph;
+              this.tempRec[index].records++;
+              this.tempRec[index].time = history.minutes;
+            }
+          }
+        });
+    }
+    this.tempRec.forEach ((value) => {
+      if (value.records > 0){
+        this.cardioRecords.push(value)
+      }
+    })
   }
 
   addSet() {
@@ -92,6 +172,9 @@ export class NewCardioComponent {
       if(this.seconds == null){
         this.seconds = 0;
       }
+
+      this.cardio = new CardioHistory();
+      this.cardio.user_id = this.userService.getUser().id;
 
       this.hours = Number(this.hours);
       this.minutes = Number(this.minutes);
@@ -114,62 +197,81 @@ export class NewCardioComponent {
       this.points = true;
       this.checkRec = false;
 
+      this.cardio.date = date;
+      this.cardio.minutes = recordTime;
+      this.cardio.miles = this.miles;
+      this.cardio.mph = mph;
+      this.cardio.exercise = this.exercise;
+
+      this.records._cardioRecs.forEach((value, index) => {
+        if (this.cardio.minutes >= value.min && this.cardio.minutes < value.max) {
+          if (this.cardio.mph > value.mph) {
+            this.g = minTime * 4;
+            this.bool = true;
+          }
+        }
+      });
+
+      this.cardio.gains = this.g;
+
       setTimeout(() => {
         this.bool = false;
         this.points = false;
       }, 2000);
+      console.log(this.cardio);
+      this.userService.addCardioHistory(this.cardio).subscribe();
+      this.myEvent.emit(null);
+      this.ngOnInit();
+      
+      // this.getExercises().then((val) => {
+      //   //console.log('Your json is', val);
+      //   var key = this.exercise.name + '-' + this.exercise.variation
+      //   var history = val[key].history;
+      //   if (!history) {
+      //     val[key].history = {};
+      //     this.storage.set(this.username + '/exercises', val)
+      //   }
+      // }).then(() => {
+      //   this.getExercises().then((val) => {
+      //     var key = this.exercise.name + '-' + this.exercise.variation
+      //     var history = val[key].history;
+      //     if (Array.isArray(history)) {
+      //       val[key].history.push(workout)
+      //     } else {
 
-      var workout = { date: date, time: time, miles: this.miles, mph: mph, minutes: recordTime };
+      //       val[key].history[newDate] = workout;
+      //     }
 
-      this.getExercises().then((val) => {
-        //console.log('Your json is', val);
-        var key = this.exercise.name + '-' + this.exercise.variation
-        var history = val[key].history;
-        if (!history) {
-          val[key].history = {};
-          this.storage.set(this.username + '/exercises', val)
-        }
-      }).then(() => {
-        this.getExercises().then((val) => {
-          var key = this.exercise.name + '-' + this.exercise.variation
-          var history = val[key].history;
-          if (Array.isArray(history)) {
-            val[key].history.push(workout)
-          } else {
+      //     this.storage.set(this.username + '/exercises', val).then(() => {
+      //       Object.keys(history).forEach((workout) => {
+      //         this.records._cardio.forEach((value, index) => {
+      //           if (history[workout].minutes >= value.min && history[workout].minutes < value.max) {
+      //             if (history[workout].mph > value.mph) {
+      //               this.records._cardio[index].miles = history[workout].miles;
+      //               this.records._cardio[index].time = history[workout].time;
+      //               this.records._cardio[index].mph = history[workout].mph;
+      //               this.records._cardio[index].records++;
+      //               this.g = minTime * 4;
+      //               this.bool = true;
+      //             }
+      //           }
+      //         });
+      //       })
+      //     }).then(() => {
+      //       this.myEvent.emit(null);
+      //       var g = { date: date, gains: this.g, muscle: this.exercise.muscle, exercise: this.exercise.name + '/' + this.exercise.variation };
+      //       this.getGains().then((val) => {
+      //         //console.log('Your json is', val);
+      //         this.totalGains = val;
+      //         this.totalGains.push(g);
+      //         this.storage.set(this.username + '/gains', this.totalGains).then(() => {
 
-            val[key].history[newDate] = workout;
-          }
-
-          this.storage.set(this.username + '/exercises', val).then(() => {
-            Object.keys(history).forEach((workout) => {
-              this.records._cardio.forEach((value, index) => {
-                if (history[workout].minutes >= value.min && history[workout].minutes < value.max) {
-                  if (history[workout].mph > value.mph) {
-                    this.records._cardio[index].miles = history[workout].miles;
-                    this.records._cardio[index].time = history[workout].time;
-                    this.records._cardio[index].mph = history[workout].mph;
-                    this.records._cardio[index].records++;
-                    this.g = minTime * 4;
-                    this.bool = true;
-                  }
-                }
-              });
-            })
-          }).then(() => {
-            this.myEvent.emit(null);
-            var g = { date: date, gains: this.g, muscle: this.exercise.muscle, exercise: this.exercise.name + '/' + this.exercise.variation };
-            this.getGains().then((val) => {
-              //console.log('Your json is', val);
-              this.totalGains = val;
-              this.totalGains.push(g);
-              this.storage.set(this.username + '/gains', this.totalGains).then(() => {
-
-                this.ngOnInit();
-              });
-            });
-          });
-        });
-      });
+      //           this.ngOnInit();
+      //         });
+      //       });
+      //     });
+      //   });
+      //});
     }
   }
 

@@ -3,8 +3,9 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import  { StatsLineChart } from '../../models/item';
 import { Storage } from '@ionic/storage';
 
-import { HistoryProvider } from '../../providers/providers';
+import { HistoryProvider, ProvidersUserProvider } from '../../providers/providers';
 import { User } from '../../providers/providers';
+import { CardioHistory } from '../../models/CardioHistory';
 
 import firebase from 'firebase';
 
@@ -22,6 +23,7 @@ export class CardioLineComponent {
 
   username: any;
   exercise: any;
+  cardioHistory: CardioHistory[];
 
 	width2: number;
   height2: number;
@@ -38,36 +40,26 @@ export class CardioLineComponent {
   	navParams: NavParams,
   	public user: User,
     private history: HistoryProvider,
-    private storage: Storage
+    private storage: Storage,
+    private userService: ProvidersUserProvider
   	) {
   	
   	this.width2 = 1000 - this.margin2.left - this.margin2.right;
     this.height2 = 500 - this.margin2.top - this.margin2.bottom;
-    this.exercise = navParams.get('item');
+    this.exercise = navParams.get('exercise');
   }
 
   public makeChart2() {
-  	this.username = localStorage.getItem("username");
-  	this.history._cardioCharts = [];
-    
-    this.getExercises().then((val) => {
-      var keyOne = this.exercise.name + '-' + this.exercise.variation
-      var history = val[keyOne].history;
-      //console.log(val[keyOne].history);
-      if (history) {
-        Object.keys(history).forEach ( (keyTwo) => {
-          var workout = {date: history[keyTwo].date, miles: history[keyTwo].miles, time: history[keyTwo].time, mph: history[keyTwo].mph}
-          this.history._cardioCharts.push(workout)
-          console.log(this.history._cardioCharts)
-        })
-      }
-    }).then(() => {
-      this.setChart2()
+  	this.userService.getCardioHistoryByIdAndExercise(this.exercise).subscribe(data =>{
+      this.cardioHistory = data;
+      console.log(this.cardioHistory);
+      this.setChart2();
     })
     
   }
 
   setChart2() {
+    //d3.select("#lineChart").remove();
   	this.initSvg()
     this.initAxis();
     this.drawAxis();
@@ -87,11 +79,12 @@ export class CardioLineComponent {
   initAxis() {
     this.x2 = d3Scale.scaleBand().rangeRound([0, this.width2]).padding(0.1);
     this.y2 = d3Scale.scaleLinear().rangeRound([this.height2, 0]);
-    this.x2.domain(this.history._cardioCharts.map((d) => d.date));
-    this.y2.domain([0, d3Array.max(this.history._cardioCharts, (d) => d.mph)]);
+    this.x2.domain(this.cardioHistory.map((d) => d.date));
+    this.y2.domain([0, d3Array.max(this.cardioHistory, (d) => d.mph)]);
   }
 
   drawAxis() {
+    console.log("Here")
     this.g2.append("g")
         .attr("class", "axis axis--y")
         .call(d3Axis.axisLeft(this.y2))
@@ -112,7 +105,7 @@ export class CardioLineComponent {
 
     
     this.g2.append("path")
-        .datum(this.history._cardioCharts)
+        .datum(this.cardioHistory)
         .attr("class", "line")
         .attr("d", this.line);
   }

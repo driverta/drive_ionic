@@ -23,20 +23,31 @@
 	</div>
 
 	<div [ngSwitch]="segment">
+	
 	  <ion-list *ngSwitchCase="'workout'">
-	    <new-cardio (myEvent)="ionViewWillEnter();"></new-cardio>
+			
+			<new-cardio (myEvent)="ionViewWillEnter();"></new-cardio>
+			
 	  </ion-list>
 
 	  <ion-list *ngSwitchCase="'history'">
-	  	<cardio-history (myEvent2)="ionViewWillEnter();"></cardio-history>
+			
+			<cardio-history (myEvent2)="ionViewWillEnter();"></cardio-history>
+		
 	  </ion-list>
 
 	  <ion-list *ngSwitchCase="'records'">
-	    <cardio-records></cardio-records>
-	  </ion-list>
-
-	  <cardio-bar [hidden]="selectedValue!=1" ></cardio-bar>
-	  <cardio-line [hidden]="selectedValue!=2" ></cardio-line>
+			
+			<cardio-records></cardio-records>
+			
+		</ion-list>
+		
+		<cardio-line [hidden]="selectedValue!=2" ></cardio-line>
+		<cardio-bar [hidden]="selectedValue!=1" ></cardio-bar>
+	
+	
+	
+		
 
 	</div>
 </ion-content>
