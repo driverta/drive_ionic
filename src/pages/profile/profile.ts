@@ -129,6 +129,12 @@ export class SettingsPage {
     // Build an empty form for the template to render
     this.form = this.formBuilder.group({});  
 
+    this.userService.getTotalGains(this.userData.id).subscribe(totalGains => {
+      console.log(totalGains);
+      this.gains = totalGains;
+      this.setLevel();
+    });;
+
     // this.storage.get(this.username + '/gains').then((val) => {
     //   this.gains = 0;
     //   this.records = 0;
@@ -358,7 +364,7 @@ export class SettingsPage {
   }
 
   rules(){
-    this.navCtrl.push('UsersPage');
+    this.navCtrl.push('RulesPage');
   }
 
   goToCompeting(){

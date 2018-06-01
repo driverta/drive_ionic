@@ -60,6 +60,10 @@ export class ProvidersUserProvider {
     return this.http.get(this.url + "getUserExercises?id=" + this.user.id).map((res: Response) => res.json());
   }
 
+  getCompetingUsersExercises(userId): Observable<Exercise[]> {
+    return this.http.get(this.url + "getUserExercises?id=" + userId).map((res: Response) => res.json());
+  }
+
   addLiftingHistory(lf){
     lf.user_id=this.user.id;
     return this.http.post(this.url + "addLiftingHistory", lf);
@@ -67,6 +71,11 @@ export class ProvidersUserProvider {
 
   getLiftingHistoryByIdAndExercise(ex: Exercise): Observable<LiftingHistory[]>{
     return this.http.get(this.url + "getLiftingHistoryByExercise?userId=" + this.user.id + "&exerciseId=" + ex.id ).map((res: Response) => res.json());
+  }
+
+  /////// NEEDS API CALL ///////////
+  getCompetingUsersLiftingHistoryByIdAndExercise(ex: Exercise, userId): Observable<LiftingHistory[]>{
+    return this.http.get(this.url + "getLiftingHistoryByExercise?userId=" + userId + "&exerciseId=" + ex.id ).map((res: Response) => res.json());
   }
 
   

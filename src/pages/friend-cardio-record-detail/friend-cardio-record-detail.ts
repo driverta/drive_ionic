@@ -3,10 +3,13 @@ import { IonicPage, AlertController, NavController, NavParams } from 'ionic-angu
 import  { StatsBarChart } from '../../models/item';
 import { Storage } from '@ionic/storage';
 
-import { User } from '../../providers/providers';
+import { User, ProvidersUserProvider } from '../../providers/providers';
 import { Records } from '../../providers/providers';
 
 import { SortByRepsPipe } from '../../pipes/sort-by-reps/sort-by-reps'
+import { CardioHistory } from '../../models/CardioHistory';
+import { ExerciseProvider } from '../../providers/exercise/exercise';
+import { Exercise } from '../../models/Exercise';
 
 import * as d3 from 'd3-selection';
 import * as d3Scale from "d3-scale";
@@ -26,13 +29,15 @@ import firebase from 'firebase';
 export class FriendCardioRecordDetailPage {
 
   exercise: any;
-  username: any;
+  user: any;
   checkRec = false;
   tempRec = [];
   loop = 0;
   myUsername: string;
   bool = true;
   myLifts:any = {};
+  cardioRecords = [];
+  cardioHistory: CardioHistory[];
 
   width: number;
   height: number;
@@ -50,17 +55,45 @@ export class FriendCardioRecordDetailPage {
   	public navParams: NavParams,
   	public records: Records,
     public alertCtrl: AlertController,
-    private storage: Storage
+    private storage: Storage,
+    private exerciseService: ExerciseProvider,
+    private userService: ProvidersUserProvider
   	) {
   	this.exercise = navParams.get('item');
-    this.username = navParams.get("username");
-    this.myUsername = localStorage.getItem("username");
+    this.user = navParams.get("user");
+    this.myUsername = userService.getUser().username;
     this.width = 1000 - this.margin.left - this.margin.right;
     this.height = 500 - this.margin.top - this.margin.bottom;
   }
 
   ionViewWillEnter() {
-  	this.tempRec = this.records._cardio;
+  	this.tempRec = [
+      {min: 0, max: 5, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 5, max: 10, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 10, max: 15, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 15, max: 20, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 20, max: 25, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 25, max: 30, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 30, max: 35, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 35, max: 40, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 40, max: 45, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 45, max: 50, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 50, max: 55, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 55, max: 60, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 60, max: 65, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 65, max: 70, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 70, max: 75, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 75, max: 80, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 80, max: 85, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 85, max: 90, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 90, max: 95, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 95, max: 100, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 100, max: 105, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 105, max: 110, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 110, max: 115, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 115, max: 120, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 120, max: 1000, miles: 0, time: 0, mph: 0, records: 0}
+    ]
 
     this.records._cardioRecords = [
       
@@ -68,51 +101,47 @@ export class FriendCardioRecordDetailPage {
     this.records._cardioRecords = [
       
     ];
-    
-    this.getRecords();
-
-    this.getExercises().then((val) => {
-      console.log(val)
-      this.myLifts = val;
-    });
+    console.log(this.exercise.exerciseName)
+    this.userService.getCardioHistoryByIdAndExercise(this.exercise).subscribe(data =>{
+      this.cardioHistory = data;
+      this.getRecords();
+    })
   }
 
   getRecords() {
-    var queryHistory = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '-' + this.exercise.variation + '/history');
-    queryHistory.once("value").then( snapshot => {
-    	this.loop = 0;
-      snapshot.forEach( childSnapshot => {
-      	this.loop++
-        var childData1 = childSnapshot.val();
+    for(let history of this.cardioHistory){
+  
+      //this.checkRec =false;
+      //console.log(this.tempRec)
+      //for(let record of this.records._records){
         this.tempRec.forEach( (value, index) => {
-            
-          if (childData1.minutes >= value.min && childData1.minutes < value.max) {
-            //alert("in")
-            if (childData1.mph > value.mph) {
-              this.tempRec[index].miles = childData1.miles;
-              this.tempRec[index].time = childData1.time;
-              this.tempRec[index].mph = childData1.mph;
+          
+          if (history.minutes >= value.min && history.minutes < value.max) {
+            //console.log("history")
+            //console.log(history)
+            if (history.mph > value.mph) {
+              
+              this.tempRec[index].miles = history.miles;
+              this.tempRec[index].mph = history.mph;
               this.tempRec[index].records++;
+              this.tempRec[index].time = history.minutes;
+              
             }
           }
         });
-        if ( snapshot.numChildren() == this.loop ) {
-          this.tempRec.forEach ((value) => {
-            if (value.records > 0){
-              this.records._cardioRecords.push(value)
-              console.log(this.records._cardioRecords)
-              this.sortRecords();
-            }
-          })
-        }
-      });
-    });
-    //this.barChart.makeChart();
-    //this.recordsTable.makeTable();
+    }
+    this.tempRec.forEach ((value) => {
+      if (value.records > 0){
+        this.cardioRecords.push(value)
+
+      }
+    })
+    console.log(this.cardioRecords)
+    this.sortRecords();
   }
 
   sortRecords() {
-    this.records._cardioRecords.sort((a: any, b: any) => {
+    this.cardioRecords.sort((a: any, b: any) => {
     
       if (a.reps < b.reps) {
         return -1;
@@ -147,8 +176,8 @@ export class FriendCardioRecordDetailPage {
   initAxis() {
     this.x = d3Scale.scaleBand().rangeRound([0, this.width]).padding(0.1);
     this.y = d3Scale.scaleLinear().rangeRound([this.height, 0]);
-    this.x.domain(this.records._cardioRecords.map((d) => d.max));
-    this.y.domain([0, d3Array.max(this.records._cardioRecords, (d) => d.mph)]);
+    this.x.domain(this.cardioRecords.map((d) => d.max));
+    this.y.domain([0, d3Array.max(this.cardioRecords, (d) => d.mph)]);
   }
 
   drawAxis() {
@@ -177,7 +206,7 @@ export class FriendCardioRecordDetailPage {
 
   drawBars() {
     this.g.selectAll(".bar")
-        .data(this.records._cardioRecords)
+        .data(this.cardioRecords)
         .enter().append("rect")
         .attr("class", "bar")
         .attr("x", (d) => this.x(d.max) )
@@ -186,32 +215,30 @@ export class FriendCardioRecordDetailPage {
         .attr("height", (d) => this.height - this.y(d.mph) );
   }
 
-  saveExercise() {
+  saveExercise(exercise) {
+    console.log("DragonFuckerWasHere")
     this.bool = true;
     
-    Object.keys(this.myLifts).forEach ( (key) => {
-      if(this.myLifts[key].name == this.exercise.name && this.myLifts[key].variation == this.exercise.variation){
-        this.presentAlert();
-        this.bool = false;
+    this.userService.getExercises().subscribe(exercises => {
+      for (let myExercise of exercises) {
+        if (myExercise.exerciseName == exercise.exerciseName
+          && myExercise.variation == exercise.variation
+          && myExercise.MuscleGroup.id == exercise.MuscleGroup.id) {
+          this.presentAlert();
+          this.bool = false;
+        }
+      }
+
+      if (this.bool) {
+        var newExercise = new Exercise;
+        newExercise.exerciseName = exercise.exerciseName;
+        newExercise.variation = exercise.variation;
+        newExercise.MuscleGroup = exercise.MuscleGroup;
+        this.exerciseService.createExercise(this.userService.getUser().id, newExercise).subscribe(data => {
+          this.exerciseAdded()
+        })
       }
     })
-
-    if(this.bool){
-      if (Array.isArray(this.exercise.history)){
-        this.exercise.history = [];
-      } else {
-        this.exercise.history = {};
-      }
-
-      var key = this.exercise.name + '-' + this.exercise.variation
-      
-      this.myLifts[key] = this.exercise
-      
-      this.storage.set(this.myUsername + '/exercises', this.myLifts).then(() =>{
-        this.exerciseAdded();
-      });
-
-    }
   }
 
   presentAlert() {

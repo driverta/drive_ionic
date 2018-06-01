@@ -9,6 +9,9 @@ import { IonicPage,
 import { KeysPipe } from '../../pipes/keys/keys';
 import firebase from 'firebase';
 import { Storage } from '@ionic/storage';
+import { ProvidersUserProvider } from '../../providers/providers-user/providers-user';
+import { ExerciseProvider } from '../../providers/exercise/exercise';
+import { Exercise } from '../../models/Exercise';
 
 @IonicPage()
 @Component({
@@ -18,10 +21,11 @@ import { Storage } from '@ionic/storage';
 export class FriendRecordsPage {
 
   username: string;
+  user: any;
   myUsername: string;
-	lifts:any = {};
-  setlifts:any = {};
-  myLifts:any = {};
+	filteredExercises = [];
+  private exercises: Exercise[];
+  private myExercises: Exercise[];
   bool = true;
 
   filter= "All";
@@ -30,43 +34,50 @@ export class FriendRecordsPage {
   	public navParams: NavParams,
     private storage: Storage,
     public alertCtrl: AlertController,
-    public actShtCtrl: ActionSheetController) {
-  	this.username = navParams.get("username");
-    this.myUsername = localStorage.getItem("username");
+    public actShtCtrl: ActionSheetController,
+    private userService: ProvidersUserProvider,
+    private exerciseService: ExerciseProvider) {
+    this.user = navParams.get('user');
+  	this.username = this.user.name;
+    this.myUsername = this.userService.getUser().username;
 
   }
 
   ionViewDidLoad() {
-  	var query1 = firebase.database().ref('/' + this.username + '/exercises');
-    query1.once("value").then( snapshot => {
-      
-      snapshot.forEach( childSnapshot => {
-        
-        var childData1 = childSnapshot.val();
-        var key = childSnapshot.key;
-        
-        this.setlifts[key] = childData1;
-        this.lifts = this.setlifts
-      
-      });
+    this.userService.getCompetingUsersExercises(this.user.id).subscribe(exercises => {
+      this.exercises = exercises;
+      this.filteredExercises = exercises;
     });
+  	// var query1 = firebase.database().ref('/' + this.username + '/exercises');
+    // query1.once("value").then( snapshot => {
+      
+    //   snapshot.forEach( childSnapshot => {
+        
+    //     var childData1 = childSnapshot.val();
+    //     var key = childSnapshot.key;
+        
+    //     this.setlifts[key] = childData1;
+    //     this.lifts = this.setlifts
+      
+    //   });
+    // });
 
-    this.getExercises().then((val) => {
-      console.log(val)
-      this.myLifts = val;
-    });
+    // this.getExercises().then((val) => {
+    //   console.log(val)
+    //   this.myLifts = val;
+    // });
   }
 
   openItem(item) {
-    if (item.muscle == "Cardio"){
+    if (item.MuscleGroup.muscleGroupName == "Cardio"){
       this.navCtrl.push('FriendCardioRecordDetailPage', {
         item: item,
-        username: this.username
+        user: this.user
       });
     }else {
       this.navCtrl.push('FriendRecordDetailPage', {
         item: item,
-        username: this.username
+        user: this.user
       });
     }
   }
@@ -78,7 +89,7 @@ export class FriendRecordsPage {
         {
           text: 'All',
           handler: () => {
-            this.lifts = this.setlifts
+            this.filteredExercises = this.exercises
           }
         },{
           text: 'Chest',
@@ -141,50 +152,65 @@ export class FriendRecordsPage {
   }
 
   executeFilter(){
-    this.lifts = {};
-    //alert(this.lifts["Bench Press-Barbell"].name)
-    Object.keys(this.setlifts).forEach( (key, index) => {
-      if (this.setlifts[key].muscle == this.filter){
-        this.lifts[key] = this.setlifts[key]
+    this.filteredExercises = [];
+    this.exercises.forEach((exercise) => {
+      if (exercise.MuscleGroup.muscleGroupName == this.filter){
+          this.filteredExercises.push(exercise);
       }
-    });
+    })
   }
 
-  getExercises(): Promise<any> {
-    this.storage.ready().then(() => {
-      console.log(this.storage.get(this.myUsername + '/exercises'))
+  // getExercises(): Promise<any> {
+  //   this.storage.ready().then(() => {
+  //     console.log(this.storage.get(this.myUsername + '/exercises'))
       
-    })
-    return this.storage.get(this.myUsername + '/exercises');
-  }
+  //   })
+  //   return this.storage.get(this.myUsername + '/exercises');
+  // }
 
   saveExercise(exercise) {
+    console.log("DragonFuckerWasHere")
     this.bool = true;
     
-    Object.keys(this.myLifts).forEach ( (key) => {
-      if(this.myLifts[key].name == exercise.name && this.myLifts[key].variation == exercise.variation){
-        this.presentAlert();
-        this.bool = false;
+    this.userService.getExercises().subscribe(exercises => {
+      for (let myExercise of exercises) {
+        if (myExercise.exerciseName == exercise.exerciseName
+          && myExercise.variation == exercise.variation
+          && myExercise.MuscleGroup.id == exercise.MuscleGroup.id) {
+          this.presentAlert();
+          this.bool = false;
+        }
+      }
+
+      if (this.bool) {
+        var newExercise = new Exercise;
+        newExercise.exerciseName = exercise.exerciseName;
+        newExercise.variation = exercise.variation;
+        newExercise.MuscleGroup = exercise.MuscleGroup;
+        this.exerciseService.createExercise(this.userService.getUser().id, newExercise).subscribe(data => {
+          this.exerciseAdded()
+        })
       }
     })
-
-    if(this.bool){
-      if (Array.isArray(exercise.history)){
-        exercise.history = [];
-      } else {
-        exercise.history = {};
-      }
-
-      var key = exercise.name + '-' + exercise.variation
-      
-      this.myLifts[key] = exercise
-      
-      this.storage.set(this.myUsername + '/exercises', this.myLifts).then(() =>{
-        this.exerciseAdded();
-      });
-
-    }
   }
+
+  //   if(this.bool){
+  //     if (Array.isArray(exercise.history)){
+  //       exercise.history = [];
+  //     } else {
+  //       exercise.history = {};
+  //     }
+
+  //     var key = exercise.name + '-' + exercise.variation
+      
+  //     this.myLifts[key] = exercise
+      
+  //     this.storage.set(this.myUsername + '/exercises', this.myLifts).then(() =>{
+  //       this.exerciseAdded();
+  //     });
+
+  //   }
+  // }
 
   presentAlert() {
     let alert = this.alertCtrl.create({

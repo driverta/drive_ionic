@@ -24,7 +24,6 @@ export class RecordsPage {
   filter= "All";
 
   filteredExercises = [];
-
   private exercises: Exercise[];
 
   constructor(public navCtrl: NavController,

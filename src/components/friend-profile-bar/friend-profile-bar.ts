@@ -6,6 +6,8 @@ import { User } from '../../providers/providers';
 import { Records } from '../../providers/providers';
 
 import { SortByRepsPipe } from '../../pipes/sort-by-reps/sort-by-reps'
+import { ProvidersUserProvider } from '../../providers/providers';
+import { LiftingHistory } from '../../models/LiftingHistory';
 
 import * as d3 from 'd3-selection';
 import * as d3Scale from "d3-scale";
@@ -20,8 +22,10 @@ import firebase from 'firebase';
 })
 export class FriendProfileBarComponent {
 
-  username: any;
+  user: any;
   exercise:any;
+
+  liftingHistory: LiftingHistory[];
 
   width: number;
   height: number;
@@ -37,63 +41,110 @@ export class FriendProfileBarComponent {
   constructor(
     navParams: NavParams,
     public navCtrl: NavController,
-    public user: User,
+    private userService: ProvidersUserProvider,
     private records: Records
     ) {
 
   	this.width = 1000 - this.margin.left - this.margin.right;
     this.height = 500 - this.margin.top - this.margin.bottom;
     this.exercise = navParams.get('item');
-    this.username = navParams.get("username");
+    this.user = navParams.get('user');
   }
 
   public makeChart() {
-    console.log(this.exercise);
-    
-    var queryHistory = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '-' + this.exercise.variation + '/history');
-    
-    queryHistory.once("value").then( snapshot => {
-      this.loop = 0;
-      console.log(snapshot)
-      snapshot.forEach( childSnapshot => {
-        this.loop++;
-        var childData1 = childSnapshot.val();
-        this.checkRec = false;
-        this.records._records.forEach( (value, index) => {
-          if (childData1.reps == value.reps) {
-            this.checkRec = true;
-            if (childData1.weight > value.weight) {
-              this.records._records[index].weight = childData1.weight;
-              this.records._records[index].oneRM = childData1.oneRM;
-              this.records._records[index].records++;
-            }
-          }
-        });
-        if (this.checkRec == false){
-          this.records._records.push({reps: childData1.reps, weight: childData1.weight, oneRM: childData1.oneRM, records: 1})
-        }
-        console.log(snapshot.numChildren())
-        console.log(this.loop)
-        if ( snapshot.numChildren() == this.loop ) {
-          
-          this.records._records.sort((a: any, b: any) => {
+    this.records._records = [
       
-            if (a.reps < b.reps) {
-              return -1;
-            } else if (a.reps > b.reps) {
-              return 1;
-            } else {
-              return 0;
-            }
-          });
-          this.setChart()
+    ];
+    this.records._chart = [
+      
+    ];
+    console.log("data")
+    this.userService.getCompetingUsersLiftingHistoryByIdAndExercise(this.exercise, this.user.id).subscribe(data =>{
+      this.liftingHistory = data;
+      
+      this.getRecords();
+    })
+    // console.log(this.exercise);
+    
+    // var queryHistory = firebase.database().ref('/' + this.username + '/exercises/' + this.exercise.name + '-' + this.exercise.variation + '/history');
+    
+    // queryHistory.once("value").then( snapshot => {
+    //   this.loop = 0;
+    //   console.log(snapshot)
+    //   snapshot.forEach( childSnapshot => {
+    //     this.loop++;
+    //     var childData1 = childSnapshot.val();
+    //     this.checkRec = false;
+    //     this.records._records.forEach( (value, index) => {
+    //       if (childData1.reps == value.reps) {
+    //         this.checkRec = true;
+    //         if (childData1.weight > value.weight) {
+    //           this.records._records[index].weight = childData1.weight;
+    //           this.records._records[index].oneRM = childData1.oneRM;
+    //           this.records._records[index].records++;
+    //         }
+    //       }
+    //     });
+    //     if (this.checkRec == false){
+    //       this.records._records.push({reps: childData1.reps, weight: childData1.weight, oneRM: childData1.oneRM, records: 1})
+    //     }
+    //     console.log(snapshot.numChildren())
+    //     console.log(this.loop)
+    //     if ( snapshot.numChildren() == this.loop ) {
+          
+    //       this.records._records.sort((a: any, b: any) => {
+      
+    //         if (a.reps < b.reps) {
+    //           return -1;
+    //         } else if (a.reps > b.reps) {
+    //           return 1;
+    //         } else {
+    //           return 0;
+    //         }
+    //       });
+    //       this.setChart()
+    //     }
+    //   });
+    // });
+  }
+
+  getRecords() {
+
+    for(let history of this.liftingHistory){
+      //console.log("here");
+  
+      this.checkRec =false;
+      for(let record of this.records._records){
+        if(history.reps == record.reps){
+          this.checkRec = true;
+          if(history.weight > record.weight){
+            record.weight = history.weight;
+            record.oneRepMax = history.oneRepMax;
+            record.records++;
+          }
+          //console.log(this.checkRec);
+        }
+      }
+      if (this.checkRec == false){
+
+        this.records._records.push({reps: history.reps, weight: history.weight, oneRepMax: history.oneRepMax, records: 1})
+      }
+      console.log(this.records._records);
+      this.records._records.sort((a: any, b: any) => {
+        if (a.reps < b.reps) {
+          return -1;
+        } else if (a.reps > b.reps) {
+          return 1;
+        } else {
+          return 0;
         }
       });
-    });
+      this.setChart()
+    }
   }
 
   setChart() {
-    //d3.selectAll("svg > *").remove();
+    d3.selectAll("svg > *").remove();
     this.initSvg()
     this.initAxis();
     this.drawAxis();
@@ -115,7 +166,7 @@ export class FriendProfileBarComponent {
     this.x = d3Scale.scaleBand().rangeRound([0, this.width]).padding(0.1);
     this.y = d3Scale.scaleLinear().rangeRound([this.height, 0]);
     this.x.domain(this.records._records.map((d) => d.reps));
-    this.y.domain([0, d3Array.max(this.records._records, (d) => d.oneRM)]);
+    this.y.domain([0, d3Array.max(this.records._records, (d) => d.oneRepMax)]);
   }
 
   drawAxis() {
@@ -148,8 +199,8 @@ export class FriendProfileBarComponent {
         .enter().append("rect")
         .attr("class", "bar")
         .attr("x", (d) => this.x(d.reps) )
-        .attr("y", (d) => this.y(d.oneRM) )
+        .attr("y", (d) => this.y(d.oneRepMax) )
         .attr("width", this.x.bandwidth())
-        .attr("height", (d) => this.height - this.y(d.oneRM) );
+        .attr("height", (d) => this.height - this.y(d.oneRepMax) );
   }
 }

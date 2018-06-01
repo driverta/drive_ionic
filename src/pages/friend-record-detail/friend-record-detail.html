@@ -1,10 +1,10 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>{{exercise.name}}</ion-title>
+    <ion-title>{{exercise.exerciseName}}</ion-title>
 
     <ion-buttons right>
-      <button ion-button icon-only (click)="saveExercise();">
+      <button ion-button icon-only (click)="saveExercise(exercise);">
         <ion-icon name="add"></ion-icon>
       </button>
     </ion-buttons>

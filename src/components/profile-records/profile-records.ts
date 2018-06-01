@@ -26,45 +26,44 @@ export class ProfileRecordsComponent {
     this.exercise = navParams.get('exercise');
   }
 
-  ionViewWillEnter() {
-    this.records._records = [
+  // ionViewWillEnter() {
+  //   this.records._records = [
       
-    ];
-    this.records._chart = [
+  //   ];
+  //   this.records._chart = [
       
-    ];
-    
-    this.userService.getLiftingHistoryByIdAndExercise(this.exercise).subscribe(data =>{
-      this.liftingHistory = data;
-      console.log("Here");
-        
-      this.getRecords();
-    })
-  }
+  //   ];
+  //   console.log("data")
+  //   this.userService.getLiftingHistoryByIdAndExercise(this.exercise).subscribe(data =>{
+  //     this.liftingHistory = data;
 
-  getRecords() {
+  //     this.getRecords();
+  //   })
+  // }
 
-    for(let history of this.liftingHistory){
-      //console.log("here");
+  // getRecords() {
+
+  //   for(let history of this.liftingHistory){
+  //     //console.log("here");
   
-      this.checkRec =false;
-      for(let record of this.records._records){
-        if(history.reps == record.reps){
-          this.checkRec = true;
-          if(history.weight > record.weight){
-            record.weight = history.weight;
-            record.oneRepMax = history.oneRepMax;
-            record.records++;
-          }
-          //console.log(this.checkRec);
-        }
-      }
-      if (this.checkRec == false){
+  //     this.checkRec =false;
+  //     for(let record of this.records._records){
+  //       if(history.reps == record.reps){
+  //         this.checkRec = true;
+  //         if(history.weight > record.weight){
+  //           record.weight = history.weight;
+  //           record.oneRepMax = history.oneRepMax;
+  //           record.records++;
+  //         }
+  //         //console.log(this.checkRec);
+  //       }
+  //     }
+  //     if (this.checkRec == false){
 
-        this.records._records.push({reps: history.reps, weight: history.weight, oneRepMax: history.oneRepMax, records: 1})
-      }
-      console.log(this.records._records);
+  //       this.records._records.push({reps: history.reps, weight: history.weight, oneRepMax: history.oneRepMax, records: 1})
+  //     }
+  //     console.log(this.records._records);
       
-    }
-  }
+  //   }
+  // }
 }

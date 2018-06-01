@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { IonicPage, ActionSheetController, NavController, NavParams } from 'ionic-angular';
-
+import { User, ProvidersUserProvider, HistoryProvider } from '../../providers/providers';
 import firebase from 'firebase';
+import { CardioHistory } from '../../models/CardioHistory';
+import { LiftingHistory } from '../../models/LiftingHistory';
 
 import * as d3 from 'd3-selection';
 import * as d3Scale from "d3-scale";
@@ -16,7 +18,7 @@ import * as d3Axis from "d3-axis";
 })
 export class FriendGainsPage {
 
-	username: string;
+	user: any;
 	gains = 0
 	allTime = 0;
 
@@ -33,6 +35,8 @@ export class FriendGainsPage {
   core = 0;
   other = 0;
   cardio = 0;
+  cardioHistory: CardioHistory[] = new Array<CardioHistory>();
+  liftingHistory: LiftingHistory[] = new Array<LiftingHistory>();
 
   filter = "";
 
@@ -62,9 +66,13 @@ export class FriendGainsPage {
     color: "#CC333F"
   };
 
-  constructor(public navCtrl: NavController, public actShtCtrl: ActionSheetController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController,
+    public actShtCtrl: ActionSheetController,
+    public navParams: NavParams,
+    private userService: ProvidersUserProvider,
+    private historyService: HistoryProvider) {
 
-  	this.username = navParams.get("username");
+  	this.user = navParams.get("user");
     this.width = Math.min(700, window.innerWidth - 10) - this.margin.left - this.margin.right,
     this.height = Math.min(this.width, window.innerHeight - this.margin.top - this.margin.bottom - 20);
     this.radarChartOptions.w = this.width;
@@ -98,49 +106,38 @@ export class FriendGainsPage {
     this.other = 0;
     this.cardio = 0;
 
-    var queryGains = firebase.database().ref('/' + this.username + '/gains');
-    queryGains.once("value").then( snapshot => {
-      snapshot.forEach( childSnapshot => {
-      	var childData1 = childSnapshot.val();
-        var key = childSnapshot.key;
-      	var gains = childData1.gains;
-        var muscle = childData1.muscle;
-
-        this.sets[key] = childData1;
-
-      	this.allTime = this.allTime + gains;
-
-      	if (muscle == "Chest"){
-          this.chest = this.chest + gains
-        }
-
-        if (muscle == "Back"){
-          this.back = this.back + gains
-        }
-
-        if (muscle == "Legs"){
-          this.legs = this.legs + gains
-        }
-
-        if (muscle == "Shoulders"){
-          this.shoulders = this.shoulders + gains
-        }
-
-        if (muscle == "Arms"){
-          this.arms = this.arms + gains
-        }
-
-        if (muscle == "Core"){
-          this.core = this.core + gains
-        }
-
-        if (muscle == "Cardio"){
-          this.cardio = this.cardio + gains
-        }
-
-      })
-    }).then(() => {
-
+    this.historyService.getCardioHistory(this.user.id).subscribe((cardioHistory) => {
+      this.cardioHistory = cardioHistory;
+      this.cardioHistory.forEach(ch => {
+        this.cardio += ch.gains;
+      });
+      this.historyService.getLiftingHistory(this.user.id).subscribe((liftingHistory) => {
+        this.liftingHistory = liftingHistory;
+        console.log(this.liftingHistory)
+        this.liftingHistory.forEach(lh =>{
+          switch(lh.exercise.MuscleGroup.muscleGroupName) {
+            case "Chest":
+              this.chest += lh.gains;
+              break;
+            case "Back":
+              this.back += lh.gains;
+              break;
+            case "Legs":
+              this.legs += lh.gains;
+              break;
+            case "Shoulders":
+              this.shoulders += lh.gains;
+              break;
+            case "Arms":
+              this.arms += lh.gains;
+              break;
+            case "Core":
+              this.core += lh.gains;
+              break;
+          }
+      });
+      console.log(this.chest)
+      this.allTime = this.cardio + this.back + this.chest + this.arms + this.core + this.arms + this.shoulders + this.legs;
       this.data[0][0].value = this.chest / this.allTime;
       this.data[0][1].value = this.back / this.allTime;
       this.data[0][2].value = this.legs / this.allTime;
@@ -148,8 +145,9 @@ export class FriendGainsPage {
       this.data[0][4].value = this.arms / this.allTime;
       this.data[0][5].value = this.core / this.allTime;
       this.data[0][6].value = this.cardio / this.allTime;
-      
+      console.log(this.data)
       this.radarChart("#gainsChart2", this.data, this.radarChartOptions);
+      })
     })
   }
 
