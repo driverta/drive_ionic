@@ -22,7 +22,7 @@
       <ion-option>All Time</ion-option>
     </ion-select>
 
-    <ion-list>
+    <ion-list class="no-margin">
       <ion-item-sliding no-lines *ngFor="let item of competingUsers | sortByGains" >
         <ion-item (click)="openItem(item)" no-lines [ngClass]="{red: item.name == username}">
           <ion-avatar item-start>
