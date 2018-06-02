@@ -53,6 +53,7 @@ export class SettingsPage {
   userData: any;
   options: any;
   profile_pic: any;
+  exercisesLength = 0;
 
   show: boolean = true;
   load: boolean = true;
@@ -130,6 +131,12 @@ export class SettingsPage {
     })
     // Build an empty form for the template to render
     this.form = this.formBuilder.group({});  
+
+    this.userService.getTotalGains(this.userData.id).subscribe(totalGains => {
+      console.log(totalGains);
+      this.gains = totalGains;
+      this.setLevel();
+    });;
 
     // this.storage.get(this.username + '/gains').then((val) => {
     //   this.gains = 0;
@@ -231,6 +238,10 @@ export class SettingsPage {
     //     this.location = location
     //   }
     // })
+
+    this.userService.getExercises().subscribe(exercises => {
+      this.exercisesLength = exercises.length;
+    });
   }
 
   setLevel () {
@@ -362,7 +373,7 @@ export class SettingsPage {
   }
 
   rules(){
-    this.navCtrl.push('UsersPage');
+    this.navCtrl.push('RulesPage');
   }
 
   goToCompeting(){

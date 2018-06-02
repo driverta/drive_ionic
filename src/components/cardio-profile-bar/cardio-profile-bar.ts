@@ -3,10 +3,12 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import  { StatsBarChart } from '../../models/item';
 import { Storage } from '@ionic/storage';
 
-import { User } from '../../providers/providers';
+import { User, ProvidersUserProvider } from '../../providers/providers';
 import { Records } from '../../providers/providers';
 
 import { SortByRepsPipe } from '../../pipes/sort-by-reps/sort-by-reps'
+
+import { CardioHistory } from '../../models/CardioHistory';
 
 import * as d3 from 'd3-selection';
 import * as d3Scale from "d3-scale";
@@ -23,6 +25,9 @@ export class CardioProfileBarComponent {
 
   username: any;
   exercise:any;
+
+  cardioHistory: CardioHistory[];
+  cardioRecords = [];
 
   width: number;
   height: number;
@@ -41,49 +46,83 @@ export class CardioProfileBarComponent {
     public navCtrl: NavController,
     public user: User,
     private records: Records,
-    private storage: Storage
+    private storage: Storage,
+    private userService: ProvidersUserProvider
     ) {
 
   	this.width = 1000 - this.margin.left - this.margin.right;
     this.height = 500 - this.margin.top - this.margin.bottom;
-    this.exercise = navParams.get('item');
-    this.tempRec = this.records._cardio;
+    this.exercise = navParams.get('exercise');
   }
 
   public makeChart() {
-    this.username = localStorage.getItem("username");
-    this.getExercises().then((val) => {
-      var keyOne = this.exercise.name + '-' + this.exercise.variation
-      var history = val[keyOne].history;
-      this.loop = 0;
-      //console.log(val[keyOne].history);
-      if (history) {
-        Object.keys(history).forEach ( (workout) => {
-          
-          this.tempRec.forEach( (value, index) => {
-            if (history[workout].minutes >= value.min && history[workout].minutes < value.max) {
-              
-              if (history[workout].mph > value.mph) {
-                this.tempRec[index].miles = history[workout].miles;
-                this.tempRec[index].time = history[workout].time;
-                this.tempRec[index].mph = history[workout].mph;
-                this.tempRec[index].records++;
-                this.records._cardioRecords.push(this.tempRec[index])
-              }
-            }
-          });
-          
-          if (this.loop == this.history.length){
-          	console.log(this.records._cardioRecords)
-            this.sortRecords();
-          }
-          
-        })
-      }
+    console.log("FUCK DIS")
+    this.tempRec = [
+      {min: 0, max: 5, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 5, max: 10, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 10, max: 15, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 15, max: 20, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 20, max: 25, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 25, max: 30, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 30, max: 35, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 35, max: 40, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 40, max: 45, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 45, max: 50, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 50, max: 55, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 55, max: 60, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 60, max: 65, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 65, max: 70, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 70, max: 75, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 75, max: 80, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 80, max: 85, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 85, max: 90, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 90, max: 95, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 95, max: 100, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 100, max: 105, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 105, max: 110, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 110, max: 115, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 115, max: 120, miles: 0, time: 0, mph: 0, records: 0},
+      {min: 120, max: 1000, miles: 0, time: 0, mph: 0, records: 0}
+  
+    ]
+    this.userService.getCardioHistoryByIdAndExercise(this.exercise).subscribe(data =>{
+      this.cardioHistory = data;
+      this.getRecords();
     })
   }
 
+  getRecords() {
+    //console.log(this.records._cardioRecs)
+    for(let history of this.cardioHistory){
+  
+      //this.checkRec =false;
+      //console.log(this.tempRec)
+      //for(let record of this.records._records){
+        this.tempRec.forEach( (value, index) => {
+          
+          if (history.minutes >= value.min && history.minutes < value.max) {
+            if (history.mph > value.mph) {
+              
+              this.tempRec[index].miles = history.miles;
+              this.tempRec[index].mph = history.mph;
+              this.tempRec[index].records++;
+              this.tempRec[index].time = history.minutes;
+            }
+          }
+        });
+    }
+    //console.log(this.records._cardioRecs)
+    this.tempRec.forEach ((value) => {
+      if (value.records > 0){
+        this.cardioRecords.push(value)
+      }
+    })
+    //this.records._cardioRecords = this.records._setToZero;
+    this.sortRecords();
+  }
+
   sortRecords() {
+    //console.log(this.records._cardioRecs)
     this.tempRec.sort((a: any, b: any) => {
     
       if (a.reps < b.reps) {
@@ -98,7 +137,7 @@ export class CardioProfileBarComponent {
   }
 
   setChart() {
-    //d3.selectAll("svg > *").remove();
+    d3.selectAll("svg > *").remove();
     this.initSvg()
     this.initAxis();
     this.drawAxis();
@@ -119,8 +158,8 @@ export class CardioProfileBarComponent {
 	initAxis() {
     this.x = d3Scale.scaleBand().rangeRound([0, this.width]).padding(0.1);
     this.y = d3Scale.scaleLinear().rangeRound([this.height, 0]);
-    this.x.domain(this.records._cardioRecords.map((d) => d.max));
-    this.y.domain([0, d3Array.max(this.records._cardioRecords, (d) => d.mph)]);
+    this.x.domain(this.cardioRecords.map((d) => d.max));
+    this.y.domain([0, d3Array.max(this.cardioRecords, (d) => d.mph)]);
   }
 
   drawAxis() {
@@ -149,7 +188,7 @@ export class CardioProfileBarComponent {
 
   drawBars() {
     this.g.selectAll(".bar")
-        .data(this.records._cardioRecords)
+        .data(this.cardioRecords)
         .enter().append("rect")
         .attr("class", "bar")
         .attr("x", (d) => this.x(d.max) )

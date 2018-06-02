@@ -117,8 +117,7 @@ export class ItemCreatePage {
 
   saveExercise() {
     this.bool = true;
-
-
+    
     this.userService.getExercises().subscribe(exercises => {
       for (let exercise of exercises) {
         if (exercise.exerciseName == this.exercise.name

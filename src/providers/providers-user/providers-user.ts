@@ -52,8 +52,8 @@ export class ProvidersUserProvider {
     return this.http.get(this.url + "getUserCompeting?userId=" + userId).map((res: Response) => res.json());
   }
 
-  addCompetingUser(competing): Observable<Response>{
-    return this.http.post(this.url + "createCompeting", competing);
+  addCompetingUser(competing): Observable<String>{
+    return this.http.post(this.url + "createCompeting", competing).map((res: Response) => res.text());
   }
 
   removeCompetingUser(competing): Observable<Response>{
@@ -68,6 +68,10 @@ export class ProvidersUserProvider {
     return this.http.get(this.url + "getUserExercises?id=" + this.user.id).map((res: Response) => res.json());
   }
 
+  getCompetingUsersExercises(userId): Observable<Exercise[]> {
+    return this.http.get(this.url + "getUserExercises?id=" + userId).map((res: Response) => res.json());
+  }
+
   addLiftingHistory(lf){
     lf.user_id=this.user.id;
     return this.http.post(this.url + "addLiftingHistory", lf);
@@ -77,14 +81,23 @@ export class ProvidersUserProvider {
     return this.http.get(this.url + "getLiftingHistoryByExercise?userId=" + this.user.id + "&exerciseId=" + ex.id ).map((res: Response) => res.json());
   }
 
+  getCompetingUsersLiftingHistoryByIdAndExercise(ex: Exercise, userId): Observable<LiftingHistory[]>{
+    return this.http.get(this.url + "getLiftingHistoryByExercise?userId=" + userId + "&exerciseId=" + ex.id ).map((res: Response) => res.json());
+  }
+
   
-  getCardioHistryByIdAndExercise(ex: Exercise): Observable<CardioHistory[]>{
+  getCardioHistoryByIdAndExercise(ex: Exercise): Observable<CardioHistory[]>{
     return this.http.get(this.url + "getCardioHistoryByExercise?userId=" + this.user.id + "&exerciseId=" + ex.id ).map((res: Response) => res.json());
   }
 
-  addCardioHistory(cardioHistory: CardioHistory){
-    cardioHistory.user_id=this.user.id;
-    return this.http.post(this.url + "addCardioHistory", cardioHistory);
+  getCompetingUsersCardioHistoryByIdAndExercise(ex: Exercise, userId): Observable<CardioHistory[]>{
+    return this.http.get(this.url + "getCardioHistoryByExercise?userId=" + userId + "&exerciseId=" + ex.id ).map((res: Response) => res.json());
+  }
+
+  addCardioHistory(cardio){
+    cardio.user_id=this.user.id;
+    console.log(this.user.id)
+    return this.http.post(this.url + "addCardioHistory", cardio);
   }
 
 
@@ -96,8 +109,8 @@ export class ProvidersUserProvider {
     return this.http.get(this.url + "getUserGainsTotal?userId=" + userId).map((res: Response) => res.json());
   }
 
-  createUser(user): Observable<Response>{
-    return this.http.post(this.url + "createUser", user);
+  createUser(user): Observable<UserModel>{
+    return this.http.post(this.url + "createUser", user).map((res: Response) => res.json());
   }
 
   removeExercise(exId): Observable<Response>{

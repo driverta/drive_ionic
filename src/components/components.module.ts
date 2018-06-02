@@ -15,8 +15,8 @@ import { FriendProfileRecordsComponent } from './friend-profile-records/friend-p
 import { FriendProfileBarComponent } from './friend-profile-bar/friend-profile-bar';
 import { CardioProfileRecordsComponent } from './cardio-profile-records/cardio-profile-records';
 import { CardioProfileBarComponent } from './cardio-profile-bar/cardio-profile-bar';
-import { FriendCardioProfileBarComponent } from './friend-cardio-profile-bar/friend-cardio-profile-bar';
-import { FriendCardioProfileRecordsComponent } from './friend-cardio-profile-records/friend-cardio-profile-records';
+// import { FriendCardioProfileBarComponent } from './friend-cardio-profile-bar/friend-cardio-profile-bar';
+// import { FriendCardioProfileRecordsComponent } from './friend-cardio-profile-records/friend-cardio-profile-records';
 import { GainsChartComponent } from './gains-chart/gains-chart';
 @NgModule({
 	declarations: [BarChartComponent,
@@ -35,8 +35,8 @@ import { GainsChartComponent } from './gains-chart/gains-chart';
     FriendProfileBarComponent,
     CardioProfileRecordsComponent,
     CardioProfileBarComponent,
-    FriendCardioProfileBarComponent,
-    FriendCardioProfileRecordsComponent,
+    // FriendCardioProfileBarComponent,
+    // FriendCardioProfileRecordsComponent,
     GainsChartComponent],
 	imports: [],
 	exports: [BarChartComponent,
@@ -55,8 +55,8 @@ import { GainsChartComponent } from './gains-chart/gains-chart';
     FriendProfileBarComponent,
     CardioProfileRecordsComponent,
     CardioProfileBarComponent,
-    FriendCardioProfileBarComponent,
-    FriendCardioProfileRecordsComponent,
+    // FriendCardioProfileBarComponent,
+    // FriendCardioProfileRecordsComponent,
     GainsChartComponent]
 })
 export class ComponentsModule {}

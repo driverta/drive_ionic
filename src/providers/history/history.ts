@@ -46,5 +46,13 @@ export class HistoryProvider {
 	
 	getLiftingHistory(userId): Observable<LiftingHistory[]> {
     return this.http.get(this.url + "getUserLiftingHistory?userId=" + userId).map((res: Response) => res.json());
+	}
+	
+	removeLiftingHistory(liftingHistory): Observable<Response>{
+    return this.http.post(this.url + "deleteLiftingHistory?", liftingHistory);
+	}
+	
+	removeCardioHistory(cardioHistory): Observable<Response>{
+    return this.http.post(this.url + "deleteCardioHistory?", cardioHistory);
   }
 }

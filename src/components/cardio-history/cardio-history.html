@@ -12,10 +12,10 @@
       </table>
       <ion-scroll scrollY="true" class="scroll">
         <table>
-          <tr *ngFor="let x of history._cardio.reverse()">
+          <tr *ngFor="let x of cardioHistory">
             <td>{{x.date | date: 'MM/dd'}}</td>
             <td>{{x.miles}}</td>
-            <td>{{x.time}}</td>
+            <td>{{x.minutes}}</td>
             <td>{{x.mph.toFixed(1)}}</td>
             <td>
               <input type="button" value="X" class="remove" (click)="presentConfirm(x)">

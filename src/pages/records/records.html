@@ -1,7 +1,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Records</ion-title>
+    <ion-title>Exercises</ion-title>
 
     <ion-buttons right>
       <button ion-button icon-only (click)="filterExercises()">
@@ -18,7 +18,7 @@
     <ion-item *ngFor="let exercise of filteredExercises">
       <button no-lines ion-item (click)="openItem(exercise)">
 
-        <h2 >{{exercise.name}}</h2>
+        <h2 >{{exercise.exerciseName}}</h2>
         <p>{{exercise.variation}}</p>
         
       </button>

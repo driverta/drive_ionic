@@ -33,6 +33,7 @@ export class FriendProfilePage {
   competitorsList = [];
   realCompetitorsList = [];
   loop = 0;
+  exercisesLength = 0;
 
   constructor(public navCtrl: NavController, 
   	public navParams: NavParams,
@@ -53,23 +54,29 @@ export class FriendProfilePage {
     this.location = this.user.location;
     //this.gym = data.gym;
 
-    var queryGains = firebase.database().ref('/' + this.username + '/gains');
-    queryGains.once("value").then( snapshot => {
-      this.loop = 0;
-      this.gains = 0;
-      this.records = 0;
-      snapshot.forEach( childSnapshot => {
-        this.loop++
-        var childData1 = childSnapshot.val();
-        var gains = childData1.gains;
-        this.gains = this.gains + gains
-        if (gains == 10){
-          this.records++;
-        }
-        if ( snapshot.numChildren() == this.loop )
-          this.setLevel()
-      })
-    })
+    this.userService.getTotalGains(this.user.id).subscribe(totalGains => {
+      console.log(totalGains);
+      this.gains = totalGains;
+      this.setLevel();
+    });;
+
+    // var queryGains = firebase.database().ref('/' + this.username + '/gains');
+    // queryGains.once("value").then( snapshot => {
+    //   this.loop = 0;
+    //   this.gains = 0;
+    //   this.records = 0;
+    //   snapshot.forEach( childSnapshot => {
+    //     this.loop++
+    //     var childData1 = childSnapshot.val();
+    //     var gains = childData1.gains;
+    //     this.gains = this.gains + gains
+    //     if (gains == 10){
+    //       this.records++;
+    //     }
+    //     if ( snapshot.numChildren() == this.loop )
+    //       this.setLevel()
+    //   })
+    // })
 
     this.userService.getCompetingUsers(this.user.id).subscribe(data => {
       this.competingList = data;
@@ -140,18 +147,22 @@ export class FriendProfilePage {
     //   }
     // })
 
-    var query2 = firebase.database().ref("/" + this.username + '/competing');
-
-    query2.once("value").then( snapshot => {
-      this.players = [];
-      snapshot.forEach( childSnapshot => {
-        
-        var childData1 = childSnapshot.val();
-        
-        this.players.push(childData1)
-        //alert(this.user._user);      
-      });
+    this.userService.getCompetingUsersExercises(this.user.id).subscribe(exercises => {
+      this.exercisesLength = exercises.length;
     });
+
+    // var query2 = firebase.database().ref("/" + this.username + '/competing');
+
+    // query2.once("value").then( snapshot => {
+    //   this.players = [];
+    //   snapshot.forEach( childSnapshot => {
+        
+    //     var childData1 = childSnapshot.val();
+        
+    //     this.players.push(childData1)
+    //     //alert(this.user._user);      
+    //   });
+    // });
   }
 
   setLevel () {
@@ -219,13 +230,13 @@ export class FriendProfilePage {
 
   goToRecords(){
     this.navCtrl.push('FriendRecordsPage', {
-      username: this.username
+      user: this.user
     });
   }
 
   goToGains(){
     this.navCtrl.push('FriendGainsPage', {
-      username: this.username
+      user: this.user
     });
   }
 

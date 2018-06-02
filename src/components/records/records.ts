@@ -29,8 +29,8 @@ export class RecordsComponent {
     private userService: ProvidersUserProvider
     ) {
     this.exercise = navParams.get('exercise');
-    console.log(this.exercise);
-    console.log(records._records);
+    //console.log(this.exercise);
+    //console.log(records._records);
   }
 
   ionViewWillEnter() {
@@ -70,7 +70,7 @@ export class RecordsComponent {
 
         this.records._records.push({reps: history.reps, weight: history.weight, oneRepMax: history.oneRepMax, records: 1})
       }
-      console.log(this.records._records);
+      //console.log(this.records._records);
       
     }
   }

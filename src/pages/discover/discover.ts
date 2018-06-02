@@ -136,12 +136,17 @@ export class DiscoverPage {
   addToLeaderboard(item){
     this.id = item.id;
     let competing = new CompetingModel;
-    //competing = {userId: this.userId, competingUserId: this.id}
     competing.id = this.userId;
     competing.competingUser = this.id
     console.log(competing);
     this.userService.addCompetingUser(competing).subscribe(data => {
       console.log(data);
+      if(data === "already_exists"){
+        this.alreadyCompeting();
+      }
+      else{
+        this.playerAdded();
+      }
     })
 
     // var check = true;
@@ -190,7 +195,7 @@ export class DiscoverPage {
 
   alreadyCompeting() {
     let alert = this.alertCtrl.create({
-      title: 'You are already Cometing with this player!',
+      title: 'You are already competing with this player!',
       buttons: ['Ok']
     });
     alert.present();
