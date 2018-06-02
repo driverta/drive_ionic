@@ -74,7 +74,7 @@ export class SignupPage {
   }
 
   doSignUp() {
-    this.userService.getOneUser(this.account.name).subscribe(data => {
+    this.userService.getOneUser(this.account.name).subscribe(data => { 
       if(data.username === "alreadyexists"){
         this.signUp();
       }
@@ -85,6 +85,7 @@ export class SignupPage {
   }
 
   signUp(){
+    
     this.show = true;
     if(this.account.password != this.confirmPassword){
       this.badPassword()
@@ -98,39 +99,40 @@ export class SignupPage {
     let user = new UserModel();
     user.username = this.account.name;
     user.email = this.account.email;
-    this.userService.createUser(user).subscribe(response => console.log(response));
-    this.userService.getUserByEmail(this.account.email).subscribe(data =>{
-      this.userService.setUser(data);
-      console.log(data.id)
-    });
+    console.log("here")    
+    this.userService.createUser(user).subscribe(response => {
+      this.userService.setUser(response)
+      var bench = new Exercise;
+      bench.exerciseName = "Bench Press";
+      bench.variation = "Barbell";
+      this.mg = {id: 1, muscleGroupName: "Chest"}
+      bench.MuscleGroup = this.mg;
+      this.exerciseService.createExercise
+      (this.userService.getUser().id, bench).subscribe(data => {
+          //console.log(data)
+      })
+  
+      var squat = new Exercise;
+      squat.exerciseName = "Squat";
+      squat.variation = "Barbell";
+      this.mg = {id: 3, muscleGroupName: "Legs"}
+      squat.MuscleGroup = this.mg;
+      this.exerciseService.createExercise(this.userService.getUser().id, squat).subscribe(data => {
+          //console.log(data)
+      })
+  
+      var deadlift = new Exercise;
+      deadlift.exerciseName = "Deadlift";
+      deadlift.variation = "Barbell";
+      this.mg = {id: 2, muscleGroupName: "Back"}
+      deadlift.MuscleGroup = this.mg;
+      this.exerciseService.createExercise(this.userService.getUser().id, deadlift).subscribe(data => {
+          //console.log(data)
+      })
+     });
 
-    var bench = new Exercise;
-    bench.exerciseName = "Bench Press";
-    bench.variation = "Barbell";
-    this.mg = {id: 1, muscleGroupName: "Chest"}
-    bench.MuscleGroup = this.mg;
-    this.exerciseService.createExercise
-    (this.userService.getUser().id, bench).subscribe(data => {
-        //console.log(data)
-    })
 
-    var squat = new Exercise;
-    squat.exerciseName = "Squat";
-    squat.variation = "Barbell";
-    this.mg = {id: 3, muscleGroupName: "Legs"}
-    squat.MuscleGroup = this.mg;
-    this.exerciseService.createExercise(this.userService.getUser().id, squat).subscribe(data => {
-        //console.log(data)
-    })
-
-    var deadlift = new Exercise;
-    deadlift.exerciseName = "Deadlift";
-    deadlift.variation = "Barbell";
-    this.mg = {id: 2, muscleGroupName: "Back"}
-    deadlift.MuscleGroup = this.mg;
-    this.exerciseService.createExercise(this.userService.getUser().id, deadlift).subscribe(data => {
-        //console.log(data)
-    })
+  
    
     // this.storage.set(this.account.name + '/exercises', this.exercises);
     // this.storage.set(this.account.name + '/gains', this.totalGains)

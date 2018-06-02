@@ -101,8 +101,8 @@ export class ProvidersUserProvider {
     return this.http.get(this.url + "getUserGainsTotal?userId=" + userId).map((res: Response) => res.json());
   }
 
-  createUser(user): Observable<Response>{
-    return this.http.post(this.url + "createUser", user);
+  createUser(user): Observable<UserModel>{
+    return this.http.post(this.url + "createUser", user).map((res: Response) => res.json());
   }
 
   removeExercise(exId): Observable<Response>{
