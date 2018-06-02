@@ -182,7 +182,6 @@ export class NewCardioComponent {
 
       d3.selectAll("svg > *").remove();
       var date = new Date().toISOString();
-      var newDate = date.replace(".", "-")
       var time = this.hours + ":" + this.minutes + ":" + this.seconds;
       var newMinutes = this.minutes / 60;
       var newSeconds = this.seconds / 360;
@@ -218,7 +217,6 @@ export class NewCardioComponent {
         this.bool = false;
         this.points = false;
       }, 2000);
-      console.log(this.cardio);
       this.userService.addCardioHistory(this.cardio).subscribe();
       this.myEvent.emit(null);
       this.ngOnInit();
