@@ -44,8 +44,8 @@ export class ProvidersUserProvider {
     return this.http.get(this.url + "getUserCompeting?userId=" + userId).map((res: Response) => res.json());
   }
 
-  addCompetingUser(competing): Observable<Response>{
-    return this.http.post(this.url + "createCompeting", competing);
+  addCompetingUser(competing): Observable<String>{
+    return this.http.post(this.url + "createCompeting", competing).map((res: Response) => res.text());
   }
 
   removeCompetingUser(competing): Observable<Response>{
