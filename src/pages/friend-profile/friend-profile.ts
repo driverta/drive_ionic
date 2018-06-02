@@ -193,7 +193,6 @@ export class FriendProfilePage {
   getProfileImageStyle() {
 
     try {
-      //this.noLoad();
       return 'url(' + this.user.profilePic + ')'
     }
     catch(err){
