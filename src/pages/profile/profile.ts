@@ -388,23 +388,6 @@ export class SettingsPage {
     this.navCtrl.push('CompetitorsPage', {
       list: this.competitorsList
     });
-    // this.realCompetitorsList = [];
-    // console.log(this.competitorsList)
-    // this.competitorsList.forEach((val) => {
-    //   this.loop = 0;
-    //   var queryPic = firebase.database().ref('/users/' + val + '/profilePic');
-    //   queryPic.once("value").then( snapshot => {
-    //     var pic = snapshot.val();
-    //     this.realCompetitorsList.push({name: val, profilePic: pic})
-    //     this.loop++
-    //     if (this.loop == this.competitorsList.length){
-    //       this.navCtrl.push('CompetitorsPage', {
-    //         list: this.realCompetitorsList,
-    //         competing: this.competingList
-    //       });
-    //     }
-    //   })
-    // })
   }
 
   goToRecords(){
