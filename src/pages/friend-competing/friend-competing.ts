@@ -35,10 +35,13 @@ export class FriendCompetingPage {
   }
 
   ionViewDidLoad() {
-    // console.log(this.list);
-    // this.userService.getCompetingUsers(this.user).subscribe(data => {
-    //   this.list = data
-    // })
+    console.log(this.list);
+    this.list.forEach(player => {
+      alert("here")
+      this.userService.getProfilePic(player.username).subscribe(pic => {
+        player.profilePic = "data:image/jpeg;base64," + pic['_body'];
+      })
+    })
   }
 
   openItem(item){

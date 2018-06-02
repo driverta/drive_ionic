@@ -29,6 +29,11 @@ export class CompetingPage {
   ionViewDidLoad() {
     this.userService.getCompetingUsers(this.user.id).subscribe(data => {
       this.list = data
+      this.list.forEach(player => {
+        this.userService.getProfilePic(player.username).subscribe(pic => {
+          player.profilePic = "data:image/jpeg;base64," + pic['_body'];
+        })
+      })
     })
   }
 

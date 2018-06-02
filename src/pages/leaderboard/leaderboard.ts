@@ -8,6 +8,7 @@ import { SortByGainsPipe } from '../../pipes/sort-by-gains/sort-by-gains'
 import firebase from 'firebase';
 import { UserModel } from '../../models/users';
 import { CompetingModel } from '../../models/competing';
+import { values } from 'd3';
 
 @IonicPage()
 @Component({
@@ -57,23 +58,14 @@ export class SearchPage {
 
     this.userService.getLeaderboardData(this.userService.getUser().id).subscribe(data =>{
       this.competingUsers = data;
+      this.competingUsers.forEach(player => {
+        this.userService.getProfilePic(player.username).subscribe(pic => {
+          player.profilePic = "data:image/jpeg;base64," + pic['_body'];
+        })
+      })
       this.show = false;
       this.filterDay('All Time');
     });
-  }
-
-  getPic() {
-    this.players.forEach( value => {
-      var queryGains = firebase.database().ref('/users');
-      queryGains.once("value").then( snapshot => {
-        snapshot.forEach( childSnapshot => {
-          var childData1 = childSnapshot.val();
-          if (childData1.name == value.name){
-            value.profilePic = childData1.profilePic;
-          }
-        });
-      });
-    })
   }
 
   setLevel (gains, i) {

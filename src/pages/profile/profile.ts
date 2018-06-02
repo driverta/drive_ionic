@@ -1,12 +1,15 @@
 import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
+import { DomSanitizer } from '@angular/platform-browser';
+import { Records } from '../../providers/providers';
 import { IonicPage,
   Nav,
   NavController,
   NavParams,
   AlertController,
-  ModalController
+  ModalController,
+  Img
 } from 'ionic-angular';
 import { Camera } from '@ionic-native/camera';
 import { Storage } from '@ionic/storage';
@@ -49,6 +52,7 @@ export class SettingsPage {
   imageData: any;
   userData: any;
   options: any;
+  profile_pic: any;
 
   show: boolean = true;
   load: boolean = true;
@@ -79,7 +83,9 @@ export class SettingsPage {
     private user: User,
     public levels: Levels,
     private storage: Storage,
-    private userService: ProvidersUserProvider) {
+    private userService: ProvidersUserProvider,
+    private domSanitizer: DomSanitizer,
+    private rec: Records) {
 
     this.userData = this.userService.getUser();
   }
@@ -107,16 +113,13 @@ export class SettingsPage {
     // Watch the form for changes, and
     this.form.valueChanges.subscribe((v) => {
       this.settings.merge(this.form.value);
-      var pic = firebase.database().ref('/users/' + this.username + '/profilePic');
-      pic.set(this.form.controls['profilePic'].value);
-      console.log(group.profilePic);
+      // console.log(group.profilePic);
     });
   }
 
   ionViewDidLoad() {
     this.competitorsList = [];
     this.username = this.userService.getUser().username;
-    //console.log(this.username)
     this.userService.getOneUser(this.username).subscribe(data => {
 
       this.weight = data.weight;
@@ -181,10 +184,16 @@ export class SettingsPage {
         
     //   })
     // })
+    this.userService.getProfilePic(this.userData.username).subscribe(data => {
+
+      this.form.patchValue({"profilePic": "data:image/jpeg;base64," + data['_body']});
+      this.show = false;
+    });
 
     // var queryPic = firebase.database().ref('/users/' + this.username + '/profilePic');
     // queryPic.once("value").then( snapshot => {
     //   var pic = snapshot.val();
+    //   console.log(pic);
     //   if(pic){
     //     this.form.patchValue({ 'profilePic': pic });
     //     this.show = false;
@@ -253,27 +262,28 @@ export class SettingsPage {
         targetWidth: 96,
         targetHeight: 96
       }).then((data) => {
+        alert("here");
         this.form.patchValue({ 'profilePic': 'data:image/jpg;base64,' + data });
-
+        
       }, (err) => {
         alert('Unable to take photo');
       })
     } else {
+      this.fileInput.nativeElement
       this.fileInput.nativeElement.click();
     }
-
-
-
   }
 
   processWebImage(event) {
     //alert(event);
     let reader = new FileReader();
     reader.onload = (readerEvent) => {
-
       this.imageData = (readerEvent.target as any).result;
-      this.show = false;
-      this.form.patchValue({ 'profilePic': this.imageData });
+      console.log(this.imageData);
+      this.userService.uploadProfilePic(this.userData.username, this.imageData).subscribe(data => {
+        this.show = false;
+        this.form.patchValue({ 'profilePic': this.imageData });
+      });
     };
     reader.readAsDataURL(event.target.files[0]);
   }

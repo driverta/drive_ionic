@@ -58,6 +58,11 @@ export class DiscoverPage {
     this.userService.getAllUsers().subscribe(data => {
       this.users = data;
       this.show = false;
+      this.users.forEach(player => {
+        this.userService.getProfilePic(player.username).subscribe(pic => {
+          player.profilePic = "data:image/jpeg;base64," + pic['_body'];
+        })
+      })
       
     });
 

@@ -10,12 +10,12 @@
 <ion-content padding>
 	<ion-list>
     <ion-item (click)="openItem(item)" no-lines *ngFor="let item of list">
-      <!--
+      
       <ion-avatar item-start>
                     <img *ngIf="item.profilePic != null" [src]="item.profilePic" />
             <ion-icon *ngIf="item.profilePic == null" class="default-img" name="contact"></ion-icon>
       </ion-avatar>
-      -->
+     
 	    <h1 >{{item.username}}
 	    	<button ion-button icon-only (click)="addToLeaderboard(item)">
 	        <ion-icon name="add"></ion-icon>

@@ -32,6 +32,11 @@ export class CompetitorsPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad CompetitorsPage');
+    this.list.forEach(player => {
+      this.userService.getProfilePic(player.username).subscribe(pic => {
+        player.profilePic = "data:image/jpeg;base64," + pic['_body'];
+      })
+    })
   }
 
   addToLeaderboard(item){

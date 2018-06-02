@@ -22,6 +22,7 @@ import { HistoryProvider } from '../providers/history/history';
 import { FeathersProvider } from '../providers/feathers/feathers';
 import { ProvidersUserProvider } from '../providers/providers-user/providers-user';
 import { ExerciseProvider } from '../providers/exercise/exercise';
+import { AwsProvider } from '../providers/aws/aws';
 
 // The translate loader needs to know where to load i18n files
 // in Ionic's static asset pipeline.
@@ -82,7 +83,8 @@ export function provideSettings(storage: Storage) {
     Levels,
     HistoryProvider,
     FeathersProvider,
-    ExerciseProvider
+    ExerciseProvider,
+    AwsProvider
   ]
 })
 export class AppModule { }
