@@ -12,6 +12,7 @@ import { CardioHistory } from '../../models/CardioHistory';
 import { CardioBarComponent } from '../../components/cardio-bar/cardio-bar';
 import { CardioLineComponent } from '../../components/cardio-line/cardio-line';
 import { SortByRepsPipe } from '../../pipes/sort-by-reps/sort-by-reps';
+import { CardioTimeConvertPipe } from '../../pipes/cardio-time-convert/cardio-time-convert';
 
 import firebase from 'firebase';
 

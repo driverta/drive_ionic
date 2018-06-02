@@ -151,11 +151,8 @@ export class SettingsPage {
     })
 
     this.userService.getProfilePic(this.userData.username).subscribe(data => {
-
-      this.form.patchValue({"profilePic": "data:image/jpeg;base64," + data['_body']});
-      
+      this.form.patchValue({"profilePic": "data:image/jpeg;base64," + data['_body']});     
       this.show = false;
-      console.log(this.show);
     });
 
     this.userService.getExercises().subscribe(exercises => {
