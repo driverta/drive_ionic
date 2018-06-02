@@ -51,28 +51,17 @@ export class FriendCompetingPage {
     this.id = item.id;
     let competing = new CompetingModel;
     competing = {id: this.userId, competingUser: this.id}
-    var check = true;
-    
-    this.list.forEach( value => {
 
-      if (value.name == item.name) {
-
+    this.userService.addCompetingUser(competing).subscribe(data => {
+      console.log(data);
+      if(data === "already_exists"){
         this.alreadyCompeting();
-        check = false;
-      } 
+      }
+      else{
+        this.playerAdded();
+      }
     })
-  	
-    if(check){
-      this.userService.addCompetingUser(competing).subscribe(data => {
 
-      })
-      // var competing = firebase.database().ref('/' + this.username + '/competing');
-      // competing.child(item.name).set(item);
-
-      // var competitors = firebase.database().ref('/' + item.name + '/competitors');
-      // competitors.child(this.username).set(this.username);
-      this.playerAdded();
-    }
   }
 
   alreadyCompeting() {

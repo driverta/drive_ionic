@@ -12,20 +12,20 @@ import { ProvidersUserProvider } from '../../providers/providers-user/providers-
 })
 export class CompetitorsPage {
 
-	list = [];
-	competing = [];
-	username: string;
+  list = [];
+  competing = [];
+  username: string;
   id: number;
   competingOne: CompetingModel[];
   userId: number;
 
   constructor(public navCtrl: NavController,
-  	public navParams: NavParams,
-  	public alertCtrl: AlertController,
+    public navParams: NavParams,
+    public alertCtrl: AlertController,
     private userService: ProvidersUserProvider) {
 
-  	this.list = navParams.get('list');
-  	this.username = this.userService.getUser().username;
+    this.list = navParams.get('list');
+    this.username = this.userService.getUser().username;
     this.userId = this.userService.getUser().id;
 
   }
@@ -34,35 +34,21 @@ export class CompetitorsPage {
     console.log('ionViewDidLoad CompetitorsPage');
   }
 
-  addToLeaderboard(item){
+  addToLeaderboard(item) {
     this.id = item.id;
     let competing = new CompetingModel;
     competing.id = this.userId;
     competing.competingUser = this.id
-    var check = true;
-    
-    /////// needs work /////
-    this.competing.forEach( value => {
 
-      if (value.name == item.name) {
-
+    this.userService.addCompetingUser(competing).subscribe(data => {
+      console.log(data);
+      if (data === "already_exists") {
         this.alreadyCompeting();
-        check = false;
-      } 
+      }
+      else {
+        this.playerAdded();
+      }
     })
-  	/////////////
-
-    if(check){
-      this.userService.addCompetingUser(competing).subscribe(data => {
-
-      })
-      // var competing = firebase.database().ref('/' + this.username + '/competing');
-      // competing.child(item.name).set(item);
-
-      // var competitors = firebase.database().ref('/' + item.name + '/competitors');
-      // competitors.child(this.username).set(this.username);
-      this.playerAdded();
-    }
   }
 
   alreadyCompeting() {
@@ -81,7 +67,7 @@ export class CompetitorsPage {
     alert.present();
   }
 
-  openItem(item){
+  openItem(item) {
     this.navCtrl.push('FriendProfilePage', {
       item: item
     });
