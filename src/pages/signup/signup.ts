@@ -101,6 +101,7 @@ export class SignupPage {
     this.userService.createUser(user).subscribe(response => console.log(response));
     this.userService.getUserByEmail(this.account.email).subscribe(data =>{
       this.userService.setUser(data);
+      console.log(data.id)
     });
 
     var bench = new Exercise;
@@ -108,7 +109,8 @@ export class SignupPage {
     bench.variation = "Barbell";
     this.mg = {id: 1, muscleGroupName: "Chest"}
     bench.MuscleGroup = this.mg;
-    this.exerciseService.createExercise(this.userService.getUser().id, bench).subscribe(data => {
+    this.exerciseService.createExercise
+    (this.userService.getUser().id, bench).subscribe(data => {
         //console.log(data)
     })
 

@@ -16,8 +16,6 @@ import * as d3Scale from "d3-scale";
 import * as d3Array from "d3-array";
 import * as d3Axis from "d3-axis";
 
-import { FriendCardioProfileBarComponent } from '../../components/friend-cardio-profile-bar/friend-cardio-profile-bar';
-import { FriendCardioProfileRecordsComponent } from '../../components/friend-cardio-profile-records/friend-cardio-profile-records';
 import firebase from 'firebase';
 
 
@@ -47,9 +45,6 @@ export class FriendCardioRecordDetailPage {
   svg: any;
   g: any;
   history = [];
-
-  @ViewChild(FriendCardioProfileBarComponent) barChart: FriendCardioProfileBarComponent
-  @ViewChild(FriendCardioProfileRecordsComponent) recordsTable: FriendCardioProfileRecordsComponent
 
   constructor(public navCtrl: NavController,
   	public navParams: NavParams,
@@ -102,7 +97,7 @@ export class FriendCardioRecordDetailPage {
       
     ];
     console.log(this.exercise.exerciseName)
-    this.userService.getCardioHistoryByIdAndExercise(this.exercise).subscribe(data =>{
+    this.userService.getCompetingUsersCardioHistoryByIdAndExercise(this.exercise, this.user.id).subscribe(data =>{
       this.cardioHistory = data;
       this.getRecords();
     })

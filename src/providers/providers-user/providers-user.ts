@@ -73,7 +73,6 @@ export class ProvidersUserProvider {
     return this.http.get(this.url + "getLiftingHistoryByExercise?userId=" + this.user.id + "&exerciseId=" + ex.id ).map((res: Response) => res.json());
   }
 
-  /////// NEEDS API CALL ///////////
   getCompetingUsersLiftingHistoryByIdAndExercise(ex: Exercise, userId): Observable<LiftingHistory[]>{
     return this.http.get(this.url + "getLiftingHistoryByExercise?userId=" + userId + "&exerciseId=" + ex.id ).map((res: Response) => res.json());
   }
@@ -81,6 +80,10 @@ export class ProvidersUserProvider {
   
   getCardioHistoryByIdAndExercise(ex: Exercise): Observable<CardioHistory[]>{
     return this.http.get(this.url + "getCardioHistoryByExercise?userId=" + this.user.id + "&exerciseId=" + ex.id ).map((res: Response) => res.json());
+  }
+
+  getCompetingUsersCardioHistoryByIdAndExercise(ex: Exercise, userId): Observable<CardioHistory[]>{
+    return this.http.get(this.url + "getCardioHistoryByExercise?userId=" + userId + "&exerciseId=" + ex.id ).map((res: Response) => res.json());
   }
 
   addCardioHistory(cardio){
