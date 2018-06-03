@@ -60,6 +60,8 @@ export class ItemDetailPage {
       var keyOne = this.exercise.name + '-' + this.exercise.variation
       var history = val[keyOne].history;
       //console.log(val[keyOne].history);
+      var historyQuery =  firebase.database().ref(this.username + "/exercisesNew2/" + keyOne + "/history");
+      historyQuery.push(history);
       if (history) {
         Object.keys(history).forEach ( (set) => {
           this.checkRec = false;

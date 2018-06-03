@@ -173,6 +173,11 @@ export class ListMasterPage {
       }
     })
     if (this.status == this.username) {
+      Object.keys(this.setlifts).forEach ( (key) => {
+        var history = firebase.database().ref(this.username + "/exercisesNew/" + key + "/history");
+        history.push(this.setlifts[key]['history']);
+        // console.log(this.setlifts[key]['history']);
+      });
       this.getExercises().then((val) => {
         var exercises = firebase.database().ref(this.username + '/exercises');
         exercises.set(val);
