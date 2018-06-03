@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Records } from '../../providers/providers';
+import { ImageResizer, ImageResizerOptions } from '@ionic-native/image-resizer';
 import { IonicPage,
   Nav,
   NavController,
@@ -86,7 +87,8 @@ export class SettingsPage {
     private storage: Storage,
     private userService: ProvidersUserProvider,
     private domSanitizer: DomSanitizer,
-    private rec: Records) {
+    private rec: Records,
+    private imageResizer: ImageResizer) {
 
     this.userData = this.userService.getUser();
   }
