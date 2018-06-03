@@ -32,6 +32,9 @@ export class CompetingPage {
       this.list.forEach(player => {
         this.userService.getProfilePic(player.username).subscribe(pic => {
           player.profilePic = "data:image/jpeg;base64," + pic['_body'];
+          if (pic['_body'] != "NahNigga"){
+            //this.show = false;
+          }
         })
       })
     })

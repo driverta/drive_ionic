@@ -3,7 +3,6 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Records } from '../../providers/providers';
-import { ImageResizer, ImageResizerOptions } from '@ionic-native/image-resizer';
 import { IonicPage,
   Nav,
   NavController,
@@ -87,8 +86,7 @@ export class SettingsPage {
     private storage: Storage,
     private userService: ProvidersUserProvider,
     private domSanitizer: DomSanitizer,
-    private rec: Records,
-    private imageResizer: ImageResizer) {
+    private rec: Records) {
 
     this.userData = this.userService.getUser();
   }
@@ -194,9 +192,11 @@ export class SettingsPage {
     //   })
     // })
     this.userService.getProfilePic(this.userData.username).subscribe(data => {
-
+      console.log(data)
       this.form.patchValue({"profilePic": "data:image/jpeg;base64," + data['_body']});
-      this.show = false;
+      if (data['_body'] != "NahNigga"){
+        this.show = false;
+      }
     });
 
     // var queryPic = firebase.database().ref('/users/' + this.username + '/profilePic');
