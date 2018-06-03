@@ -61,6 +61,11 @@ export class DiscoverPage {
       this.users.forEach(player => {
         this.userService.getProfilePic(player.username).subscribe(pic => {
           player.profilePic = "data:image/jpeg;base64," + pic['_body'];
+          if (pic['_body'] == "NahNigga"){
+            player.profilePic = null
+          } else {
+            player.profilePic = "data:image/jpeg;base64," + pic['_body'];
+          }
         })
       })
       
