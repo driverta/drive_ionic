@@ -5,7 +5,7 @@ import { User, ProvidersUserProvider } from '../../providers/providers';
 import { Records } from '../../providers/providers';
 
 import { SortByMinutesPipe } from '../../pipes/sort-by-minutes/sort-by-minutes';
-
+import { CardioTimeConvertPipe } from '../../pipes/cardio-time-convert/cardio-time-convert'
 import { CardioHistory } from '../../models/CardioHistory';
 
 @Component({

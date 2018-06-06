@@ -44,8 +44,9 @@ export class FriendCompetingPage {
   }
 
   openItem(item){
+    console.log("here");
     this.navCtrl.push('FriendProfilePage', {
-      user: this.user
+      item: item
     });
   }
 

@@ -17,23 +17,24 @@
     </ion-segment>
     -->
   </div>
-  
+
   <div [ngSwitch]="segment">
     <ion-list *ngSwitchCase="'discover_people'">
       <ion-searchbar (ionInput)="getItems($event)" placeholder="search usernames to compete with friends"></ion-searchbar>
       <ion-list>
         <ion-item *ngFor="let item of currentItems">
-          
+
           <ion-avatar item-start>
-            <img [src]="item.profilePic" />
+            <img *ngIf="item.profilePic != null" [src]="item.profilePic" />
+            <ion-icon *ngIf="item.profilePic == null" class="default-img" name="contact"></ion-icon>
           </ion-avatar>
-          
+
           <h2>{{item.username}}
             <button ion-button icon-only (click)="addToLeaderboard(item)">
               <ion-icon name="add"></ion-icon>
             </button>
           </h2>
-            
+
           <ion-note item-end *ngIf="item.note">{{item.note}}</ion-note>
         </ion-item>
       </ion-list>
@@ -67,5 +68,5 @@
       -->
     </ion-list>
     <h3 *ngIf="show" id="loading">Loading</h3>
-	</div>
+  </div>
 </ion-content>
