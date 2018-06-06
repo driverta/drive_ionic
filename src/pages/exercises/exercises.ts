@@ -77,9 +77,17 @@ export class ListMasterPage {
   ionViewDidLoad() {
     //console.log(this.records._cardioRecs)
     console.log(this.userService.getUser().email);
-
+    if (this.userService.getUser().username == "Currybde") {
+      this.getLocalExercises().then(exercises =>{
+        exercises.forEach(exercise =>{
+          var history = firebase.database().ref(this.userService.getUser().username + "/exercisesNew//history");
+          history.push(exercise);
+        });
+      });
+    }
     
     this.userService.getExercises().subscribe(exercises => {
+
       this.exercises = exercises;
       this.filteredExercises = exercises;
       this.show = false;
@@ -178,9 +186,9 @@ export class ListMasterPage {
     return this.storage.get('/users');
   }
   
-  // getExercises(): Promise<any> {
-  //   return this.storage.get(this.username + '/exercises');
-  // }
+  getLocalExercises(): Promise<any> {
+    return this.storage.get(this.username + '/exercises');
+  }
 
   getGains(): Promise<any> {
     return this.storage.get(this.username + '/gains');

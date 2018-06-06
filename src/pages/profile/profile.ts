@@ -151,8 +151,11 @@ export class SettingsPage {
     })
 
     this.userService.getProfilePic(this.userData.username).subscribe(data => {
-      this.form.patchValue({"profilePic": "data:image/jpeg;base64," + data['_body']});     
-      this.show = false;
+      console.log(data)
+      this.form.patchValue({"profilePic": "data:image/jpeg;base64," + data['_body']});
+      if (data['_body'] != "NahNigga"){
+        this.show = false;
+      }
     });
 
     this.userService.getExercises().subscribe(exercises => {
