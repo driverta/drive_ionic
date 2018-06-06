@@ -67,6 +67,10 @@ export class ListMasterPage {
     });
   }
 
+  ionViewWillEnter(){
+    this.ionViewDidLoad();
+  }
+
   /**
    * The view loaded, let's query our items for the list
    */

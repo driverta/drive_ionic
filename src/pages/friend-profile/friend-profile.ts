@@ -55,6 +55,7 @@ export class FriendProfilePage {
     //this.gym = data.gym;
 
     this.userService.getTotalGains(this.user.id).subscribe(totalGains => {
+      console.log("here");
       console.log(totalGains);
       this.gains = totalGains;
       this.setLevel();
@@ -80,6 +81,7 @@ export class FriendProfilePage {
 
     this.userService.getCompetingUsers(this.user.id).subscribe(data => {
       this.competingList = data;
+      console.log("getCompetingUsers")
       console.log(this.competingList);
       this.competing = this.competingList.length;
     })
@@ -99,6 +101,7 @@ export class FriendProfilePage {
 
     this.userService.getCompetitors(this.user.id).subscribe(data => {
       this.competitorsList = data;
+      console.log("getCompetitors")
       console.log(this.competitorsList);
       this.competitors = this.competitorsList.length;
     })
@@ -148,6 +151,8 @@ export class FriendProfilePage {
     // })
 
     this.userService.getCompetingUsersExercises(this.user.id).subscribe(exercises => {
+      console.log("getCompetingUsersExercises")
+      console.log(exercises)
       this.exercisesLength = exercises.length;
     });
 
@@ -188,7 +193,6 @@ export class FriendProfilePage {
   getProfileImageStyle() {
 
     try {
-      //this.noLoad();
       return 'url(' + this.user.profilePic + ')'
     }
     catch(err){
