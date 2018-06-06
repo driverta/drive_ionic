@@ -1,6 +1,6 @@
 <div>
   <ion-item no-lines>
-    <div class="rectable">
+    <div class="rectable" *ngIf="liftingBool">
       <table>
         <tr>
           <th>Reps</th>
@@ -11,7 +11,7 @@
       </table>
       <ion-scroll scrollY="true" class="scroll">
         <table>
-          <tr *ngFor="let x of records._records | sortByReps " [ngClass]="{red: x.records == 1, green: x.records > 1 && x.records < 5, silver: x.records > 4 && x.records < 10, gold: x.records > 9 }">
+          <tr *ngFor="let x of liftingRecords | sortByReps " [ngClass]="{red: x.records == 1, green: x.records > 1 && x.records < 5, silver: x.records > 4 && x.records < 10, gold: x.records > 9 }">
             <td class="bold">{{x.reps}}</td>
             <td>{{x.weight}}</td>
             <td>{{x.oneRepMax}}</td>
@@ -20,5 +20,25 @@
         </table>
       </ion-scroll>
     </div>
+    <div class="rectable" *ngIf="cardioBool">
+        <ion-scroll scrollY="true" class="scroll">
+          <table>
+            <tr>
+              <th></th>
+              <th>Time</th>
+              <th>Miles</th>
+              <th>MPH</th>
+              <th width="10px">Records</th>
+            </tr>
+            <tr *ngFor="let x of cardioRecords | sortByMinutes " [ngClass]="{red: x.records == 1, green: x.records > 1 && x.records < 5, silver: x.records > 4 && x.records < 10, gold: x.records > 9 }">
+              <td class="bold">{{x.min}}-{{x.max}}min</td>
+              <td>{{x.time}}</td>
+              <td>{{x.miles}}</td>
+              <td>{{x.mph.toFixed(1)}}</td>
+              <td>{{x.records}}</td>
+            </tr>
+          </table>
+        </ion-scroll>
+      </div>
   </ion-item>
 </div>

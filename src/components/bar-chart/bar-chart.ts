@@ -10,6 +10,7 @@ import { SortByRepsPipe } from '../../pipes/sort-by-reps/sort-by-reps';
 import { HistoryProvider, ProvidersUserProvider } from '../../providers/providers';
 
 import { LiftingHistory } from '../../models/LiftingHistory';
+import { CardioHistory } from '../../models/CardioHistory';
 
 import * as d3 from 'd3-selection';
 import * as d3Scale from "d3-scale";
@@ -24,10 +25,14 @@ import firebase from 'firebase';
 })
 export class BarChartComponent {
 
+  cardioRecords = [];
+  cardioHistory: CardioHistory[];
+  liftingRecords = [];
   liftingHistory: LiftingHistory[];
 	username: any;
   exercise:any;
-
+  tempRec = [];
+  muscleGroup: any;
   width: number;
   height: number;
   margin = {top: 20, right: 20, bottom: 80, left: 0};
@@ -38,6 +43,10 @@ export class BarChartComponent {
   loop = 0;
   checkRec = false;
   history = [];
+  liftingBool = true;
+  cardioBool = false;
+  xAxisText = "";
+  yAxisText = "";
 
   constructor(
     navParams: NavParams,
@@ -51,50 +60,58 @@ export class BarChartComponent {
   	this.width = 1000 - this.margin.left - this.margin.right;
     this.height = 500 - this.margin.top - this.margin.bottom;
     this.exercise = navParams.get('exercise');
+    this.muscleGroup = navParams.get('muscleGroup');
   }
 
-  public makeChart() {
-    this.userService.getLiftingHistoryByIdAndExercise(this.exercise).subscribe(data =>{
-      this.liftingHistory = data;
-      console.log(this.liftingHistory);
-      this.getRecords();
-    })
-    // this.username = localStorage.getItem("username");
-    // this.getExercises().then((val) => {
-    //   var keyOne = this.exercise.name + '-' + this.exercise.variation
-    //   var history = val[keyOne].history;
-    //   this.loop = 0;
-    //   //console.log(val[keyOne].history);
-    //   if (history) {
-    //     Object.keys(history).forEach ( (set) => {
-    //       this.checkRec = false;
-    //       this.records._records.forEach( (value, index) => {
-    //         if (history[set].reps == value.reps) {
-    //           this.checkRec = true;
-    //           if (history[set].weight > value.weight) {
-    //             this.records._records[index].weight = history[set].weight;
-    //             this.records._records[index].oneRM = history[set].oneRM;
-    //             this.records._records[index].records++;
-    //           }
-    //         }
-    //       });
-    //       if (this.checkRec == false){
-    //         this.records._records.push({reps: history[set].reps, weight: history[set].weight, oneRM: history[set].oneRM, records: 1})
-    //       }
-    //       if (this.loop == this.history.length){
-    //         this.sortRecords();
-    //       }
-    //     })
-    //   }
-    // });
+  public makeBarChart() {
+    if (this.muscleGroup == "Cardio") {
+      this.tempRec = [
+        {min: 0, max: 5, miles: 0, time: 0, mph: 0, records: 0},
+        {min: 5, max: 10, miles: 0, time: 0, mph: 0, records: 0},
+        {min: 10, max: 15, miles: 0, time: 0, mph: 0, records: 0},
+        {min: 15, max: 20, miles: 0, time: 0, mph: 0, records: 0},
+        {min: 20, max: 25, miles: 0, time: 0, mph: 0, records: 0},
+        {min: 25, max: 30, miles: 0, time: 0, mph: 0, records: 0},
+        {min: 30, max: 35, miles: 0, time: 0, mph: 0, records: 0},
+        {min: 35, max: 40, miles: 0, time: 0, mph: 0, records: 0},
+        {min: 40, max: 45, miles: 0, time: 0, mph: 0, records: 0},
+        {min: 45, max: 50, miles: 0, time: 0, mph: 0, records: 0},
+        {min: 50, max: 55, miles: 0, time: 0, mph: 0, records: 0},
+        {min: 55, max: 60, miles: 0, time: 0, mph: 0, records: 0},
+        {min: 60, max: 65, miles: 0, time: 0, mph: 0, records: 0},
+        {min: 65, max: 70, miles: 0, time: 0, mph: 0, records: 0},
+        {min: 70, max: 75, miles: 0, time: 0, mph: 0, records: 0},
+        {min: 75, max: 80, miles: 0, time: 0, mph: 0, records: 0},
+        {min: 80, max: 85, miles: 0, time: 0, mph: 0, records: 0},
+        {min: 85, max: 90, miles: 0, time: 0, mph: 0, records: 0},
+        {min: 90, max: 95, miles: 0, time: 0, mph: 0, records: 0},
+        {min: 95, max: 100, miles: 0, time: 0, mph: 0, records: 0},
+        {min: 100, max: 105, miles: 0, time: 0, mph: 0, records: 0},
+        {min: 105, max: 110, miles: 0, time: 0, mph: 0, records: 0},
+        {min: 110, max: 115, miles: 0, time: 0, mph: 0, records: 0},
+        {min: 115, max: 120, miles: 0, time: 0, mph: 0, records: 0},
+        {min: 120, max: 1000, miles: 0, time: 0, mph: 0, records: 0}
+      ];
+      this.cardioRecords = [];
+      this.userService.getCardioHistoryByIdAndExercise(this.exercise).subscribe(data =>{
+        this.cardioHistory = data;
+        this.cardioBool = true;
+        this.liftingBool = false;
+        this.getCardioRecords();
+      })
+    } else {
+      this.liftingRecords = [];
+      this.userService.getLiftingHistoryByIdAndExercise(this.exercise).subscribe(data =>{
+        this.liftingHistory = data;
+        this.getLiftingRecords();
+      })
+    }
   }
 
-  getRecords() {
-
+  getLiftingRecords() {
     for(let history of this.liftingHistory){
-  
       this.checkRec =false;
-      for(let record of this.records._records){
+      for(let record of this.liftingRecords){
         if(history.reps == record.reps){
           this.checkRec = true;
           if(history.weight > record.weight){
@@ -105,16 +122,34 @@ export class BarChartComponent {
         }
       }
       if (this.checkRec == false){
-
-        this.records._records.push({reps: history.reps, weight: history.weight, oneRepMax: history.oneRepMax, records: 1})
+        this.liftingRecords.push({reps: history.reps, weight: history.weight, oneRepMax: history.oneRepMax, records: 1})
       }
     }
-    this.sortRecords();
+    this.sortLiftingRecords();
+  }
+  getCardioRecords() {
+    for(let history of this.cardioHistory){
+      this.tempRec.forEach( (value, index) => {
+        if (history.minutes >= value.min && history.minutes < value.max) {
+          if (history.mph > value.mph) {
+            this.tempRec[index].miles = history.miles;
+            this.tempRec[index].mph = history.mph;
+            this.tempRec[index].records++;
+            this.tempRec[index].time = history.minutes;
+          }
+        }
+      });
+    }
+    this.tempRec.forEach ((value) => {
+      if (value.records > 0){
+        this.cardioRecords.push(value)
+      }
+    })
+    this.sortCardioRecords();
   }
 
-  sortRecords() {
-    this.records._records.sort((a: any, b: any) => {
-    
+  sortLiftingRecords() {
+    this.liftingRecords.sort((a: any, b: any) => {
       if (a.reps < b.reps) {
         return -1;
       } else if (a.reps > b.reps) {
@@ -123,15 +158,40 @@ export class BarChartComponent {
         return 0;
       }
     });
-    this.setChart();
+    this.xAxisText = "1RM";
+    this.xAxisText = "Reps";
+    this.setLiftingChart();
   }
 
-  setChart() {
+  sortCardioRecords() {
+    this.cardioRecords.sort((a: any, b: any) => {
+      if (a.reps < b.reps) {
+        return -1;
+      } else if (a.reps > b.reps) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
+    this.xAxisText = "MPH";
+    this.xAxisText = "Max Minutes";
+    this.setCardioChart();
+  }
+
+  setLiftingChart() {
     d3.selectAll("svg > *").remove();
     this.initSvg()
-    this.initAxis();
+    this.initLiftingAxis();
     this.drawAxis();
-    this.drawBars();
+    this.drawLiftingBars();
+  }
+
+  setCardioChart() {
+    d3.selectAll("svg > *").remove();
+    this.initSvg();
+    this.initCardioAxis();
+    this.drawAxis();
+    this.drawCardioBars();
   }
 
   initSvg() {
@@ -145,11 +205,18 @@ export class BarChartComponent {
         .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")");
 	}
 
-	initAxis() {
+	initLiftingAxis() {
     this.x = d3Scale.scaleBand().rangeRound([0, this.width]).padding(0.1);
     this.y = d3Scale.scaleLinear().rangeRound([this.height, 0]);
-    this.x.domain(this.records._records.map((d) => d.reps));
-    this.y.domain([0, d3Array.max(this.records._records, (d) => d.oneRepMax)]);
+    this.x.domain(this.liftingRecords.map((d) => d.reps));
+    this.y.domain([0, d3Array.max(this.liftingRecords, (d) => d.oneRepMax)]);
+  }
+
+  initCardioAxis() {
+    this.x = d3Scale.scaleBand().rangeRound([0, this.width]).padding(0.1);
+    this.y = d3Scale.scaleLinear().rangeRound([this.height, 0]);
+    this.x.domain(this.cardioRecords.map((d) => d.max));
+    this.y.domain([0, d3Array.max(this.cardioRecords, (d) => d.mph)]);
   }
 
   drawAxis() {
@@ -162,7 +229,7 @@ export class BarChartComponent {
         .attr("y", 70)
         .attr("x", this.width / 2)
         .attr("text-anchor", "end")
-        .text("Reps");
+        .text(this.xAxisText);
     this.g.append("g")
         .attr("class", "axis axis--y")
         .call(d3Axis.axisLeft(this.y))
@@ -173,22 +240,29 @@ export class BarChartComponent {
         .attr("x", (this.height / -2) + 20)
         .attr("dy", "0.71em")
         .attr("text-anchor", "end")
-        .text("1RM");
+        .text(this.yAxisText);
   }
 
-  drawBars() {
+  drawLiftingBars() {
     this.g.selectAll(".bar")
-        .data(this.records._records)
-        .enter().append("rect")
-        .attr("class", "bar")
-        .attr("x", (d) => this.x(d.reps) )
-        .attr("y", (d) => this.y(d.oneRepMax) )
-        .attr("width", this.x.bandwidth())
-        .attr("height", (d) => this.height - this.y(d.oneRepMax) );
+      .data(this.liftingRecords)
+      .enter().append("rect")
+      .attr("class", "bar")
+      .attr("x", (d) => this.x(d.reps) )
+      .attr("y", (d) => this.y(d.oneRepMax) )
+      .attr("width", this.x.bandwidth())
+      .attr("height", (d) => this.height - this.y(d.oneRepMax) );
   }
 
-  getExercises(): Promise<any> {
-    return this.storage.get(this.username + '/exercises');
+  drawCardioBars() {
+    this.g.selectAll(".bar")
+      .data(this.cardioRecords)
+      .enter().append("rect")
+      .attr("class", "bar")
+      .attr("x", (d) => this.x(d.max) )
+      .attr("y", (d) => this.y(d.mph) )
+      .attr("width", this.x.bandwidth())
+      .attr("height", (d) => this.height - this.y(d.mph) );
   }
 
 }

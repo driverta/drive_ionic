@@ -12,23 +12,50 @@
 	<br />
 	<div class="container fields">
 		<div class="setbet">
-			<ion-item class="no-padding">
-				<ion-label floating>Weight</ion-label>
-				<ion-input [(ngModel)]="weight" type="number" #weightField="ngModel" required></ion-input>
-			</ion-item>
+			<div id="lifting" *ngIf="liftingBool">
+				<ion-item class="no-padding">
+					<ion-label floating>Weight</ion-label>
+					<ion-input [(ngModel)]="weight" type="number" #weightField="ngModel" required></ion-input>
+				</ion-item>
 
-			<div *ngIf="invalid && weightField.invalid" class="error-msg">Please enter a valid Weight</div>
+				<div *ngIf="invalid && weightField.invalid" class="error-msg">Please enter a valid Weight</div>
 
-			<ion-item class="no-padding">
-				<ion-label floating>Reps</ion-label>
-				<ion-input [(ngModel)]="reps" type="number" required #repField="ngModel"></ion-input>
-			</ion-item>
-			<div *ngIf="invalid && repField.invalid" class="error-msg">Please enter number of Reps</div>
-			<br>
-			<br>
-			<button ion-button icon-only type="submit" id="add" (click)="addSet()">
-				<ion-icon name="add"></ion-icon>
-			</button>
+				<ion-item class="no-padding">
+					<ion-label floating>Reps</ion-label>
+					<ion-input [(ngModel)]="reps" type="number" required #repField="ngModel"></ion-input>
+				</ion-item>
+				<div *ngIf="invalid && repField.invalid" class="error-msg">Please enter number of Reps</div>
+				<br>
+				<br>
+				<button ion-button icon-only type="submit" id="add" (click)="addLiftingSet()">
+					<ion-icon name="add"></ion-icon>
+				</button>
+			</div>
+			<div id="cardio" *ngIf="cardioBool">
+				<ion-item class="no-padding">
+					<ion-label floating>Miles</ion-label>
+					<ion-input [(ngModel)]="miles" type="number" #milesField="ngModel" required></ion-input>
+				</ion-item>
+				<div *ngIf="invalid && milesField.invalid" class="error-msg">Please enter miles ran.</div>
+				<ion-item class="no-padding">
+					<ion-label floating>Hours</ion-label>
+					<ion-input [(ngModel)]="hours" type="number" #hoursField="ngModel" required></ion-input>
+				</ion-item>
+				<ion-item class="no-padding">
+					<ion-label floating>Minutes</ion-label>
+					<ion-input [(ngModel)]="minutes" type="number" #minutesField="ngModel" required></ion-input>
+				</ion-item>
+				<ion-item class="no-padding">
+					<ion-label floating>Seconds</ion-label>
+					<ion-input [(ngModel)]="seconds" type="number" #secondsField="ngModel" required></ion-input>
+				</ion-item>
+				<div *ngIf="invalid && secondsField.invalid" class="error-msg">Please enter time ran.</div>
+				<br>
+				<button ion-button icon-only type="submit" id="add" (click)="addCardioSet()">
+					<ion-icon name="add"></ion-icon>
+				</button>
+			</div>
+			
 
 			<br>
 		</div>
@@ -38,7 +65,7 @@
 			<h1>NEW RECORD!</h1>
 		</div>
 		<div *ngIf="points" class="points">
-			<h1>+ {{lf.gains}} gains!</h1>
+			<h1>+ {{g}} gains!</h1>
 		</div>
 	</div>
 </div>

@@ -14,8 +14,8 @@ import { MuscleGroup } from '../../models/MuscleGroupModel';
 @Injectable()
 export class ExerciseProvider {
 
-  private url = "http://driveapi-env.y7mz5ppbve.us-east-2.elasticbeanstalk.com/";
-  // private url = "http://localhost:8080/api/";
+  // private url = "http://driveapi-env.y7mz5ppbve.us-east-2.elasticbeanstalk.com/";
+  private url = "http://localhost:8080/api/";
 
 
   constructor(public http: Http) {
