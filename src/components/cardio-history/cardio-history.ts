@@ -7,6 +7,7 @@ import { HistoryProvider, ProvidersUserProvider } from '../../providers/provider
 import { User } from '../../providers/providers';
 import { CardioHistory } from '../../models/CardioHistory';
 import { UserModel } from '../../models/users';
+import { CardioTimeConvertPipe } from '../../pipes/cardio-time-convert/cardio-time-convert'
 
 import firebase from 'firebase';
 

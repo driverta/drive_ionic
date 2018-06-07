@@ -181,8 +181,10 @@ export class NewCardioComponent {
       this.seconds = Number(this.seconds);
 
       d3.selectAll("svg > *").remove();
-      var date = new Date().toISOString();
-      var newDate = date.replace(".", "-")
+      var date;
+      date = new Date();
+      // var date = new Date().toISOString();
+      // var newDate = date.replace(".", "-")
       var time = this.hours + ":" + this.minutes + ":" + this.seconds;
       var newMinutes = this.minutes / 60;
       var newSeconds = this.seconds / 360;

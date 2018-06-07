@@ -138,41 +138,11 @@ export class SettingsPage {
       this.setLevel();
     });;
 
-    // this.storage.get(this.username + '/gains').then((val) => {
-    //   this.gains = 0;
-    //   this.records = 0;
-    //   //console.log('Your json is', val);
-    //   if (val) {
-    //     val.forEach ( (value) => {
-    //       this.gains = this.gains + value.gains;
-    //       if (value.gains == 10){
-    //         this.records++;
-    //       }
-    //     })
-    //   }
-    // }).then(() => {
-    //   console.log(this.gains)
-    //   this.setLevel();
-    // })
-
     this.userService.getCompetingUsers(this.userData.id).subscribe(data => {
       this.competingList = data;
       //console.log(this.competingList);
       this.competing = this.competingList.length;
     })
-    
-    // var queryCompeting = firebase.database().ref('/' + this.username + '/competing');
-    // queryCompeting.once("value").then( snapshot => {
-    //   this.competing = 0;
-    //   this.competingList = [];
-    //   snapshot.forEach( childSnapshot => {
-    //     var childData1 = childSnapshot.val();
-    //     this.competingList.push(childData1)
-    //     //console.log(this.competingList)
-    //     this.competing++
-    //     //console.log(this.competing)
-    //   })
-    // })
 
     this.userService.getCompetitors(this.userData.id).subscribe(data => {
       this.competitorsList = data;
@@ -180,17 +150,6 @@ export class SettingsPage {
       this.competitors = this.competitorsList.length;
     })
 
-    // var queryCompetitors = firebase.database().ref('/' + this.username + '/competitors');
-    // queryCompetitors.once("value").then( snapshot => {
-    //   this.competitors = 0;
-    //   this.competitorsList = [];
-    //   snapshot.forEach( childSnapshot => {
-    //     this.competitors++
-    //     var childData1 = childSnapshot.val();
-    //     this.competitorsList.push(childData1);
-        
-    //   })
-    // })
     this.userService.getProfilePic(this.userData.username).subscribe(data => {
       console.log(data)
       this.form.patchValue({"profilePic": "data:image/jpeg;base64," + data['_body']});
@@ -198,48 +157,6 @@ export class SettingsPage {
         this.show = false;
       }
     });
-
-    // var queryPic = firebase.database().ref('/users/' + this.username + '/profilePic');
-    // queryPic.once("value").then( snapshot => {
-    //   var pic = snapshot.val();
-    //   console.log(pic);
-    //   if(pic){
-    //     this.form.patchValue({ 'profilePic': pic });
-    //     this.show = false;
-    //   }
-    // })
-
-    // var queryWeight = firebase.database().ref('/users/' + this.username + '/weight');
-    // queryWeight.once("value").then( snapshot => {
-    //   var weight = snapshot.val();
-    //   if (weight){
-    //     this.weight = weight
-    //   }
-    // })
-
-    // var queryHeight = firebase.database().ref('/users/' + this.username + '/height');
-    // queryHeight.once("value").then( snapshot => {
-    //   var height = snapshot.val();
-    //   if (height){
-    //     this.height = height
-    //   }
-    // })
-
-    // var queryGym = firebase.database().ref('/users/' + this.username + '/gym');
-    // queryGym.once("value").then( snapshot => {
-    //   var gym = snapshot.val();
-    //   if (gym){
-    //     this.gym = gym
-    //   }
-    // })
-
-    // var queryLocation = firebase.database().ref('/users/' + this.username + '/location');
-    // queryLocation.once("value").then( snapshot => {
-    //   var location = snapshot.val();
-    //   if (location){
-    //     this.location = location
-    //   }
-    // })
 
     this.userService.getExercises().subscribe(exercises => {
       this.exercisesLength = exercises.length;
@@ -390,23 +307,6 @@ export class SettingsPage {
     this.navCtrl.push('CompetitorsPage', {
       list: this.competitorsList
     });
-    // this.realCompetitorsList = [];
-    // console.log(this.competitorsList)
-    // this.competitorsList.forEach((val) => {
-    //   this.loop = 0;
-    //   var queryPic = firebase.database().ref('/users/' + val + '/profilePic');
-    //   queryPic.once("value").then( snapshot => {
-    //     var pic = snapshot.val();
-    //     this.realCompetitorsList.push({name: val, profilePic: pic})
-    //     this.loop++
-    //     if (this.loop == this.competitorsList.length){
-    //       this.navCtrl.push('CompetitorsPage', {
-    //         list: this.realCompetitorsList,
-    //         competing: this.competingList
-    //       });
-    //     }
-    //   })
-    // })
   }
 
   goToRecords(){
@@ -421,6 +321,12 @@ export class SettingsPage {
     let addModal = this.modalCtrl.create('EditProfilePage');
     addModal.onDidDismiss(item => {
       this.ionViewDidLoad();
+      this.userService.getOneUser(this.username).subscribe(data => {
+        this.weight = data.weight;
+        this.height = data.height;
+        this.gym = data.gym;
+        this.location = data.location;
+      })
     })
     addModal.present();
   }

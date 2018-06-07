@@ -3,15 +3,18 @@ import { SortByGainsPipe } from './sort-by-gains/sort-by-gains';
 import { SortByRepsPipe } from './sort-by-reps/sort-by-reps';
 import { KeysPipe } from './keys/keys';
 import { SortByMinutesPipe } from './sort-by-minutes/sort-by-minutes';
+import { CardioTimeConvertPipe } from './cardio-time-convert/cardio-time-convert';
 @NgModule({
 	declarations: [SortByGainsPipe,
     SortByRepsPipe,
     KeysPipe,
-    SortByMinutesPipe],
+    SortByMinutesPipe,
+    CardioTimeConvertPipe],
 	imports: [],
 	exports: [SortByGainsPipe,
     SortByRepsPipe,
     KeysPipe,
-    SortByMinutesPipe]
+    SortByMinutesPipe,
+    CardioTimeConvertPipe]
 })
 export class PipesModule {}

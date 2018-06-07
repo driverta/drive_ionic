@@ -50,7 +50,7 @@ export class FriendCompetingPage {
 
   openItem(item){
     this.navCtrl.push('FriendProfilePage', {
-      user: this.user
+      item: item
     });
   }
 
