@@ -54,6 +54,7 @@ export class SettingsPage {
   options: any;
   profile_pic: any;
   exercisesLength = 0;
+  user: any;
 
   show: boolean = true;
   load: boolean = true;
@@ -81,14 +82,15 @@ export class SettingsPage {
     private alertCtrl: AlertController,
     public translate: TranslateService,
     public camera: Camera,
-    private user: User,
     public levels: Levels,
     private storage: Storage,
     private userService: ProvidersUserProvider,
     private domSanitizer: DomSanitizer,
     private rec: Records) {
 
-    this.userData = this.userService.getUser();
+    // this.userData = this.userService.getUser();
+    this.user = this.navParams.get("item")
+    console.log(this.user)
   }
 
   _buildForm() {
@@ -119,38 +121,54 @@ export class SettingsPage {
   }
 
   ionViewDidLoad() {
+    console.log(this.user)
+    if (this.user){
+      console.log(this.user)
+      //this.username = this.user.username;
+      this.weight = this.user.weight;
+      this.height = this.user.height;
+      this.gym = this.user.gym;
+      this.location = this.user.location;
+    } else {
+      this.user = this.userService.getUser()
+      console.log(this.user)
+      this.weight = this.user.weight;
+      this.height = this.user.height;
+      this.gym = this.user.gym;
+      this.location = this.user.location;
+    }
     this.competitorsList = [];
-    this.username = this.userService.getUser().username;
-    this.userService.getOneUser(this.username).subscribe(data => {
+    // this.username = this.userService.getUser().username;
+    // this.userService.getOneUser(this.username).subscribe(data => {
 
-      this.weight = data.weight;
-      this.height = data.height;
-      this.gym = data.gym;
-      this.location = data.location;
-      //this.gym = data.gym;
-    })
+    //   this.weight = data.weight;
+    //   this.height = data.height;
+    //   this.gym = data.gym;
+    //   this.location = data.location;
+    //   //this.gym = data.gym;
+    // })
     // Build an empty form for the template to render
     this.form = this.formBuilder.group({});  
 
-    this.userService.getTotalGains(this.userData.id).subscribe(totalGains => {
+    this.userService.getTotalGains(this.user.id).subscribe(totalGains => {
       console.log(totalGains);
       this.gains = totalGains;
       this.setLevel();
     });;
 
-    this.userService.getCompetingUsers(this.userData.id).subscribe(data => {
+    this.userService.getCompetingUsers(this.user.id).subscribe(data => {
       this.competingList = data;
       //console.log(this.competingList);
       this.competing = this.competingList.length;
     })
 
-    this.userService.getCompetitors(this.userData.id).subscribe(data => {
+    this.userService.getCompetitors(this.user.id).subscribe(data => {
       this.competitorsList = data;
       console.log(this.competitorsList);
       this.competitors = this.competitorsList.length;
     })
 
-    this.userService.getProfilePic(this.userData.username).subscribe(data => {
+    this.userService.getProfilePic(this.user.username).subscribe(data => {
       console.log(data)
       this.form.patchValue({"profilePic": "data:image/jpeg;base64," + data['_body']});
       if (data['_body'] != "NahNigga"){
@@ -210,7 +228,7 @@ export class SettingsPage {
     reader.onload = (readerEvent) => {
       this.imageData = (readerEvent.target as any).result;
       console.log(this.imageData);
-      this.userService.uploadProfilePic(this.userData.username, this.imageData).subscribe(data => {
+      this.userService.uploadProfilePic(this.user.username, this.imageData).subscribe(data => {
         this.show = false;
         this.form.patchValue({ 'profilePic': this.imageData });
       });
@@ -238,7 +256,7 @@ export class SettingsPage {
   }
 
   ionViewWillEnter() {
-    this.username = localStorage.getItem("username");
+    //this.username = localStorage.getItem("username");
     this.ionViewDidLoad();
     // Build an empty form for the template to render
     this.form = this.formBuilder.group({});

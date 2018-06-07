@@ -44,7 +44,7 @@ export class CompetingPage {
 
   openItem(item){
     console.log(item)
-    this.navCtrl.push('FriendProfilePage', {
+    this.navCtrl.push('SettingsPage', {
       item: item
     });
   }
