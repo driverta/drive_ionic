@@ -9,12 +9,14 @@ import { CardioTimeConvertPipe } from './cardio-time-convert/cardio-time-convert
     SortByRepsPipe,
     KeysPipe,
     SortByMinutesPipe,
+    CardioTimeConvertPipe,
     CardioTimeConvertPipe],
 	imports: [],
 	exports: [SortByGainsPipe,
     SortByRepsPipe,
     KeysPipe,
     SortByMinutesPipe,
+    CardioTimeConvertPipe,
     CardioTimeConvertPipe]
 })
 export class PipesModule {}
