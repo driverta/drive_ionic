@@ -9,6 +9,8 @@ import { IonicStorageModule, Storage } from '@ionic/storage';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
+import { Push, PushObject, PushOptions } from '@ionic-native/push';
+
 
 import { Items } from '../mocks/providers/items';
 import { Settings } from '../providers/providers';
@@ -84,7 +86,8 @@ export function provideSettings(storage: Storage) {
     HistoryProvider,
     FeathersProvider,
     ExerciseProvider,
-    AwsProvider
+    AwsProvider,
+    Push
   ]
 })
 export class AppModule { }

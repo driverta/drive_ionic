@@ -2,7 +2,9 @@ import { Component, ViewChild } from '@angular/core';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { TranslateService } from '@ngx-translate/core';
-import { Config, Nav, Platform } from 'ionic-angular';
+import { Config, Nav, Platform, AlertController } from 'ionic-angular';
+import { Push, PushObject, PushOptions } from '@ionic-native/push';
+
 
 import { FirstRunPage } from '../pages/pages';
 import { MainPage } from '../pages/pages';
@@ -48,7 +50,15 @@ export class MyApp {
     private statusBar: StatusBar,
     private splashScreen: SplashScreen,
     data: DataService,
-    private userService: ProvidersUserProvider) {
+    private userService: ProvidersUserProvider,
+    public push: Push,
+    public alertCtrl: AlertController) {
+
+      platform.ready().then(() => {
+        statusBar.styleDefault();
+        splashScreen.hide();
+        this.initPushNotification();
+      });
     this.initTranslate();
     data.init();
 
@@ -59,6 +69,8 @@ export class MyApp {
         this.rootPage = MainPage;
       }
   }
+
+
 
   setUser() {
     this.email = localStorage.getItem("email");
@@ -114,4 +126,58 @@ export class MyApp {
     // we wouldn't want the back button to show in this scenario
     this.nav.setRoot(page.component);
   }
+
+  initPushNotification(){
+
+    const options: PushOptions = {
+      android: {
+        senderID: "564282992846"
+      },
+    };
+  
+    const pushObject: PushObject = this.push.init(options);
+  
+      pushObject.on('registration').subscribe((data: any) => {
+        console.log("here");
+        console.log("device token:", data.registrationId);
+  
+        let alert = this.alertCtrl.create({
+                    title: 'device token',
+                    subTitle: data.registrationId,
+                    buttons: ['OK']
+                  });
+                  alert.present();
+  
+      });
+  
+      pushObject.on('notification').subscribe((data: any) => {
+        console.log('message', data.message);
+        if (data.additionalData.foreground) {
+          let confirmAlert = this.alertCtrl.create({
+            title: 'New Notification',
+            message: data.message,
+            buttons: [{
+              text: 'Ignore',
+              role: 'cancel'
+            }, {
+              text: 'View',
+              handler: () => {
+                //TODO: Your logic here
+              }
+            }]
+          });
+          confirmAlert.present();
+        } else {
+        let alert = this.alertCtrl.create({
+                    title: 'clicked on',
+                    subTitle: "you clicked on the notification!",
+                   buttons: ['OK']
+                  });
+                  alert.present();
+          console.log("Push notification clicked");
+        }
+     });
+  
+      pushObject.on('error').subscribe(error => console.error('Error with Push plugin', error));
+    }
 }
