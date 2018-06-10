@@ -72,7 +72,7 @@ export class GainsPage {
     private userService: ProvidersUserProvider,
     private historyService: HistoryProvider) {
 
-  	this.user = this.userService.getUser();
+    this.user = navParams.get('user');
     this.width = Math.min(700, window.innerWidth - 10) - this.margin.left - this.margin.right,
     this.height = Math.min(this.width, window.innerHeight - this.margin.top - this.margin.bottom - 20);
     this.radarChartOptions.w = this.width;

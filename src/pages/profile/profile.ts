@@ -55,9 +55,12 @@ export class SettingsPage {
   profile_pic: any;
   exercisesLength = 0;
   user: any;
-
+  checkUser: any;
   show: boolean = true;
   load: boolean = true;
+  buttons: boolean = true;
+  myPicture: boolean = true;
+  friendPicture: boolean = false;
 
   settingsReady = false;
 
@@ -89,8 +92,8 @@ export class SettingsPage {
     private rec: Records) {
 
     // this.userData = this.userService.getUser();
-    this.user = this.navParams.get("item")
-    console.log(this.user)
+    this.checkUser = this.navParams.get("item")
+    //console.log(this.user)
   }
 
   _buildForm() {
@@ -121,21 +124,29 @@ export class SettingsPage {
   }
 
   ionViewDidLoad() {
-    console.log(this.user)
-    if (this.user){
-      console.log(this.user)
+   //console.log(this.checkUser)
+    if (this.checkUser == undefined){
+      this.user = this.userService.getUser()
+      //console.log("here")
       //this.username = this.user.username;
       this.weight = this.user.weight;
       this.height = this.user.height;
       this.gym = this.user.gym;
       this.location = this.user.location;
+      this.username = this.user.username;
+      this.buttons = true;
+      this.myPicture = true;
+      this.friendPicture = false;
     } else {
-      this.user = this.userService.getUser()
-      console.log(this.user)
+      this.user = this.checkUser;
       this.weight = this.user.weight;
       this.height = this.user.height;
       this.gym = this.user.gym;
       this.location = this.user.location;
+      this.username = this.user.username;
+      this.buttons = false;
+      this.myPicture = false;
+      this.friendPicture = true;
     }
     this.competitorsList = [];
     // this.username = this.userService.getUser().username;
@@ -151,7 +162,7 @@ export class SettingsPage {
     this.form = this.formBuilder.group({});  
 
     this.userService.getTotalGains(this.user.id).subscribe(totalGains => {
-      console.log(totalGains);
+      //console.log(totalGains);
       this.gains = totalGains;
       this.setLevel();
     });;
@@ -164,12 +175,12 @@ export class SettingsPage {
 
     this.userService.getCompetitors(this.user.id).subscribe(data => {
       this.competitorsList = data;
-      console.log(this.competitorsList);
+      //console.log(this.competitorsList);
       this.competitors = this.competitorsList.length;
     })
 
     this.userService.getProfilePic(this.user.username).subscribe(data => {
-      console.log(data)
+      //console.log(data)
       this.form.patchValue({"profilePic": "data:image/jpeg;base64," + data['_body']});
       if (data['_body'] != "NahNigga"){
         this.show = false;
@@ -314,25 +325,34 @@ export class SettingsPage {
   }
 
   goToCompeting(){
-    console.log(this.competingList)
+    var listType = "competing";
     this.navCtrl.push('CompetingPage', {
-      list: this.competingList
+      list: this.competingList,
+      listType: listType,
+      user: this.user
     });
 
   }
 
   goToCompetitors(){
-    this.navCtrl.push('CompetitorsPage', {
-      list: this.competitorsList
+    var listType = "competitors";
+    this.navCtrl.push('CompetingPage', {
+      list: this.competitorsList,
+      listType: listType,
+      user: this.user
     });
   }
 
   goToRecords(){
-    this.navCtrl.push('RecordsPage');
+    this.navCtrl.push('RecordsPage', {
+      user: this.user
+    });
   }
 
   goToGains(){
-    this.navCtrl.push('GainsPage');
+    this.navCtrl.push('GainsPage', {
+      user: this.user
+    });
   }
 
   editProfile(){

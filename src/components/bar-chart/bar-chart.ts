@@ -40,6 +40,7 @@ export class BarChartComponent {
   y: any;
   svg: any;
   g: any;
+  user: any;
   loop = 0;
   checkRec = false;
   history = [];
@@ -51,7 +52,6 @@ export class BarChartComponent {
   constructor(
     navParams: NavParams,
     public navCtrl: NavController,
-    public user: User,
     private records: Records,
     private storage: Storage,
     private userService: ProvidersUserProvider
@@ -61,6 +61,7 @@ export class BarChartComponent {
     this.height = 500 - this.margin.top - this.margin.bottom;
     this.exercise = navParams.get('exercise');
     this.muscleGroup = navParams.get('muscleGroup');
+    this.user = navParams.get('user');
   }
 
   public makeBarChart() {
@@ -93,18 +94,34 @@ export class BarChartComponent {
         {min: 120, max: 1000, miles: 0, time: 0, mph: 0, records: 0}
       ];
       this.cardioRecords = [];
-      this.userService.getCardioHistoryByIdAndExercise(this.exercise).subscribe(data =>{
-        this.cardioHistory = data;
-        this.cardioBool = true;
-        this.liftingBool = false;
-        this.getCardioRecords();
-      })
+      if (this.user == this.userService.getUser()){
+        this.userService.getCardioHistoryByIdAndExercise(this.exercise).subscribe(data =>{
+          this.cardioHistory = data;
+          this.cardioBool = true;
+          this.liftingBool = false;
+          this.getCardioRecords();
+        })
+      } else {
+        this.userService.getCompetingUsersCardioHistoryByIdAndExercise(this.exercise, this.user.id).subscribe(data => {
+          this.cardioHistory = data;
+          this.cardioBool = true;
+          this.liftingBool = false;
+          this.getCardioRecords();
+        })
+      }
     } else {
       this.liftingRecords = [];
-      this.userService.getLiftingHistoryByIdAndExercise(this.exercise).subscribe(data =>{
-        this.liftingHistory = data;
-        this.getLiftingRecords();
-      })
+      if (this.user == this.userService.getUser()){
+        this.userService.getLiftingHistoryByIdAndExercise(this.exercise).subscribe(data =>{
+          this.liftingHistory = data;
+          this.getLiftingRecords();
+        })
+      } else {
+        this.userService.getCompetingUsersLiftingHistoryByIdAndExercise(this.exercise, this.user.id).subscribe(data =>{
+          this.liftingHistory = data;
+          this.getLiftingRecords();
+        })
+      }
     }
   }
 

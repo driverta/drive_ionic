@@ -28,15 +28,17 @@ export class RecordsComponent {
   liftingHistory: LiftingHistory[];
   liftingBool = true;
   cardioBool = false;
+  user: any;
+  
 
   constructor(
     navParams: NavParams,
-    public user: User,
     public records: Records,
     private userService: ProvidersUserProvider
     ) {
     this.exercise = navParams.get('exercise');
     this.muscleGroup = navParams.get('muscleGroup');
+    this.user = navParams.get('user');
   }
 
   ngOnInit() {
@@ -69,18 +71,34 @@ export class RecordsComponent {
         {min: 120, max: 1000, miles: 0, time: 0, mph: 0, records: 0}
       ];
       this.cardioRecords = [];
-      this.userService.getCardioHistoryByIdAndExercise(this.exercise).subscribe(data =>{
-        this.cardioHistory = data;
-        this.cardioBool = true;
-        this.liftingBool = false;
-        this.getCardioRecords();
-      })
+      if (this.user == this.userService.getUser()){
+        this.userService.getCardioHistoryByIdAndExercise(this.exercise).subscribe(data =>{
+          this.cardioHistory = data;
+          this.cardioBool = true;
+          this.liftingBool = false;
+          this.getCardioRecords();
+        })
+      } else {
+        this.userService.getCompetingUsersCardioHistoryByIdAndExercise(this.exercise, this.user.id).subscribe(data => {
+          this.cardioHistory = data;
+          this.cardioBool = true;
+          this.liftingBool = false;
+          this.getCardioRecords();
+        })
+      }
     } else {
       this.liftingRecords = [];
-      this.userService.getLiftingHistoryByIdAndExercise(this.exercise).subscribe(data =>{
-        this.liftingHistory = data;
-        this.getLiftingRecords();
-      })
+      if (this.user == this.userService.getUser()){
+        this.userService.getLiftingHistoryByIdAndExercise(this.exercise).subscribe(data =>{
+          this.liftingHistory = data;
+          this.getLiftingRecords();
+        })
+      } else {
+        this.userService.getCompetingUsersLiftingHistoryByIdAndExercise(this.exercise, this.user.id).subscribe(data =>{
+          this.liftingHistory = data;
+          this.getLiftingRecords();
+        })
+      }
     }
   }
 
