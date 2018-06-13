@@ -29,7 +29,7 @@ export class HistoryProvider {
   constructor(public http: Http) {
   
 	}
-	private url = "http://driveapi-env.y7mz5ppbve.us-east-2.elasticbeanstalk.com/";
+	private url = "http://drivefitness-env.diuvpksfsk.us-east-1.elasticbeanstalk.com/";
 	//private url = "http://localhost:8080/api/";
 
 	getLiftingHistoryByExercise(userId, exerciseId): Observable<LiftingHistory[]> {
