@@ -3,6 +3,25 @@ page-welcome {
     
   }
 
+  .welcome{
+    background-image: url(../assets/img/loginbackground.jpeg); 
+    background-repeat:no-repeat; background-size: cover; 
+    background-position: center;
+  }
+
+  .header{
+    font-size: 4rem;
+    margin-top: 10%;
+  }
+
+  .transparent-field{
+    background-color: transparent;            
+  }
+
+  .middle-item{
+    margin-top: 50%;
+  }
+
   .splash-bg {
     position: relative;
     background: url('../assets/img/Drive_Art.png');

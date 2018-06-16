@@ -1,12 +1,65 @@
-<ion-content scroll="false">
-  <div class="splash-bg"></div>
+<ion-content scroll="false" class="welcome">
+  <!-- <div class="splash-bg"></div>
   <div class="splash-info">
     <div class="splash-intro">
       D R I V E
     </div>
-  </div>
-  <div padding>
+  </div> -->
+  <ion-grid>
+
+      <ion-header>
+          <ion-row>
+              <ion-col class="header" text-center>
+                  Drive Fitness
+              </ion-col>
+            </ion-row>
+          </ion-header>
+    <ion-row>
+      <ion-col>
+          <ion-item class="transparent-field middle-item no-padding">        
+              <ion-label> <ion-icon name="person"></ion-icon></ion-label>
+              <ion-input placeholder="Email" clearInput type="text"></ion-input>
+      </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+        <ion-col>
+            <ion-item class="transparent-field no-padding">        
+                <ion-label> <ion-icon name="lock"></ion-icon></ion-label>
+                <ion-input placeholder="Password" clearInput type="password"></ion-input>
+        </ion-item>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col>
+            <button ion-button block (click)="signup()">Sign In</button>
+        </ion-col>
+      </ion-row>
+      <ion-footer>
+      <ion-row>
+          <ion-col text-center>
+              Don't have an account? Sign up!
+          </ion-col>
+        </ion-row>
+      </ion-footer>
+  </ion-grid>
+
+  <!-- <ion-list class="list-form" style="margin-top:30px;margin-bottom: 30px">
+  	
+  	<ion-item style="padding:0px !important; border-bottom:none !important;border-top:none;font-size: 14px;margin-top:10px;background:none;border-bottom:1px solid white;box-shadow:none;">
+	    <ion-input style="color:white;border-bottom-color:white;box-shadow:none;" type="text" placeholder="Username"></ion-input>
+  	</ion-item>
+  	<ion-item style="padding:0px !important; font-size: 14px;margin-top:10px;background:none;border-bottom:1px solid white;box-shadow:none;">
+	    <ion-input style="color:white;border-bottom-color:white;box-shadow:none;" type="password" placeholder="Password"></ion-input>
+  	</ion-item>
+
+  </ion-list> -->
+  <!-- <div padding>
     <button ion-button block (click)="signup()">{{ 'SIGNUP' | translate }}</button>
     <button ion-button block (click)="login()" class="login">{{ 'LOGIN' | translate }}</button>
   </div>
+  <ion-footer>
+    Don't have an account? Sign up!
+  </ion-footer> -->
 </ion-content>
