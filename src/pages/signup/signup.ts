@@ -12,6 +12,7 @@ import { UserModel } from '../../models/users';
 import { ExerciseProvider } from '../../providers/exercise/exercise';
 import { Exercise } from '../../models/Exercise';
 import { MuscleGroup } from '../../models/MuscleGroupModel';
+import { MainPage } from '../pages';
 
 @IonicPage()
 @Component({
