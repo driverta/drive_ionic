@@ -4,8 +4,37 @@ page-tutorial {
     border-color: transparent;
   }
 
+  .tutorial-header{
+      border: 0px !important;
+
+      border-bottom: none !important;
+  }
+
+  .compete{
+    background-image: url(../assets/img/competewithfriends.jpeg); 
+    background-repeat:no-repeat; background-size: cover; 
+    background-position: center;
+  }
+
+  .gain{
+      background-image: url(../assets/img/slidebarbell.jpeg); 
+      background-repeat:no-repeat; background-size: cover; 
+      background-position: center;
+  }
+
+  .dumbbells{
+    background-image: url(../assets/img/dumbells.jpeg); 
+    background-repeat:no-repeat; background-size: cover; 
+    background-position: center;
+}
+
   .slide-zoom {
     height: 100%;
+  }
+
+  .slide-header{
+    margin-top:50%;
+    font-size: 4rem;
   }
 
   .slide-title {
@@ -34,11 +63,11 @@ page-tutorial {
     padding: 0 40px;
     font-size: 14px;
     line-height: 1.5;
-    color: #60646B;
 
     b {
       color: #000000;
     }
   }
+
 
 }
