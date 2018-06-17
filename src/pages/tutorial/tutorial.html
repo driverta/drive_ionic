@@ -1,25 +1,67 @@
-<ion-header no-shadow>
-  <ion-navbar>
-    <ion-buttons end *ngIf="showSkip">
-      <button ion-button (click)="startApp()" color="primary">{{ 'TUTORIAL_SKIP_BUTTON' | translate}}</button>
-    </ion-buttons>
-  </ion-navbar>
-</ion-header>
+<ion-content no-bounce fullscreen>
+  <ion-slides #slides class="tutorial-slides" pager="true" dir="{{dir}}" (ionSlideWillChange)="onSlideChangeStart($event)">
 
-<ion-content no-bounce>
-  <ion-slides pager="true" dir="{{dir}}" (ionSlideWillChange)="onSlideChangeStart($event)">
-    <ion-slide *ngFor="let slide of slides">
-      <img [src]="slide.image" class="slide-image" />
-      <h2 class="slide-title" [innerHTML]="slide.title"></h2>
-      <p [innerHTML]="slide.description"></p>
+    <ion-slide class="dumbbells">
+      <ion-header no-shadow no-border transparent class="tutorial-header">
+        <ion-navbar>
+          <ion-buttons end *ngIf="showSkip">
+            <button ion-button (click)="startApp()" color="white">Sign In</button>
+          </ion-buttons>
+        </ion-navbar>
+      </ion-header>
+      <h1 class="slide-header">Track any exercise</h1>
+      <h3>Monitor your progress overtime, no matter how you exercise!</h3>
+      <ion-footer class="slide-footer">
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <button ion-button block class="next-button" (click)="next()">Next</button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-footer>
     </ion-slide>
-    <ion-slide>
-      <img src="assets/img/flex_biceps1600.png" class="slide-image" />
-      <h2 class="slide-title">{{ 'TUTORIAL_SLIDE4_TITLE' | translate }}</h2>
-      <button ion-button icon-end large clear (click)="startApp()">
-        {{ 'TUTORIAL_CONTINUE_BUTTON' | translate }}
-        <ion-icon name="arrow-forward"></ion-icon>
-      </button>
+
+    <ion-slide class="gain">
+      <ion-header no-shadow no-border transparent class="tutorial-header">
+        <ion-navbar>
+          <ion-buttons end *ngIf="showSkip">
+            <button ion-button (click)="startApp()" color="white">Sign In</button>
+          </ion-buttons>
+        </ion-navbar>
+      </ion-header>
+      <h1 class="slide-header">Earn points to level up!</h1>
+      <h3>Gain points for each exercise and new personal records </h3>
+      <ion-footer class="slide-footer">
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <button ion-button block class="next-button" (click)="next()">Next</button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-footer>
+    </ion-slide>
+
+    <ion-slide class="compete">
+      <ion-header no-shadow no-border transparent class="tutorial-header">
+        <ion-navbar>
+          <ion-buttons end *ngIf="showSkip">
+            <button ion-button (click)="startApp()" color="white">Sign In</button>
+          </ion-buttons>
+        </ion-navbar>
+      </ion-header>
+      <h1 class="slide-header">Compete with Friends</h1>
+      <h3>Add friends to your leaderboard to compete</h3>
+      <ion-footer class="slide-footer">
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <button ion-button block class="next-button" (click)="startApp()">Let's Get Started</button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-footer>
     </ion-slide>
   </ion-slides>
 </ion-content>
