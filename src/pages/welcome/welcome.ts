@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, ToastController, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, ToastController, AlertController, Alert } from 'ionic-angular';
 import { User, ProvidersUserProvider } from '../../providers/providers';
 import { MainPage } from '../pages';
 import firebase from 'firebase';
+import { Error } from '@firebase/auth-types';
 
 /**
  * The Welcome Page is a splash page that quickly describes the app,
@@ -36,6 +37,7 @@ export class WelcomePage {
   setUser() {
     this.userService.getUserByEmail(this.account.email).subscribe(data =>{
       this.userService.setUser(data);
+      this.navCtrl.push(MainPage);
     });
   }
 
@@ -68,23 +70,36 @@ export class WelcomePage {
       .then(value => {
         this.saveLogin()
         this.setUser();
-        this.navCtrl.push(MainPage);
+
       }).catch( error => {
-        this.firebaseErrors(error)
+        this.presentFirebaseError(error)
       });
     }
   }
 
-  firebaseErrors(error){
-    
+  presentFirebaseError(error: Error){
+    console.log(error.code);
+    console.log(error.message);
     this.buttonPressed = false;
-    let alert3 = this.alertCtrl.create({
-      title: error,
-      buttons: ['Ok']
-    });
-    alert3.present();
-    
-  };
+    let firebaseError: Alert = this.alertCtrl.create({
+     title: "Error",
+     message: "Something went wrong!",
+     buttons: ['Ok']
+   });
+   if(error.code === "auth/email-already-in-use"){
+     firebaseError.setMessage("There is an existing account associated with this email")
+   }
+   else if(error.code === "auth/invalid-email"){
+     firebaseError.setMessage("Please enter a valid email")
+   }
+   else if(error.code === "auth/weak-password"){
+     firebaseError.setMessage("Password must be at least 6 characters")
+   }
+   else if(error.code === "auth/wrong-password"){
+    firebaseError.setMessage("Invalid password")
+  }
+   firebaseError.present();
+ }
  
   authLogin() : Promise<any> {
     return firebase.auth().signInWithEmailAndPassword(this.account.email, this.account.password);

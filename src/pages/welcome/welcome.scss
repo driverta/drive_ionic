@@ -12,12 +12,23 @@ page-welcome {
       padding:0;
   }
 
-  .button-ios.activated{
+  .astext.button-ios.activated{
     background:none;
     border:none;
     margin:0;
     padding:0;
   }
+
+  #login.activated{
+    opacity: 1;
+    background-color:red
+  }
+
+  .header-md::after, .tabs-md[tabsPlacement="top"] > .tabbar::after, .footer-md::before, .tabs-md[tabsPlacement="bottom"] > .tabbar::before{
+    background-image: none;
+  }
+
+
   .welcome{
     background-image: url(../assets/img/loginbackground.jpeg); 
     background-repeat:no-repeat; background-size: cover; 

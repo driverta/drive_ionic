@@ -31,13 +31,13 @@
       </form>
       <ion-row>
         <ion-col>
-          <button [disabled]="buttonPressed" class="login-button" ion-button block (click)="login()"><ion-spinner *ngIf="buttonPressed" class="spinner-energized"></ion-spinner> <span  *ngIf="!buttonPressed">Sign In</span></button>
+          <button [disabled]="buttonPressed" id="login" class="login-button" ion-button block (click)="login()"><ion-spinner *ngIf="buttonPressed" class="spinner-energized"></ion-spinner> <span  *ngIf="!buttonPressed">Sign In</span></button>
         </ion-col>
       </ion-row>
       <ion-footer>
         <ion-row>
           <ion-col text-center>
-            <button ion-button class="astext" (click)="signup()">Don't have an account? Sign up!</button>
+            <button class="sign-up-button" ion-button class="astext" (click)="signup()">Don't have an account? Sign up!</button>
           </ion-col>
         </ion-row>
       </ion-footer>

@@ -58,7 +58,7 @@
         </ion-col>
       </ion-row>
     </ion-header>
-    <form (submit)="setUser();">
+    <form>
       <ion-row>
         <ion-col>
           <ion-item class="transparent-field middle-item no-padding">
@@ -116,7 +116,7 @@
     <ion-footer>
       <ion-row>
         <ion-col text-center>
-          <button ion-button class="astext" (click)="signIn()">Already have an account? Sign In!</button>
+          <button ion-button type="submit" class="astext" (click)="signIn()">Already have an account? Sign In!</button>
         </ion-col>
       </ion-row>
     </ion-footer>
