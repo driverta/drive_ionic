@@ -11,6 +11,13 @@ page-welcome {
       margin:0;
       padding:0;
   }
+
+  .button-ios.activated{
+    background:none;
+    border:none;
+    margin:0;
+    padding:0;
+  }
   .welcome{
     background-image: url(../assets/img/loginbackground.jpeg); 
     background-repeat:no-repeat; background-size: cover; 

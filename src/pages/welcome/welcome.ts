@@ -45,18 +45,22 @@ export class WelcomePage {
 
     if(this.account.email == ''){
       let emptyEmail = this.alertCtrl.create({
-        title: "Please enter your email!",
+        title: "Error",
+        message: "Please enter your email!",
         buttons: ['Ok']
       });
-      emptyEmail.present();
 
+      emptyEmail.present();
+      this.buttonPressed = false;
     }
     else if(this.account.password == ''){
       let emptyPassword = this.alertCtrl.create({
-        title: "Please enter your password!",
+        title: "Error",
+        message: "Please enter your password!",
         buttons: ['Ok']
       });
       emptyPassword.present();
+      this.buttonPressed = false;
     }
     else{
 

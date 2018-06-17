@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { IonicPage, NavController, ToastController, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, ToastController, AlertController, Alert } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 
 import firebase from 'firebase';
-
+import { Error } from '@firebase/auth-types';
 import { User } from '../../providers/providers';
 import { MainPage } from '../pages';
 import { ProvidersUserProvider } from '../../providers/providers-user/providers-user';
@@ -12,7 +12,7 @@ import { UserModel } from '../../models/users';
 import { ExerciseProvider } from '../../providers/exercise/exercise';
 import { Exercise } from '../../models/Exercise';
 import { MuscleGroup } from '../../models/MuscleGroupModel';
-import { MainPage } from '../pages';
+
 
 @IonicPage()
 @Component({
@@ -32,28 +32,10 @@ export class SignupPage {
     password: ''
   };
 
-  // exercises = {
-  //   "Bench Press-Barbell": { 
-  //     name: 'Bench Press',
-  //     variation: 'Barbell', 
-  //     muscle: 'Chest'
-  //   },
-  //   "Squat-Barbell": {
-  //     name: 'Squat',
-  //     variation: 'Barbell',
-  //     muscle: 'Legs'
-  //   },
-  //   "Deadlift-Barbell": {
-  //     name: 'Deadlift',
-  //     variation: 'Barbell',
-  //     muscle: 'Back'
-  //   }
-  // };
   totalGains = [];
 
   bro: string = "bro";
 
-  terms = false;
   users: UserModel[];
 
   // Our translated text strings
@@ -74,7 +56,7 @@ export class SignupPage {
     })
   }
 
-  doSignUp() {
+  initiateSignUp() {
     this.userService.getOneUser(this.account.name).subscribe(data => { 
       if(data.username === "alreadyexists"){
         this.signUp();
@@ -92,117 +74,93 @@ export class SignupPage {
       this.badPassword()
       return;
     }
-    if(this.terms == false){
-      this.noTerms()
-      return;
-    }
-
-    let user = new UserModel();
-    user.username = this.account.name;
-    user.email = this.account.email;
-    console.log("here")    
-    this.userService.createUser(user).subscribe(response => {
-      this.userService.setUser(response)
-      var bench = new Exercise;
-      bench.exerciseName = "Bench Press";
-      bench.variation = "Barbell";
-      this.mg = {id: 1, muscleGroupName: "Chest"}
-      bench.MuscleGroup = this.mg;
-      this.exerciseService.createExercise
-      (this.userService.getUser().id, bench).subscribe(data => {
-          //console.log(data)
-      })
-  
-      var squat = new Exercise;
-      squat.exerciseName = "Squat";
-      squat.variation = "Barbell";
-      this.mg = {id: 3, muscleGroupName: "Legs"}
-      squat.MuscleGroup = this.mg;
-      this.exerciseService.createExercise(this.userService.getUser().id, squat).subscribe(data => {
-          //console.log(data)
-      })
-  
-      var deadlift = new Exercise;
-      deadlift.exerciseName = "Deadlift";
-      deadlift.variation = "Barbell";
-      this.mg = {id: 2, muscleGroupName: "Back"}
-      deadlift.MuscleGroup = this.mg;
-      this.exerciseService.createExercise(this.userService.getUser().id, deadlift).subscribe(data => {
-          //console.log(data)
-      })
-     });
-
-
-  
-   
-    // this.storage.set(this.account.name + '/exercises', this.exercises);
-    // this.storage.set(this.account.name + '/gains', this.totalGains)
-    
-    // var name = firebase.database().ref('/users/' + this.account.name + '/name');
-    // name.set(this.account.name);
-    
-    // localStorage.setItem("username",this.account.name);
-    // localStorage.setItem("status","good");
-    
-    // var email = firebase.database().ref('/users/' + this.account.name + '/email');
-    // email.set(this.account.email);
-
-    // var exercises = firebase.database().ref('/' + this.account.name + '/exercises');
-    // exercises.set(this.exercises);
-
-    // var competitors = firebase.database().ref('/' + this.account.name + '/competing');
-    // competitors.child(this.account.name).set(this.account);
 
     firebase.auth().createUserWithEmailAndPassword(this.account.email, this.account.password)
-       .then(value => {
-         this.user._user = this.account.name;
-         this.navCtrl.push(MainPage);
-       }).catch( error => {
-         this.firebaseErrors(error)
+    .then(value => {
+      this.user._user = this.account.name;
+      let user = new UserModel();
+      user.username = this.account.name;
+      user.email = this.account.email;
+      console.log("here")    
+      this.userService.createUser(user).subscribe(response => {
+        console.log(response);
+        this.userService.setUser(response)
+        var bench = new Exercise;
+        bench.exerciseName = "Bench Press";
+        bench.variation = "Barbell";
+        this.mg = {id: 1, muscleGroupName: "Chest"}
+        bench.MuscleGroup = this.mg;
+        this.exerciseService.createExercise
+        (this.userService.getUser().id, bench).subscribe(data => {
+            //console.log(data)
+        })
+    
+        var squat = new Exercise;
+        squat.exerciseName = "Squat";
+        squat.variation = "Barbell";
+        this.mg = {id: 3, muscleGroupName: "Legs"}
+        squat.MuscleGroup = this.mg;
+        this.exerciseService.createExercise(this.userService.getUser().id, squat).subscribe(data => {
+            //console.log(data)
+        })
+    
+        var deadlift = new Exercise;
+        deadlift.exerciseName = "Deadlift";
+        deadlift.variation = "Barbell";
+        this.mg = {id: 2, muscleGroupName: "Back"}
+        deadlift.MuscleGroup = this.mg;
+        this.exerciseService.createExercise(this.userService.getUser().id, deadlift).subscribe(data => {
+            //console.log(data)
+        })
+        this.navCtrl.push(MainPage);
        });
+     
+
+    }).catch( (error: Error) => {
+      this.presentFirebaseError(error)
+    });
   }
 
-  firebaseErrors(error){
-    let alert3 = this.alertCtrl.create({
-      title: error,
+  presentFirebaseError(error: Error){
+     let firebaseError: Alert = this.alertCtrl.create({
+      title: "Error",
+      message: "Something went wrong!",
       buttons: ['Ok']
     });
-    alert3.present();
-    
+    if(error.code === "auth/email-already-in-use"){
+      firebaseError.setMessage("There is an existing account associated with this email")
+    }
+    else if(error.code === "auth/invalid-email"){
+      firebaseError.setMessage("Please enter a valid email")
+    }
+    else if(error.code === "auth/weak-password"){
+      firebaseError.setMessage("Password must be at least 6 characters")
+    }
+    firebaseError.present();
   }
 
   badPassword(){
     let alert = this.alertCtrl.create({
-      title: "Passwords do not match!",
+      title: "Error",
+      message: "Passwords do not match!",
       buttons: ['Ok']
     });
     alert.present();
     
   }
 
-  changeTerms(){
-    //alert("Hey")
-    if (this.terms == false){
-      this.terms = true;
-    }else if (this.terms == true){
-      this.terms = false;
-    }
-  }
-
-  noTerms(){
-    let alert = this.alertCtrl.create({
-      title: "You must agree to the terms of use.",
-      buttons: ['Ok']
-    });
-    alert.present(); 
-  }
-
   repeatUsername(){
     let alert = this.alertCtrl.create({
-      title: "Someone is already using this username.",
+      title: "Error",
+      message: "Someone is already using this username.",
       buttons: ['Ok']
     });
     alert.present(); 
+  }
+
+  
+  signIn() {
+    this.navCtrl.pop();
   }
 
   termsOfUse(){
