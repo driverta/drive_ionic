@@ -1,12 +1,18 @@
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { IonicPage, NavController, ToastController, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, ToastController, AlertController, LoadingController } from 'ionic-angular';
 
 import firebase from 'firebase';
 
-import { User, ProvidersUserProvider } from '../../providers/providers';
+import { ProvidersUserProvider } from '../../providers/providers';
 import { MainPage } from '../pages';
 
+import {AuthProvider} from "../../providers/auth/auth";
+
+import { finalize } from 'rxjs/operators';
+
+import { APIUser } from '../../models/APIUser';
+import { tap } from 'rxjs/operators';
 
 
 @IonicPage()
@@ -32,11 +38,12 @@ export class LoginPage {
   private loginErrorString: string;
 
   constructor(public navCtrl: NavController,
-    public user: User,
     public toastCtrl: ToastController,
     private alertCtrl: AlertController,
     public translateService: TranslateService,
-    public userService: ProvidersUserProvider) {
+    public userService: ProvidersUserProvider,
+    private readonly authProvider: AuthProvider,
+    private readonly loadingCtrl: LoadingController) {
 
     this.translateService.get('LOGIN_ERROR').subscribe((value) => {
       this.loginErrorString = value;
@@ -44,21 +51,57 @@ export class LoginPage {
   }
 
   setUser() {
-    this.userService.getUserByEmail(this.account.email).subscribe(data =>{
+    this.userService.getUserByEmail(this.account.email).subscribe(data => {
+      alert(data);
       this.userService.setUser(data);
       this.doLogin();
+    }, err => {
+      alert(err)
     });
   }
 
   doLogin() {
+    let loading = this.loadingCtrl.create({
+      spinner: 'bubbles',
+      content: 'Logging in ...'
+    });
+
+    loading.present();
 
     this.authLogin()
-      .then(value => {
-        this.checkLog()
-        this.navCtrl.push(MainPage);
+      .then(value => {  
+        let user = new APIUser;
+        user.email = this.account.email
+        user.password = this.account.password
+        user.username = this.account.email.split('@')[0]
+        this.signup(user);
       }).catch( error => {
+
         this.firebaseErrors(error)
       });
+  }
+
+  login(value: any) {
+    this.authProvider
+      .login(value)
+      .subscribe(
+        (jwt) => {
+          this.checkLog();
+          this.navCtrl.push(MainPage);
+        },
+        err => this.handleError(err));
+  }
+
+  signup(value: any) {
+
+    this.authProvider
+      .signup(value)
+      .subscribe(
+        (jwt) => {
+          alert("here")
+          this.login(value);
+        },
+        err => alert("here"));
   }
 
   firebaseErrors(error){
@@ -69,6 +112,24 @@ export class LoginPage {
     alert3.present();
     
   };
+
+  handleError(error: any) {
+    let message: string;
+    if (error.status && error.status === 401) {
+      message = 'Login failed';
+    }
+    else {
+      message = `Unexpected error: ${error.statusText}`;
+    }
+
+    const toast = this.toastCtrl.create({
+      message,
+      duration: 5000,
+      position: 'bottom'
+    });
+
+    toast.present();
+  }
  
 
   authLogin() : Promise<any> {

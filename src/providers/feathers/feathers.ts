@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
-import 'rxjs/add/operator/map';
+import { HttpClient } from '@angular/common/http';
 
 /*
   Generated class for the FeathersProvider provider.
@@ -11,7 +10,7 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class FeathersProvider {
 
-  constructor(public http: Http) {
+  constructor(public http: HttpClient) {
     console.log('Hello FeathersProvider Provider');
   }
 

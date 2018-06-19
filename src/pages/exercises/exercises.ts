@@ -16,7 +16,6 @@ import { KeysPipe } from '../../pipes/keys/keys'
 
 import firebase from 'firebase';
 
-import { User } from '../../providers/providers';
 import { ExerciseProvider } from '../../providers/exercise/exercise';
 import { ProvidersUserProvider } from '../../providers/providers-user/providers-user';
 import { UserModel } from '../../models/users';
@@ -50,7 +49,6 @@ export class ListMasterPage {
 
   constructor(
     public navCtrl: NavController,
-    public user: User,
     public items: Items,
     public records: Records,
     public modalCtrl: ModalController,

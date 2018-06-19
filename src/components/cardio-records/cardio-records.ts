@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NavParams } from 'ionic-angular';
 
-import { User, ProvidersUserProvider } from '../../providers/providers';
+import { ProvidersUserProvider } from '../../providers/providers';
 import { Records } from '../../providers/providers';
 
 import { SortByMinutesPipe } from '../../pipes/sort-by-minutes/sort-by-minutes';
@@ -23,7 +23,6 @@ export class CardioRecordsComponent {
 
   constructor(
     navParams: NavParams,
-    public user: User,
     public records: Records,
     private userService: ProvidersUserProvider
     ) {

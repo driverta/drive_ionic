@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { NavParams } from 'ionic-angular';
 
-import { User } from '../../providers/providers';
 import { Records } from '../../providers/providers';
 
 import { SortByRepsPipe } from '../../pipes/sort-by-reps/sort-by-reps';
@@ -24,7 +23,6 @@ export class RecordsComponent {
 
   constructor(
     navParams: NavParams,
-    public user: User,
     public records: Records,
     private userService: ProvidersUserProvider
     ) {

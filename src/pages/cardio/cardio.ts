@@ -4,7 +4,6 @@ import { Storage } from '@ionic/storage';
 
 import { Items, ProvidersUserProvider } from '../../providers/providers';
 import { Records } from '../../providers/providers';
-import { User } from '../../providers/providers';
 import { Levels } from '../../providers/providers';
 import { HistoryProvider } from '../../providers/providers';
 import { CardioHistory } from '../../models/CardioHistory';

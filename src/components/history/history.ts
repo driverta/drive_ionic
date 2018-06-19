@@ -4,7 +4,6 @@ import  { NavParams, AlertController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 
 import { HistoryProvider, ProvidersUserProvider } from '../../providers/providers';
-import { User } from '../../providers/providers';
 
 import firebase from 'firebase';
 

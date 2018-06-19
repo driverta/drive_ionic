@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
-import 'rxjs/add/operator/map';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { Exercise } from '../../models/Exercise';
 import { MuscleGroup } from '../../models/MuscleGroupModel';
@@ -14,23 +13,23 @@ import { MuscleGroup } from '../../models/MuscleGroupModel';
 @Injectable()
 export class ExerciseProvider {
 
-  private url = "http://driveapi-env.y7mz5ppbve.us-east-2.elasticbeanstalk.com/";
-  //private url = "http://localhost:8080/api/";
+  // private url = "http://Driveapi-pic.uvrytrqbjh.us-east-1.elasticbeanstalk.com/";
+  private url = "http://localhost:8080/api/";
 
 
-  constructor(public http: Http) {
+  constructor(private http: HttpClient) {
     console.log('Hello ExerciseProvider Provider');
   }
 
   getExercisesByUserId(userId): Observable<Exercise[]> {
-    return this.http.get(this.url + "getExerciseByUserID?userID=" + userId).map((res: Response) => res.json());
+    return this.http.get<Exercise[]>(this.url + "getExerciseByUserID?userID=" + userId);
   }
 
-  createExercise(userid, ex): Observable<Response>{
-    return this.http.post(this.url + "createExercise?userID=" + userid, ex);
+  createExercise(userid, ex): Observable<Exercise>{
+    return this.http.post<Exercise>(this.url + "createExercise?userID=" + userid, ex);
   }
 
   getAllMuscleGroups(): Observable<MuscleGroup[]>{
-    return this.http.get(this.url + "getAllMG").map((res: Response) => res.json());
+    return this.http.get<MuscleGroup[]>(this.url + "getAllMG");
   }
 }

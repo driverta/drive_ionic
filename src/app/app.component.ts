@@ -4,13 +4,21 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { TranslateService } from '@ngx-translate/core';
 import { Config, Nav, Platform } from 'ionic-angular';
 
+
 import { FirstRunPage } from '../pages/pages';
 import { MainPage } from '../pages/pages';
+import { TutorialPage } from '../pages/pages';
 import { Settings, ProvidersUserProvider } from '../providers/providers';
-import { User } from '../providers/providers';
 
-import { DataService } from '../providers/api/firebase';
 import firebase from 'firebase';
+
+import { FcmProvider } from '../providers/fcm/fcm';
+
+import { ToastController } from 'ionic-angular';
+import { tap } from 'rxjs/operators';
+import { TabsPage } from '../pages/tabs/tabs';
+
+import { AuthProvider } from "../providers/auth/auth";
 
 @Component({
   template: `
@@ -42,47 +50,86 @@ export class MyApp {
 
   constructor(private translate: TranslateService,
     private platform: Platform,
-    public user: User,
     settings: Settings,
     private config: Config,
     private statusBar: StatusBar,
     private splashScreen: SplashScreen,
-    data: DataService,
-    private userService: ProvidersUserProvider) {
+    private userService: ProvidersUserProvider,
+    public fcm: FcmProvider,
+    public toastCtrl: ToastController,
+    public authProvider: AuthProvider) {
     this.initTranslate();
-    data.init();
 
     this.tester = localStorage.getItem("stay");
-      //alert(this.tester)
       if(this.tester == "logged"){
-        this.setUser();
         this.rootPage = MainPage;
       }
-  }
 
-  setUser() {
-    this.email = localStorage.getItem("email");
+      platform.ready().then(() => {
+        // Get a FCM token
+        if(this.tester == "logged"){
+          alert(this.tester)
+          fcm.getToken();
 
-    this.userService.getUserByEmail(this.email).subscribe(data =>{
-      this.userService.setUser(data);
-    })
-
-    var query1 = firebase.database().ref("/users");
-
-    query1.once("value").then( snapshot => {
-      
-      snapshot.forEach( childSnapshot => {
-        
-        var childData1 = childSnapshot.val();
-        if (childData1.email == this.email) {
-          this.user._user = childData1.name;
-          localStorage.setItem("username",childData1.name);
-          //this.rootPage = MainPage;
+          // Listen to incoming messages
+          fcm.listenToNotifications().pipe(
+            tap(msg => {
+              console.log("FIRST MESSAGE" + JSON.stringify(msg));
+              if (msg['tap'] == true) {
+                console.log("here");
+                // userService.getOneUser(msg['user'].split(' ')[0]).subscribe(user => {
+                //   this.nav.push(TabsPage).then(() => {
+                //     this.nav.push('FriendProfilePage', {
+                //       item: user
+                //     });
+                //   })
+                // })
+              }
+              // show a toast
+              const toast = toastCtrl.create({
+                message: msg['body'],
+                duration: 3000,
+                position: 'top'
+              });
+              toast.present();
+            })
+          )
         }
-        //alert(this.user._user);      
       });
-    });
+
+      // authProvider.checkLogin();
+      // authProvider.authUser.subscribe(jwt => {
+      //   if (jwt) {
+      //     this.rootPage = MainPage;
+      //   }
+      //   else {
+      //     this.rootPage = TutorialPage;
+      //   }
+      // });
   }
+
+  // setUser() {
+  //   this.email = localStorage.getItem("email");
+
+  //   this.userService.getUserByEmail(this.email).subscribe(data =>{
+  //     this.userService.setUser(data);
+  //   })
+
+  //   var query1 = firebase.database().ref("/users");
+
+  //   query1.once("value").then( snapshot => {
+      
+  //     snapshot.forEach( childSnapshot => {
+        
+  //       var childData1 = childSnapshot.val();
+  //       if (childData1.email == this.email) {
+  //         localStorage.setItem("username",childData1.name);
+  //         //this.rootPage = MainPage;
+  //       }
+  //       //alert(this.user._user);      
+  //     });
+  //   });
+  // }
 
   ionViewDidLoad() {
     this.platform.ready().then(() => {
@@ -103,7 +150,6 @@ export class MyApp {
     } else {
       this.translate.use('en'); // Set your language here
     }
-
     this.translate.get(['BACK_BUTTON_TEXT']).subscribe(values => {
       this.config.set('ios', 'backButtonText', values.BACK_BUTTON_TEXT);
     });

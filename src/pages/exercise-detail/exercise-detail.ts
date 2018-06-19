@@ -5,7 +5,6 @@ import { Platform } from 'ionic-angular';
 
 import { Items, ProvidersUserProvider } from '../../providers/providers';
 import { Records } from '../../providers/providers';
-import { User } from '../../providers/providers';
 import { Levels } from '../../providers/providers';
 import { HistoryProvider } from '../../providers/providers';
 import { UserModel } from '../../models/users';

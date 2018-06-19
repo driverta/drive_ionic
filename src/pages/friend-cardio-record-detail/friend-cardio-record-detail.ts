@@ -3,7 +3,7 @@ import { IonicPage, AlertController, NavController, NavParams } from 'ionic-angu
 import  { StatsBarChart } from '../../models/item';
 import { Storage } from '@ionic/storage';
 
-import { User, ProvidersUserProvider } from '../../providers/providers';
+import { ProvidersUserProvider } from '../../providers/providers';
 import { Records } from '../../providers/providers';
 
 import { SortByRepsPipe } from '../../pipes/sort-by-reps/sort-by-reps'

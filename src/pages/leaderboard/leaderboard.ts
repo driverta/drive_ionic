@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 
-import { User, ProvidersUserProvider } from '../../providers/providers';
+import { ProvidersUserProvider } from '../../providers/providers';
 import { Levels } from '../../providers/providers';
 import { SortByGainsPipe } from '../../pipes/sort-by-gains/sort-by-gains'
 

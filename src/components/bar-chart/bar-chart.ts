@@ -3,7 +3,6 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import  { StatsBarChart } from '../../models/item';
 import { Storage } from '@ionic/storage';
 
-import { User } from '../../providers/providers';
 import { Records } from '../../providers/providers';
 
 import { SortByRepsPipe } from '../../pipes/sort-by-reps/sort-by-reps';
@@ -42,7 +41,6 @@ export class BarChartComponent {
   constructor(
     navParams: NavParams,
     public navCtrl: NavController,
-    public user: User,
     private records: Records,
     private storage: Storage,
     private userService: ProvidersUserProvider

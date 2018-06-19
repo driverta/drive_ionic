@@ -4,7 +4,6 @@ import  { StatsLineChart } from '../../models/item';
 import { Storage } from '@ionic/storage';
 
 import { HistoryProvider, ProvidersUserProvider } from '../../providers/providers';
-import { User } from '../../providers/providers';
 import { CardioHistory } from '../../models/CardioHistory';
 
 import firebase from 'firebase';
@@ -38,7 +37,6 @@ export class CardioLineComponent {
 
   constructor(
   	navParams: NavParams,
-  	public user: User,
     private history: HistoryProvider,
     private storage: Storage,
     private userService: ProvidersUserProvider

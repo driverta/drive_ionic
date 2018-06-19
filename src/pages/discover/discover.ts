@@ -1,14 +1,12 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 
-import { User } from '../../providers/providers';
 import firebase from 'firebase';
-
-import { SortByGainsPipe } from '../../pipes/sort-by-gains/sort-by-gains'
 
 import { ProvidersUserProvider } from '../../providers/providers-user/providers-user';
 import { UserModel } from '../../models/users';
 import { CompetingModel } from '../../models/competing';
+import { FcmProvider } from '../../providers/fcm/fcm';
 
 /**
  * Generated class for the DiscoverPage page.
@@ -40,8 +38,8 @@ export class DiscoverPage {
   constructor(public alertCtrl: AlertController,
     public navCtrl: NavController,
     public navParams: NavParams,
-    public user: User,
-    private userService: ProvidersUserProvider) {
+    private userService: ProvidersUserProvider,
+    private fcm: FcmProvider) {
   }
 
   ionViewWillEnter() {
@@ -150,6 +148,7 @@ export class DiscoverPage {
         this.alreadyCompeting();
       }
       else{
+        this.fcm.sendCompetingNotification(item.username, this.userService.getUser().username);
         this.playerAdded();
       }
     })

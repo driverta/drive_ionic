@@ -2,7 +2,7 @@ import { Component, Output, EventEmitter } from '@angular/core';
 import { NavParams, NavController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 
-import { User, ProvidersUserProvider } from '../../providers/providers';
+import { ProvidersUserProvider } from '../../providers/providers';
 import { Levels } from '../../providers/providers';
 import { Records } from '../../providers/providers';
 

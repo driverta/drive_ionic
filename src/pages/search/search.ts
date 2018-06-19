@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 
-import { User } from '../../providers/providers';
-
 import firebase from 'firebase';
 
 @IonicPage()
@@ -19,7 +17,7 @@ export class AddCompetitorsPage {
   loop = 0;
   show = true;
 
-  constructor(public alertCtrl: AlertController, public navCtrl: NavController, public navParams: NavParams, public user: User) {
+  constructor(public alertCtrl: AlertController, public navCtrl: NavController, public navParams: NavParams) {
   }
 
   ionViewWillEnter() {

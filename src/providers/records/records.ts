@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
-import 'rxjs/add/operator/map';
+import { HttpClient } from '@angular/common/http';
 
 /*
   Generated class for the RecordsProvider provider.
@@ -77,7 +76,7 @@ export class Records {
 
 	  _cardioRecords = [];
 
-  constructor(public http: Http) {
+  constructor(public http: HttpClient) {
    
   }
 

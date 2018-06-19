@@ -15,7 +15,6 @@ import { Camera } from '@ionic-native/camera';
 import { Storage } from '@ionic/storage';
 
 import { Settings } from '../../providers/providers';
-import { User } from '../../providers/providers';
 import { Levels } from '../../providers/providers';
 import { ProvidersUserProvider } from '../../providers/providers-user/providers-user';
 //import { WelcomePage } from '../pages';
@@ -81,7 +80,6 @@ export class SettingsPage {
     private alertCtrl: AlertController,
     public translate: TranslateService,
     public camera: Camera,
-    private user: User,
     public levels: Levels,
     private storage: Storage,
     private userService: ProvidersUserProvider,

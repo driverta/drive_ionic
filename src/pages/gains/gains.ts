@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, ActionSheetController, NavController, NavParams } from 'ionic-angular';
-import { User, ProvidersUserProvider, HistoryProvider } from '../../providers/providers';
+import { ProvidersUserProvider, HistoryProvider } from '../../providers/providers';
 import { Storage } from '@ionic/storage';
 import { CardioHistory } from '../../models/CardioHistory';
 import { LiftingHistory } from '../../models/LiftingHistory';

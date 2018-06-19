@@ -5,7 +5,6 @@ import { Storage } from '@ionic/storage';
 
 import firebase from 'firebase';
 
-import { User } from '../../providers/providers';
 import { MainPage } from '../pages';
 import { ProvidersUserProvider } from '../../providers/providers-user/providers-user';
 import { UserModel } from '../../models/users';
@@ -61,7 +60,6 @@ export class SignupPage {
   private mg: MuscleGroup;
 
   constructor(public navCtrl: NavController,
-    public user: User,
     public toastCtrl: ToastController,
     public translateService: TranslateService,
     public alertCtrl: AlertController,
@@ -154,7 +152,6 @@ export class SignupPage {
 
     firebase.auth().createUserWithEmailAndPassword(this.account.email, this.account.password)
        .then(value => {
-         this.user._user = this.account.name;
          this.navCtrl.push(MainPage);
        }).catch( error => {
          this.firebaseErrors(error)

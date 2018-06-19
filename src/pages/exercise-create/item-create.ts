@@ -7,7 +7,7 @@ import { Storage } from '@ionic/storage';
 
 import firebase from 'firebase';
 
-import { User, ProvidersUserProvider } from '../../providers/providers';
+import { ProvidersUserProvider } from '../../providers/providers';
 import { Records } from '../../providers/providers';
 import { Exercise } from '../../models/Exercise';
 import { ExerciseProvider } from '../../providers/exercise/exercise';
@@ -43,7 +43,6 @@ export class ItemCreatePage {
 
   constructor(
     public navCtrl: NavController,
-    public user: User,
     public viewCtrl: ViewController,
     formBuilder: FormBuilder,
     public camera: Camera,
