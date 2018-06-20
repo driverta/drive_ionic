@@ -106,6 +106,7 @@
     <plugin name="cordova-plugin-device" spec="^1.1.7" />
     <plugin name="cordova-plugin-splashscreen" spec="^4.1.0" />
     <plugin name="cordova-sqlite-storage" spec="^2.2.1" />
-    <engine name="browser" spec="~5.0.3" />
     <engine name="ios" spec="~4.5.4" />
+    <engine name="browser" spec="~5.0.3" />
+    <allow-navigation href="http://172.28.66.132:8100" />
 </widget>

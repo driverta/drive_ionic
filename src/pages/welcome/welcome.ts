@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, ToastController, AlertController, Alert } from 'ionic-angular';
-import { User, ProvidersUserProvider } from '../../providers/providers';
+import { ProvidersUserProvider } from '../../providers/providers';
 import { MainPage } from '../pages';
 import firebase from 'firebase';
 import { Error } from '@firebase/auth-types';
@@ -23,6 +23,8 @@ export class WelcomePage {
     password: ''
   };
 
+  log: boolean;
+
   private buttonPressed: Boolean = false;
 
   constructor(public navCtrl: NavController,
@@ -35,6 +37,7 @@ export class WelcomePage {
   }
 
   setUser() {
+    console.log(this.account.email);
     this.userService.getUserByEmail(this.account.email).subscribe(data =>{
       this.userService.setUser(data);
       this.navCtrl.push(MainPage);
@@ -68,12 +71,20 @@ export class WelcomePage {
 
     this.authLogin()
       .then(value => {
+        console.log(value);
         this.saveLogin()
         this.setUser();
 
       }).catch( error => {
         this.presentFirebaseError(error)
       });
+    }
+  }
+  stayLogged() {
+    if (this.log == false){
+      this.log = true;
+    } else if (this.log == true){
+      this.log = false;
     }
   }
 
@@ -97,9 +108,9 @@ export class WelcomePage {
    }
    else if(error.code === "auth/wrong-password"){
     firebaseError.setMessage("Invalid password")
+   }
+    firebaseError.present();
   }
-   firebaseError.present();
- }
  
   authLogin() : Promise<any> {
     return firebase.auth().signInWithEmailAndPassword(this.account.email, this.account.password);

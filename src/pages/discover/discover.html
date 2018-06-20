@@ -9,13 +9,16 @@
 
 <ion-content>
   <div padding>
-    <!--
+    
     <ion-segment [(ngModel)]="segment">
       <ion-segment-button  value="discover_people">
         People
       </ion-segment-button>
+      <ion-segment-button value="discover_excercises">
+        Excercises
+      </ion-segment-button>
     </ion-segment>
-    -->
+   
   </div>
   
   <div [ngSwitch]="segment">
@@ -66,6 +69,19 @@
         </tr>
       </table>
       -->
+    </ion-list>
+    <ion-list *ngSwitchCase="'discover_excercises'">
+      <ion-searchbar (ionInput)="getExercises($event)" placeholder="Search Exercises"></ion-searchbar>
+      <ion-list>
+        <ion-item *ngFor="let item of currentExercises">
+          <h2>{{item.exerciseName}} - {{item.variation}} - {{item.MuscleGroup.muscleGroupName}}</h2>
+          <button ion-button icon-only (click)="addToExercises(item)">
+            <ion-icon name="add"></ion-icon>
+          </button>
+            
+          <ion-note item-end *ngIf="item.note">{{item.note}}</ion-note>
+        </ion-item>
+      </ion-list>
     </ion-list>
     <h3 *ngIf="show" id="loading">Loading</h3>
 	</div>
