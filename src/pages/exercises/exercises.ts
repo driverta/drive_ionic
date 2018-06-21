@@ -77,12 +77,14 @@ export class ListMasterPage {
   ionViewDidLoad() {
     //console.log(this.records._cardioRecs)
     console.log(this.userService.getUser().email);
-    if (this.userService.getUser().username == "Currybde") {
+    if (this.userService.getUser().username == "Currybde" || this.userService.getUser().username == 'Pegcarnes') {
       this.getLocalExercises().then(exercises =>{
-        exercises.forEach(exercise =>{
-          var history = firebase.database().ref(this.userService.getUser().username + "/exercisesNew//history");
-          history.push(exercise);
-        });
+        if (exercises != null) {
+          exercises.forEach(exercise =>{
+            var history = firebase.database().ref(this.userService.getUser().username + "/exercisesNew//history");
+            history.push(exercise);
+          });
+        }
       });
     }
     

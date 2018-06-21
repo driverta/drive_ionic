@@ -8,6 +8,7 @@ import { SortByGainsPipe } from '../../pipes/sort-by-gains/sort-by-gains'
 
 import { ProvidersUserProvider } from '../../providers/providers-user/providers-user';
 import { ExerciseProvider } from '../../providers/exercise/exercise';
+import { FcmProvider } from '../../providers/fcm/fcm';
 
 import { UserModel } from '../../models/users';
 import { Exercise } from '../../models/Exercise';
@@ -49,7 +50,8 @@ export class DiscoverPage {
     public navParams: NavParams,
     public user: User,
     private userService: ProvidersUserProvider,
-    public exerciseService: ExerciseProvider) {
+    public exerciseService: ExerciseProvider,
+    private fcm: FcmProvider) {
   }
 
   ionViewWillEnter() {
@@ -186,10 +188,11 @@ export class DiscoverPage {
     console.log(competing);
     this.userService.addCompetingUser(competing).subscribe(data => {
       console.log(data);
-      if(data === "already_exists"){
+      if(data === "already_exists") {
         this.alreadyCompeting();
       }
-      else{
+      else {
+        this.fcm.sendCompetingNotification(item.username, this.userService.getUser().username);
         this.playerAdded();
       }
     })

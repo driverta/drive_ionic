@@ -12,6 +12,12 @@ import { User } from '../providers/providers';
 import { DataService } from '../providers/api/firebase';
 import firebase from 'firebase';
 
+import { FcmProvider } from '../providers/fcm/fcm';
+
+import { ToastController } from 'ionic-angular';
+import { tap } from 'rxjs/operators';
+import { TabsPage } from '../pages/tabs/tabs';
+
 @Component({
   template: `
   <ion-nav #content [root]="rootPage"></ion-nav>
@@ -48,16 +54,46 @@ export class MyApp {
     private statusBar: StatusBar,
     private splashScreen: SplashScreen,
     data: DataService,
-    private userService: ProvidersUserProvider) {
+    private userService: ProvidersUserProvider,
+    public fcm: FcmProvider,
+    public toastCtrl: ToastController) {
     this.initTranslate();
-    data.init();
 
     this.tester = localStorage.getItem("stay");
-      //alert(this.tester)
-      if(this.tester == "logged"){
-        this.setUser();
-        this.rootPage = MainPage;
-      }
+    //alert(this.tester)
+    if(this.tester == "logged"){
+      this.setUser();
+      this.rootPage = MainPage;
+    }
+
+    platform.ready().then(() => {
+      // Get a FCM token
+      fcm.getToken();
+
+      // Listen to incoming messages
+      fcm.listenToNotifications().pipe(
+        tap(msg => {
+          console.log("FIRST MESSAGE" + JSON.stringify(msg));
+          if (msg['tap'] == true) {
+            console.log("here");
+            userService.getOneUser(msg['user'].split(' ')[0]).subscribe(user => {
+              this.nav.push(TabsPage).then(() => {
+                this.nav.push('FriendProfilePage', {
+                  item: user
+                });
+              })
+            })
+          }
+          // show a toast
+          const toast = toastCtrl.create({
+            message: msg['body'],
+            duration: 3000,
+            position: 'top'
+          });
+          toast.present();
+        })
+      )
+    });
   }
 
   setUser() {

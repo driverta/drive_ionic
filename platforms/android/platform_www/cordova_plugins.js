@@ -56,9 +56,9 @@ module.exports.metadata =
   "cordova-plugin-device": "1.1.7",
   "cordova-plugin-firebase": "0.1.25",
   "cordova-plugin-splashscreen": "4.1.0",
-  "cordova-plugin-statusbar": "2.4.1",
+  "cordova-plugin-statusbar": "2.4.2",
   "cordova-plugin-whitelist": "1.3.3",
-  "cordova-sqlite-storage": "2.3.0",
+  "cordova-sqlite-storage": "2.3.2",
   "ionic-plugin-keyboard": "2.2.1"
 };
 // BOTTOM OF METADATA
