@@ -77,14 +77,14 @@ export class ListMasterPage {
   ionViewDidLoad() {
     //console.log(this.records._cardioRecs)
     console.log(this.userService.getUser().email);
-    if (this.userService.getUser().username == "Currybde") {
-      this.getLocalExercises().then(exercises =>{
+    this.getLocalExercises().then(exercises =>{
+      if (exercises != null) {
         exercises.forEach(exercise =>{
           var history = firebase.database().ref(this.userService.getUser().username + "/exercisesNew//history");
           history.push(exercise);
         });
-      });
-    }
+      }
+    });
     
     this.userService.getExercises().subscribe(exercises => {
 

@@ -7,7 +7,12 @@ import firebase from 'firebase';
 import { SortByGainsPipe } from '../../pipes/sort-by-gains/sort-by-gains'
 
 import { ProvidersUserProvider } from '../../providers/providers-user/providers-user';
+import { ExerciseProvider } from '../../providers/exercise/exercise';
+import { FcmProvider } from '../../providers/fcm/fcm';
+
 import { UserModel } from '../../models/users';
+import { Exercise } from '../../models/Exercise';
+
 import { CompetingModel } from '../../models/competing';
 
 /**
@@ -25,11 +30,14 @@ import { CompetingModel } from '../../models/competing';
 export class DiscoverPage {
   
   currentItems: any = [];
+  currentExercises: any = [];
+  exercises: Exercise[];
 	users: UserModel[];
   competing: CompetingModel[];
 	username: any;
   userId: number;
   id: number;
+  bool: boolean;
   loop = 0;
   likelyFriends: any = []; 
   competingFriends: any = []; 
@@ -41,7 +49,9 @@ export class DiscoverPage {
     public navCtrl: NavController,
     public navParams: NavParams,
     public user: User,
-    private userService: ProvidersUserProvider) {
+    private userService: ProvidersUserProvider,
+    public exerciseService: ExerciseProvider,
+    private fcm: FcmProvider) {
   }
 
   ionViewWillEnter() {
@@ -68,18 +78,10 @@ export class DiscoverPage {
           }
         })
       })
-      
     });
-
-
-    
-    // query2.once("value").then( snapshot => {
-    //   snapshot.forEach( childSnapshot => {
-    //     var competingFriend = childSnapshot.val();
-    //     this.competingFriends.push(competingFriend.name);
-    //     this.getFriendsOfFriends(competingFriend.name);
-    //   });
-    // });
+    this.exerciseService.getUniqueExercises(this.userId).subscribe(exercises =>{
+      this.exercises = exercises;
+    })
   }
   
   // getFriendsOfFriends(friend) {
@@ -137,6 +139,46 @@ export class DiscoverPage {
 	  });
     console.log(this.currentItems);
   }
+
+  getExercises(ev) {
+    let val = ev.target.value;
+    if (!val || !val.trim()) {
+      this.currentExercises = [];
+      return;
+    }
+    this.currentExercises = this.exercises.filter((v) => {
+    if(v.exerciseName && val) {
+      if (v.exerciseName.toLowerCase().indexOf(val.toLowerCase()) > -1) {
+        return true;
+	      }
+	    return false;
+	    }
+	  });
+  }
+  addToExercises(exercise){
+    this.bool = true;
+    
+    this.userService.getExercises().subscribe(exercises => {
+      for (let myExercise of exercises) {
+        if (myExercise.exerciseName == exercise.exerciseName
+          && myExercise.variation == exercise.variation
+          && myExercise.MuscleGroup.id == exercise.MuscleGroup.id) {
+          this.presentAlert();
+          this.bool = false;
+        }
+      }
+
+      if (this.bool) {
+        var newExercise = new Exercise;
+        newExercise.exerciseName = exercise.exerciseName;
+        newExercise.variation = exercise.variation;
+        newExercise.MuscleGroup = exercise.MuscleGroup;
+        this.exerciseService.createExercise(this.userService.getUser().id, newExercise).subscribe(data => {
+          this.exerciseAdded()
+        })
+      }
+    })
+  }
     
   addToLeaderboard(item){
     this.id = item.id;
@@ -146,10 +188,11 @@ export class DiscoverPage {
     console.log(competing);
     this.userService.addCompetingUser(competing).subscribe(data => {
       console.log(data);
-      if(data === "already_exists"){
+      if(data === "already_exists") {
         this.alreadyCompeting();
       }
-      else{
+      else {
+        this.fcm.sendCompetingNotification(item.username, this.userService.getUser().username);
         this.playerAdded();
       }
     })
@@ -209,6 +252,23 @@ export class DiscoverPage {
   playerAdded() {
     let alert = this.alertCtrl.create({
       title: 'Player added to your leaderboard!',
+      buttons: ['Ok']
+    });
+    alert.present();
+  }
+
+  presentAlert() {
+    let alert = this.alertCtrl.create({
+      title: 'Duplicate Exercise',
+      subTitle: 'You already have an exercise with this name and Variation',
+      buttons: ['Dismiss']
+    });
+    alert.present();
+  }
+
+  exerciseAdded() {
+    let alert = this.alertCtrl.create({
+      title: 'Exercise added to your list!',
       buttons: ['Ok']
     });
     alert.present();

@@ -5,3 +5,5 @@
 www/*
 node_modules/*
 src/**/*.js
+platforms/*
+plugins/*

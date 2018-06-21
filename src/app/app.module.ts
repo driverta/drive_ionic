@@ -22,7 +22,12 @@ import { HistoryProvider } from '../providers/history/history';
 import { FeathersProvider } from '../providers/feathers/feathers';
 import { ProvidersUserProvider } from '../providers/providers-user/providers-user';
 import { ExerciseProvider } from '../providers/exercise/exercise';
-import { AwsProvider } from '../providers/aws/aws';
+
+import { AngularFireModule } from 'angularfire2';
+import { AngularFirestoreModule } from 'angularfire2/firestore';
+import { AngularFireDatabaseModule } from 'angularfire2/database';
+import { FcmProvider } from '../providers/fcm/fcm';
+import { Firebase } from '@ionic-native/firebase';
 
 // The translate loader needs to know where to load i18n files
 // in Ionic's static asset pipeline.
@@ -45,6 +50,15 @@ export function provideSettings(storage: Storage) {
   });
 }
 
+const firebase = {
+  apiKey: "AIzaSyCBYJ0--a38rC2Uhd28z5g3B449Kkz-fJE",
+  authDomain: "drive-cadf7.firebaseapp.com",
+  databaseURL: "https://drive-cadf7.firebaseio.com",
+  projectId: "drive-cadf7",
+  storageBucket: "drive-cadf7.appspot.com",
+  messagingSenderId: "564282992846"
+};
+
 @NgModule({
   declarations: [
     MyApp
@@ -60,7 +74,10 @@ export function provideSettings(storage: Storage) {
       }
     }),
     IonicModule.forRoot(MyApp),
-    IonicStorageModule.forRoot()
+    IonicStorageModule.forRoot(),
+    AngularFireModule.initializeApp(firebase), 
+    AngularFirestoreModule,
+    AngularFireDatabaseModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -84,7 +101,8 @@ export function provideSettings(storage: Storage) {
     HistoryProvider,
     FeathersProvider,
     ExerciseProvider,
-    AwsProvider
+    FcmProvider,
+    Firebase,
   ]
 })
 export class AppModule { }
