@@ -34,7 +34,6 @@
     "angular": "^1.6.9",
     "angularfire2": "^5.0.0-rc.11",
     "animate.css": "^3.5.2",
-    "cordova-android": "6.3.0",
     "cordova-browser": "5.0.3",
     "cordova-ios": "4.5.4",
     "cordova-plugin-device": "^1.1.7",
@@ -77,8 +76,7 @@
     },
     "platforms": [
       "browser",
-      "ios",
-      "android"
+      "ios"
     ]
   }
 }

@@ -1,9 +1,0 @@
-<?xml version='1.0' encoding='utf-8'?>
-<resources>
-    <string name="app_name">Drive Fitness</string>
-    <string name="launcher_name">@string/app_name</string>
-    <string name="activity_name">@string/launcher_name</string>
-    
-    <string name="google_app_id">1:564282992846:android:cd7ea47af17930e1</string>
-    <string name="google_api_key">AIzaSyDMLF-DgRYOi0pFNmu8374xeko3vh8KfT0</string>
-</resources>
