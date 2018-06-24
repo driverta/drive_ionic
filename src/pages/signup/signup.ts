@@ -62,6 +62,7 @@ export class SignupPage {
 
     authProvider.authUser.subscribe(jwt => {
       if (jwt) {
+        this.saveLogin()
         this.addExercises()
       }
     });
@@ -120,6 +121,11 @@ export class SignupPage {
         }
       });
     }
+  }
+
+  saveLogin() {
+    localStorage.setItem("stay","logged");
+    localStorage.setItem("email",this.account.email);
   }
 
   signUp() {
