@@ -1,18 +1,19 @@
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { IonicPage, NavController, ToastController, AlertController, Alert } from 'ionic-angular';
+import { IonicPage, NavController, ToastController, AlertController, Alert, LoadingController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 
 import firebase from 'firebase';
 import { Error } from '@firebase/auth-types';
-import { User } from '../../providers/providers';
+import { User, AuthProvider } from '../../providers/providers';
 import { MainPage } from '../pages';
 import { ProvidersUserProvider } from '../../providers/providers-user/providers-user';
 import { UserModel } from '../../models/users';
+import { APIUser } from '../../models/APIUser';
 import { ExerciseProvider } from '../../providers/exercise/exercise';
 import { Exercise } from '../../models/Exercise';
 import { MuscleGroup } from '../../models/MuscleGroupModel';
-
+import {finalize} from 'rxjs/operators';
 
 @IonicPage()
 @Component({
@@ -39,6 +40,7 @@ export class SignupPage {
   bro: string = "bro";
 
   users: UserModel[];
+  private user: UserModel;
 
   // Our translated text strings
   private signupErrorString: string;
@@ -46,16 +48,23 @@ export class SignupPage {
   private mg: MuscleGroup;
 
   constructor(public navCtrl: NavController,
-    public user: User,
     public toastCtrl: ToastController,
     public translateService: TranslateService,
     public alertCtrl: AlertController,
     private storage: Storage,
     private userService: ProvidersUserProvider,
-    private exerciseService: ExerciseProvider) {
+    private exerciseService: ExerciseProvider,
+    private authProvider: AuthProvider,
+    private readonly loadingCtrl: LoadingController) {
     this.translateService.get('SIGNUP_ERROR').subscribe((value) => {
       this.signupErrorString = value;
     })
+
+    authProvider.authUser.subscribe(jwt => {
+      if (jwt) {
+        this.addExercises()
+      }
+    });
   }
 
   initiateSignUp() {
@@ -123,48 +132,86 @@ export class SignupPage {
 
     firebase.auth().createUserWithEmailAndPassword(this.account.email, this.account.password)
       .then(value => {
-        this.user._user = this.account.name;
-        let user = new UserModel();
-        user.username = this.account.name;
-        user.email = this.account.email;
-        console.log("here")
-        this.userService.createUser(user).subscribe(response => {
-          console.log(response);
-          this.userService.setUser(response)
-          var bench = new Exercise;
-          bench.exerciseName = "Bench Press";
-          bench.variation = "Barbell";
-          this.mg = { id: 1, muscleGroupName: "Chest" }
-          bench.MuscleGroup = this.mg;
-          this.exerciseService.createExercise
-            (this.userService.getUser().id, bench).subscribe(data => {
-              //console.log(data)
-            })
-
-          var squat = new Exercise;
-          squat.exerciseName = "Squat";
-          squat.variation = "Barbell";
-          this.mg = { id: 3, muscleGroupName: "Legs" }
-          squat.MuscleGroup = this.mg;
-          this.exerciseService.createExercise(this.userService.getUser().id, squat).subscribe(data => {
-            //console.log(data)
-          })
-
-          var deadlift = new Exercise;
-          deadlift.exerciseName = "Deadlift";
-          deadlift.variation = "Barbell";
-          this.mg = { id: 2, muscleGroupName: "Back" }
-          deadlift.MuscleGroup = this.mg;
-          this.exerciseService.createExercise(this.userService.getUser().id, deadlift).subscribe(data => {
-            //console.log(data)
-          })
-          this.navCtrl.push(MainPage);
+        let loading = this.loadingCtrl.create({
+          spinner: 'bubbles',
+          content: 'Logging in ...'
         });
+    
+        loading.present();
 
+        this.user = new UserModel();
+        this.user.username = this.account.name;
+        this.user.email = this.account.email;
+
+        let apiUser = new APIUser;
+        apiUser.email = this.account.email
+        apiUser.password = this.account.password
+        apiUser.username = this.account.email.split('@')[0]
+        this.authProvider
+          .login(apiUser)
+          .pipe(finalize(() => loading.dismiss()))
+          .subscribe(
+            () => {
+            },
+            err => this.handleError(err));
 
       }).catch((error: Error) => {
         this.presentFirebaseError(error)
       });
+  }
+
+  addExercises() {
+    this.userService.createUser(this.user).subscribe(response => {
+      console.log(response);
+      this.userService.setUser(response)
+      var bench = new Exercise;
+      bench.exerciseName = "Bench Press";
+      bench.variation = "Barbell";
+      this.mg = { id: 1, muscleGroupName: "Chest" }
+      bench.MuscleGroup = this.mg;
+      this.exerciseService.createExercise
+        (this.userService.getUser().id, bench).subscribe(data => {
+          //console.log(data)
+        })
+
+      var squat = new Exercise;
+      squat.exerciseName = "Squat";
+      squat.variation = "Barbell";
+      this.mg = { id: 3, muscleGroupName: "Legs" }
+      squat.MuscleGroup = this.mg;
+      this.exerciseService.createExercise(this.userService.getUser().id, squat).subscribe(data => {
+        //console.log(data)
+      })
+
+      var deadlift = new Exercise;
+      deadlift.exerciseName = "Deadlift";
+      deadlift.variation = "Barbell";
+      this.mg = { id: 2, muscleGroupName: "Back" }
+      deadlift.MuscleGroup = this.mg;
+      this.exerciseService.createExercise(this.userService.getUser().id, deadlift).subscribe(data => {
+        //console.log(data)
+      })
+      this.navCtrl.push(MainPage);
+    });
+  }
+
+  handleError(error: any) {
+    alert(error)
+    let message: string;
+    if (error.status && error.status === 401) {
+      message = 'Login failed';
+    }
+    else {
+      message = `Unexpected error: ${error.statusText}`;
+    }
+
+    const toast = this.toastCtrl.create({
+      message,
+      duration: 5000,
+      position: 'bottom'
+    });
+
+    toast.present();
   }
 
   presentFirebaseError(error: Error) {

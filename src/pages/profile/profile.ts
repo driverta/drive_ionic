@@ -17,6 +17,7 @@ import { Storage } from '@ionic/storage';
 import { Settings } from '../../providers/providers';
 import { User } from '../../providers/providers';
 import { Levels } from '../../providers/providers';
+import { AuthProvider } from '../../providers/providers';
 import { ProvidersUserProvider } from '../../providers/providers-user/providers-user';
 //import { WelcomePage } from '../pages';
 
@@ -86,7 +87,8 @@ export class SettingsPage {
     private storage: Storage,
     private userService: ProvidersUserProvider,
     private domSanitizer: DomSanitizer,
-    private rec: Records) {
+    private rec: Records,
+    private authProvidor: AuthProvider) {
 
     this.userData = this.userService.getUser();
   }
@@ -285,6 +287,7 @@ export class SettingsPage {
   }
 
   reallyLogOut(){
+    this.authProvidor.logout();
     localStorage.setItem("stay","out");
     localStorage.setItem("email","");
     window.location.reload();

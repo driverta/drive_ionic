@@ -6,6 +6,7 @@ import { Records } from './records/records';
 import { Levels } from './levels/levels';
 import { HistoryProvider } from './history/history';
 import { ProvidersUserProvider } from './providers-user/providers-user'
+import { AuthProvider } from './auth/auth'
 
 export {
     Api,
@@ -15,5 +16,6 @@ export {
     Records,
     Levels,
     HistoryProvider,
-    ProvidersUserProvider
+    ProvidersUserProvider,
+    AuthProvider
 };

@@ -1,5 +1,4 @@
 import { ErrorHandler, NgModule } from '@angular/core';
-import { Http, HttpModule } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { Camera } from '@ionic-native/camera';
 import { GoogleMaps } from '@ionic-native/google-maps';
@@ -22,16 +21,21 @@ import { HistoryProvider } from '../providers/history/history';
 import { FeathersProvider } from '../providers/feathers/feathers';
 import { ProvidersUserProvider } from '../providers/providers-user/providers-user';
 import { ExerciseProvider } from '../providers/exercise/exercise';
+import { AuthProvider } from "../providers/auth/auth";
 
 import { AngularFireModule } from 'angularfire2';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { FcmProvider } from '../providers/fcm/fcm';
 import { Firebase } from '@ionic-native/firebase';
+import { HttpClientModule, HttpClient } from "@angular/common/http";
+
+import {JWT_OPTIONS, JwtModule} from '@auth0/angular-jwt';
+import { AppVersion } from '@ionic-native/app-version';
 
 // The translate loader needs to know where to load i18n files
 // in Ionic's static asset pipeline.
-export function HttpLoaderFactory(http: Http) {
+export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 
@@ -59,25 +63,39 @@ const firebase = {
   messagingSenderId: "564282992846"
 };
 
+export function jwtOptionsFactory(storage: Storage) {
+  return {
+    tokenGetter: () => storage.get('jwt_token'),
+    whitelistedDomains: ['localhost:8080', 'drive-cadf7.firebaseapp.com']
+  }
+}
+
 @NgModule({
   declarations: [
     MyApp
   ],
   imports: [
     BrowserModule,
-    HttpModule,
+    HttpClientModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
         useFactory: HttpLoaderFactory,
-        deps: [Http]
+        deps: [HttpClient]
       }
     }),
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot(),
     AngularFireModule.initializeApp(firebase), 
     AngularFirestoreModule,
-    AngularFireDatabaseModule
+    AngularFireDatabaseModule,
+    JwtModule.forRoot({
+      jwtOptionsProvider: {
+        provide: JWT_OPTIONS,
+        useFactory: jwtOptionsFactory,
+        deps: [Storage]
+      }
+    })
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -103,6 +121,8 @@ const firebase = {
     ExerciseProvider,
     FcmProvider,
     Firebase,
+    AuthProvider,
+    AppVersion
   ]
 })
 export class AppModule { }
