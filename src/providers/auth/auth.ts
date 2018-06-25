@@ -11,8 +11,8 @@ export class AuthProvider {
 
   authUser = new ReplaySubject<any>(1);
 
-  // private url = "http://Driveapi-pic.uvrytrqbjh.us-east-1.elasticbeanstalk.com/";
-  private url = "http://localhost:8080/api";
+  private url = "http://Driveapi-pic.uvrytrqbjh.us-east-1.elasticbeanstalk.com/";
+  // private url = "http://localhost:8080/api";
 
   constructor(private readonly httpClient: HttpClient,
               private readonly storage: Storage,
