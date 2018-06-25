@@ -1,9 +1,16 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, ToastController, AlertController, Alert } from 'ionic-angular';
-import { ProvidersUserProvider } from '../../providers/providers';
+import { IonicPage, NavController, ToastController, AlertController, Alert, LoadingController } from 'ionic-angular';
+import { ProvidersUserProvider, AuthProvider } from '../../providers/providers';
 import { MainPage } from '../pages';
 import firebase from 'firebase';
+import { Firebase } from '@ionic-native/firebase';
+
 import { Error } from '@firebase/auth-types';
+import { APIUser } from '../../models/APIUser'
+import {JwtHelperService} from "@auth0/angular-jwt";
+import {HttpClient} from "@angular/common/http";
+import { Injectable } from '@angular/core';
+import {finalize} from 'rxjs/operators';
 
 /**
  * The Welcome Page is a splash page that quickly describes the app,
@@ -16,12 +23,15 @@ import { Error } from '@firebase/auth-types';
   selector: 'page-welcome',
   templateUrl: 'welcome.html'
 })
+@Injectable()
 export class WelcomePage {
 
    account: { email: string, password: string } = {
     email: '',
     password: ''
   };
+
+  user: string;
 
   log: boolean;
 
@@ -30,7 +40,23 @@ export class WelcomePage {
   constructor(public navCtrl: NavController,
     public alertCtrl: AlertController,
     private userService: ProvidersUserProvider,
-  ) { }
+    private authProvider: AuthProvider,
+    private toastCtrl: ToastController,
+    public httpClient: HttpClient,
+    public jwtHelper: JwtHelperService,
+    public firebaseNative: Firebase,
+    private readonly loadingCtrl: LoadingController
+  ) { 
+    authProvider.authUser.subscribe(jwt => {
+      if (jwt) {
+        this.userService.getUserByEmail(this.account.email).subscribe(data =>{
+          this.userService.setUser(data);
+          this.saveLogin();
+          this.navCtrl.push(MainPage);
+        });
+      }
+    });
+  }
 
   signup() {
     this.navCtrl.push('SignupPage');
@@ -38,10 +64,15 @@ export class WelcomePage {
 
   setUser() {
     console.log(this.account.email);
-    this.userService.getUserByEmail(this.account.email).subscribe(data =>{
-      this.userService.setUser(data);
-      this.navCtrl.push(MainPage);
-    });
+    this.httpClient.get('http://localhost:8080/api/' + "getUserByEmail?email=" + this.account.email).subscribe(
+      text => console.log('here'),
+      err => console.log(err)
+    );
+
+    // this.userService.getUserByEmail(this.account.email).subscribe(data =>{
+    //   this.userService.setUser(data);
+    //   this.navCtrl.push(MainPage);
+    // });
   }
 
   login() {
@@ -68,18 +99,66 @@ export class WelcomePage {
       this.buttonPressed = false;
     }
     else{
-
     this.authLogin()
       .then(value => {
         console.log(value);
-        this.saveLogin()
-        this.setUser();
-
+        let user = new APIUser;
+        user.email = this.account.email
+        user.password = this.account.password
+        user.username = this.account.email.split('@')[0]
+        this.loginWithAPI(user);
       }).catch( error => {
         this.presentFirebaseError(error)
       });
     }
   }
+
+  loginWithAPI(value: any) {
+    let loading = this.loadingCtrl.create({
+      spinner: 'bubbles',
+      content: 'Logging in ...'
+    });
+
+    loading.present();
+
+    this.authProvider
+      .login(value)
+      .pipe(finalize(() => loading.dismiss()))
+      .subscribe(
+        () => {},
+        err => this.handleError(err));
+  }
+
+  signupWithAPI(value: any) {
+
+    this.authProvider
+      .signup(value)
+      .subscribe(
+        (jwt) => {
+          this.loginWithAPI(value);
+        },
+        err => console.log(err));
+  }
+
+  handleError(error: any) {
+    alert(error)
+    let message: string;
+    if (error.status && error.status === 401) {
+      message = 'Login failed';
+    }
+    else {
+      message = `Unexpected error: ${error.statusText}`;
+    }
+
+    const toast = this.toastCtrl.create({
+      message,
+      duration: 5000,
+      position: 'bottom'
+    });
+
+    toast.present();
+  }
+
   stayLogged() {
     if (this.log == false){
       this.log = true;

@@ -2,7 +2,7 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
 
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 
 import { Api } from '../api/api';
 
@@ -29,6 +29,6 @@ import { Api } from '../api/api';
 export class User {
   _user: any;
 
-  constructor(public http: Http, public api: Api) {
+  constructor(public http: HttpClient, public api: Api) {
   }
 }

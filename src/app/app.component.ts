@@ -1,11 +1,14 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild,  } from '@angular/core';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { TranslateService } from '@ngx-translate/core';
 import { Config, Nav, Platform } from 'ionic-angular';
+import { HttpClient } from '@angular/common/http'
 
 import { FirstRunPage } from '../pages/pages';
 import { MainPage } from '../pages/pages';
+import { WelcomePage } from '../pages/pages';
+
 import { Settings, ProvidersUserProvider } from '../providers/providers';
 import { User } from '../providers/providers';
 
@@ -14,9 +17,12 @@ import firebase from 'firebase';
 
 import { FcmProvider } from '../providers/fcm/fcm';
 
-import { ToastController } from 'ionic-angular';
+import { ToastController, AlertController } from 'ionic-angular';
 import { tap } from 'rxjs/operators';
 import { TabsPage } from '../pages/tabs/tabs';
+
+import { AuthProvider } from "../providers/auth/auth";
+import { AppVersion } from '@ionic-native/app-version';
 
 @Component({
   template: `
@@ -46,7 +52,7 @@ export class MyApp {
     { title: 'AddCompetitors', component: 'AddCompetitorsPage' }
   ]
 
-  constructor(private translate: TranslateService,
+  constructor(public translate: TranslateService,
     private platform: Platform,
     public user: User,
     settings: Settings,
@@ -56,7 +62,11 @@ export class MyApp {
     data: DataService,
     private userService: ProvidersUserProvider,
     public fcm: FcmProvider,
-    public toastCtrl: ToastController) {
+    public toastCtrl: ToastController,
+    public authProvider: AuthProvider,
+    public alertCtrl: AlertController,
+    private app: AppVersion) {
+
     this.initTranslate();
 
     this.tester = localStorage.getItem("stay");
@@ -67,6 +77,23 @@ export class MyApp {
     }
 
     platform.ready().then(() => {
+      this.app.getVersionNumber().then((version) =>{
+        console.log(JSON.stringify(version));
+        this.authProvider.getVersion().subscribe(currentVersion => {
+          console.log(currentVersion);
+          if (version != currentVersion) {
+            let alert = this.alertCtrl.create({
+              title: 'Your version is out of date',
+              message: 'Please download the latest version',
+              buttons: [{
+                text: "OK",
+                handler: () => { alert.dismiss() }
+              }]
+            })
+            alert.present();
+          }
+        })
+      });
       // Get a FCM token
       fcm.getToken();
 
@@ -103,21 +130,21 @@ export class MyApp {
       this.userService.setUser(data);
     })
 
-    var query1 = firebase.database().ref("/users");
+    // var query1 = firebase.database().ref("/users");
 
-    query1.once("value").then( snapshot => {
+    // query1.once("value").then( snapshot => {
       
-      snapshot.forEach( childSnapshot => {
+    //   snapshot.forEach( childSnapshot => {
         
-        var childData1 = childSnapshot.val();
-        if (childData1.email == this.email) {
-          this.user._user = childData1.name;
-          localStorage.setItem("username",childData1.name);
-          //this.rootPage = MainPage;
-        }
-        //alert(this.user._user);      
-      });
-    });
+    //     var childData1 = childSnapshot.val();
+    //     if (childData1.email == this.email) {
+    //       this.user._user = childData1.name;
+    //       localStorage.setItem("username",childData1.name);
+    //       //this.rootPage = MainPage;
+    //     }
+    //     //alert(this.user._user);      
+    //   });
+    // });
   }
 
   ionViewDidLoad() {

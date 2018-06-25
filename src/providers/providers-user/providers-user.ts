@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Response, ResponseContentType } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
 import { UserModel } from '../../models/users';
@@ -15,61 +15,61 @@ import { CardioHistory } from '../../models/CardioHistory';
 @Injectable()
 export class ProvidersUserProvider {
 
-  private url = "http://driveapi-env.y7mz5ppbve.us-east-2.elasticbeanstalk.com/";
-  // private url = "http://localhost:8080/api/";
+  // private url = "http://driveapi-env.y7mz5ppbve.us-east-2.elasticbeanstalk.com/";
+  private url = "http://localhost:8080/api/";
 
   user: UserModel = new UserModel(); 
 
-  constructor(public http: Http) {
+  constructor(public http: HttpClient) {
     console.log('Hello ProvidersUserProvider Provider');
   }
 
   getAllUsers(): Observable<UserModel[]> {
-    return this.http.get(this.url + "getUsers").map((res: Response) => res.json());
+    return this.http.get<UserModel[]>(this.url + "getUsers")
   }
 
   getLeaderboardData(userId): Observable<UserModel[]> {
-    return this.http.get(this.url + "getLeaderboardData?userId=" + userId).map((res: Response) => res.json());
+    return this.http.get<UserModel[]>(this.url + "getLeaderboardData?userId=" + userId)
   }
 
   getOneUser(username): Observable<UserModel> {
-    return this.http.get(this.url + "getUserByUsername?username=" + username).map((res: Response) => res.json());
+    return this.http.get<UserModel>(this.url + "getUserByUsername?username=" + username)
   }
 
   getProfilePic(username): Observable<Response> {
-    return this.http.get(this.url + "getUserProfilePic?username=" + username);
+    return this.http.get<Response>(this.url + "getUserProfilePic?username=" + username);
   }
 
   uploadProfilePic(username, pic): Observable<Response> {
-    return this.http.post(this.url + "uploadUserProfilePic?username=" + username, pic);
+    return this.http.post<Response>(this.url + "uploadUserProfilePic?username=" + username, pic);
   }
 
   getUserByEmail(email): Observable<UserModel> {
-    return this.http.get(this.url + "getUserByEmail?email=" + email).map((res: Response) => res.json());
+    return this.http.get<UserModel>(this.url + "getUserByEmail?email=" + email)
   }
 
   getCompetingUsers(userId): Observable<UserModel[]> {
-    return this.http.get(this.url + "getUserCompeting?userId=" + userId).map((res: Response) => res.json());
+    return this.http.get<UserModel[]>(this.url + "getUserCompeting?userId=" + userId)
   }
 
   addCompetingUser(competing): Observable<String>{
-    return this.http.post(this.url + "createCompeting", competing).map((res: Response) => res.text());
+    return this.http.post<String>(this.url + "createCompeting", competing)
   }
 
   removeCompetingUser(competing): Observable<Response>{
-    return this.http.post(this.url + "deleteCompeting?", competing);
+    return this.http.post<Response>(this.url + "deleteCompeting?", competing);
   }
   
   getCompetitors(userId): Observable<UserModel[]> {
-    return this.http.get(this.url + "getUserCompetitors?userId=" + userId).map((res: Response) => res.json());
+    return this.http.get<UserModel[]>(this.url + "getUserCompetitors?userId=" + userId)
   }
 
   getExercises(): Observable<Exercise[]> {
-    return this.http.get(this.url + "getUserExercises?id=" + this.user.id).map((res: Response) => res.json());
+    return this.http.get<Exercise[]>(this.url + "getUserExercises?id=" + this.user.id)
   }
 
   getCompetingUsersExercises(userId): Observable<Exercise[]> {
-    return this.http.get(this.url + "getUserExercises?id=" + userId).map((res: Response) => res.json());
+    return this.http.get<Exercise[]>(this.url + "getUserExercises?id=" + userId)
   }
 
   addLiftingHistory(lf){
@@ -78,20 +78,20 @@ export class ProvidersUserProvider {
   }
 
   getLiftingHistoryByIdAndExercise(ex: Exercise): Observable<LiftingHistory[]>{
-    return this.http.get(this.url + "getLiftingHistoryByExercise?userId=" + this.user.id + "&exerciseId=" + ex.id ).map((res: Response) => res.json());
+    return this.http.get<LiftingHistory[]>(this.url + "getLiftingHistoryByExercise?userId=" + this.user.id + "&exerciseId=" + ex.id )
   }
 
   getCompetingUsersLiftingHistoryByIdAndExercise(ex: Exercise, userId): Observable<LiftingHistory[]>{
-    return this.http.get(this.url + "getLiftingHistoryByExercise?userId=" + userId + "&exerciseId=" + ex.id ).map((res: Response) => res.json());
+    return this.http.get<LiftingHistory[]>(this.url + "getLiftingHistoryByExercise?userId=" + userId + "&exerciseId=" + ex.id )
   }
 
   
   getCardioHistoryByIdAndExercise(ex: Exercise): Observable<CardioHistory[]>{
-    return this.http.get(this.url + "getCardioHistoryByExercise?userId=" + this.user.id + "&exerciseId=" + ex.id ).map((res: Response) => res.json());
+    return this.http.get<CardioHistory[]>(this.url + "getCardioHistoryByExercise?userId=" + this.user.id + "&exerciseId=" + ex.id )
   }
 
   getCompetingUsersCardioHistoryByIdAndExercise(ex: Exercise, userId): Observable<CardioHistory[]>{
-    return this.http.get(this.url + "getCardioHistoryByExercise?userId=" + userId + "&exerciseId=" + ex.id ).map((res: Response) => res.json());
+    return this.http.get<CardioHistory[]>(this.url + "getCardioHistoryByExercise?userId=" + userId + "&exerciseId=" + ex.id )
   }
 
   addCardioHistory(cardio){
@@ -102,19 +102,19 @@ export class ProvidersUserProvider {
 
 
   getExercise(mgId, name, variation): Observable<Exercise> {
-    return this.http.get(this.url + "getExercise?muscleGroup=" + mgId + "&name=" + name.encodeURI() + "&variation=" + variation.encodeURI()).map((res: Response) => res.json());
+    return this.http.get<Exercise>(this.url + "getExercise?muscleGroup=" + mgId + "&name=" + name.encodeURI() + "&variation=" + variation.encodeURI())
   }
 
   getTotalGains(userId): Observable<number> {
-    return this.http.get(this.url + "getUserGainsTotal?userId=" + userId).map((res: Response) => res.json());
+    return this.http.get<number>(this.url + "getUserGainsTotal?userId=" + userId)
   }
 
   createUser(user): Observable<UserModel>{
-    return this.http.post(this.url + "createUser", user).map((res: Response) => res.json());
+    return this.http.post<UserModel>(this.url + "createUser", user)
   }
 
   removeExercise(exId): Observable<Response>{
-    return this.http.get(this.url + "removeExercise?userID=" + this.user.id + "&exID=" + exId);
+    return this.http.get<Response>(this.url + "removeExercise?userID=" + this.user.id + "&exID=" + exId);
   }
 
   setUser(newUser){
