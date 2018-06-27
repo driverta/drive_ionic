@@ -88,7 +88,7 @@ export class SettingsPage {
     private userService: ProvidersUserProvider,
     private domSanitizer: DomSanitizer,
     private rec: Records,
-    private authProvidor: AuthProvider) {
+    private authProvider: AuthProvider) {
 
     this.userData = this.userService.getUser();
   }
@@ -287,11 +287,12 @@ export class SettingsPage {
   }
 
   reallyLogOut(){
-    this.authProvidor.logout();
-    localStorage.setItem("stay","out");
-    localStorage.setItem("email","");
-    window.location.reload();
-    this.navCtrl.push("FirstRunPage");
+    this.storage.remove("jwt_token").then(() => {
+      localStorage.setItem("stay","out");
+      localStorage.setItem("email","");
+      window.location.reload();
+      this.navCtrl.push("FirstRunPage");
+    });
   }
 
   rules(){

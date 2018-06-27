@@ -46,17 +46,7 @@ export class WelcomePage {
     public jwtHelper: JwtHelperService,
     public firebaseNative: Firebase,
     private readonly loadingCtrl: LoadingController
-  ) { 
-    authProvider.authUser.subscribe(jwt => {
-      if (jwt) {
-        this.userService.getUserByEmail(this.account.email).subscribe(data =>{
-          this.userService.setUser(data);
-          this.saveLogin();
-          this.navCtrl.push(MainPage);
-        });
-      }
-    });
-  }
+  ) { }
 
   signup() {
     this.navCtrl.push('SignupPage');
@@ -99,17 +89,17 @@ export class WelcomePage {
       this.buttonPressed = false;
     }
     else{
-    this.authLogin()
-      .then(value => {
-        console.log(value);
-        let user = new APIUser;
-        user.email = this.account.email
-        user.password = this.account.password
-        user.username = this.account.email.split('@')[0]
-        this.loginWithAPI(user);
-      }).catch( error => {
-        this.presentFirebaseError(error)
-      });
+      this.authLogin()
+        .then(value => {
+          console.log(value);
+          let user = new APIUser;
+          user.email = this.account.email
+          user.password = this.account.password
+          user.username = this.account.email.split('@')[0]
+          this.loginWithAPI(user);
+        }).catch( error => {
+          this.presentFirebaseError(error)
+        });
     }
   }
 
@@ -125,7 +115,7 @@ export class WelcomePage {
       .login(value)
       .pipe(finalize(() => loading.dismiss()))
       .subscribe(
-        () => {},
+        () => this.saveLogin(),
         err => this.handleError(err));
   }
 
