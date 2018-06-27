@@ -55,11 +55,9 @@ export class MyApp {
   constructor(public translate: TranslateService,
     private platform: Platform,
     public user: User,
-    settings: Settings,
     private config: Config,
     private statusBar: StatusBar,
     private splashScreen: SplashScreen,
-    data: DataService,
     private userService: ProvidersUserProvider,
     public fcm: FcmProvider,
     public toastCtrl: ToastController,
@@ -67,14 +65,27 @@ export class MyApp {
     public alertCtrl: AlertController,
     private app: AppVersion) {
 
+    authProvider.authUser.subscribe(jwt => {
+      if (jwt) {
+        this.userService.getUserByEmail(localStorage.getItem("email")).subscribe(data =>{
+          this.userService.setUser(data);
+          this.nav.push(MainPage);
+        });
+      } else {
+      }
+    });
+
+    this.authProvider.checkLogin();
+
     this.initTranslate();
 
     this.tester = localStorage.getItem("stay");
     //alert(this.tester)
-    if(this.tester == "logged"){
-      this.setUser();
-      this.rootPage = MainPage;
-    }
+    // if(this.tester == "logged"){
+    //   console.log("LOGGED");
+    //   this.setUser();
+    //   this.rootPage = MainPage;
+    // }
 
     platform.ready().then(() => {
       this.app.getVersionNumber().then((version) =>{
@@ -92,7 +103,8 @@ export class MyApp {
             })
             alert.present();
           }
-        })
+        }, 
+        err => alert(JSON.stringify(err)))
       });
       // Get a FCM token
       fcm.getToken();
