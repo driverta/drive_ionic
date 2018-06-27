@@ -52,19 +52,6 @@ export class WelcomePage {
     this.navCtrl.push('SignupPage');
   }
 
-  setUser() {
-    console.log(this.account.email);
-    this.httpClient.get('http://localhost:8080/api/' + "getUserByEmail?email=" + this.account.email).subscribe(
-      text => console.log('here'),
-      err => console.log(err)
-    );
-
-    // this.userService.getUserByEmail(this.account.email).subscribe(data =>{
-    //   this.userService.setUser(data);
-    //   this.navCtrl.push(MainPage);
-    // });
-  }
-
   login() {
 
     this.buttonPressed = true;

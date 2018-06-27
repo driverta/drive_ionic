@@ -71,8 +71,7 @@ export class MyApp {
           this.userService.setUser(data);
           this.nav.push(MainPage);
         });
-      } else {
-      }
+      } else { }
     });
 
     this.authProvider.checkLogin();
