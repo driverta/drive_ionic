@@ -38,8 +38,8 @@ export class ProvidersUserProvider {
     return this.http.get<UserModel>(this.url + "getUserByUsername?username=" + username)
   }
 
-  getProfilePic(username): Observable<Response> {
-    return this.http.get<Response>(this.url + "getUserProfilePic?username=" + username);
+  getProfilePic(username): Observable<any> {
+    return this.http.get(this.url + "getUserProfilePic?username=" + username, {responseType: 'text'});
   }
 
   uploadProfilePic(username, pic): Observable<Response> {

@@ -154,7 +154,7 @@ export class SettingsPage {
 
     this.userService.getProfilePic(this.userData.username).subscribe(data => {
       console.log(data)
-      this.form.patchValue({"profilePic": "data:image/jpeg;base64," + data['_body']});
+      this.form.patchValue({"profilePic": "data:image/jpeg;base64," + data});
       if (data['_body'] != "NahNigga"){
         this.show = false;
       }
