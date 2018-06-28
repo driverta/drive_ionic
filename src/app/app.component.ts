@@ -6,8 +6,7 @@ import { Config, Nav, Platform } from 'ionic-angular';
 import { HttpClient } from '@angular/common/http'
 
 import { FirstRunPage } from '../pages/pages';
-import { MainPage } from '../pages/pages';
-import { WelcomePage } from '../pages/pages';
+import { MainPage, TutorialPage } from '../pages/pages';
 
 import { Settings, ProvidersUserProvider } from '../providers/providers';
 import { User } from '../providers/providers';
@@ -69,8 +68,6 @@ export class MyApp {
     private app: AppVersion,
     private storage: Storage) {
 
-    this.authProvider.checkLogin();
-
     this.initTranslate();
 
     this.tester = localStorage.getItem("stay");
@@ -127,6 +124,17 @@ export class MyApp {
         })
       )
     });
+
+    authProvider.authUser.subscribe(jwt => {
+      if (jwt) {
+        this.rootPage = MainPage;
+      }
+      else {
+        this.rootPage = TutorialPage;
+      }
+    });
+
+    this.authProvider.checkLogin();
   }
 
   setUser() {

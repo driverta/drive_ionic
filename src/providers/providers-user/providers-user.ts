@@ -55,11 +55,11 @@ export class ProvidersUserProvider {
   }
 
   addCompetingUser(competing): Observable<String>{
-    return this.http.post<String>(this.url + "createCompeting", competing)
+    return this.http.post(this.url + "createCompeting", competing, {responseType: 'text'})
   }
 
-  removeCompetingUser(competing): Observable<Response>{
-    return this.http.post<Response>(this.url + "deleteCompeting?", competing);
+  removeCompetingUser(competing): Observable<any>{
+    return this.http.post(this.url + "deleteCompeting?", competing, {responseType: 'text'});
   }
   
   getCompetitors(userId): Observable<UserModel[]> {
