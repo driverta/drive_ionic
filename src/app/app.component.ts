@@ -1,4 +1,4 @@
-import { Component, ViewChild,  } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { TranslateService } from '@ngx-translate/core';
@@ -23,6 +23,9 @@ import { TabsPage } from '../pages/tabs/tabs';
 
 import { AuthProvider } from "../providers/auth/auth";
 import { AppVersion } from '@ionic-native/app-version';
+
+import {Storage} from "@ionic/storage";
+
 
 @Component({
   template: `
@@ -63,16 +66,8 @@ export class MyApp {
     public toastCtrl: ToastController,
     public authProvider: AuthProvider,
     public alertCtrl: AlertController,
-    private app: AppVersion) {
-
-    authProvider.authUser.subscribe(jwt => {
-      if (jwt) {
-        this.userService.getUserByEmail(localStorage.getItem("email")).subscribe(data =>{
-          this.userService.setUser(data);
-          this.nav.push(MainPage);
-        });
-      } else { }
-    });
+    private app: AppVersion,
+    private storage: Storage) {
 
     this.authProvider.checkLogin();
 

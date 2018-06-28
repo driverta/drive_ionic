@@ -7,10 +7,12 @@ import { Firebase } from '@ionic-native/firebase';
 
 import { Error } from '@firebase/auth-types';
 import { APIUser } from '../../models/APIUser'
-import {JwtHelperService} from "@auth0/angular-jwt";
+// import {JwtHelperService} from "@auth0/angular-jwt";
 import {HttpClient} from "@angular/common/http";
 import { Injectable } from '@angular/core';
 import {finalize} from 'rxjs/operators';
+import {Storage} from "@ionic/storage";
+
 
 /**
  * The Welcome Page is a splash page that quickly describes the app,
@@ -43,10 +45,21 @@ export class WelcomePage {
     private authProvider: AuthProvider,
     private toastCtrl: ToastController,
     public httpClient: HttpClient,
-    public jwtHelper: JwtHelperService,
+    // public jwtHelper: JwtHelperService,
     public firebaseNative: Firebase,
-    private readonly loadingCtrl: LoadingController
-  ) { }
+    private readonly loadingCtrl: LoadingController,
+    private storage: Storage,
+  ) { 
+    authProvider.authUser.subscribe(jwt => {
+      if (jwt) {
+        this.userService.getUserByEmail(this.account.email).subscribe(data =>{
+          this.userService.setUser(data);
+          this.navCtrl.push(MainPage);
+        },
+        err => console.log(err));
+      } else { }
+    });
+  }
 
   signup() {
     this.navCtrl.push('SignupPage');
@@ -83,7 +96,7 @@ export class WelcomePage {
           user.email = this.account.email
           user.password = this.account.password
           user.username = this.account.email.split('@')[0]
-          this.loginWithAPI(user);
+          this.signupWithAPI(user);
         }).catch( error => {
           this.presentFirebaseError(error)
         });
@@ -103,16 +116,26 @@ export class WelcomePage {
       .pipe(finalize(() => loading.dismiss()))
       .subscribe(
         () => this.saveLogin(),
-        err => this.handleError(err));
+        err => {
+          alert(err)
+          this.handleError(err);
+        });
   }
 
   signupWithAPI(value: any) {
+    let loading = this.loadingCtrl.create({
+      spinner: 'bubbles',
+      content: 'Logging in ...'
+    });
+
+    loading.present();
 
     this.authProvider
       .signup(value)
+      .pipe(finalize(() => loading.dismiss()))
       .subscribe(
         (jwt) => {
-          this.loginWithAPI(value);
+          this.saveLogin()
         },
         err => console.log(err));
   }

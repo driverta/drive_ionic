@@ -28,10 +28,11 @@ import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { FcmProvider } from '../providers/fcm/fcm';
 import { Firebase } from '@ionic-native/firebase';
-import { HttpClientModule, HttpClient } from "@angular/common/http";
+import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from "@angular/common/http";
 
 import {JWT_OPTIONS, JwtModule} from '@auth0/angular-jwt';
 import { AppVersion } from '@ionic-native/app-version';
+import { JwtHttpInterceptor } from '../providers/auth/jwt-http-interceptor'
 
 // The translate loader needs to know where to load i18n files
 // in Ionic's static asset pipeline.
@@ -66,7 +67,8 @@ const firebase = {
 export function jwtOptionsFactory(storage: Storage) {
   return {
     tokenGetter: () => storage.get('jwt_token'),
-    whitelistedDomains: ['localhost:8080', 'drive-cadf7.firebaseapp.com']
+    // whitelistedDomains: ['localhost:8080', 'drive-cadf7.firebaseapp.com', 'elasticbeanstalk.com']
+    whitelistedDomains: new Array(new RegExp('^null$'))
   }
 }
 
@@ -89,13 +91,13 @@ export function jwtOptionsFactory(storage: Storage) {
     AngularFireModule.initializeApp(firebase), 
     AngularFirestoreModule,
     AngularFireDatabaseModule,
-    JwtModule.forRoot({
-      jwtOptionsProvider: {
-        provide: JWT_OPTIONS,
-        useFactory: jwtOptionsFactory,
-        deps: [Storage]
-      }
-    })
+    // JwtModule.forRoot({
+    //   jwtOptionsProvider: {
+    //     provide: JWT_OPTIONS,
+    //     useFactory: jwtOptionsFactory,
+    //     deps: [Storage]
+    //   }
+    // })
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -114,6 +116,7 @@ export function jwtOptionsFactory(storage: Storage) {
     { provide: Settings, useFactory: provideSettings, deps: [Storage] },
     // Keep this to enable Ionic's runtime error handling during development
     { provide: ErrorHandler, useClass: IonicErrorHandler },
+    { provide: HTTP_INTERCEPTORS, useClass: JwtHttpInterceptor, multi: true },
     Records,
     Levels,
     HistoryProvider,

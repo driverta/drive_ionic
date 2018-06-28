@@ -2,7 +2,7 @@ import {Injectable} from "@angular/core";
 import {tap} from 'rxjs/operators';
 import {ReplaySubject, Observable} from "rxjs";
 import {Storage} from "@ionic/storage";
-import {JwtHelperService} from "@auth0/angular-jwt";
+// import {JwtHelperService} from "@auth0/angular-jwt";
 import { HttpClient } from '@angular/common/http';
 
 @Injectable()
@@ -11,17 +11,19 @@ export class AuthProvider {
 
   authUser = new ReplaySubject<any>(1);
 
-  // private url = "http://Driveapi-pic.uvrytrqbjh.us-east-1.elasticbeanstalk.com/";
-  private url = "http://localhost:8080/api";
+  // private url = "http://driveapi-env.y7mz5ppbve.us-east-2.elasticbeanstalk.com";
+  // private url = "http://localhost:8080/api";
+  private url = "http://DriveApi.y7mz5ppbve.us-east-2.elasticbeanstalk.com";
 
   constructor(private readonly httpClient: HttpClient,
               private readonly storage: Storage,
-              private readonly jwtHelper: JwtHelperService) {
+              // private readonly jwtHelper: JwtHelperService
+            ) {
   }
 
   checkLogin() {
     this.storage.get(this.jwtTokenName).then(jwt => {
-      if (jwt && !this.jwtHelper.isTokenExpired(jwt)) {
+      if (jwt) {
         this.httpClient.get(`${this.url}/authenticate`)
           .subscribe(() => this.authUser.next(jwt),
             (err) => this.storage.remove(this.jwtTokenName).then(() => this.authUser.next(null)));
@@ -60,8 +62,8 @@ export class AuthProvider {
   }
 
   private handleJwtResponse(jwt: string) {
-    return this.storage.set(this.jwtTokenName, jwt)
-      .then(() => this.authUser.next(jwt))
-      .then(() => jwt);
+    localStorage.setItem(this.jwtTokenName, jwt)
+    this.authUser.next(jwt)
+    return jwt;
   }
 }
