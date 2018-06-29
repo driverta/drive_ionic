@@ -32,7 +32,7 @@
           </h1>
         </ion-item>
       
-        <ion-item-options>
+        <ion-item-options *ngIf="item.username != username">
           <button ion-button color="danger" (click)="presentConfirm(item)">
             {{ 'Remove' | translate }}
           </button>
