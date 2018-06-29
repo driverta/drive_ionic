@@ -50,11 +50,11 @@ export class HistoryProvider {
     return this.http.get<LiftingHistory[]>(this.url + "getUserLiftingHistory?userId=" + userId)
 	}
 	
-	removeLiftingHistory(liftingHistory): Observable<Response>{
-    return this.http.post<Response>(this.url + "deleteLiftingHistory?", liftingHistory);
+	removeLiftingHistory(liftingHistory): Observable<any>{
+    return this.http.post(this.url + "deleteLiftingHistory?", liftingHistory, {responseType: 'text'});
 	}
 	
-	removeCardioHistory(cardioHistory): Observable<Response>{
-    return this.http.post<Response>(this.url + "deleteCardioHistory?", cardioHistory);
+	removeCardioHistory(cardioHistory): Observable<any>{
+    return this.http.post(this.url + "deleteCardioHistory?", cardioHistory, {responseType: 'text'});
   	}
 }

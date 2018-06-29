@@ -42,8 +42,8 @@ export class ProvidersUserProvider {
     return this.http.get(this.url + "getUserProfilePic?username=" + username, {responseType: 'text'});
   }
 
-  uploadProfilePic(username, pic): Observable<Response> {
-    return this.http.post<Response>(this.url + "uploadUserProfilePic?username=" + username, pic);
+  uploadProfilePic(username, pic): Observable<any> {
+    return this.http.post(this.url + "uploadUserProfilePic?username=" + username, pic, {responseType: 'text'});
   }
 
   getUserByEmail(email): Observable<UserModel> {
@@ -115,8 +115,8 @@ export class ProvidersUserProvider {
     return this.http.post<UserModel>(this.url + "createUser", user)
   }
 
-  removeExercise(exId): Observable<Response>{
-    return this.http.get<Response>(this.url + "removeExercise?userID=" + this.user.id + "&exID=" + exId);
+  removeExercise(exId): Observable<any>{
+    return this.http.get(this.url + "removeExercise?userID=" + this.user.id + "&exID=" + exId, {responseType: 'text'});
   }
 
   setUser(newUser){

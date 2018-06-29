@@ -35,8 +35,8 @@ export class ExerciseProvider {
     return this.http.get<Exercise[]>(this.url + "getUniqueExercises?userID=" + userId)
   }
 
-  createExercise(userid, ex): Observable<Response>{
-    return this.http.post<Response>(this.url + "createExercise?userID=" + userid, ex);
+  createExercise(userid, ex): Observable<any>{
+    return this.http.post(this.url + "createExercise?userID=" + userid, ex, {responseType: 'text'});
   }
 
   getAllMuscleGroups(): Observable<MuscleGroup[]>{

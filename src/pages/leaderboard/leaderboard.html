@@ -17,11 +17,11 @@
     </ion-select>
 
     <ion-list class="no-margin">
-      <ion-item-sliding no-lines *ngFor="let item of competingUsers | sortByGains" >
+      <ion-item-sliding no-lines *ngFor="let item of competingUsers" >
         <ion-item (click)="openItem(item)" no-lines [ngClass]="{red: item.username == username}">
           <ion-avatar item-start>
-            <img *ngIf="item.profilePic != null" [src]="item.profilePic" />
-            <ion-icon *ngIf="item.profilePic == null" class="default-img" name="contact"></ion-icon>
+            <img *ngIf="item.profilePic != 'data:image/jpeg;base64,NahNigga'" [src]="item.profilePic" />
+            <ion-icon *ngIf="item.profilePic == 'data:image/jpeg;base64,NahNigga'" class="default-img" name="contact"></ion-icon>
           </ion-avatar>
           
           <h1>{{item.username}}

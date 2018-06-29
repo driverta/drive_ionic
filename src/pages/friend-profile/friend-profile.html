@@ -24,8 +24,8 @@
   <br>
     
   <div class="profile-image-wrapper">
-  	<div *ngIf="this.user.profilePic != null" class="profile-image" [style.backgroundImage]="getProfileImageStyle()"></div>
-    <ion-icon *ngIf="this.user.profilePic == null" class="profile-image icon-size" name="contact"></ion-icon> 
+    <div *ngIf="this.user.profilePic != 'data:image/jpeg;base64,NahNigga'" class="profile-image" [style.backgroundImage]="getProfileImageStyle()"></div>
+    <ion-icon *ngIf="this.user.profilePic == 'data:image/jpeg;base64,NahNigga'" class="profile-image icon-size" name="contact"></ion-icon> 
   </div>
     
   <div class="stats">

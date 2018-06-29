@@ -96,7 +96,7 @@ export class SettingsPage {
   _buildForm() {
 
     let group: any = {
-      profilePic: [''],
+      profilePic: ['default-img'],
       option1: [this.options.option1],
       option2: [this.options.option2],
       option3: [this.options.option3]
@@ -135,8 +135,9 @@ export class SettingsPage {
     this.form = this.formBuilder.group({});  
 
     this.userService.getTotalGains(this.userData.id).subscribe(totalGains => {
-      console.log(totalGains);
-      this.gains = totalGains;
+      if (totalGains) {
+        this.gains = totalGains;
+      } else this.gains = 0;
       this.setLevel();
     });;
 
@@ -148,15 +149,15 @@ export class SettingsPage {
 
     this.userService.getCompetitors(this.userData.id).subscribe(data => {
       this.competitorsList = data;
-      console.log(this.competitorsList);
       this.competitors = this.competitorsList.length;
     })
 
     this.userService.getProfilePic(this.userData.username).subscribe(data => {
-      console.log(data)
-      this.form.patchValue({"profilePic": "data:image/jpeg;base64," + data});
-      if (data['_body'] != "NahNigga"){
+      if (data != "NahNigga"){
         this.show = false;
+        this.form.patchValue({"profilePic": "data:image/jpeg;base64," + data});
+      } else {
+        // <ion-icon *ngIf="item.profilePic == 'data:image/jpeg;base64,NahNigga'" class="default-img" name="contact"></ion-icon>
       }
     });
 

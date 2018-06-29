@@ -1,19 +1,18 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 
-import { User, ProvidersUserProvider } from '../../providers/providers';
+import { ProvidersUserProvider } from '../../providers/providers';
 import { Levels } from '../../providers/providers';
 import { SortByGainsPipe } from '../../pipes/sort-by-gains/sort-by-gains'
 
 import firebase from 'firebase';
 import { UserModel } from '../../models/users';
 import { CompetingModel } from '../../models/competing';
-import { values } from 'd3';
 
 @IonicPage()
 @Component({
   selector: 'page-leaderboard',
-  templateUrl: 'leaderboard.html'
+  templateUrl: 'leaderboard.html',
 })
 export class SearchPage {
 
@@ -41,7 +40,8 @@ export class SearchPage {
     public levels: Levels, 
     public navCtrl: NavController, 
     public navParams: NavParams, 
-    public userService: ProvidersUserProvider) {
+    public userService: ProvidersUserProvider,
+    private gainsPipe: SortByGainsPipe) {
       this.user = this.userService.getUser();
     }
 
@@ -60,7 +60,7 @@ export class SearchPage {
       this.competingUsers = data;
       this.competingUsers.forEach(player => {
         this.userService.getProfilePic(player.username).subscribe(pic => {
-          player.profilePic = "data:image/jpeg;base64," + pic['_body'];
+          player.profilePic = "data:image/jpeg;base64," + pic;
         })
       })
       this.show = false;
@@ -103,6 +103,7 @@ export class SearchPage {
           break;
       }
     });
+    this.competingUsers = this.gainsPipe.transform(this.competingUsers)
   }
 
   presentConfirm(x) {

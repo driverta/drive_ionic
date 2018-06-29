@@ -29,6 +29,8 @@ import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { FcmProvider } from '../providers/fcm/fcm';
 import { Firebase } from '@ionic-native/firebase';
 import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from "@angular/common/http";
+import { SortByGainsPipe } from '../pipes/sort-by-gains/sort-by-gains'
+
 
 import {JWT_OPTIONS, JwtModule} from '@auth0/angular-jwt';
 import { AppVersion } from '@ionic-native/app-version';
@@ -125,7 +127,8 @@ export function jwtOptionsFactory(storage: Storage) {
     FcmProvider,
     Firebase,
     AuthProvider,
-    AppVersion
+    AppVersion,
+    SortByGainsPipe
   ]
 })
 export class AppModule { }
