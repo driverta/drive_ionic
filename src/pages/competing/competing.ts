@@ -43,7 +43,6 @@ export class CompetingPage {
   }
 
   openItem(item){
-    console.log(item)
     this.navCtrl.push('FriendProfilePage', {
       item: item
     });
@@ -77,7 +76,6 @@ export class CompetingPage {
     competing.id = this.user.id;
     competing.competingUser = competingUser.id
     this.userService.removeCompetingUser(competing).subscribe(data => {
-      console.log(data);
       this.ionViewDidLoad();
     })
   }
