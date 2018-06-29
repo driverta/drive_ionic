@@ -24,6 +24,7 @@ import { AuthProvider } from "../providers/auth/auth";
 import { AppVersion } from '@ionic-native/app-version';
 
 import {Storage} from "@ionic/storage";
+import { local } from 'd3';
 
 
 @Component({
@@ -97,39 +98,45 @@ export class MyApp {
         }, 
         err => alert(JSON.stringify(err)))
       });
-      // Get a FCM token
-      fcm.getToken();
-
-      // Listen to incoming messages
-      fcm.listenToNotifications().pipe(
-        tap(msg => {
-          console.log("FIRST MESSAGE" + JSON.stringify(msg));
-          if (msg['tap'] == true) {
-            console.log("here");
-            userService.getOneUser(msg['user'].split(' ')[0]).subscribe(user => {
-              this.nav.push(TabsPage).then(() => {
-                this.nav.push('FriendProfilePage', {
-                  item: user
-                });
-              })
-            })
-          }
-          // show a toast
-          const toast = toastCtrl.create({
-            message: msg['body'],
-            duration: 3000,
-            position: 'top'
-          });
-          toast.present();
-        })
-      )
     });
 
     authProvider.authUser.subscribe(jwt => {
       if (jwt) {
-        this.rootPage = MainPage;
+        console.log("HOME")
+        this.userService.getUserByEmail(localStorage.getItem("email")).subscribe(data =>{
+          this.userService.setUser(data);
+          this.nav.push(MainPage);
+          // Get a FCM token
+          fcm.getToken();
+
+          // Listen to incoming messages
+          fcm.listenToNotifications().pipe(
+            tap(msg => {
+              console.log("FIRST MESSAGE" + JSON.stringify(msg));
+              if (msg['tap'] == true) {
+                console.log("here");
+                userService.getOneUser(msg['user'].split(' ')[0]).subscribe(user => {
+                  this.nav.push(MainPage).then(() => {
+                    this.nav.push('FriendProfilePage', {
+                      item: user
+                    });
+                  })
+                })
+              }
+              // show a toast
+              const toast = toastCtrl.create({
+                message: msg['body'],
+                duration: 3000,
+                position: 'top'
+              });
+              toast.present();
+            })
+          ).subscribe()
+          this.rootPage = MainPage;
+        })
       }
       else {
+        console.log("OI:JEWUFCK NIGGER SHIT")
         this.rootPage = TutorialPage;
       }
     });

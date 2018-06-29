@@ -212,7 +212,6 @@ export class SettingsPage {
     let reader = new FileReader();
     reader.onload = (readerEvent) => {
       this.imageData = (readerEvent.target as any).result;
-      console.log(this.imageData);
       this.userService.uploadProfilePic(this.userData.username, this.imageData).subscribe(data => {
         this.show = false;
         this.form.patchValue({ 'profilePic': this.imageData });
@@ -288,12 +287,11 @@ export class SettingsPage {
   }
 
   reallyLogOut(){
-    this.storage.remove("jwt_token").then(() => {
-      localStorage.setItem("stay","out");
-      localStorage.setItem("email","");
-      window.location.reload();
-      this.navCtrl.push("FirstRunPage");
-    });
+    localStorage.removeItem("jwt_token")
+    localStorage.setItem("stay","out");
+    localStorage.setItem("email","");
+    window.location.reload();
+    this.navCtrl.push("FirstRunPage");
   }
 
   rules(){
@@ -301,7 +299,6 @@ export class SettingsPage {
   }
 
   goToCompeting(){
-    console.log(this.competingList)
     this.navCtrl.push('CompetingPage', {
       list: this.competingList
     });

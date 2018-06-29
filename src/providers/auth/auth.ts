@@ -4,6 +4,7 @@ import {ReplaySubject, Observable} from "rxjs";
 import {Storage} from "@ionic/storage";
 // import {JwtHelperService} from "@auth0/angular-jwt";
 import { HttpClient } from '@angular/common/http';
+import { local } from "d3";
 
 @Injectable()
 export class AuthProvider {
@@ -22,18 +23,20 @@ export class AuthProvider {
   }
 
   checkLogin() {
-    this.storage.get(this.jwtTokenName).then(jwt => {
-      if (jwt) {
-        this.httpClient.get(`${this.url}/authenticate`)
-          .subscribe(() => this.authUser.next(jwt),
-            (err) => this.storage.remove(this.jwtTokenName).then(() => this.authUser.next(null)));
-        // OR
-        // this.authUser.next(jwt);
-      }
-      else {
-        this.storage.remove(this.jwtTokenName).then(() => this.authUser.next(null));
-      }
-    });
+    const jwt = localStorage.getItem(this.jwtTokenName)
+    if (jwt) {
+      this.httpClient.get(`${this.url}/authenticate`)
+        .subscribe(() => this.authUser.next(jwt),
+          (err) => {
+            localStorage.removeItem(this.jwtTokenName);
+            this.authUser.next(null);
+          })
+      // OR
+      // this.authUser.next(jwt);
+    } else {
+      localStorage.removeItem(this.jwtTokenName)
+      this.authUser.next(null);
+    }
   }
 
   getVersion(): Observable<any> {
@@ -50,10 +53,11 @@ export class AuthProvider {
     this.storage.remove(this.jwtTokenName).then(() => this.authUser.next(null));
   }
 
-  signup(values: any): Observable<any> {
+  signup(values: any, email): Observable<any> {
     return this.httpClient.post(this.url + '/signup', values, {responseType: 'text'})
       .pipe(tap((jwt: any) => {
         if (jwt !== 'EXISTS') {
+          this.saveLogin(email);
           console.log("DOESNT EXISTS");
           return this.handleJwtResponse(jwt);
         }
@@ -65,5 +69,9 @@ export class AuthProvider {
     localStorage.setItem(this.jwtTokenName, jwt)
     this.authUser.next(jwt)
     return jwt;
+  }
+  saveLogin(email) {
+    localStorage.setItem("stay","logged");
+    localStorage.setItem("email",email);
   }
 }

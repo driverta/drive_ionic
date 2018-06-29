@@ -9,6 +9,9 @@ import firebase from 'firebase';
 import { UserModel } from '../../models/users';
 import { CompetingModel } from '../../models/competing';
 
+import { tap } from 'rxjs/operators';
+
+
 @IonicPage()
 @Component({
   selector: 'page-leaderboard',

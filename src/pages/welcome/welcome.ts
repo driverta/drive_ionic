@@ -12,8 +12,9 @@ import {HttpClient} from "@angular/common/http";
 import { Injectable } from '@angular/core';
 import {finalize} from 'rxjs/operators';
 import {Storage} from "@ionic/storage";
+import { FcmProvider } from '../../providers/fcm/fcm';
 
-
+import { tap } from 'rxjs/operators';
 /**
  * The Welcome Page is a splash page that quickly describes the app,
  * and then directs the user to create an account or log in.
@@ -49,16 +50,43 @@ export class WelcomePage {
     public firebaseNative: Firebase,
     private readonly loadingCtrl: LoadingController,
     private storage: Storage,
+    private fcm: FcmProvider
   ) { 
-    authProvider.authUser.subscribe(jwt => {
-      if (jwt) {
-        this.userService.getUserByEmail(this.account.email).subscribe(data =>{
-          this.userService.setUser(data);
-          this.navCtrl.push(MainPage);
-        },
-        err => console.log(err));
-      } else { }
-    });
+    // authProvider.authUser.subscribe(jwt => {
+    //   if (jwt) {
+    //     this.userService.getUserByEmail(this.account.email).subscribe(data =>{
+    //       this.userService.setUser(data);
+    //       this.navCtrl.push(MainPage);
+    //       // Get a FCM token
+    //       fcm.getToken();
+
+    //       // Listen to incoming messages
+    //       fcm.listenToNotifications().pipe(
+    //         tap(msg => {
+    //           console.log("FIRST MESSAGE" + JSON.stringify(msg));
+    //           if (msg['tap'] == true) {
+    //             console.log("here");
+    //             userService.getOneUser(msg['user'].split(' ')[0]).subscribe(user => {
+    //               this.navCtrl.push(MainPage).then(() => {
+    //                 this.navCtrl.push('FriendProfilePage', {
+    //                   item: user
+    //                 });
+    //               })
+    //             })
+    //           }
+    //           // show a toast
+    //           const toast = toastCtrl.create({
+    //             message: msg['body'],
+    //             duration: 3000,
+    //             position: 'top'
+    //           });
+    //           toast.present();
+    //         })
+    //       ).subscribe()
+    //     },
+    //     err => console.log(err));
+    //   } else { }
+    // });
   }
 
   signup() {
@@ -115,7 +143,7 @@ export class WelcomePage {
       .login(value)
       .pipe(finalize(() => loading.dismiss()))
       .subscribe(
-        () => this.saveLogin(),
+        () => {},
         err => {
           alert(err)
           this.handleError(err);
@@ -131,12 +159,10 @@ export class WelcomePage {
     loading.present();
 
     this.authProvider
-      .signup(value)
+      .signup(value, this.account.email)
       .pipe(finalize(() => loading.dismiss()))
       .subscribe(
-        (jwt) => {
-          this.saveLogin()
-        },
+        (jwt) => { },
         err => console.log(err));
   }
 

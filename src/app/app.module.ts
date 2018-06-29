@@ -32,7 +32,6 @@ import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from "@angular/common
 import { SortByGainsPipe } from '../pipes/sort-by-gains/sort-by-gains'
 
 
-import {JWT_OPTIONS, JwtModule} from '@auth0/angular-jwt';
 import { AppVersion } from '@ionic-native/app-version';
 import { JwtHttpInterceptor } from '../providers/auth/jwt-http-interceptor'
 
@@ -66,13 +65,13 @@ const firebase = {
   messagingSenderId: "564282992846"
 };
 
-export function jwtOptionsFactory(storage: Storage) {
-  return {
-    tokenGetter: () => storage.get('jwt_token'),
-    // whitelistedDomains: ['localhost:8080', 'drive-cadf7.firebaseapp.com', 'elasticbeanstalk.com']
-    whitelistedDomains: new Array(new RegExp('^null$'))
-  }
-}
+// export function jwtOptionsFactory(storage: Storage) {
+//   return {
+//     tokenGetter: () => storage.get('jwt_token'),
+//     // whitelistedDomains: ['localhost:8080', 'drive-cadf7.firebaseapp.com', 'elasticbeanstalk.com']
+//     whitelistedDomains: new Array(new RegExp('^null$'))
+//   }
+// }
 
 @NgModule({
   declarations: [
@@ -92,7 +91,6 @@ export function jwtOptionsFactory(storage: Storage) {
     IonicStorageModule.forRoot(),
     AngularFireModule.initializeApp(firebase), 
     AngularFirestoreModule,
-    AngularFireDatabaseModule,
     // JwtModule.forRoot({
     //   jwtOptionsProvider: {
     //     provide: JWT_OPTIONS,
