@@ -64,6 +64,7 @@ export class ListMasterPage {
   }
 
   ionViewWillEnter(){
+    
     this.ionViewDidLoad();
   }
 
@@ -85,7 +86,11 @@ export class ListMasterPage {
     this.userService.getExercises().subscribe(exercises => {
 
       this.exercises = exercises;
-      this.filteredExercises = exercises;
+      if (this.filter == "All"){
+        this.filteredExercises = exercises;
+      } else {
+        this.executeFilter()
+      }
       this.show = false;
     });
 
@@ -281,6 +286,7 @@ export class ListMasterPage {
         {
           text: 'All',
           handler: () => {
+            this.filter = "All";
             this.filteredExercises = this.exercises
           }
         },{

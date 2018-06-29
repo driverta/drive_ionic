@@ -22,6 +22,9 @@
 	  </ion-segment>
 	</div>
 
+	<cardio-line [hidden]="selectedValue!=2" ></cardio-line>
+		<cardio-bar [hidden]="selectedValue!=1" ></cardio-bar>
+
 	<div [ngSwitch]="segment">
 	
 	  <ion-list *ngSwitchCase="'workout'">
@@ -42,8 +45,7 @@
 			
 		</ion-list>
 		
-		<cardio-line [hidden]="selectedValue!=2" ></cardio-line>
-		<cardio-bar [hidden]="selectedValue!=1" ></cardio-bar>
+		
 	
 	
 	

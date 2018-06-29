@@ -30,9 +30,14 @@ page-welcome {
 
 
   .welcome{
+    color: white;
     background-image: url(../assets/img/loginbackground.jpeg); 
     background-repeat:no-repeat; background-size: cover; 
     background-position: center;
+  }
+
+  .fuckBlake {
+    color:white;
   }
 
   .login-button:disabled{
@@ -45,6 +50,7 @@ page-welcome {
   }
 
   .transparent-field{
+    color: whitep;
     background-color: transparent;            
   }
 

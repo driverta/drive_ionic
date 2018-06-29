@@ -44,7 +44,16 @@ page-gains {
   }
 
   #chart {
+    color: black;
     text-align: center;
+  }
+
+  .axis-title text{
+    fill: black;
+  }
+
+  .axis text{
+    fill: black;
   }
   
 }
