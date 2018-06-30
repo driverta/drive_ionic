@@ -1,0 +1,47 @@
+<!--
+  Generated template for the HomePage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <button id="login" class="login-button" ion-button block (click)="login()"><ion-spinner *ngIf="buttonPressed" class="spinner-energized"></ion-spinner> <span  *ngIf="!buttonPressed">Start a workout!</span></button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col col-6>
+         <button id="login" class="login-button img-button" ion-button block (click)="login()"><ion-spinner *ngIf="buttonPressed" class="spinner-energized"></ion-spinner> <span  *ngIf="!buttonPressed">Chest</span></button>
+      </ion-col>
+      <ion-col col-6>
+        <button id="login" class="login-button img-button" ion-button block (click)="login()"><ion-spinner *ngIf="buttonPressed" class="spinner-energized"></ion-spinner> <span  *ngIf="!buttonPressed">Back</span></button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col col-6>
+        <button id="login" class="login-button img-button" ion-button block (click)="login()"><ion-spinner *ngIf="buttonPressed" class="spinner-energized"></ion-spinner> <span  *ngIf="!buttonPressed">Legs</span></button>
+      </ion-col>
+      <ion-col col-6>
+        <button id="login" class="login-button img-button" ion-button block (click)="login()"><ion-spinner *ngIf="buttonPressed" class="spinner-energized"></ion-spinner> <span  *ngIf="!buttonPressed">Arms</span></button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col col-6>
+        <button id="login" class="login-button img-button" ion-button block (click)="login()"><ion-spinner *ngIf="buttonPressed" class="spinner-energized"></ion-spinner> <span  *ngIf="!buttonPressed">Shoulders</span></button>
+      </ion-col>
+      <ion-col col-6>
+        <button id="login" class="login-button img-button" ion-button block (click)="login()"><ion-spinner *ngIf="buttonPressed" class="spinner-energized"></ion-spinner> <span  *ngIf="!buttonPressed">Abs</span></button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

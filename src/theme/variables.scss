@@ -12,13 +12,13 @@ $font-path: "../assets/fonts";
 // To view all the possible Ionic variables, see:
 // http://ionicframework.com/docs/v2/theming/overriding-ionic-variables/
 
-$text-color:        white;
-$background-color:  black;
-$toolbar-background: red;
-$tabs-background: red;
-$tabs-tab-color-active: white;
+$text-color:        black;
+$background-color:  white;
+$toolbar-background: white;
+$tabs-background: white;
+$tabs-tab-color-active: red;
 $tabs-tab-color-inactive: black;
-$action-sheet-ios-button-text-color: red;
+$action-sheet-ios-button-text-color: #F20000;
 
 // Named Color Variables
 // --------------------------------------------------
@@ -29,7 +29,7 @@ $action-sheet-ios-button-text-color: red;
 // The "primary" color is the only required color in the map.
 
 $colors: (
-  primary:    red,
+  primary:    #F20000,
   secondary:  red,
   danger:     red,
   light:      #D3D3D3,

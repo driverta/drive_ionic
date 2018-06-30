@@ -37,7 +37,8 @@ export class MyApp {
     { title: 'Menu', component: 'MenuPage' },
     { title: 'Profile', component: 'SettingsPage' },
     { title: 'Leaderboard', component: 'SearchPage' },
-    { title: 'AddCompetitors', component: 'AddCompetitorsPage' }
+    { title: 'AddCompetitors', component: 'AddCompetitorsPage' },
+    { title: 'Home', component: 'HomePage'}
   ]
 
   constructor(private translate: TranslateService,
