@@ -17,6 +17,7 @@ import { Storage } from '@ionic/storage';
 import { Settings } from '../../providers/providers';
 import { User } from '../../providers/providers';
 import { Levels } from '../../providers/providers';
+import { AuthProvider } from '../../providers/providers';
 import { ProvidersUserProvider } from '../../providers/providers-user/providers-user';
 //import { WelcomePage } from '../pages';
 
@@ -86,7 +87,8 @@ export class SettingsPage {
     private storage: Storage,
     private userService: ProvidersUserProvider,
     private domSanitizer: DomSanitizer,
-    private rec: Records) {
+    private rec: Records,
+    private authProvider: AuthProvider) {
 
     this.userData = this.userService.getUser();
   }
@@ -94,7 +96,7 @@ export class SettingsPage {
   _buildForm() {
 
     let group: any = {
-      profilePic: [''],
+      profilePic: ['default-img'],
       option1: [this.options.option1],
       option2: [this.options.option2],
       option3: [this.options.option3]
@@ -133,8 +135,9 @@ export class SettingsPage {
     this.form = this.formBuilder.group({});  
 
     this.userService.getTotalGains(this.userData.id).subscribe(totalGains => {
-      console.log(totalGains);
-      this.gains = totalGains;
+      if (totalGains) {
+        this.gains = totalGains;
+      } else this.gains = 0;
       this.setLevel();
     });;
 
@@ -146,15 +149,15 @@ export class SettingsPage {
 
     this.userService.getCompetitors(this.userData.id).subscribe(data => {
       this.competitorsList = data;
-      console.log(this.competitorsList);
       this.competitors = this.competitorsList.length;
     })
 
     this.userService.getProfilePic(this.userData.username).subscribe(data => {
-      console.log(data)
-      this.form.patchValue({"profilePic": "data:image/jpeg;base64," + data['_body']});
-      if (data['_body'] != "NahNigga"){
+      if (data != "NahNigga"){
         this.show = false;
+        this.form.patchValue({"profilePic": "data:image/jpeg;base64," + data});
+      } else {
+        // <ion-icon *ngIf="item.profilePic == 'data:image/jpeg;base64,NahNigga'" class="default-img" name="contact"></ion-icon>
       }
     });
 
@@ -209,7 +212,6 @@ export class SettingsPage {
     let reader = new FileReader();
     reader.onload = (readerEvent) => {
       this.imageData = (readerEvent.target as any).result;
-      console.log(this.imageData);
       this.userService.uploadProfilePic(this.userData.username, this.imageData).subscribe(data => {
         this.show = false;
         this.form.patchValue({ 'profilePic': this.imageData });
@@ -285,6 +287,7 @@ export class SettingsPage {
   }
 
   reallyLogOut(){
+    localStorage.removeItem("jwt_token")
     localStorage.setItem("stay","out");
     localStorage.setItem("email","");
     window.location.reload();
@@ -296,7 +299,6 @@ export class SettingsPage {
   }
 
   goToCompeting(){
-    console.log(this.competingList)
     this.navCtrl.push('CompetingPage', {
       list: this.competingList
     });

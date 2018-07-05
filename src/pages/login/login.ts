@@ -44,7 +44,9 @@ export class LoginPage {
   }
 
   setUser() {
+    console.log(this.account.email);
     this.userService.getUserByEmail(this.account.email).subscribe(data =>{
+      console.log(data);
       this.userService.setUser(data);
       this.doLogin();
     });

@@ -56,7 +56,9 @@ export class FriendProfilePage {
 
     this.userService.getTotalGains(this.user.id).subscribe(totalGains => {
       console.log(totalGains);
-      this.gains = totalGains;
+      if (totalGains) {
+        this.gains = totalGains;
+      } else this.gains = 0;
       this.setLevel();
     });;
 

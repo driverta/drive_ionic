@@ -6,7 +6,7 @@
 
 </ion-header>
 
-<ion-content scrollY="false">
+<ion-content scrollY="false" no-line>
 
   <div padding>
 	  <ion-segment [(ngModel)]="segment">
@@ -22,6 +22,9 @@
 	  </ion-segment>
 	</div>
 
+	<bar-chart [hidden]="selectedValue!=1" ></bar-chart>
+	<line-chart [hidden]="selectedValue!=2" ></line-chart>
+
 	<div [ngSwitch]="segment">
 	  <ion-list *ngSwitchCase="'set'">
 	    <new-set (myEvent)="ionViewWillEnter();"></new-set>
@@ -34,9 +37,6 @@
 	  <ion-list *ngSwitchCase="'records'">
 	    <records></records>
 	  </ion-list>
-
-	  <bar-chart [hidden]="selectedValue!=1" ></bar-chart>
-	  <line-chart [hidden]="selectedValue!=2" ></line-chart>
 
 	</div>
 </ion-content>

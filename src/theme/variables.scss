@@ -16,9 +16,9 @@ $text-color:        black;
 $background-color:  white;
 $toolbar-background: white;
 $tabs-background: white;
-$tabs-tab-color-active: red;
+$tabs-tab-color-active: #C60000;
 $tabs-tab-color-inactive: black;
-$action-sheet-ios-button-text-color: #F20000;
+$action-sheet-ios-button-text-color: #C60000;
 
 // Named Color Variables
 // --------------------------------------------------
@@ -29,11 +29,11 @@ $action-sheet-ios-button-text-color: #F20000;
 // The "primary" color is the only required color in the map.
 
 $colors: (
-  primary:    #F20000,
-  secondary:  red,
-  danger:     red,
+  primary:    #9C000A,
+  secondary:  #9C000A,
+  danger:     #9C000A,
   light:      #D3D3D3,
-  dark:       red
+  dark:       #9C000A
 );
 
 

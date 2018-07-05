@@ -226,18 +226,29 @@ export class FriendGainsPage {
     this.exercises = {};
     this.xGains = 0;
     
-     Object.keys(this.sets).forEach((key) => {
-      if (this.sets[key].muscle == this.filter) {
-        if (typeof this.sets[key].exercise == "string"){
-          this.xGains = this.xGains + this.sets[key].gains
-          if (this.exercises[this.sets[key].exercise]){
-            this.exercises[this.sets[key].exercise] = this.exercises[this.sets[key].exercise] + this.sets[key].gains;
+    if (this.filter == "Cardio"){
+      this.cardioHistory.forEach(c =>{
+        if (c.exercise.MuscleGroup.muscleGroupName == this.filter) {
+          this.xGains += c.gains;
+          if (this.exercises[c.exercise.exerciseName]){
+            this.exercises[c.exercise.exerciseName] += c.gains;
           } else {
-            this.exercises[this.sets[key].exercise] = this.sets[key].gains;
+            this.exercises[c.exercise.exerciseName] = c.gains;
           }
         }
-      }
-    })
+    });
+    } else {
+      this.liftingHistory.forEach(lf =>{
+        if (lf.exercise.MuscleGroup.muscleGroupName == this.filter) {
+          this.xGains += lf.gains;
+          if (this.exercises[lf.exercise.exerciseName]){
+            this.exercises[lf.exercise.exerciseName] += lf.gains;
+          } else {
+            this.exercises[lf.exercise.exerciseName] = lf.gains;
+          }
+        }
+      });
+    }
     Object.keys(this.exercises).forEach ( (key) => {
       var name = key
       var percent = this.exercises[key] / this.xGains;
@@ -351,7 +362,7 @@ export class FriendGainsPage {
        .attr("y", function(d){return -d*radius/cfg.levels;})
        .attr("dy", "0.4em")
        .style("font-size", "10px")
-       .attr("fill", "white")
+       .attr("fill", "black")
        .text(function(d,i) { return (maxValue * d/cfg.levels)* 100 + "%" });
     
     /////////////////////////////////////////////////////////

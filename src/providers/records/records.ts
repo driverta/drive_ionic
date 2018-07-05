@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import 'rxjs/add/operator/map';
 
 /*
@@ -77,7 +77,7 @@ export class Records {
 
 	  _cardioRecords = [];
 
-  constructor(public http: Http) {
+  constructor(public http: HttpClient) {
    
   }
 

@@ -4,14 +4,14 @@ new-cardio {
   }
 
   .setbet input {
-  	color: white;
+  	color: black;
   }
   .levels {
   	text-align: center;
   }
 
   .sick {
-  	color: red;
+  	color: #9C000A;
   }
 
   #myProgress {
@@ -22,7 +22,7 @@ new-cardio {
 
 	#myBar {
 		width: 20%;
-		background-color: red;
+		background-color: #9C000A;
 		border: 1px solid black;
 		height: 15px;
 	}

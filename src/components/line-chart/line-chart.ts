@@ -1,12 +1,10 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import  { StatsLineChart } from '../../models/item';
+import { NavParams } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 
 import { HistoryProvider, ProvidersUserProvider } from '../../providers/providers';
 import { User } from '../../providers/providers';
 
-import firebase from 'firebase';
 
 import * as d3 from 'd3-selection';
 import * as d3Scale from "d3-scale";
@@ -28,7 +26,7 @@ export class LineChartComponent {
 
 	width2: number;
   height2: number;
-  margin2 = {top: 20, right: 20, bottom: 80, left: 0};
+  margin2 = {top: 20, right: 20, bottom: 30, left: 0};
   x2: any;
   y2: any;
   svg2: any;
@@ -76,7 +74,6 @@ export class LineChartComponent {
   }
 
   setChart2() {
-    console.log(this.liftingHistory);
   	this.initSvg()
     this.initAxis();
     this.drawAxis();
@@ -86,9 +83,10 @@ export class LineChartComponent {
   initSvg() {
     this.svg2 = d3.select("#lineChart")
         .append("svg")
-        .attr("width", '100%')
-        .attr("height", '100%')
+        .attr("width", '90%')
+        .attr("height", '90%')
         .attr('viewBox','0 0 900 500');
+
     this.g2 = this.svg2.append("g")
         .attr("transform", "translate(" + this.margin2.left + "," + this.margin2.top + ")");
   }
@@ -101,6 +99,13 @@ export class LineChartComponent {
   }
 
   drawAxis() {
+    this.g2.append("g")
+      .attr("transform", "translate(0," + this.height2 + ")")
+      .call(d3Axis.axisBottom(this.x2))
+      .select(".domain")
+      .attr("dx", "0.71em")
+      .remove();
+
     this.g2.append("g")
         .attr("class", "axis axis--y")
         .call(d3Axis.axisLeft(this.y2))
@@ -120,9 +125,17 @@ export class LineChartComponent {
         .y( (d: any) => this.y2(d.oneRepMax) );
 
     
+    // this.g2.append("path")
+    //     .datum(this.liftingHistory)
+    //     .attr("class", "line")
+    //     .attr("d", this.line);
     this.g2.append("path")
         .datum(this.liftingHistory)
-        .attr("class", "line")
+        .attr("fill", "none")
+        .attr("stroke", "black")
+        .attr("stroke-linejoin", "round")
+        .attr("stroke-linecap", "round")
+        .attr("stroke-width", 3)
         .attr("d", this.line);
   }
 

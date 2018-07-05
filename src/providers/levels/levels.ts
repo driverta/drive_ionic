@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import 'rxjs/add/operator/map';
 
 /*
@@ -54,7 +54,7 @@ export class Levels {
 	    { level: 40, totalPoints: 2105361000, levelPoints: 2097152000},
 	  ];
 
-  constructor(public http: Http) {
+  constructor(public http: HttpClient) {
   
   }
 

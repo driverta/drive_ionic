@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Response } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
 import { LiftingHistory } from '../../models/LiftingHistory';
@@ -26,33 +26,35 @@ export class HistoryProvider {
 
 	_cardioCharts = [{date: new Date(0), miles: 0, time: 0, mph: 0}]
 
-  constructor(public http: Http) {
+  constructor(public http: HttpClient) {
   
 	}
-	private url = "http://driveapi-env.y7mz5ppbve.us-east-2.elasticbeanstalk.com/";
-	//private url = "http://localhost:8080/api/";
+	// private url = "http://driveapi-env.y7mz5ppbve.us-east-2.elasticbeanstalk.com/";
+	// private url = "http://localhost:8080/api/";
+	private url = "http://DriveApi.y7mz5ppbve.us-east-2.elasticbeanstalk.com/";
+
 
 	getLiftingHistoryByExercise(userId, exerciseId): Observable<LiftingHistory[]> {
-    return this.http.get(this.url + "getLiftingHistoryByExercise?userId=" + userId + '&exerciseId=' + exerciseId).map((res: Response) => res.json());
+    return this.http.get<LiftingHistory[]>(this.url + "getLiftingHistoryByExercise?userId=" + userId + '&exerciseId=' + exerciseId)
 	}
 	
 	getCardioHistoryByExercise(userId, exerciseId): Observable<CardioHistory[]> {
-    return this.http.get(this.url + "getCardioHistoryByExercise?userId=" + userId + '&exerciseId=' + exerciseId).map((res: Response) => res.json());
+    return this.http.get<CardioHistory[]>(this.url + "getCardioHistoryByExercise?userId=" + userId + '&exerciseId=' + exerciseId)
 	}
 	
 	getCardioHistory(userId): Observable<CardioHistory[]> {
-    return this.http.get(this.url + "getCardioHistoryById?userId=" + userId).map((res: Response) => res.json());
+    return this.http.get<CardioHistory[]>(this.url + "getCardioHistoryById?userId=" + userId)
 	}
 	
 	getLiftingHistory(userId): Observable<LiftingHistory[]> {
-    return this.http.get(this.url + "getUserLiftingHistory?userId=" + userId).map((res: Response) => res.json());
+    return this.http.get<LiftingHistory[]>(this.url + "getUserLiftingHistory?userId=" + userId)
 	}
 	
-	removeLiftingHistory(liftingHistory): Observable<Response>{
-    return this.http.post(this.url + "deleteLiftingHistory?", liftingHistory);
+	removeLiftingHistory(liftingHistory): Observable<any>{
+    return this.http.post(this.url + "deleteLiftingHistory?", liftingHistory, {responseType: 'text'});
 	}
 	
-	removeCardioHistory(cardioHistory): Observable<Response>{
-    return this.http.post(this.url + "deleteCardioHistory?", cardioHistory);
-  }
+	removeCardioHistory(cardioHistory): Observable<any>{
+    return this.http.post(this.url + "deleteCardioHistory?", cardioHistory, {responseType: 'text'});
+  	}
 }
