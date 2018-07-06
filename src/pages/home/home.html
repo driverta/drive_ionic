@@ -21,26 +21,26 @@
   <ion-grid>
     <ion-row>
       <ion-col col-6>
-         <button id="login" class="login-button img-button" ion-button block (click)="login()"><ion-spinner *ngIf="buttonPressed" class="spinner-energized"></ion-spinner> <span  *ngIf="!buttonPressed">Chest</span></button>
+         <button id="login" class="login-button img-button" ion-button block (click)="toChest()"><ion-spinner *ngIf="buttonPressed" class="spinner-energized"></ion-spinner> <span  *ngIf="!buttonPressed">Chest</span></button>
       </ion-col>
       <ion-col col-6>
-        <button id="login" class="login-button img-button" ion-button block (click)="login()"><ion-spinner *ngIf="buttonPressed" class="spinner-energized"></ion-spinner> <span  *ngIf="!buttonPressed">Back</span></button>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col col-6>
-        <button id="login" class="login-button img-button" ion-button block (click)="login()"><ion-spinner *ngIf="buttonPressed" class="spinner-energized"></ion-spinner> <span  *ngIf="!buttonPressed">Legs</span></button>
-      </ion-col>
-      <ion-col col-6>
-        <button id="login" class="login-button img-button" ion-button block (click)="login()"><ion-spinner *ngIf="buttonPressed" class="spinner-energized"></ion-spinner> <span  *ngIf="!buttonPressed">Arms</span></button>
+        <button id="login" class="login-button img-button" ion-button block (click)="toBack()"><ion-spinner *ngIf="buttonPressed" class="spinner-energized"></ion-spinner> <span  *ngIf="!buttonPressed">Back</span></button>
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col col-6>
-        <button id="login" class="login-button img-button" ion-button block (click)="login()"><ion-spinner *ngIf="buttonPressed" class="spinner-energized"></ion-spinner> <span  *ngIf="!buttonPressed">Shoulders</span></button>
+        <button id="login" class="login-button img-button" ion-button block (click)="toLegs()"><ion-spinner *ngIf="buttonPressed" class="spinner-energized"></ion-spinner> <span  *ngIf="!buttonPressed">Legs</span></button>
       </ion-col>
       <ion-col col-6>
-        <button id="login" class="login-button img-button" ion-button block (click)="login()"><ion-spinner *ngIf="buttonPressed" class="spinner-energized"></ion-spinner> <span  *ngIf="!buttonPressed">Abs</span></button>
+        <button id="login" class="login-button img-button" ion-button block (click)="toArms()"><ion-spinner *ngIf="buttonPressed" class="spinner-energized"></ion-spinner> <span  *ngIf="!buttonPressed">Arms</span></button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col col-6>
+        <button id="login" class="login-button img-button" ion-button block (click)="toShoulders()"><ion-spinner *ngIf="buttonPressed" class="spinner-energized"></ion-spinner> <span  *ngIf="!buttonPressed">Shoulders</span></button>
+      </ion-col>
+      <ion-col col-6>
+        <button id="login" class="login-button img-button" ion-button block (click)="toAbs()"><ion-spinner *ngIf="buttonPressed" class="spinner-energized"></ion-spinner> <span  *ngIf="!buttonPressed">Abs</span></button>
       </ion-col>
     </ion-row>
   </ion-grid>

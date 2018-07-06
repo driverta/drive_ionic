@@ -1,13 +1,8 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-buttons left>
-      <button ion-button icon-only (click)="filterExercises()">
-        <ion-icon name="funnel"></ion-icon>
-      </button>
-    </ion-buttons>
 
-    <ion-title>Exercises</ion-title>
+    <ion-title>{{title}} Exercises</ion-title>
 
     <ion-buttons right>
       <button ion-button icon-only (click)="addItem()">
@@ -17,20 +12,15 @@
   </ion-navbar>
 
 </ion-header>
-<pre>{{exercises | json}}</pre>
 <ion-content>
   <ion-list>
-    <div id='reCont'>
-      <button id="refresh" *ngIf="show" (click)="ionViewDidLoad()">Refresh
-      </button>
-    </div>
-    <ion-item-sliding *ngFor="let exercise of filteredExercises">
-      <button ion-item (click)="openItem(exercise)">
+    <ion-item-sliding *ngFor="let exercise of exercises" >
+      <button ion-item (click)="openItem(exercise)" class="item-list">
         <!--<ion-avatar item-start>
         </ion-avatar>-->
 
-        <h2 >{{exercise.exerciseName}}</h2>
-        <p>{{exercise.variation}}</p>
+        <h2 class="item-text">{{exercise.exerciseName}}</h2>
+        <p class="item-text">{{exercise.variation}}</p>
       </button>
         <!-- <ion-note item-end *ngIf="item.note">{{item.note}}</ion-note>
        -->

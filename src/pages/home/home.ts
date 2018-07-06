@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { Exercise } from '../../models/Exercise';
+import { ProvidersUserProvider } from '../../providers/providers-user/providers-user';
+import { ExerciseProvider } from '../../providers/exercise/exercise';
 
 /**
  * Generated class for the HomePage page.
@@ -15,11 +18,60 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class HomePage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  private exercises: Exercise[];
+
+  constructor(public navCtrl: NavController, public navParams: NavParams, private exerciseService: ExerciseProvider,
+    private userService: ProvidersUserProvider) {
   }
 
   ionViewDidLoad() {
+    this.userService.getExercises().subscribe(exercises => {
+      this.exercises = exercises
+    });
     console.log('ionViewDidLoad HomePage');
   }
 
+  
+
+  toChest(){
+    this.navCtrl.push('ListMasterPage', {
+      exercises : this.exercises.filter(exercise => exercise.MuscleGroup.muscleGroupName === "Chest"),
+      title: "Chest"
+    });
+  }
+
+  toBack(){
+    this.navCtrl.push('ListMasterPage', {
+      exercises : this.exercises.filter(exercise => exercise.MuscleGroup.muscleGroupName === "Back"),
+      title: "Back"
+    });
+  }
+
+  toLegs(){
+    this.navCtrl.push('ListMasterPage', {
+      exercises : this.exercises.filter(exercise => exercise.MuscleGroup.muscleGroupName === "Legs"),
+      title: "Legs"
+    });
+  }
+
+  toArms(){
+    this.navCtrl.push('ListMasterPage', {
+      exercises : this.exercises.filter(exercise => exercise.MuscleGroup.muscleGroupName === "Arms"),
+      title: "Arms"
+    });
+  }
+
+  toShoulders(){
+    this.navCtrl.push('ListMasterPage', {
+      exercises : this.exercises.filter(exercise => exercise.MuscleGroup.muscleGroupName === "Shoulders"),
+      title: "Shoulders"
+    });
+  }
+
+  toAbs(){
+    this.navCtrl.push('ListMasterPage', {
+      exercises : this.exercises.filter(exercise => exercise.MuscleGroup.muscleGroupName === "Abs"),
+      title: "Abs"
+    });
+  }
 }

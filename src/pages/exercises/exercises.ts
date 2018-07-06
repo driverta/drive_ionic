@@ -4,7 +4,8 @@ import {
   ModalController,
   NavController,
   ActionSheetController,
-  AlertController
+  AlertController,
+  NavParams
 } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { Platform } from 'ionic-angular';
@@ -43,7 +44,7 @@ export class ListMasterPage {
 
   private User: UserModel;
   private exercises: Exercise[];
-
+  private title: string;
 
   constructor(
     public navCtrl: NavController,
@@ -55,6 +56,7 @@ export class ListMasterPage {
     private storage: Storage,
     private platform: Platform,
     private exerciseService: ExerciseProvider,
+    public navParams: NavParams,
     private userService: ProvidersUserProvider) {
     this.platform.ready().then((readySource) => {
       console.log("anything")
@@ -72,27 +74,9 @@ export class ListMasterPage {
    * The view loaded, let's query our items for the list
    */
   ionViewDidLoad() {
-    //console.log(this.records._cardioRecs)
-    console.log(this.userService.getUser().email);
-    this.getLocalExercises().then(exercises =>{
-      if (exercises != null) {
-        exercises.forEach(exercise =>{
-          var history = firebase.database().ref(this.userService.getUser().username + "/exercisesNew//history");
-          history.push(exercise);
-        });
-      }
-    });
-    
-    this.userService.getExercises().subscribe(exercises => {
-
-      this.exercises = exercises;
-      if (this.filter == "All"){
-        this.filteredExercises = exercises;
-      } else {
-        this.executeFilter()
-      }
-      this.show = false;
-    });
+    this.exercises = this.navParams.get('exercises');
+    this.title = this.navParams.get('title');
+    console.log(this.title);
 
     // this.username = localStorage.getItem("username");
     // console.log(this.username);
