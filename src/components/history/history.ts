@@ -10,6 +10,7 @@ import firebase from 'firebase';
 
 import * as d3 from 'd3-selection';
 import { LiftingHistory } from '../../models/LiftingHistory';
+import { CardioHistory } from '../../models/CardioHistory';
 import { UserModel } from '../../models/users';
 
 @Component({
@@ -19,10 +20,14 @@ import { UserModel } from '../../models/users';
 export class HistoryComponent {
 
   liftingHistory: LiftingHistory[];
+  cardioHistory: CardioHistory[];
   username: any;
   exercise: any;
   user: any;
   totalGains = [];
+  muscleGroup: any;
+  liftingBool = true;
+  cardioBool = false;
 
   @Output() myEvent2 = new EventEmitter();
 
@@ -34,19 +39,25 @@ export class HistoryComponent {
     private userService: ProvidersUserProvider
     ) {
     this.exercise = navParams.get('exercise');
+    this.muscleGroup = navParams.get('muscleGroup');
     this.user = userService.getUser();
   }
 
-
-
   ngOnInit() {
-    this.userService.getLiftingHistoryByIdAndExercise(this.exercise).subscribe(data =>{
-      this.liftingHistory = data;
-      console.log(this.liftingHistory);
-    })
+    if (this.muscleGroup == "Cardio") {
+      this.userService.getCardioHistoryByIdAndExercise(this.exercise).subscribe(data =>{
+        this.cardioHistory = data;
+        this.cardioBool = true;
+        this.liftingBool = false;
+      });
+    } else {
+      this.userService.getLiftingHistoryByIdAndExercise(this.exercise).subscribe(data =>{
+        this.liftingHistory = data;
+      })
+    }
   }
 
-  presentConfirm(x) {
+  presentConfirmLifting(x) {
     let alert = this.alertCtrl.create({
       title: 'Delete?',
       message: 'Do you want to delete this set (' + x.weight + ' x ' + x.reps + ') and lose these gains?',
@@ -61,7 +72,7 @@ export class HistoryComponent {
         {
           text: 'Delete',
           handler: () => {
-            this.deleteSet(x);
+            this.deleteLifting(x);
           }
         }
       ]
@@ -69,12 +80,42 @@ export class HistoryComponent {
     alert.present();
   }
 
-  deleteSet(x) {
-    d3.selectAll("svg > *").remove();
+  presentConfirmCardio(x) {
+    let alert = this.alertCtrl.create({
+      title: 'Delete?',
+      message: 'Do you want to delete this workout (' + x.miles + ' miles in ' + x.time + ') and loose these gains?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        },
+        {
+          text: 'Delete',
+          handler: () => {
+            this.deleteCardio(x);
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
+
+  deleteLifting(x) {
     this.username = this.user.username
     this.historyService.removeLiftingHistory(x).subscribe(data => {
+      this.myEvent2.emit(null);
       this.ngOnInit();
-      console.log(data);
+    });
+  }
+
+  deleteCardio(x) {
+    this.username = this.user.username
+    this.historyService.removeCardioHistory(x).subscribe(data => {
+      this.myEvent2.emit(null);
+      this.ngOnInit();
     });
   }
 }

@@ -6,7 +6,7 @@
 
 </ion-header>
 
-<ion-content scrollY="false" no-line>
+<ion-content *ngIf="!friend" scrollY="false" no-line>
 
   <div padding>
 	  <ion-segment [(ngModel)]="segment">
@@ -40,4 +40,8 @@
 
 	</div>
 </ion-content>
+<ion-content *ngIf="friend" padding>
+		<records></records>
+		<bar-chart></bar-chart>
+	</ion-content>
 

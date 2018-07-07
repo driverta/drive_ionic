@@ -18,7 +18,11 @@
     <ion-item *ngFor="let exercise of filteredExercises">
       <button no-lines ion-item (click)="openItem(exercise)">
 
-        <h2 >{{exercise.exerciseName}}</h2>
+        <h2 >{{exercise.exerciseName}}
+          <button *ngIf="friendExercises" ion-button icon-only (click)="saveExercise(item)">
+            <ion-icon name="add"></ion-icon>
+          </button>
+        </h2>
         <p>{{exercise.variation}}</p>
         
       </button>

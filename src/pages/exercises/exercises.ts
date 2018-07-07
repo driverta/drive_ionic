@@ -115,7 +115,11 @@ export class ListMasterPage {
     //         var childData1 = childSnapshot.val();
     //         var key = childSnapshot.key;
     // 
-    //         this.setlifts[key] = childData1;
+    //         th
+    //       });
+    //     });  
+    //   }
+    // })is.setlifts[key] = childData1;
     //         this.lifts = this.setlifts
     // 
     //         if ( snapshot.numChildren() == this.loop ) {
@@ -123,47 +127,28 @@ export class ListMasterPage {
     //           this.show = false;
     //           this.saveData();
     //         }
-    //       });
-    //     });  
-    //   }
-    // })
-  }
+    //console.log(this.records._cardioRecs)
+    console.log(this.userService.getUser().email);
+    this.getLocalExercises().then(exercises =>{
+      if (exercises != null) {
+        exercises.forEach(exercise =>{
+          var history = firebase.database().ref(this.userService.getUser().username + "/exercisesNew//history");
+          history.push(exercise);
+        });
+      }
+    });
+    
+    this.userService.getExercises().subscribe(exercises => {
 
-  // saveData() {
-  //   // Get user data status
-  //   this.getUsers().then((val) => {
-  //     if (val == null) {
-  //       this.users.push(this.username);
-  //     }
-  //     else {
-  //       this.users = val;
-  //       this.users.push(this.username);
-  //     }
-  //     this.storage.set('/users', this.users);
-  //     this.status = this.username;
-  //   })
-  // 
-  //   this.storage.set(this.username + '/exercises', this.setlifts)
-  //   this.storage.set(this.username + '/gains', this.totalGains)
-  //   var queryGains = firebase.database().ref('/' + this.username + '/gains');
-  // 
-  //   queryGains.once("value").then( snapshot => {
-  //     if (!snapshot) {
-  //       //alert("nope")
-  //     }
-  //     this.loop = 0;
-  //     this.gains = 0;
-  //     snapshot.forEach( childSnapshot => {
-  //       this.loop++
-  //       var childData2 = childSnapshot.val();
-  //       this.totalGains.push(childData2);
-  //       if ( snapshot.numChildren() == this.loop ) {
-  //         //alert("My Dear")
-  //         this.storage.set(this.username + '/gains', this.totalGains)
-  //       }
-  //     })
-  //   })
-  // }
+      this.exercises = exercises;
+      if (this.filter == "All"){
+        this.filteredExercises = exercises;
+      } else {
+        this.executeFilter()
+      }
+      this.show = false;
+    });
+  }
 
   getUsers(): Promise<any> {
     console.log("at user method");
@@ -179,32 +164,7 @@ export class ListMasterPage {
     return this.storage.get(this.username + '/gains');
   }
 
-  // ionViewDidEnter() {
-  // 
-  //   this.ionViewDidLoad();
-  //   this.getExercises().then((val) => {
-  //     if (val != null) {
-  //       this.setlifts = val;
-  // 
-  //     }
-  //   })
-  //   if (this.status == this.username) {
-  //     this.getExercises().then((val) => {
-  //       var exercises = firebase.database().ref(this.username + '/exercises');
-  //       exercises.set(val);
-  //     })
-  //     this.getGains().then((val) => {
-  //       var gains  = firebase.database().ref(this.username + '/gains');
-  //       gains.set(val);
-  //     })
-  //   }
-  // }
-
-  /**
-   * Prompt the user to add a new item. This shows our ItemCreatePage in a
-   * modal and then adds the new item to our data source if the user created one.
-   */
-  addItem() {
+  addExercise() {
     //this.navCtrl.push('ItemCreatePage');
     let addModal = this.modalCtrl.create('ItemCreatePage');
     addModal.onDidDismiss(item => {
@@ -251,16 +211,10 @@ export class ListMasterPage {
    * Navigate to the detail page for this item.
    */
   openItem(exercise) {
-    //console.log(this.records._cardioRecs)
-    if (exercise.MuscleGroup.muscleGroupName == 'Cardio') {
-      this.navCtrl.push('CardioPage', {
-        exercise: exercise
-      });
-    } else {
-      this.navCtrl.push('ItemDetailPage', {
-        exercise: exercise
-      });
-    }
+    this.navCtrl.push('ItemDetailPage', {
+      exercise: exercise,
+      muscleGroup: exercise.MuscleGroup.muscleGroupName
+    });
   }
 
   filterExercises(){

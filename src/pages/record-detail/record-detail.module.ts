@@ -3,15 +3,15 @@ import { IonicPageModule } from 'ionic-angular';
 import { TranslateModule } from '@ngx-translate/core';
 import { RecordDetailPage } from './record-detail';
 
-import { ProfileRecordsComponent } from '../../components/profile-records/profile-records';
-import { ProfileBarComponent } from '../../components/profile-bar/profile-bar';
+import { RecordsComponent } from '../../components/records/records';
+import { BarChartComponent } from '../../components/bar-chart/bar-chart';
 import { PipesModule } from '../../pipes/pipes.module';
 
 @NgModule({
   declarations: [
     RecordDetailPage,
-    ProfileBarComponent,
-    ProfileRecordsComponent
+    BarChartComponent,
+    RecordsComponent
   ],
   imports: [
     IonicPageModule.forChild(RecordDetailPage),

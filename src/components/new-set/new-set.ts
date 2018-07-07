@@ -10,6 +10,7 @@ import firebase from 'firebase';
 
 import * as d3 from 'd3-selection';
 import { LiftingHistory } from '../../models/LiftingHistory';
+import { CardioHistory } from '../../models/CardioHistory';
 
 @Component({
   selector: 'new-set',
@@ -25,6 +26,10 @@ export class NewSetComponent {
 	loop = 0;
 	gains = 0;
   g = 0;
+  miles: any;
+  hours: any;
+  minutes: any;
+  seconds: any;
 	weight: any;
   reps: any;
   bool = false;
@@ -33,11 +38,15 @@ export class NewSetComponent {
   checkRec = false;
   history = [];
   totalGains = [];
-
+  muscleGroup: any;
+  liftingBool = true;
+  cardioBool = false;
 
   lf: LiftingHistory;
+  cardioHistory: CardioHistory[];
+  cardio: CardioHistory;
 
-  //private invalid: boolean = false;
+  private invalid: boolean = false;
 
 
   @Output() myEvent = new EventEmitter();
@@ -54,12 +63,19 @@ export class NewSetComponent {
 
 
   	this.exercise = navParams.get('exercise');
-
+    this.muscleGroup = navParams.get('muscleGroup');
     this.user = userService.getUser();
 
   }
 
   ngOnInit() {
+    if (this.muscleGroup == "Cardio") {
+      this.cardioBool = true;
+      this.liftingBool = false;
+    } else {
+      
+    }
+
     this.userService.getTotalGains(this.user.id).subscribe(totalGains => {
       console.log(totalGains);
       this.gains = totalGains;
@@ -78,8 +94,7 @@ export class NewSetComponent {
     })
   }
 
-  addSet() {
-
+  addLiftingSet() {
     this.lf = new LiftingHistory();
     this.lf.reps = this.reps;
     this.lf.weight = this.weight;
@@ -94,6 +109,7 @@ export class NewSetComponent {
     this.lf.oneRepMax = parseInt(this.weight) + oneRepMaxFirstStep;
     this.lf.exercise = this.exercise;
     this.lf.gains = 5;
+    this.g = 5;
     this.checkRec =false;
     this.points = true;
     for(let record of this.records._records){
@@ -101,6 +117,7 @@ export class NewSetComponent {
         this.checkRec = true;
         if (record.weight < this.lf.weight){
           this.lf.gains = 10;
+          this.g = 10
           this.bool = true;
           record.weight = this.lf.weight;
           record.oneRepMax = this.lf.oneRepMax;
@@ -110,6 +127,7 @@ export class NewSetComponent {
     }
     if (this.checkRec == false){
       this.lf.gains = 10;
+      this.g = 10;
       this.bool = true;
       this.records._records.push({reps: this.lf.reps, weight: this.lf.weight, oneRepMax: this.lf.oneRepMax, records: 1})
     }
@@ -122,186 +140,75 @@ export class NewSetComponent {
     console.log(this.lf);
     this.userService.addLiftingHistory(this.lf).subscribe();
     this.myEvent.emit(null);
-    this.ngOnInit();
-
-    /*
-    if(this.weight == null || this.reps == null){
-      //  this.invalid = true; 
-    }
-    else{
-      
-  	d3.selectAll("svg > *").remove();
-    let date = new Date().toISOString();
-    var newDate = date.replace(".", "-")
-    //alert(newDate)
-    var oneRM = (Number(this.weight) * Number(this.reps) * .033) + Number(this.weight);
-    if(this.reps == 1){
-      oneRM = this.weight;
-    }
-    this.g = 5;
-    this.bool = false;
-    this.points = true;
-    this.checkRec = false;
-
-    setTimeout(() => {
-      this.bool = false;
-      this.points = false;
-    }, 2000);
-
-    var set = { date: date, weight: this.weight, reps: this.reps, oneRM: oneRM};
-
-    this.getExercises().then((val) => {
-      //console.log('Your json is', val);
-      var key = this.exercise.name + '-' + this.exercise.variation
-      var history = val[key].history;
-      if(!history){
-        val[key].history = {};
-        this.storage.set(this.username + '/exercises', val)
-      }
-    }).then(() => {
-      this.getExercises().then((val) => {
-        var key = this.exercise.name + '-' + this.exercise.variation
-        var history = val[key].history;
-        if (Array.isArray(history)){
-          val[key].history.push(set)
-        } else {
-          
-          val[key].history[newDate] = set;
-        }
-        
-        this.storage.set(this.username + '/exercises', val).then(() => {
-          Object.keys(history).forEach( (set) => {
-            this.checkRec = false;
-            this.records._records.forEach( (value, index) => {
-              if (history[set].reps == value.reps) {
-                this.checkRec = true;
-                if (history[set].weight > value.weight) {
-                  this.records._records[index].weight = history[set].weight;
-                  this.records._records[index].oneRM = history[set].oneRM;
-                  this.records._records[index].records++;
-                  this.g = 10;
-                  this.bool = true;
-                }
-              }
-            });
-            if (this.checkRec == false){
-              this.records._records.push({reps: history[set].reps, weight: history[set].weight, oneRM: history[set].oneRM, records: 1})
-              this.g = 10;
-              this.bool = true;
-            }
-          })
-        }).then(() => {
-          this.myEvent.emit(null);
-          var g = { date: date, gains: this.g, muscle: this.exercise.muscle, exercise: this.exercise.name + '/' + this.exercise.variation};
-          this.getGains().then((val) => {
-            //console.log('Your json is', val);
-            this.totalGains = val;
-            this.totalGains.push(g);
-            this.storage.set(this.username + '/gains', this.totalGains). then(() => {
-              
-              this.ngOnInit();
-            });
-          });
-        });
-      });
-    }); 
-    }
-    */  
-
-  //   if(this.weight == null || this.reps == null){
-  //       this.invalid = true; 
-  //   }
-  //   else{
-  // 
-  // 	d3.selectAll("svg > *").remove();
-  //   var date = new Date().toISOString();
-  //   var newDate = date.replace(".", "-")
-  //   //alert(newDate)
-  //   var oneRM = (Number(this.weight) * Number(this.reps) * .033) + Number(this.weight);
-  //   if(this.reps == 1){
-  //     oneRM = this.weight;
-  //   }
-  //   this.g = 5;
-  //   this.bool = false;
-  //   this.points = true;
-  //   this.checkRec = false;
-  // 
-  //   setTimeout(() => {
-  //     this.bool = false;
-  //     this.points = false;
-  //   }, 2000);
-  // 
-  //   var set = { date: date, weight: this.weight, reps: this.reps, oneRM: oneRM};
-  // 
-  //   this.getExercises().then((val) => {
-  //     //console.log('Your json is', val);
-  //     var key = this.exercise.name + '-' + this.exercise.variation
-  //     var history = val[key].history;
-  //     if(!history){
-  //       val[key].history = {};
-  //       this.storage.set(this.username + '/exercises', val)
-  //     }
-  //   }).then(() => {
-  //     this.getExercises().then((val) => {
-  //       var key = this.exercise.name + '-' + this.exercise.variation
-  //       var history = val[key].history;
-  //       if (Array.isArray(history)){
-  //         val[key].history.push(set)
-  //       } else {
-  // 
-  //         val[key].history[newDate] = set;
-  //       }
-  // 
-  //       this.storage.set(this.username + '/exercises', val).then(() => {
-  //         Object.keys(history).forEach( (set) => {
-  //           this.checkRec = false;
-  //           this.records._records.forEach( (value, index) => {
-  //             if (history[set].reps == value.reps) {
-  //               this.checkRec = true;
-  //               if (history[set].weight > value.weight) {
-  //                 this.records._records[index].weight = history[set].weight;
-  //                 this.records._records[index].oneRM = history[set].oneRM;
-  //                 this.records._records[index].records++;
-  //                 this.g = 10;
-  //                 this.bool = true;
-  //               }
-  //             }
-  //           });
-  //           if (this.checkRec == false){
-  //             this.records._records.push({reps: history[set].reps, weight: history[set].weight, oneRM: history[set].oneRM, records: 1})
-  //             this.g = 10;
-  //             this.bool = true;
-  //           }
-  //         })
-  //       }).then(() => {
-  //         this.myEvent.emit(null);
-  //         var g = { date: date, gains: this.g, muscle: this.exercise.muscle, exercise: this.exercise.name + '/' + this.exercise.variation};
-  //         this.getGains().then((val) => {
-  //           //console.log('Your json is', val);
-  //           this.totalGains = val;
-  //           this.totalGains.push(g);
-  //           this.storage.set(this.username + '/gains', this.totalGains). then(() => {
-  // 
-  //             this.ngOnInit();
-  //           });
-  //         });
-  //       });
-  //     });
-  //   }); 
-  // }  
+    this.ngOnInit(); 
   }
 
-  // getExercises(): Promise<any> {
-  //   return this.storage.get(this.user + '/exercises');
-  // }
+  addCardioSet() {
 
-  // getGains(): Promise<any> {
-  //   return this.storage.get(this.username + '/gains');
-  // }
+    if (this.miles == null && this.hours == null && this.minutes == null && this.seconds == null) {
+      this.invalid = true;
+    } else {
 
-  // getLevel(): Promise<any> {
-  //   return this.storage.get(this.username + '/level');
-  // }
+      if(this.hours == null){
+        this.hours = 0;
+      }
+      if(this.minutes == null){
+        this.minutes = 0;
+      }
+      if(this.seconds == null){
+        this.seconds = 0;
+      }
+
+      this.cardio = new CardioHistory();
+      this.cardio.user_id = this.userService.getUser().id;
+
+      this.hours = Number(this.hours);
+      this.minutes = Number(this.minutes);
+      this.seconds = Number(this.seconds);
+
+      d3.selectAll("svg > *").remove();
+      let date = new Date().toISOString();
+      var time = this.hours + ":" + this.minutes + ":" + this.seconds;
+      var newMinutes = this.minutes / 60;
+      var newSeconds = this.seconds / 360;
+      var totalHours = this.hours + newMinutes + newSeconds;
+      var mph = this.miles / totalHours;
+      var newHours = this.hours * 60;
+      var minSec = this.seconds / 60;
+      var recordTime = this.minutes + newHours + minSec;
+      var minTime = this.minutes + newHours
+      this.g = minTime * 2
+      this.bool = false;
+      this.points = true;
+      this.checkRec = false;
+      console.log(date)
+      this.cardio.date = date;
+      this.cardio.minutes = recordTime;
+      this.cardio.miles = this.miles;
+      this.cardio.mph = mph;
+      this.cardio.exercise = this.exercise;
+
+      this.records._cardioRecs.forEach((value, index) => {
+        if (this.cardio.minutes >= value.min && this.cardio.minutes < value.max) {
+          if (this.cardio.mph > value.mph) {
+            this.g = minTime * 4;
+            this.bool = true;
+          }
+        }
+      });
+
+      this.cardio.gains = this.g;
+
+      setTimeout(() => {
+        this.bool = false;
+        this.points = false;
+      }, 2000);
+      console.log(this.cardio);
+      this.userService.addCardioHistory(this.cardio).subscribe();
+      this.myEvent.emit(null);
+      this.ngOnInit();
+    }
+  }
 
   newLevel(level){
     let alert = this.alertCtrl.create({
@@ -309,9 +216,7 @@ export class NewSetComponent {
       message: "You are now a Level " + level,
       buttons: ['Ok']
     });
-    alert.present();
-    
+    alert.present();   
   }
-
 }
 

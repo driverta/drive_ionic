@@ -1,6 +1,6 @@
 <div>
-  <ion-item no-lines>
-    <div class="scrollingtable">
+  <ion-item >
+    <div class="scrollingtable" *ngIf="liftingBool">
       <table class="table table-bordered" id="headers">
         <tr>
           <th>Date</th>
@@ -18,45 +18,35 @@
             <td>{{x.reps}}</td>
             <td>{{x.oneRepMax}}</td>
             <td>
-              <input type="button" value="X" class="remove" (click)="presentConfirm(x)">
+              <input type="button" value="X" class="remove" (click)="presentConfirmLifting(x)">
             </td>
           </tr>
         </table>
       </ion-scroll>
-    </div></ion-item>
-  <!-- <table class="table">
-    <tr>
-      <th>Date</th>
-      <th>Weight</th>
-      <th>Reps</th>
-      <th>1RM</th>
-    </tr>
-  </table>
-
-  <ion-scroll scrollY="true" class="scroll">
-    <ion-list>
-
-      <ion-item-sliding *ngFor="let x of history._history.reverse()">
-
-        <ion-item>
-          <h2>{{x.date | date: 'MM/dd'}}</h2>
-            
-          {{x.weight}} {{x.reps}}
-          <span class="historyItem">
-            
-          </span>
-          <ion-note class="historyItem">
-            
-          </ion-note>
-          <span class="historyItem">{{x.oneRM.toFixed(1)}}</span>
-        </ion-item>
-
-        <ion-item-options>
-          <button danger (click)="presentConfirm(x)"> Delete</button>
-        </ion-item-options>
-      </ion-item-sliding>
-
-    </ion-list>
-  </ion-scroll> -->
-
+    </div>
+    <div class="scrollingtable" *ngIf="cardioBool">
+        <table id="headers">
+          <tr>
+            <th>Date</th>
+            <th>Miles</th>
+            <th>Time</th>
+            <th>MPH</th>
+            <th>Delete</th>
+          </tr>
+        </table>
+        <ion-scroll scrollY="true" class="scroll">
+          <table>
+            <tr *ngFor="let x of cardioHistory">
+              <td>{{x.date | date: 'MM/dd'}}</td>
+              <td>{{x.miles}}</td>
+              <td>{{x.minutes | cardioTimeConvert}}</td>
+              <td>{{x.mph.toFixed(1)}}</td>
+              <td>
+                <input type="button" value="X" class="remove" (click)="presentConfirmCardio(x)">
+              </td>
+            </tr>
+          </table>
+        </ion-scroll>
+      </div>
+  </ion-item>
 </div>

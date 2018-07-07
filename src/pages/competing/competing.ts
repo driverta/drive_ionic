@@ -15,35 +15,54 @@ export class CompetingPage {
 	list = [];
 	username: string;
   user: any;
+  listType: string;
+  showDelete: boolean = true;
+  canAddFriend: boolean = true;
 
   constructor(public navCtrl: NavController,
   	public navParams: NavParams,
   	public alertCtrl: AlertController,
     private userService: ProvidersUserProvider) {
   	
-  	//this.list = navParams.get('list');
-  	this.user = this.userService.getUser();
+    //this.list = navParams.get('list');
+    this.listType = navParams.get('listType');
+    
+  	this.user = navParams.get('user');
     this.username = this.user.name;
   }
 
   ionViewDidLoad() {
-    this.userService.getCompetingUsers(this.user.id).subscribe(data => {
-      this.list = data
-      this.list.forEach(player => {
-        this.userService.getProfilePic(player.username).subscribe(pic => {
-          player.profilePic = "data:image/jpeg;base64," + pic;
-          if (pic == "NahNigga"){
-            player.profilePic = null
-          } else {
-            player.profilePic = "data:image/jpeg;base64," + pic;
-          }
-        })
+    console.log(this.listType)
+    if (this.listType == "competing"){
+      if (this.user == this.userService.getUser()){
+        this.canAddFriend = false;
+      }
+      this.userService.getCompetingUsers(this.user.id).subscribe(data => {
+        this.list = data
       })
-    })
+    }
+    if (this.listType == "competitors"){  
+      this.userService.getCompetitors(this.user.id).subscribe(data => {
+        this.list = data
+        console.log("here")
+        this.showDelete = false;
+      })
+    }
+    this.list.forEach(player => {
+      this.userService.getProfilePic(player.username).subscribe(pic => {
+        player.profilePic = "data:image/jpeg;base64," + pic['_body'];
+        if (pic['_body'] == "NahNigga"){
+          player.profilePic = null
+        } else {
+          player.profilePic = "data:image/jpeg;base64," + pic['_body'];
+        }
+      })
+    })  
   }
 
   openItem(item){
-    this.navCtrl.push('FriendProfilePage', {
+    console.log(item)
+    this.navCtrl.push('SettingsPage', {
       item: item
     });
   }
@@ -78,5 +97,38 @@ export class CompetingPage {
     this.userService.removeCompetingUser(competing).subscribe(data => {
       this.ionViewDidLoad();
     })
+  }
+
+  addToLeaderboard(item) {
+    var id = item.id;
+    let competing = new CompetingModel;
+    competing.id = this.userService.getUser().id;
+    competing.competingUser = id
+
+    this.userService.addCompetingUser(competing).subscribe(data => {
+      console.log(data);
+      if (data === "already_exists") {
+        this.alreadyCompeting();
+      }
+      else {
+        this.playerAdded();
+      }
+    })
+  }
+
+  alreadyCompeting() {
+    let alert = this.alertCtrl.create({
+      title: 'You are already Cometing with this player!',
+      buttons: ['Ok']
+    });
+    alert.present();
+  }
+
+  playerAdded() {
+    let alert = this.alertCtrl.create({
+      title: 'Player added to your leaderboard!',
+      buttons: ['Ok']
+    });
+    alert.present();
   }
 }
