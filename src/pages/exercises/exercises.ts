@@ -18,6 +18,7 @@ import { ExerciseProvider } from '../../providers/exercise/exercise';
 import { ProvidersUserProvider } from '../../providers/providers-user/providers-user';
 import { UserModel } from '../../models/users';
 import { Exercise } from '../../models/Exercise';
+import { BluetoothSerial } from '@ionic-native/bluetooth-serial';
 
 @IonicPage()
 @Component({
@@ -55,7 +56,8 @@ export class ListMasterPage {
     private storage: Storage,
     private platform: Platform,
     private exerciseService: ExerciseProvider,
-    private userService: ProvidersUserProvider) {
+    private userService: ProvidersUserProvider,
+    private bluetooth: BluetoothSerial) {
     this.platform.ready().then((readySource) => {
       console.log("anything")
       console.log('Platform ready from', readySource);
