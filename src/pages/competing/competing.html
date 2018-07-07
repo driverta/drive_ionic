@@ -18,11 +18,15 @@
             <ion-icon *ngIf="item.profilePic == null" class="default-img" name="contact"></ion-icon>
           </ion-avatar>
          
-          <h1>{{item.username}}</h1>
+          <h1>{{item.username}}
+            <button *ngIf="canAddFriend" ion-button icon-only (click)="addToLeaderboard(item)">
+              <ion-icon name="add"></ion-icon>
+            </button>
+          </h1>
           
         </ion-item>
       	
-        <ion-item-options>
+        <ion-item-options *ngIf="showDelete">
           <button ion-button color="danger" (click)="presentConfirm(item)">
             {{ 'Remove' }}
           </button>

@@ -18,6 +18,7 @@ export class CompetitorsPage {
   id: number;
   competingOne: CompetingModel[];
   userId: number;
+  
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
@@ -25,6 +26,7 @@ export class CompetitorsPage {
     private userService: ProvidersUserProvider) {
 
     this.list = navParams.get('list');
+    
     this.username = this.userService.getUser().username;
     this.userId = this.userService.getUser().id;
 

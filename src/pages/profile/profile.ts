@@ -55,9 +55,13 @@ export class SettingsPage {
   options: any;
   profile_pic: any;
   exercisesLength = 0;
-
+  user: any;
+  checkUser: any;
   show: boolean = true;
   load: boolean = true;
+  buttons: boolean = true;
+  myPicture: boolean = true;
+  friendPicture: boolean = false;
 
   settingsReady = false;
 
@@ -82,7 +86,6 @@ export class SettingsPage {
     private alertCtrl: AlertController,
     public translate: TranslateService,
     public camera: Camera,
-    private user: User,
     public levels: Levels,
     private storage: Storage,
     private userService: ProvidersUserProvider,
@@ -90,7 +93,9 @@ export class SettingsPage {
     private rec: Records,
     private authProvider: AuthProvider) {
 
-    this.userData = this.userService.getUser();
+    // this.userData = this.userService.getUser();
+    this.checkUser = this.navParams.get("item")
+    //console.log(this.user)
   }
 
   _buildForm() {
@@ -121,39 +126,65 @@ export class SettingsPage {
   }
 
   ionViewDidLoad() {
+   //console.log(this.checkUser)
+    if (this.checkUser == undefined){
+      this.user = this.userService.getUser()
+      //console.log("here")
+      //this.username = this.user.username;
+      this.weight = this.user.weight;
+      this.height = this.user.height;
+      this.gym = this.user.gym;
+      this.location = this.user.location;
+      this.username = this.user.username;
+      this.buttons = true;
+      this.myPicture = true;
+      this.friendPicture = false;
+    } else {
+      this.user = this.checkUser;
+      this.weight = this.user.weight;
+      this.height = this.user.height;
+      this.gym = this.user.gym;
+      this.location = this.user.location;
+      this.username = this.user.username;
+      this.buttons = false;
+      this.myPicture = false;
+      this.friendPicture = true;
+    }
     this.competitorsList = [];
-    this.username = this.userService.getUser().username;
-    this.userService.getOneUser(this.username).subscribe(data => {
+    // this.username = this.userService.getUser().username;
+    // this.userService.getOneUser(this.username).subscribe(data => {
 
-      this.weight = data.weight;
-      this.height = data.height;
-      this.gym = data.gym;
-      this.location = data.location;
-      //this.gym = data.gym;
-    })
+    //   this.weight = data.weight;
+    //   this.height = data.height;
+    //   this.gym = data.gym;
+    //   this.location = data.location;
+    //   //this.gym = data.gym;
+    // })
     // Build an empty form for the template to render
     this.form = this.formBuilder.group({});  
 
-    this.userService.getTotalGains(this.userData.id).subscribe(totalGains => {
-      if (totalGains) {
-        this.gains = totalGains;
-      } else this.gains = 0;
+    this.userService.getTotalGains(this.user.id).subscribe(totalGains => {
+      //console.log(totalGains);
+      this.gains = totalGains;
       this.setLevel();
     });;
 
-    this.userService.getCompetingUsers(this.userData.id).subscribe(data => {
+    this.userService.getCompetingUsers(this.user.id).subscribe(data => {
       this.competingList = data;
       //console.log(this.competingList);
       this.competing = this.competingList.length;
     })
 
-    this.userService.getCompetitors(this.userData.id).subscribe(data => {
+    this.userService.getCompetitors(this.user.id).subscribe(data => {
       this.competitorsList = data;
+      //console.log(this.competitorsList);
       this.competitors = this.competitorsList.length;
     })
 
-    this.userService.getProfilePic(this.userData.username).subscribe(data => {
-      if (data != "NahNigga"){
+    this.userService.getProfilePic(this.user.username).subscribe(data => {
+      //console.log(data)
+      this.form.patchValue({"profilePic": "data:image/jpeg;base64," + data['_body']});
+      if (data['_body'] != "NahNigga"){
         this.show = false;
         this.form.patchValue({"profilePic": "data:image/jpeg;base64," + data});
       } else {
@@ -212,7 +243,8 @@ export class SettingsPage {
     let reader = new FileReader();
     reader.onload = (readerEvent) => {
       this.imageData = (readerEvent.target as any).result;
-      this.userService.uploadProfilePic(this.userData.username, this.imageData).subscribe(data => {
+      console.log(this.imageData);
+      this.userService.uploadProfilePic(this.user.username, this.imageData).subscribe(data => {
         this.show = false;
         this.form.patchValue({ 'profilePic': this.imageData });
       });
@@ -240,7 +272,7 @@ export class SettingsPage {
   }
 
   ionViewWillEnter() {
-    this.username = localStorage.getItem("username");
+    //this.username = localStorage.getItem("username");
     this.ionViewDidLoad();
     // Build an empty form for the template to render
     this.form = this.formBuilder.group({});
@@ -299,30 +331,39 @@ export class SettingsPage {
   }
 
   goToCompeting(){
+    var listType = "competing";
     this.navCtrl.push('CompetingPage', {
-      list: this.competingList
+      list: this.competingList,
+      listType: listType,
+      user: this.user
     });
 
   }
 
   goToCompetitors(){
-    this.navCtrl.push('CompetitorsPage', {
-      list: this.competitorsList
+    var listType = "competitors";
+    this.navCtrl.push('CompetingPage', {
+      list: this.competitorsList,
+      listType: listType,
+      user: this.user
     });
   }
 
   goToRecords(){
-    this.navCtrl.push('RecordsPage');
+    this.navCtrl.push('RecordsPage', {
+      user: this.user
+    });
   }
 
   goToGains(){
-    this.navCtrl.push('GainsPage');
+    this.navCtrl.push('GainsPage', {
+      user: this.user
+    });
   }
 
   editProfile(){
     let addModal = this.modalCtrl.create('EditProfilePage');
     addModal.onDidDismiss(item => {
-      this.ionViewDidLoad();
       this.userService.getOneUser(this.username).subscribe(data => {
         this.weight = data.weight;
         this.height = data.height;
@@ -330,6 +371,7 @@ export class SettingsPage {
         this.location = data.location;
       })
     })
+
     addModal.present();
   }
 }

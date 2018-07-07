@@ -4,7 +4,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Records } from '../../providers/providers';
 import { Storage } from '@ionic/storage';
 
-import { ProfileBarComponent } from '../../components/profile-bar/profile-bar';
+import { BarChartComponent } from '../../components/bar-chart/bar-chart';
 import { SortByRepsPipe } from '../../pipes/sort-by-reps/sort-by-reps';
 
 @IonicPage()
@@ -18,7 +18,7 @@ export class RecordDetailPage {
   username: any;
   checkRec = false;
 
-  @ViewChild(ProfileBarComponent) barChart: ProfileBarComponent
+  @ViewChild(BarChartComponent) barChart: BarChartComponent
 
   constructor(public navCtrl: NavController,
   	public navParams: NavParams,
@@ -29,6 +29,6 @@ export class RecordDetailPage {
   }
 
   ionViewWillEnter() {
-    this.barChart.makeChart();
+    this.barChart.makeBarChart();
   }
 }

@@ -4,11 +4,6 @@ import { NewSetComponent } from './new-set/new-set';
 import { HistoryComponent } from './history/history';
 import { RecordsComponent } from './records/records';
 import { LineChartComponent } from './line-chart/line-chart';
-import { NewCardioComponent } from './new-cardio/new-cardio';
-import { CardioHistoryComponent } from './cardio-history/cardio-history';
-import { CardioRecordsComponent } from './cardio-records/cardio-records';
-import { CardioBarComponent } from './cardio-bar/cardio-bar';
-import { CardioLineComponent } from './cardio-line/cardio-line';
 import { ProfileRecordsComponent } from './profile-records/profile-records';
 import { ProfileBarComponent } from './profile-bar/profile-bar';
 import { FriendProfileRecordsComponent } from './friend-profile-records/friend-profile-records';
@@ -24,19 +19,12 @@ import { GainsChartComponent } from './gains-chart/gains-chart';
     HistoryComponent,
     RecordsComponent,
     LineChartComponent,
-    NewCardioComponent,
-    CardioHistoryComponent,
-    CardioRecordsComponent,
-    CardioBarComponent,
-    CardioLineComponent,
     ProfileRecordsComponent,
     ProfileBarComponent,
     FriendProfileRecordsComponent,
     FriendProfileBarComponent,
     CardioProfileRecordsComponent,
     CardioProfileBarComponent,
-    // FriendCardioProfileBarComponent,
-    // FriendCardioProfileRecordsComponent,
     GainsChartComponent],
 	imports: [],
 	exports: [BarChartComponent,
@@ -44,19 +32,12 @@ import { GainsChartComponent } from './gains-chart/gains-chart';
     HistoryComponent,
     RecordsComponent,
     LineChartComponent,
-    NewCardioComponent,
-    CardioHistoryComponent,
-    CardioRecordsComponent,
-    CardioBarComponent,
-    CardioLineComponent,
     ProfileRecordsComponent,
     ProfileBarComponent,
     FriendProfileRecordsComponent,
     FriendProfileBarComponent,
     CardioProfileRecordsComponent,
     CardioProfileBarComponent,
-    // FriendCardioProfileBarComponent,
-    // FriendCardioProfileRecordsComponent,
     GainsChartComponent]
 })
 export class ComponentsModule {}

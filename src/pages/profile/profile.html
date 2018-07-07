@@ -24,12 +24,18 @@
     <input type="file" #fileInput style="visibility: hidden; height: 0px" name="files[]" (change)="processWebImage($event)" />
     <div class="profile-image-wrapper" (click)="getPicture()">
       <div class="profile-image-placeholder" *ngIf="show">
-        <ion-icon name="add"></ion-icon>
-        <div>
+        <ion-icon *ngIf="friendPicture" class="profile-image icon-size" name="contact"></ion-icon>
+        <ion-icon *ngIf="myPicture" name="add"></ion-icon>
+        <div *ngIf="myPicture">
           {{ 'ITEM_CREATE_CHOOSE_IMAGE' | translate }}
         </div>
       </div>
-      <div class="profile-image" [style.backgroundImage]="getProfileImageStyle()" *ngIf="!show"></div>
+      
+      <!--<div*ngIf="!show">
+        <div *ngIf="myPicture" class="profile-image" [style.backgroundImage]="getProfileImageStyle()"></div>
+        <ion-icon *ngIf="friendPicture" class="profile-image icon-size" name="contact"></ion-icon>
+      </div>
+    -->
     </div>
   </form>
   <div class="stats">
@@ -42,7 +48,7 @@
         <td>{{weight}}lbs</td>
         <td>{{location}}</td>
       </tr>
-      <tr>
+      <tr *ngIf="buttons">
         <th id="rules"><button on-click="rules()" ion-button type="button" color="primary" block>{{ "Rules" | translate }}</button></th>
         <th id="edit"><button on-click="editProfile()" ion-button type="button" color="primary" block>{{ "Edit Profile" | translate }}</button></th>
       <tr>

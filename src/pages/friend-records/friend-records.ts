@@ -194,24 +194,6 @@ export class FriendRecordsPage {
     })
   }
 
-  //   if(this.bool){
-  //     if (Array.isArray(exercise.history)){
-  //       exercise.history = [];
-  //     } else {
-  //       exercise.history = {};
-  //     }
-
-  //     var key = exercise.name + '-' + exercise.variation
-      
-  //     this.myLifts[key] = exercise
-      
-  //     this.storage.set(this.myUsername + '/exercises', this.myLifts).then(() =>{
-  //       this.exerciseAdded();
-  //     });
-
-  //   }
-  // }
-
   presentAlert() {
     let alert = this.alertCtrl.create({
       title: 'Duplicate Exercise',

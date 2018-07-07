@@ -27,6 +27,7 @@ import { tap } from 'rxjs/operators';
   templateUrl: 'welcome.html'
 })
 @Injectable()
+
 export class WelcomePage {
 
    account: { email: string, password: string } = {
