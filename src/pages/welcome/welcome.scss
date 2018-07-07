@@ -1,6 +1,61 @@
 page-welcome {
-  .back {
-    
+
+  ion-header::after {
+    background-image: none;
+    height: 0px;
+    }
+
+    .astext {
+      background:none;
+      border:none;
+      margin:0;
+      padding:0;
+  }
+
+  .astext.button-ios.activated{
+    background:none;
+    border:none;
+    margin:0;
+    padding:0;
+  }
+
+  #login.activated{
+    opacity: 1;
+    background-color:red
+  }
+
+  .header-md::after, .tabs-md[tabsPlacement="top"] > .tabbar::after, .footer-md::before, .tabs-md[tabsPlacement="bottom"] > .tabbar::before{
+    background-image: none;
+  }
+
+
+  .welcome{
+    color: white;
+    background-image: url(../assets/img/loginbackground.jpeg); 
+    background-repeat:no-repeat; background-size: cover; 
+    background-position: center;
+  }
+
+  .fuckBlake {
+    color:white;
+  }
+
+  .login-button:disabled{
+    opacity: 1;
+  }
+
+  .header{
+    font-size: 4rem;
+    margin-top: 10%;
+  }
+
+  .transparent-field{
+    color: whitep;
+    background-color: transparent;            
+  }
+
+  .middle-item{
+    margin-top: 50%;
   }
 
   .splash-bg {
@@ -43,4 +98,5 @@ page-welcome {
       background-color: rgb(220, 220, 220);
     }
   }
+  
 }

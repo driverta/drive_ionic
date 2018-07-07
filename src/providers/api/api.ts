@@ -1,7 +1,7 @@
 import 'rxjs/add/operator/map';
 
 import { Injectable } from '@angular/core';
-import { Http, RequestOptions, URLSearchParams } from '@angular/http';
+import { HttpClient  } from '@angular/common/http';
 
 /**
  * Api is a generic REST Api handler. Set your API url first.
@@ -10,7 +10,7 @@ import { Http, RequestOptions, URLSearchParams } from '@angular/http';
 export class Api {
   url: string = 'http://driveapi-env.y7mz5ppbve.us-east-2.elasticbeanstalk.com/getUsers';
 
-  constructor(public http: Http) {
+  constructor(public http: HttpClient) {
   }
 
   get() {

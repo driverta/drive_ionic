@@ -39,6 +39,8 @@ export class ItemDetailPage {
   liftingHistory: LiftingHistory[];
   cardioHistory: CardioHistory[];
 
+  private friend: boolean = true;
+
   @ViewChild(BarChartComponent) barChart: BarChartComponent
   @ViewChild(LineChartComponent) lineChart: LineChartComponent
 
@@ -57,13 +59,22 @@ export class ItemDetailPage {
       });
     this.exercise = navParams.get('exercise');
     this.muscleGroup = navParams.get('muscleGroup');
-    this.user = userService.getUser();
-    console.log(this.muscleGroup);
+    this.user = navParams.get('user');
+    if(this.user == null){
+      this.user = userService.getUser();
+      this.friend = false;
+    }
   }
 
   ionViewWillEnter() {
+    if(this.friend){
+      this.barChart.makeBarChart();
+    }
+   else{
     this.barChart.makeBarChart();
     this.lineChart.makeLineChart();
+   }
+
   }
   
   showBar() {

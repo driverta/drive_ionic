@@ -74,7 +74,7 @@ export class RecordsPage {
     //     exercise: exercise
     //   });
     // }else {
-      this.navCtrl.push('RecordDetailPage', {
+      this.navCtrl.push('ItemDetailPage', {
         exercise: exercise,
         muscleGroup: exercise.MuscleGroup.muscleGroupName,
         user: this.user

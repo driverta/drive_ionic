@@ -6,4 +6,88 @@ page-signup {
 	h3 {
 		text-align: center;
 	}
+
+	.checkbox-ios .checkbox-icon{
+		background-color: transparent;
+	}
+
+	.bottom-border{
+		border-bottom: 0.55px solid #c8c7cc
+	}
+
+	ion-button::placeholder{
+		color: white;
+	}
+
+	ion-header::after {
+		background-image: none;
+		height: 0px;
+		}
+	
+		.astext {
+		  background:none;
+		  border:none;
+		  margin:0;
+		  padding:0;
+	  }
+
+	  .header-md::after, .tabs-md[tabsPlacement="top"] > .tabbar::after, .footer-md::before, .tabs-md[tabsPlacement="bottom"] > .tabbar::before{
+		background-image: none;
+	  }
+	
+	  .astext.button-ios.activated{
+		background:none;
+		border:none;
+		margin:0;
+		padding:0;
+	  }
+	  
+	.terms-of-use{
+		color: white;
+		font-size: 1rem;
+	}
+
+	  .welcome{
+		background-image: url(../assets/img/loginbackground.jpeg); 
+		background-repeat:no-repeat; background-size: cover; 
+		background-position: center;
+	  }
+	
+	  .login-button:disabled{
+		opacity: 1;
+	  }
+	
+	  .header{
+	  	color: white;
+		font-size: 4rem;
+		margin-top: 10%;
+	  }
+	
+	  .transparent-field{
+	  	color: white;
+		background-color: transparent;            
+	  }
+	
+	  .middle-item{
+		margin-top: 50%;
+	  }
+
+	  .text-input::-moz-placeholder {
+		color: white;
+	  }
+	  
+	  .text-input:-ms-input-placeholder {
+		color: white;
+	  }
+	  
+	  .text-input::-webkit-input-placeholder {
+		color: white;
+	  }
+	
+	.no-bottom-padding{
+		padding-bottom: 0;
+	}
+	.no-top-padding{
+		padding-top: 0;
+	}
 }

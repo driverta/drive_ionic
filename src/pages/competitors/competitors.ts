@@ -33,13 +33,12 @@ export class CompetitorsPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad CompetitorsPage');
     this.list.forEach(player => {
       this.userService.getProfilePic(player.username).subscribe(pic => {
-        if (pic['_body'] == "NahNigga"){
+        if (pic == "NahNigga"){
           player.profilePic = null
         } else {
-          player.profilePic = "data:image/jpeg;base64," + pic['_body'];
+          player.profilePic = "data:image/jpeg;base64," + pic;
         }
       })
     })
@@ -52,7 +51,6 @@ export class CompetitorsPage {
     competing.competingUser = this.id
 
     this.userService.addCompetingUser(competing).subscribe(data => {
-      console.log(data);
       if (data === "already_exists") {
         this.alreadyCompeting();
       }

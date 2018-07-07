@@ -7,11 +7,10 @@ import { Pipe, PipeTransform } from '@angular/core';
  */
 @Pipe({
   name: 'sortByGains',
-  pure: false
+  pure: true
 })
 export class SortByGainsPipe implements PipeTransform {
-  transform(array: any, args: any): any {
-  	//alert("What");
+  transform(array: any): any {
     array.sort((a: any, b: any) => {
     	
       if (a.gains < b.gains) {
@@ -19,6 +18,7 @@ export class SortByGainsPipe implements PipeTransform {
       } else if (a.gains > b.gains) {
         return 1;
       } else {
+        
         return 0;
       }
     });

@@ -99,7 +99,11 @@ export class NewSetComponent {
     this.lf.reps = this.reps;
     this.lf.weight = this.weight;
     this.lf.user_id = this.userService.getUser().id;
-    let date = new Date().toISOString();
+    var date;
+    date = new Date();
+    // date = date.getUTCFullYear() + '-' +
+    //         ('00' + (date.getUTCMonth() + 1)).slice(-2) + '-' +
+    //         ('00' + date.getUTCDate()).slice(-2);   
     this.lf.date = date
     var oneRepMaxFirstStep =  (this.weight * this.reps * .033);
     this.lf.oneRepMax = parseInt(this.weight) + oneRepMaxFirstStep;

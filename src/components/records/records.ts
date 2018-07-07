@@ -39,6 +39,9 @@ export class RecordsComponent {
     this.exercise = navParams.get('exercise');
     this.muscleGroup = navParams.get('muscleGroup');
     this.user = navParams.get('user');
+    if(this.user == null){
+      this.user = userService.getUser();
+    }
   }
 
   ngOnInit() {

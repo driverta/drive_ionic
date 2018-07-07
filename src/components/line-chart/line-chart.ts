@@ -1,12 +1,10 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import  { StatsLineChart } from '../../models/item';
+import { NavParams } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 
 import { HistoryProvider, ProvidersUserProvider } from '../../providers/providers';
 import { User } from '../../providers/providers';
 
-import firebase from 'firebase';
 
 import * as d3 from 'd3-selection';
 import * as d3Scale from "d3-scale";
@@ -30,7 +28,7 @@ export class LineChartComponent {
   muscleGroup: any;
 	width2: number;
   height2: number;
-  margin2 = {top: 20, right: 20, bottom: 80, left: 0};
+  margin2 = {top: 20, right: 20, bottom: 30, left: 0};
   x2: any;
   y2: any;
   svg2: any;
@@ -52,6 +50,8 @@ export class LineChartComponent {
     this.height2 = 500 - this.margin2.top - this.margin2.bottom;
     this.exercise = navParams.get('exercise');
     this.muscleGroup = navParams.get('muscleGroup');
+    console.log(this.exercise);
+    console.log(this.muscleGroup);
   }
 
   public makeLineChart() {
@@ -63,6 +63,7 @@ export class LineChartComponent {
         this.setCardioChart();
       });
     } else {
+      console.log("here");
       this.userService.getLiftingHistoryByIdAndExercise(this.exercise).subscribe(data =>{
         this.liftingHistory = data;
         this.axisText = "1RM"
@@ -111,6 +112,13 @@ export class LineChartComponent {
 
   drawAxis() {
     this.g2.append("g")
+      .attr("transform", "translate(0," + this.height2 + ")")
+      .call(d3Axis.axisBottom(this.x2))
+      .select(".domain")
+      .attr("dx", "0.71em")
+      .remove();
+
+    this.g2.append("g")
         .attr("class", "axis axis--y")
         .call(d3Axis.axisLeft(this.y2))
         .append("text")
@@ -141,7 +149,11 @@ export class LineChartComponent {
 
     this.g2.append("path")
         .datum(this.liftingHistory)
-        .attr("class", "line")
+        .attr("fill", "none")
+        .attr("stroke", "black")
+        .attr("stroke-linejoin", "round")
+        .attr("stroke-linecap", "round")
+        .attr("stroke-width", 3)
         .attr("d", this.line);
   }
 

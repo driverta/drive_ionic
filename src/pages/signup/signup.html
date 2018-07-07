@@ -1,4 +1,4 @@
-<ion-header>
+<!-- <ion-header>
 
   <ion-navbar>
     <ion-title>{{ 'SIGNUP_TITLE' | translate }}</ion-title>
@@ -20,12 +20,6 @@
         <ion-label fixed>{{ 'EMAIL' | translate }}</ion-label>
         <ion-input type="email" [(ngModel)]="account.email" name="email" placeholder="{{ 'testUser@example.com' | translate }}"></ion-input>
       </ion-item>
-      <!--
-      <ion-item>
-        <ion-label floating>Username</ion-label>
-        <ion-input type="text" [(ngModel)]="account.username" name="username"></ion-input>
-      </ion-item>
-      -->
       <ion-item>
         <ion-label fixed>{{ 'PASSWORD' | translate }}</ion-label>
         <ion-input type="password" [(ngModel)]="account.password" name="password"></ion-input>
@@ -54,4 +48,77 @@
 
     </ion-list>
   </form>
+</ion-content> -->
+<ion-content scroll="false" class="welcome">
+  <ion-grid>
+    <ion-header>
+      <ion-row>
+        <ion-col class="header" text-center>
+          Drive Fitness
+        </ion-col>
+      </ion-row>
+    </ion-header>
+    <form>
+      <ion-row>
+        <ion-col>
+          <ion-item class="transparent-field middle-item no-padding">
+            <ion-label>
+              <ion-icon name="person"></ion-icon>
+            </ion-label>
+            <ion-input placeholder="Username" [(ngModel)]="account.name" name="name" clearInput type="text"></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-item class="transparent-field no-padding">
+            <ion-label>
+              <ion-icon name="mail"></ion-icon>
+            </ion-label>
+            <ion-input placeholder="Email" [(ngModel)]="account.email" name="email" clearInput type="text"></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <ion-item class="transparent-field no-padding">
+            <ion-label>
+              <ion-icon name="lock"></ion-icon>
+            </ion-label>
+            <ion-input placeholder="Password" [(ngModel)]="account.password" name="password" clearInput type="password"></ion-input>
+          </ion-item>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+          <ion-col>
+            <ion-item class="transparent-field no-padding">
+              <ion-label>
+                <ion-icon name="lock"></ion-icon>
+              </ion-label>
+              <ion-input class="place-holder-white" placeholder="Confirm Password" [(ngModel)]="confirmPassword" name="confirmPassword" clearInput type="password"></ion-input>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      <ion-row>
+           <ion-col text-center class="no-bottom-padding">
+                  <button ion-button class="astext" (click)="termsOfUse()"><p class="terms-of-use">By continuing to use Drive, you agree to our <u>terms of use</u></p></button>
+          </ion-col>
+        </ion-row>
+    </form>
+    <ion-row>
+      <ion-col class="no-top-padding">
+        <button [disabled]="buttonPressed" class="login-button" ion-button block (click)="initiateSignUp()">
+          <ion-spinner *ngIf="buttonPressed" class="spinner-energized"></ion-spinner>
+          <span *ngIf="!buttonPressed">Sign Up</span>
+        </button>
+      </ion-col>
+    </ion-row>
+    <ion-footer>
+      <ion-row>
+        <ion-col text-center>
+          <button ion-button type="submit" class="astext" (click)="signIn()">Already have an account? Sign In!</button>
+        </ion-col>
+      </ion-row>
+    </ion-footer>
+  </ion-grid>
 </ion-content>

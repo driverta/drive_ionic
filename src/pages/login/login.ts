@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { IonicPage, NavController, ToastController, AlertController } from 'ionic-angular';
-
+import { IonicPage, NavController, ToastController, AlertController, Alert } from 'ionic-angular';
+import { Error } from '@firebase/auth-types';
 import firebase from 'firebase';
 
 import { User, ProvidersUserProvider } from '../../providers/providers';
@@ -44,7 +44,9 @@ export class LoginPage {
   }
 
   setUser() {
+    console.log(this.account.email);
     this.userService.getUserByEmail(this.account.email).subscribe(data =>{
+      console.log(data);
       this.userService.setUser(data);
       this.doLogin();
     });
@@ -57,18 +59,29 @@ export class LoginPage {
         this.checkLog()
         this.navCtrl.push(MainPage);
       }).catch( error => {
-        this.firebaseErrors(error)
+        this.presentFirebaseError(error)
       });
   }
 
-  firebaseErrors(error){
-    let alert3 = this.alertCtrl.create({
-      title: error,
-      buttons: ['Ok']
-    });
-    alert3.present();
-    
-  };
+  presentFirebaseError(error: Error){
+    console.log(error.code);
+    console.log(error.message);
+    let firebaseError: Alert = this.alertCtrl.create({
+     title: "Error",
+     message: "Something went wrong!",
+     buttons: ['Ok']
+   });
+   if(error.code === "auth/email-already-in-use"){
+     firebaseError.setMessage("There is an existing account associated with this email")
+   }
+   else if(error.code === "auth/invalid-email"){
+     firebaseError.setMessage("Please enter a valid email")
+   }
+   else if(error.code === "auth/weak-password"){
+     firebaseError.setMessage("Password must be at least 6 characters")
+   }
+   firebaseError.present();
+ }
  
 
   authLogin() : Promise<any> {

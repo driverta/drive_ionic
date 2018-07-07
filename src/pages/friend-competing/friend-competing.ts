@@ -38,11 +38,11 @@ export class FriendCompetingPage {
     console.log(this.list);
     this.list.forEach(player => {
       this.userService.getProfilePic(player.username).subscribe(pic => {
-        player.profilePic = "data:image/jpeg;base64," + pic['_body'];
-        if (pic['_body'] == "NahNigga"){
+        player.profilePic = "data:image/jpeg;base64," + pic;
+        if (pic == "NahNigga"){
           player.profilePic = null
         } else {
-          player.profilePic = "data:image/jpeg;base64," + pic['_body'];
+          player.profilePic = "data:image/jpeg;base64," + pic;
         }
       })
     })
@@ -61,7 +61,6 @@ export class FriendCompetingPage {
     competing = {id: this.userId, competingUser: this.id}
 
     this.userService.addCompetingUser(competing).subscribe(data => {
-      console.log(data);
       if(data === "already_exists"){
         this.alreadyCompeting();
       }

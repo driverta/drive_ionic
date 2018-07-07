@@ -9,14 +9,11 @@ import {
 import { Storage } from '@ionic/storage';
 import { Platform } from 'ionic-angular';
 
-import { Item } from '../../models/item';
 import { Items } from '../../providers/providers';
 import { Records } from '../../providers/providers';
-import { KeysPipe } from '../../pipes/keys/keys'
 
 import firebase from 'firebase';
 
-import { User } from '../../providers/providers';
 import { ExerciseProvider } from '../../providers/exercise/exercise';
 import { ProvidersUserProvider } from '../../providers/providers-user/providers-user';
 import { UserModel } from '../../models/users';
@@ -50,7 +47,6 @@ export class ListMasterPage {
 
   constructor(
     public navCtrl: NavController,
-    public user: User,
     public items: Items,
     public records: Records,
     public modalCtrl: ModalController,
@@ -68,6 +64,7 @@ export class ListMasterPage {
   }
 
   ionViewWillEnter(){
+    
     this.ionViewDidLoad();
   }
 
@@ -77,19 +74,23 @@ export class ListMasterPage {
   ionViewDidLoad() {
     //console.log(this.records._cardioRecs)
     console.log(this.userService.getUser().email);
-    if (this.userService.getUser().username == "Currybde") {
-      this.getLocalExercises().then(exercises =>{
+    this.getLocalExercises().then(exercises =>{
+      if (exercises != null) {
         exercises.forEach(exercise =>{
           var history = firebase.database().ref(this.userService.getUser().username + "/exercisesNew//history");
           history.push(exercise);
         });
-      });
-    }
+      }
+    });
     
     this.userService.getExercises().subscribe(exercises => {
 
       this.exercises = exercises;
-      this.filteredExercises = exercises;
+      if (this.filter == "All"){
+        this.filteredExercises = exercises;
+      } else {
+        this.executeFilter()
+      }
       this.show = false;
     });
   }
@@ -168,6 +169,7 @@ export class ListMasterPage {
         {
           text: 'All',
           handler: () => {
+            this.filter = "All";
             this.filteredExercises = this.exercises
           }
         },{

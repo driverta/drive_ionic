@@ -17,6 +17,7 @@ import { Storage } from '@ionic/storage';
 import { Settings } from '../../providers/providers';
 import { User } from '../../providers/providers';
 import { Levels } from '../../providers/providers';
+import { AuthProvider } from '../../providers/providers';
 import { ProvidersUserProvider } from '../../providers/providers-user/providers-user';
 //import { WelcomePage } from '../pages';
 
@@ -89,7 +90,8 @@ export class SettingsPage {
     private storage: Storage,
     private userService: ProvidersUserProvider,
     private domSanitizer: DomSanitizer,
-    private rec: Records) {
+    private rec: Records,
+    private authProvider: AuthProvider) {
 
     // this.userData = this.userService.getUser();
     this.checkUser = this.navParams.get("item")
@@ -99,7 +101,7 @@ export class SettingsPage {
   _buildForm() {
 
     let group: any = {
-      profilePic: [''],
+      profilePic: ['default-img'],
       option1: [this.options.option1],
       option2: [this.options.option2],
       option3: [this.options.option3]
@@ -184,6 +186,9 @@ export class SettingsPage {
       this.form.patchValue({"profilePic": "data:image/jpeg;base64," + data['_body']});
       if (data['_body'] != "NahNigga"){
         this.show = false;
+        this.form.patchValue({"profilePic": "data:image/jpeg;base64," + data});
+      } else {
+        // <ion-icon *ngIf="item.profilePic == 'data:image/jpeg;base64,NahNigga'" class="default-img" name="contact"></ion-icon>
       }
     });
 
@@ -314,6 +319,7 @@ export class SettingsPage {
   }
 
   reallyLogOut(){
+    localStorage.removeItem("jwt_token")
     localStorage.setItem("stay","out");
     localStorage.setItem("email","");
     window.location.reload();
