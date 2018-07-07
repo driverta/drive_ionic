@@ -33,6 +33,7 @@ export class ItemDetailPage {
   segment = "set";
   loop = 0;
   checkRec = false;
+  noRecords = true;
   history = [];
   muscleGroup: any;
 
@@ -67,6 +68,15 @@ export class ItemDetailPage {
   }
 
   ionViewWillEnter() {
+    console.log(this.exercise.MuscleGroup.muscleGroupName)
+    if (this.exercise.MuscleGroup.muscleGroupName == "Flexibility"){
+      console.log("Flex")
+      this.noRecords = false;
+    } else {
+      console.log("NoFlexZone")
+      this.noRecords = true;
+    }
+
     if(this.friend){
       this.barChart.makeBarChart();
     }

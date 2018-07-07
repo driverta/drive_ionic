@@ -43,5 +43,13 @@
         <button id="login" class="login-button img-button" ion-button block (click)="toAbs()"><ion-spinner *ngIf="buttonPressed" class="spinner-energized"></ion-spinner> <span  *ngIf="!buttonPressed">Abs</span></button>
       </ion-col>
     </ion-row>
+    <ion-row>
+      <ion-col col-6>
+        <button id="login" class="login-button img-button" ion-button block (click)="toCardio()"><ion-spinner *ngIf="buttonPressed" class="spinner-energized"></ion-spinner> <span  *ngIf="!buttonPressed">Cardio</span></button>
+      </ion-col>
+      <ion-col col-6>
+        <button id="login" class="login-button img-button" ion-button block (click)="toFlexibility()"><ion-spinner *ngIf="buttonPressed" class="spinner-energized"></ion-spinner> <span  *ngIf="!buttonPressed">Flexibility</span></button>
+      </ion-col>
+    </ion-row>
   </ion-grid>
 </ion-content>

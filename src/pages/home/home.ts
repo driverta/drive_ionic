@@ -74,4 +74,18 @@ export class HomePage {
       title: "Abs"
     });
   }
+
+  toCardio(){
+    this.navCtrl.push('ListMasterPage', {
+      exercises : this.exercises.filter(exercise => exercise.MuscleGroup.muscleGroupName === "Cardio"),
+      title: "Cardio"
+    });
+  }
+
+  toFlexibility(){
+    this.navCtrl.push('ListMasterPage', {
+      exercises : this.exercises.filter(exercise => exercise.MuscleGroup.muscleGroupName === "Flexibility"),
+      title: "Flexibility"
+    });
+  }
 }
