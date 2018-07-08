@@ -6,4 +6,5 @@ export class Exercise {
     userId: number;
     variation: string;
     MuscleGroup: MuscleGroup;
+    bodyLift: boolean;
   }

@@ -224,14 +224,26 @@ export class NewSetComponent {
     }
   }
 
-  addFlexibilitySet() {
+  addFlexSet() {
     this.historyModel = new History();
     this.historyModel.date = new Date().toISOString();
     this.historyModel.exercise = this.exercise;
     this.historyModel.user_id = this.userService.getUser().id;
     this.flex = new Flexibility();
-    this.flex.minutes = this.flexMinutes;
-    this.historyService.addFlexHistory(this.historyModel, this.flex);
+
+    if (this.minutes == undefined) { this.minutes = 0 }
+    if (this.hours == undefined) { this.hours = 0 }
+    if (this.seconds == undefined) { this.seconds = 0 }
+    console.log(this.hours)
+    console.log(this.minutes)
+    console.log(this.seconds)
+
+    this.flex.minutes = parseInt(this.minutes) + (parseInt(this.hours) * 60) + (parseInt(this.seconds) / 60);
+    this.historyModel.gains = this.flex.minutes * 3;
+    console.log(this.historyModel);
+    this.userService.addFlexHistory(this.historyModel, this.flex).subscribe();
+    this.myEvent.emit(null);
+    this.ngOnInit(); 
   }
 
   newLevel(level){
