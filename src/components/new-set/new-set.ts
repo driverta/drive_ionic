@@ -2,7 +2,7 @@ import { Component, Output, EventEmitter } from '@angular/core';
 import { NavParams, NavController, AlertController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 
-import { User, ProvidersUserProvider } from '../../providers/providers';
+import { HistoryProvider, ProvidersUserProvider } from '../../providers/providers';
 import { Levels } from '../../providers/providers';
 import { Records } from '../../providers/providers';
 
@@ -11,6 +11,9 @@ import firebase from 'firebase';
 import * as d3 from 'd3-selection';
 import { LiftingHistory } from '../../models/LiftingHistory';
 import { CardioHistory } from '../../models/CardioHistory';
+import { Flexibility } from '../../models/Flexibility';
+import { History } from '../../models/History';
+
 
 @Component({
   selector: 'new-set',
@@ -29,6 +32,7 @@ export class NewSetComponent {
   miles: any;
   hours: any;
   minutes: any;
+  flexMinutes: any;
   seconds: any;
 	weight: any;
   reps: any;
@@ -46,6 +50,8 @@ export class NewSetComponent {
   lf: LiftingHistory;
   cardioHistory: CardioHistory[];
   cardio: CardioHistory;
+  historyModel: History;
+  flex: Flexibility;
 
   private invalid: boolean = false;
 
@@ -58,8 +64,8 @@ export class NewSetComponent {
     public alertCtrl: AlertController,
   	public levels: Levels,
   	private records: Records,
-    private storage: Storage,
-    private userService: ProvidersUserProvider
+    private userService: ProvidersUserProvider,
+    private historyService: HistoryProvider
   	) {
 
 
@@ -216,6 +222,16 @@ export class NewSetComponent {
       this.myEvent.emit(null);
       this.ngOnInit();
     }
+  }
+
+  addFlexibilitySet() {
+    this.historyModel = new History();
+    this.historyModel.date = new Date().toISOString();
+    this.historyModel.exercise = this.exercise;
+    this.historyModel.user_id = this.userService.getUser().id;
+    this.flex = new Flexibility();
+    this.flex.minutes = this.flexMinutes;
+    this.historyService.addFlexHistory(this.historyModel, this.flex);
   }
 
   newLevel(level){

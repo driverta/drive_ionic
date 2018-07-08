@@ -4,6 +4,8 @@ import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
 import { LiftingHistory } from '../../models/LiftingHistory';
 import { CardioHistory } from '../../models/CardioHistory';
+import { History } from '../../models/History';
+
 
 /*
   Generated class for the HistoryProvider provider.
@@ -17,6 +19,8 @@ export class HistoryProvider {
 	liftingHistory: LiftingHistory = new LiftingHistory(); 
 
 	cardioHistory: CardioHistory = new CardioHistory();
+
+	History: History = new History();
 
 	_history = [{date: new Date(0), reps: 0, weight: 0, oneRM: 0}]
 
@@ -56,5 +60,9 @@ export class HistoryProvider {
 	
 	removeCardioHistory(cardioHistory): Observable<any>{
     return this.http.post(this.url + "deleteCardioHistory?", cardioHistory, {responseType: 'text'});
-  	}
+	  }
+	  
+	addFlexHistory(history, flex){
+		return this.http.post(this.url + "addFlexHistory", history, flex);
+	}
 }
