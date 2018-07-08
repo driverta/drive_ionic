@@ -75,6 +75,8 @@ export class ListMasterPage {
    */
   ionViewDidLoad() {
     this.exercises = this.navParams.get('exercises');
+    console.log(this.exercises)
+    this.filteredExercises = this.exercises;
     this.title = this.navParams.get('title');
     console.log(this.title);
 
@@ -138,16 +140,16 @@ export class ListMasterPage {
       }
     });
     
-    this.userService.getExercises().subscribe(exercises => {
+    // this.userService.getExercises().subscribe(exercises => {
 
-      this.exercises = exercises;
-      if (this.filter == "All"){
-        this.filteredExercises = exercises;
-      } else {
-        this.executeFilter()
-      }
-      this.show = false;
-    });
+    //   this.exercises = exercises;
+    //   if (this.filter == "All"){
+    //     this.filteredExercises = exercises;
+    //   } else {
+    //     this.executeFilter()
+    //   }
+    //   this.show = false;
+    // });
   }
 
   getUsers(): Promise<any> {
