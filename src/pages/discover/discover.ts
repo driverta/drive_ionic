@@ -44,6 +44,7 @@ export class DiscoverPage {
   competingFriendsOfFriends: any = [];
   show = true;
   segment = "discover_people";
+  search = "";
 
   constructor(public alertCtrl: AlertController,
     public navCtrl: NavController,
@@ -131,8 +132,10 @@ export class DiscoverPage {
 	      }
 	    return false;
 	    }
-	  });
-    console.log(this.currentItems);
+    });
+    this.getExercises(ev)
+    
+
   }
 
   getExercises(ev) {
@@ -148,7 +151,8 @@ export class DiscoverPage {
 	      }
 	    return false;
 	    }
-	  });
+    });
+    this.getItems(ev)
   }
   addToExercises(exercise){
     this.bool = true;
