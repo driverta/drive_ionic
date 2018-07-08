@@ -34,6 +34,12 @@ export class ItemCreatePage {
   bool = true;
   edit = false;
   data: any;
+  liftBool = false;
+  timeBool = true;
+  milesBool = true;
+  caloriesBool = false;
+  lift = true;
+  cardio = false;
 
   form: FormGroup;
 
@@ -67,7 +73,11 @@ export class ItemCreatePage {
     this.form = formBuilder.group({
       name: ['', Validators.required],
       variation: [''],
-      muscle: MuscleGroup
+      muscle: MuscleGroup,
+      lift: false,
+      time: true,
+      miles: true,
+      calories: false,
     });
 
     // Watch the form for changes, and
@@ -185,5 +195,20 @@ export class ItemCreatePage {
     })
     return this.storage.get(this.username + '/exercises');
 
+  }
+
+  changeCheckbox(groupName) {
+    if (groupName == "Cardio"){
+      this.lift = false;
+      this.cardio = true;
+      this.timeBool = true;
+      this.milesBool = true;
+    } else if (groupName == "Flexibility"){
+      this.lift = false;
+      this.cardio = false;
+    } else {
+      this.lift = true;
+      this.cardio = false;
+    }
   }
 }
