@@ -47,12 +47,14 @@ export class HistoryComponent {
     if (this.muscleGroup == "Cardio") {
       this.userService.getCardioHistoryByIdAndExercise(this.exercise).subscribe(data =>{
         this.cardioHistory = data;
+        this.cardioHistory = this.cardioHistory.reverse();
         this.cardioBool = true;
         this.liftingBool = false;
       });
     } else {
       this.userService.getLiftingHistoryByIdAndExercise(this.exercise).subscribe(data =>{
         this.liftingHistory = data;
+        this.liftingHistory = this.liftingHistory.reverse();
       })
     }
   }

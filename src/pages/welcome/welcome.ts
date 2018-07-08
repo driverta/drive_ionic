@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, ToastController, AlertController, Alert, LoadingController } from 'ionic-angular';
+import { IonicPage, NavController, ToastController, AlertController, Alert, LoadingController, Keyboard } from 'ionic-angular';
 import { ProvidersUserProvider, AuthProvider } from '../../providers/providers';
 import { MainPage } from '../pages';
 import firebase from 'firebase';
@@ -40,6 +40,7 @@ export class WelcomePage {
   log: boolean;
 
   private buttonPressed: Boolean = false;
+  private showFooter: boolean = true;
 
   constructor(public navCtrl: NavController,
     public alertCtrl: AlertController,
@@ -47,12 +48,24 @@ export class WelcomePage {
     private authProvider: AuthProvider,
     private toastCtrl: ToastController,
     public httpClient: HttpClient,
+    public keyboard: Keyboard,
     // public jwtHelper: JwtHelperService,
     public firebaseNative: Firebase,
     private readonly loadingCtrl: LoadingController,
     private storage: Storage,
     private fcm: FcmProvider
   ) { 
+
+    keyboard.didShow.subscribe(() => {
+      console.log("here");
+      this.showFooter = false;
+   });
+   
+   keyboard.didHide.subscribe(() => {
+      this.showFooter = true;
+   });
+
+
     // authProvider.authUser.subscribe(jwt => {
     //   if (jwt) {
     //     this.userService.getUserByEmail(this.account.email).subscribe(data =>{
@@ -129,6 +142,14 @@ export class WelcomePage {
         }).catch( error => {
           this.presentFirebaseError(error)
         });
+    }
+  }
+
+  keyboardCheck() {
+    console.log("KEYBOARD OPEN");
+    if (this.keyboard.isOpen()) {
+        // You logic goes here
+        this.showFooter = false;
     }
   }
 

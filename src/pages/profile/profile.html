@@ -3,7 +3,7 @@
   <ion-navbar>
     <ion-title>{{ username }}</ion-title>
 
-    <ion-buttons right>
+    <ion-buttons *ngIf="buttons" right>
       <button ion-button icon-only (click)="logOut()">
         <ion-icon name="log-out"></ion-icon>
       </button>
