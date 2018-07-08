@@ -69,7 +69,6 @@ export class MyApp {
     public alertCtrl: AlertController,
     private app: AppVersion,
     private storage: Storage) {
-
     this.initTranslate();
 
     this.tester = localStorage.getItem("stay");
@@ -137,7 +136,6 @@ export class MyApp {
         })
       }
       else {
-        console.log("OI:JEWUFCK NIGGER SHIT")
         this.rootPage = TutorialPage;
       }
     });

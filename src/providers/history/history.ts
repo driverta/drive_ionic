@@ -34,8 +34,8 @@ export class HistoryProvider {
   
 	}
 	// private url = "http://driveapi-env.y7mz5ppbve.us-east-2.elasticbeanstalk.com/";
-	// private url = "http://localhost:8080/api/";
-	private url = "http://DriveApi.y7mz5ppbve.us-east-2.elasticbeanstalk.com/";
+	private url = "http://localhost:8080/api/";
+	// private url = "http://DriveApi.y7mz5ppbve.us-east-2.elasticbeanstalk.com/";
 
 
 	getLiftingHistoryByExercise(userId, exerciseId): Observable<LiftingHistory[]> {
@@ -63,6 +63,7 @@ export class HistoryProvider {
 	  }
 	  
 	addFlexHistory(history, flex){
-		return this.http.post(this.url + "addFlexHistory", history, flex);
+		console.log("HERE");
+		return this.http.post(this.url + "addFlexHistory", history);
 	}
 }

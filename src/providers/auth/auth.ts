@@ -13,8 +13,8 @@ export class AuthProvider {
   authUser = new ReplaySubject<any>(1);
 
   // private url = "http://driveapi-env.y7mz5ppbve.us-east-2.elasticbeanstalk.com";
-  // private url = "http://localhost:8080/api";
-  private url = "http://DriveApi.y7mz5ppbve.us-east-2.elasticbeanstalk.com";
+  private url = "http://localhost:8080/api";
+  // private url = "http://DriveApi.y7mz5ppbve.us-east-2.elasticbeanstalk.com";
 
   constructor(private readonly httpClient: HttpClient,
               private readonly storage: Storage,
@@ -24,17 +24,21 @@ export class AuthProvider {
 
   checkLogin() {
     const jwt = localStorage.getItem(this.jwtTokenName)
+    console.log("CHECKING JWT")
     if (jwt) {
+      console.log("HERE1")
       this.httpClient.get(`${this.url}/authenticate`)
         .subscribe(() => this.authUser.next(jwt),
           (err) => {
+            console.log("HERE2");
             localStorage.removeItem(this.jwtTokenName);
             this.authUser.next(null);
           })
       // OR
       // this.authUser.next(jwt);
     } else {
-      localStorage.removeItem(this.jwtTokenName)
+      localStorage.removeItem(this.jwtTokenName);
+      console.log(localStorage.getItem(this.jwtTokenName));
       this.authUser.next(null);
     }
   }
@@ -50,10 +54,12 @@ export class AuthProvider {
 
   logout() {
     console.log(this.jwtTokenName);
+    localStorage.removeItem(this.jwtTokenName)
     this.storage.remove(this.jwtTokenName).then(() => this.authUser.next(null));
   }
 
   signup(values: any, email): Observable<any> {
+    console.log("HERE")
     return this.httpClient.post(this.url + '/signup', values, {responseType: 'text'})
       .pipe(tap((jwt: any) => {
         if (jwt !== 'EXISTS') {
