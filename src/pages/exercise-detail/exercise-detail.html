@@ -9,16 +9,17 @@
 <ion-content *ngIf="!friend" scrollY="false" no-line>
 
   <div padding>
-	  <ion-segment [(ngModel)]="segment">
+	  <ion-segment  [(ngModel)]="segment">
 	    <ion-segment-button (click)="hideCharts()" value="set">
 	      New Set
 	    </ion-segment-button>
 	    <ion-segment-button (click)="showLine()" value="history">
 	      History
 	    </ion-segment-button>
-	    <ion-segment-button (click)="showBar()" value="records">
+	    <ion-segment-button *ngIf="noRecords" (click)="showBar()" value="records">
 	      Records
 	    </ion-segment-button>
+
 	  </ion-segment>
 	</div>
 

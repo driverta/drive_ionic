@@ -45,6 +45,7 @@ export class NewSetComponent {
   muscleGroup: any;
   liftingBool = true;
   cardioBool = false;
+  flexBool = false;
 
   lf: LiftingHistory;
   cardioHistory: CardioHistory[];
@@ -78,8 +79,15 @@ export class NewSetComponent {
     if (this.muscleGroup == "Cardio") {
       this.cardioBool = true;
       this.liftingBool = false;
+      this.flexBool = false;
+    } if (this.muscleGroup == "Flexibility") {
+      this.cardioBool = false;
+      this.liftingBool = false;
+      this.flexBool = true;
     } else {
-      
+      this.cardioBool = false;
+      this.liftingBool = true;
+      this.flexBool = false;
     }
 
     this.userService.getTotalGains(this.user.id).subscribe(totalGains => {

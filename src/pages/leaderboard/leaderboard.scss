@@ -53,4 +53,17 @@ page-leaderboard {
 	.no-margin{
 		margin: 0px 0px 0px;
 	}
+
+	.gains-title{
+		margin-right: 16px;
+	}
+
+	.username-title{
+		margin-left: 16px;
+	}
+
+	.header-item{
+			min-height: 3rem; /* <- this can be whatever you need */
+		
+	}
 }

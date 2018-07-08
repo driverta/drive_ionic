@@ -4,7 +4,8 @@ import {
   ModalController,
   NavController,
   ActionSheetController,
-  AlertController
+  AlertController,
+  NavParams
 } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { Platform } from 'ionic-angular';
@@ -43,7 +44,7 @@ export class ListMasterPage {
 
   private User: UserModel;
   private exercises: Exercise[];
-
+  private title: string;
 
   constructor(
     public navCtrl: NavController,
@@ -55,6 +56,7 @@ export class ListMasterPage {
     private storage: Storage,
     private platform: Platform,
     private exerciseService: ExerciseProvider,
+    public navParams: NavParams,
     private userService: ProvidersUserProvider) {
     this.platform.ready().then((readySource) => {
       console.log("anything")
@@ -72,6 +74,59 @@ export class ListMasterPage {
    * The view loaded, let's query our items for the list
    */
   ionViewDidLoad() {
+    this.exercises = this.navParams.get('exercises');
+    this.title = this.navParams.get('title');
+    console.log(this.title);
+
+    // this.username = localStorage.getItem("username");
+    // console.log(this.username);
+    // this.lifts = {};
+    // this.setlifts = {};
+    // // Get user data status
+    // 
+    // this.getUsers().then((val) => {
+    //   console.log("Slut");
+    //   if (val != null) {
+    //     this.users = val;
+    //   }
+    //   if (this.users.includes(this.username)) {
+    //     this.status = this.username;
+    //   }
+    //   else {
+    //     this.status = "cloud";
+    //   }
+    // }).then(() => {
+    // 
+    //   if (this.status == this.username) {
+    //     this.getExercises().then((val) => {
+    //       this.setlifts = val;
+    //       this.lifts = this.setlifts;
+    //       this.show = false;
+    //       var exercises = firebase.database().ref('/' + this.username + '/exercises');
+    //       exercises.set(this.setlifts);
+    //     })
+    //   } else {
+    //     var query1 = firebase.database().ref('/' + this.username + '/exercises');
+    //     query1.once("value").then( snapshot => {
+    //       this.loop = 0;
+    //       snapshot.forEach( childSnapshot => {
+    // 
+    //         this.loop++
+    //         var childData1 = childSnapshot.val();
+    //         var key = childSnapshot.key;
+    // 
+    //         th
+    //       });
+    //     });  
+    //   }
+    // })is.setlifts[key] = childData1;
+    //         this.lifts = this.setlifts
+    // 
+    //         if ( snapshot.numChildren() == this.loop ) {
+    //           //alert("HERE")
+    //           this.show = false;
+    //           this.saveData();
+    //         }
     //console.log(this.records._cardioRecs)
     console.log(this.userService.getUser().email);
     this.getLocalExercises().then(exercises =>{

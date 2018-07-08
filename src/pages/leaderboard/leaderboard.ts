@@ -32,6 +32,7 @@ export class SearchPage {
   week = false;
   month = false;
   day = false;
+  segment = "week";
   competingUsers: UserModel[] = new Array<UserModel>();
 
   players= [
@@ -56,7 +57,7 @@ export class SearchPage {
     this.show = true;
     this.username = this.user.username;
     this.players = [];
-    this.timeFilter = "All Time"
+    this.timeFilter = "Week"
 
 
     this.userService.getLeaderboardData(this.userService.getUser().id).subscribe(data =>{
@@ -67,7 +68,7 @@ export class SearchPage {
         })
       })
       this.show = false;
-      this.filterDay('All Time');
+      this.filterDay('Week');
     });
   }
 
@@ -87,6 +88,23 @@ export class SearchPage {
         this.players[i].rank = "Olympian"
       }
     });
+  }
+
+  onSegmentChange(){
+    this.competingUsers.forEach((user) =>{
+      switch(this.segment) {
+        case "today":
+          user.gains = user.gainsToday;
+          break;
+        case "week":
+          user.gains = user.gainsWeek;
+          break;
+        default:
+          user.gains = user.gainsTotal;
+          break;
+      }
+    });
+    this.competingUsers = this.gainsPipe.transform(this.competingUsers)
   }
 
   filterDay(ev) {
