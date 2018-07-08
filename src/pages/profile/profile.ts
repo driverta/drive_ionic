@@ -87,11 +87,7 @@ export class SettingsPage {
     public translate: TranslateService,
     public camera: Camera,
     public levels: Levels,
-    private storage: Storage,
-    private userService: ProvidersUserProvider,
-    private domSanitizer: DomSanitizer,
-    private rec: Records,
-    private authProvider: AuthProvider) {
+    private userService: ProvidersUserProvider) {
 
     // this.userData = this.userService.getUser();
     this.checkUser = this.navParams.get("item")
@@ -182,10 +178,11 @@ export class SettingsPage {
     })
 
     this.userService.getProfilePic(this.user.username).subscribe(data => {
-      console.log(data)
-      this.form.patchValue({"profilePic": "data:image/jpeg;base64," + data['_body']});
-      if (data['_body'] != "NahNigga"){
-        this.show = false;
+      //console.log(data)
+      this.form.patchValue({"profilePic": "data:image/jpeg;base64," + data});
+      if (data != "NahNigga"){
+        this.show = true;
+        console.log(data);
         this.form.patchValue({"profilePic": "data:image/jpeg;base64," + data});
       } else {
         // <ion-icon *ngIf="item.profilePic == 'data:image/jpeg;base64,NahNigga'" class="default-img" name="contact"></ion-icon>
