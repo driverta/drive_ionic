@@ -158,6 +158,9 @@ export class WelcomePage {
     });
 
     loading.present();
+    if (localStorage.getItem("jwt_token")) {
+      localStorage.removeItem("jwt_token");
+    }
 
     this.authProvider
       .signup(value, this.account.email)
