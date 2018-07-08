@@ -35,10 +35,26 @@
         <ion-input type="text" required [(ngModel)]="exercise.variation" placeholder="{{ 'E.g. Dumbbell' | translate }}" formControlName="variation"></ion-input>
       </ion-item>
       <ion-item no-lines>
-        <ion-select  [compareWith]="setMG" required [(ngModel)] = "mgSelect" [ngModelOptions]="{standalone: true}">
+        <ion-select [compareWith]="setMG" required [(ngModel)] = "mgSelect" [ngModelOptions]="{standalone: true}">
           <ion-label>Muscle Group:</ion-label>
-          <ion-option *ngFor="let group of mg"  [value]="group">{{group.muscleGroupName}}</ion-option>
+          <ion-option (ionSelect)="changeCheckbox(group.muscleGroupName)"*ngFor="let group of mg"  [value]="group">{{group.muscleGroupName}}</ion-option>
         </ion-select>
+      </ion-item>
+      <ion-item *ngIf="lift">
+        <ion-label>Bodyweight</ion-label>
+        <ion-checkbox formControlName="lift" [(ngModel)]="liftBool"></ion-checkbox>
+      </ion-item>
+      <ion-item *ngIf="cardio">
+        <ion-label>Time</ion-label>
+        <ion-checkbox formControlName="time" [(ngModel)]="timeBool"></ion-checkbox>
+      </ion-item>
+      <ion-item *ngIf="cardio">
+        <ion-label>Miles</ion-label>
+        <ion-checkbox formControlName="miles" [(ngModel)]="milesBool"></ion-checkbox>
+      </ion-item>
+      <ion-item *ngIf="cardio">
+        <ion-label>Calories</ion-label>
+        <ion-checkbox formControlName="calories" [(ngModel)]="caloriesBool"></ion-checkbox>
       </ion-item>
     </ion-list>
   </form>
