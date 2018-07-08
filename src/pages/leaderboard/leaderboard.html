@@ -1,5 +1,11 @@
-<ion-header>
-  <ion-segment (ionChange)="onSegmentChange()" [(ngModel)]="segment">
+
+<ion-content>
+        <button id="login" class="login-button img-button-chest"><span class="font-white">See how you compare to your friends!</span></button>
+   
+
+  <div class="timespan">
+    <ion-list class="no-margin">
+<ion-item-divider no-lines sticky>    <ion-segment (ionChange)="onSegmentChange()" [(ngModel)]="segment">
     <ion-segment-button value="today">
       TODAY
     </ion-segment-button>
@@ -9,14 +15,8 @@
     <ion-segment-button value="all_time">
       All TIME
     </ion-segment-button>
-  </ion-segment>
-</ion-header>
+  </ion-segment></ion-item-divider>
 
-
-<ion-content>
-
-  <div class="timespan">
-    <ion-list class="no-margin">
 
       <ion-item-sliding no-lines *ngFor="let item of competingUsers">
 
