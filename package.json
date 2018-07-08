@@ -35,6 +35,7 @@
     "@ngx-translate/http-loader": "2.0.1",
     "angularfire2": "^5.0.0-rc.11",
     "animate.css": "^3.5.2",
+    "cordova-android": "6.3.0",
     "cordova-browser": "5.0.3",
     "cordova-ios": "4.5.4",
     "cordova-plugin-app-version": "^0.1.9",
@@ -80,7 +81,8 @@
     },
     "platforms": [
       "browser",
-      "ios"
+      "ios",
+      "android"
     ]
   }
 }

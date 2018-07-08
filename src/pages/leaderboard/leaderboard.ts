@@ -143,7 +143,7 @@ export class SearchPage {
   }
 
   openItem(item){
-    this.navCtrl.push('FriendProfilePage', {
+    this.navCtrl.push('SettingsPage', {
       item: item
     });
   }
