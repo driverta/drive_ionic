@@ -1,32 +1,29 @@
 <ion-header>
-
   <ion-navbar>
     <ion-title>Exercises</ion-title>
-
     <ion-buttons right>
       <button ion-button icon-only (click)="filterExercises()">
         <ion-icon name="funnel"></ion-icon>
       </button>
     </ion-buttons>
   </ion-navbar>
-
 </ion-header>
 
-
-<ion-content >
-	<ion-list >
+<ion-content>
+  <ion-list>
     <ion-item *ngFor="let exercise of filteredExercises">
       <button no-lines ion-item (click)="openItem(exercise)">
-
-        <h2 >{{exercise.exerciseName}}
-          <button *ngIf="friendExercises" ion-button icon-only (click)="saveExercise(item)">
-            <ion-icon name="add"></ion-icon>
-          </button>
+        <h2>
+          {{exercise.exerciseName}}
         </h2>
-        <p>{{exercise.variation}}</p>
+        <p style="margin-top: 2%;"> Variation: {{exercise.variation}}</p>
+        <div style="margin-top: 2%; border:1px; border-style:solid; border-color:#D12B2B; padding: .1em; display: inline-block;">
+          {{exercise.MuscleGroup.muscleGroupName}}</div>
+        </button>
+        <button class="list-button" *ngIf="friendExercises" ion-button icon-only item-end (click)="saveExercise(exercise)">
+          <ion-icon name="add"></ion-icon>
+        </button>
         
-      </button>
-
     </ion-item>
   </ion-list>
 </ion-content>

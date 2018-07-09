@@ -27,7 +27,7 @@ page-leaderboard {
 	}
 
 	.remove {
-		background-color: red;
+		background-color: #aa1414;
 	}
 
 	.item-inner {
@@ -35,7 +35,7 @@ page-leaderboard {
 	}
 
 	.red {
-		color: red;
+		color: #aa1414;
 	}
 
 	.gains{
@@ -65,5 +65,17 @@ page-leaderboard {
 	.header-item{
 			min-height: 3rem; /* <- this can be whatever you need */
 		
+	}
+
+	.img-button-chest{
+		background-image: url(../assets/img/competewithfriendsslide.jpeg); 
+		background-repeat:no-repeat; background-size: cover; 
+		background-position: center;
+		height:150px;
+		width:100%
+	}
+	.font-white{
+		color:white;
+		font-size: 2rem;
 	}
 }
