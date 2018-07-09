@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.drive.fitness" version="0.2.3" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.drive.fitness" version="0.2.6" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Drive Fitness</name>
     <description>An awesome Ionic/Cordova app.</description>
     <author email="hi@ionicframework" href="http://ionicframework.com/">Ionic Framework Team</author>
@@ -107,8 +107,8 @@
     <allow-navigation href="http://172.20.10.9:8100" />
     <allow-navigation href="http://192.168.1.193:8100" />
     <engine name="browser" spec="5.0.3" />
-    <engine name="ios" spec="4.5.4" />
     <engine name="android" spec="6.3.0" />
+    <engine name="ios" spec="4.5.4" />
     <plugin name="cordova-plugin-firebase" spec="^0.1.25" />
     <plugin name="ionic-plugin-keyboard" spec="^2.2.1" />
     <plugin name="cordova-plugin-whitelist" spec="^1.3.3" />
