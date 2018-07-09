@@ -5,19 +5,15 @@ import { Platform } from 'ionic-angular';
 
 import { Items, ProvidersUserProvider } from '../../providers/providers';
 import { Records } from '../../providers/providers';
-import { User } from '../../providers/providers';
 import { Levels } from '../../providers/providers';
-import { HistoryProvider } from '../../providers/providers';
-import { UserModel } from '../../models/users';
-import { Exercise } from '../../models/Exercise';
 
 import { BarChartComponent } from '../../components/bar-chart/bar-chart';
 import { LineChartComponent } from '../../components/line-chart/line-chart';
 import { SortByRepsPipe } from '../../pipes/sort-by-reps/sort-by-reps';
 
-import firebase from 'firebase';
 import { LiftingHistory } from '../../models/LiftingHistory';
 import { CardioHistory } from '../../models/CardioHistory';
+import { Flexibility } from '../../models/Flexibility';
 
 @IonicPage()
 @Component({
@@ -69,7 +65,7 @@ export class ItemDetailPage {
 
   ionViewWillEnter() {
     console.log(this.exercise.MuscleGroup.muscleGroupName)
-    if (this.exercise.MuscleGroup.muscleGroupName == "Flexibility"){
+    if (this.exercise.MuscleGroup.muscleGroupName == "Flexibility" || this.exercise.bodyLift){
       console.log("Flex")
       this.noRecords = false;
     } else {
@@ -78,13 +74,16 @@ export class ItemDetailPage {
     }
 
     if(this.friend){
-      this.barChart.makeBarChart();
+      if (this.exercise.MuscleGroup.muscleGroupName != Flexibility || !this.exercise.bodyLift) {
+        this.barChart.makeBarChart();
+      }
     }
-   else{
-    this.barChart.makeBarChart();
-    this.lineChart.makeLineChart();
-   }
-
+    else{
+      if (this.exercise.MuscleGroup.muscleGroupName != Flexibility || !this.exercise.bodyLift) {
+        this.barChart.makeBarChart();
+        this.lineChart.makeLineChart();
+      }
+    }
   }
   
   showBar() {

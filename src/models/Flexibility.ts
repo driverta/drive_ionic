@@ -1,5 +1,7 @@
+import { History } from './History';
+
 export class Flexibility {
     id: number;
     minutes: number;
-    history_id: number;
+    History: History;
 }

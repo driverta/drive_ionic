@@ -22,10 +22,8 @@
 
 	  </ion-segment>
 	</div>
-
-	<bar-chart [hidden]="selectedValue!=1" ></bar-chart>
-	<line-chart [hidden]="selectedValue!=2" ></line-chart>
-
+		<bar-chart [hidden]="selectedValue!=1" ></bar-chart>
+		<line-chart  [hidden]="selectedValue!=2 || exercise.bodyLift || exercise.MuscleGroup.musclegroupName == Flexibility" ></line-chart>
 	<div [ngSwitch]="segment">
 	  <ion-list *ngSwitchCase="'set'">
 	    <new-set (myEvent)="ionViewWillEnter();"></new-set>

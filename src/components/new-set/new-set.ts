@@ -13,6 +13,7 @@ import { LiftingHistory } from '../../models/LiftingHistory';
 import { CardioHistory } from '../../models/CardioHistory';
 import { Flexibility } from '../../models/Flexibility';
 import { History } from '../../models/History';
+import { BodyLift } from '../../models/BodyLift';
 
 
 @Component({
@@ -52,6 +53,7 @@ export class NewSetComponent {
   cardio: CardioHistory;
   historyModel: History;
   flex: Flexibility;
+  bodyLift: BodyLift;
 
   private invalid: boolean = false;
 
@@ -225,6 +227,7 @@ export class NewSetComponent {
   }
 
   addFlexSet() {
+    this.points = true;
     this.historyModel = new History();
     this.historyModel.date = new Date().toISOString();
     this.historyModel.exercise = this.exercise;
@@ -240,8 +243,57 @@ export class NewSetComponent {
 
     this.flex.minutes = parseInt(this.minutes) + (parseInt(this.hours) * 60) + (parseInt(this.seconds) / 60);
     this.historyModel.gains = this.flex.minutes * 3;
-    console.log(this.historyModel);
-    this.userService.addFlexHistory(this.historyModel, this.flex).subscribe();
+    this.g = this.historyModel.gains;
+    setTimeout(() => {
+      this.bool = false;
+      this.points = false;
+    }, 2000);
+    this.flex.History = this.historyModel
+
+    console.log(JSON.stringify(this.flex.History));
+    console.log(JSON.stringify(this.flex));
+
+    this.historyService.addFlex(this.flex).subscribe()
+    
+    this.myEvent.emit(null);
+    this.ngOnInit(); 
+  }
+
+  addBodyLiftSet() {
+    this.points = true;
+    this.historyModel = new History();
+    this.historyModel.date = new Date().toISOString();
+    this.historyModel.exercise = this.exercise;
+    this.historyModel.user_id = this.userService.getUser().id;
+    this.bodyLift = new BodyLift();
+    this.historyModel.gains = 5;
+    this.g = 5;
+    this.bodyLift.reps = this.reps;
+    console.log(JSON.stringify(this.historyModel));
+
+    if (this.reps == undefined) { this.reps = 0 }                                                                                                                                                 
+    for(let record of this.records._bodyLiftRecords){
+      if(record.reps <                             this.bodyLift.reps){
+        this.checkRec = true;
+        this.historyModel.gains = 10;
+        this.g = 10
+        this.bool = true;
+        record.records++;
+        this.records._bodyLiftRecords.push({reps: this.bodyLift.reps, records: 1})
+      }
+    }
+    console.log(JSON.stringify(this.historyModel));
+
+    setTimeout(() => {
+      this.bool = false;
+      this.points = false;
+    }, 2000);
+    this.bodyLift.History = this.historyModel
+    this.historyService.addBodyLift(this.bodyLift).subscribe()
+    // this.historyService.addBodyLiftHistory(this.historyModel).subscribe(history => {
+    //   this.bodyLift.History = history
+    //   this.historyService.addBodyLift(this.bodyLift).subscribe()
+    // });
     this.myEvent.emit(null);
     this.ngOnInit(); 
   }

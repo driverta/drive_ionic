@@ -143,6 +143,7 @@ export class ItemCreatePage {
         newExercise.exerciseName = this.exercise.name;
         newExercise.variation = this.exercise.variation;
         newExercise.MuscleGroup = this.mgSelect;
+        if (this.lift == true) { newExercise.bodyLift = true } else { newExercise.bodyLift = false }
         this.exerciseService.createExercise(this.userService.getUser().id, newExercise).subscribe(data => {
           if(this.edit){
             this.userService.removeExercise(this.data.id).subscribe(data =>{

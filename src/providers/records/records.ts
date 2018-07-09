@@ -13,6 +13,8 @@ export class Records {
 
 		_records = [];
 
+	_bodyLiftRecords = [];
+
 	  _chart = [];
 
 	  _cardio = [];

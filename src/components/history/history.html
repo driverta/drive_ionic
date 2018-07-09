@@ -48,5 +48,49 @@
           </table>
         </ion-scroll>
       </div>
+
+      <div class="scrollingtable" *ngIf="bodyLiftBool">
+        <table id="headers">
+          <tr>
+            <th>Date</th>
+            <th>Reps</th>
+            <th>Delete</th>
+          </tr>
+        </table>
+        <ion-scroll scrollY="true" class="scroll">
+          <table>
+            <tr *ngFor="let x of bodyLiftHistory">
+              <td>{{x.History.date | date: 'MM/dd'}}</td>
+              <td>{{x.reps}}</td>
+              <td>
+                <input type="button" value="X" class="remove" (click)="presentConfirmBodyLift(x)">
+              </td>
+            </tr>
+          </table>
+        </ion-scroll>
+      </div>
+
+      <div class="scrollingtable" *ngIf="flexBool">
+        <table id="headers">
+          <tr>
+            <th>Date</th>
+            <th>Minutes</th>
+            <th>Delete</th>
+          </tr>
+        </table>
+        <ion-scroll scrollY="true" class="scroll">
+          <table>
+            <tr *ngFor="let x of flexHistory">
+              <td>{{x.History.date | date: 'MM/dd'}}</td>
+              <td>{{x.minutes}}</td>
+              <td>
+                <input type="button" value="X" class="remove" (click)="presentConfirmFlex(x)">
+              </td>
+            </tr>
+          </table>
+        </ion-scroll>
+      </div>
+      
+
   </ion-item>
 </div>

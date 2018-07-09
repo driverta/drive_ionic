@@ -5,6 +5,8 @@ import { Observable } from 'rxjs/Observable';
 import { LiftingHistory } from '../../models/LiftingHistory';
 import { CardioHistory } from '../../models/CardioHistory';
 import { History } from '../../models/History';
+import { Flexibility } from '../../models/Flexibility';
+import { BodyLift } from '../../models/BodyLift';
 
 
 /*
@@ -21,6 +23,8 @@ export class HistoryProvider {
 	cardioHistory: CardioHistory = new CardioHistory();
 
 	History: History = new History();
+	BodyLift: BodyLift = new BodyLift();
+	Flexibility: Flexibility = new Flexibility();
 
 	_history = [{date: new Date(0), reps: 0, weight: 0, oneRM: 0}]
 
@@ -39,31 +43,63 @@ export class HistoryProvider {
 
 
 	getLiftingHistoryByExercise(userId, exerciseId): Observable<LiftingHistory[]> {
-    return this.http.get<LiftingHistory[]>(this.url + "getLiftingHistoryByExercise?userId=" + userId + '&exerciseId=' + exerciseId)
+    	return this.http.get<LiftingHistory[]>(this.url + "getLiftingHistoryByExercise?userId=" + userId + '&exerciseId=' + exerciseId)
 	}
 	
 	getCardioHistoryByExercise(userId, exerciseId): Observable<CardioHistory[]> {
-    return this.http.get<CardioHistory[]>(this.url + "getCardioHistoryByExercise?userId=" + userId + '&exerciseId=' + exerciseId)
+    	return this.http.get<CardioHistory[]>(this.url + "getCardioHistoryByExercise?userId=" + userId + '&exerciseId=' + exerciseId)
+	}
+
+	getHistoryByExercise(userId, exerciseId): Observable<CardioHistory[]> {
+    	return this.http.get<CardioHistory[]>(this.url + "getCardioHistoryByExercise?userId=" + userId + '&exerciseId=' + exerciseId)
+	}
+
+	getFlexByExercise(userId, exerciseId): Observable<Flexibility[]> {
+		return this.http.get<Flexibility[]>(this.url + "getFlexHistoryByExercise?userId=" + userId + '&exerciseId=' + exerciseId)
+	}
+
+	getBodyLiftByExercise(userId, exerciseId): Observable<BodyLift[]> {
+		console.log(userId);
+		console.log(exerciseId);
+		return this.http.get<BodyLift[]>(this.url + "getBodyLiftHistoryByExercise?userId=" + userId + '&exerciseId=' + exerciseId)
 	}
 	
 	getCardioHistory(userId): Observable<CardioHistory[]> {
-    return this.http.get<CardioHistory[]>(this.url + "getCardioHistoryById?userId=" + userId)
+    	return this.http.get<CardioHistory[]>(this.url + "getCardioHistoryById?userId=" + userId)
 	}
 	
 	getLiftingHistory(userId): Observable<LiftingHistory[]> {
-    return this.http.get<LiftingHistory[]>(this.url + "getUserLiftingHistory?userId=" + userId)
+    	return this.http.get<LiftingHistory[]>(this.url + "getUserLiftingHistory?userId=" + userId)
 	}
 	
 	removeLiftingHistory(liftingHistory): Observable<any>{
-    return this.http.post(this.url + "deleteLiftingHistory?", liftingHistory, {responseType: 'text'});
+    	return this.http.post(this.url + "deleteLiftingHistory?", liftingHistory, {responseType: 'text'});
 	}
 	
 	removeCardioHistory(cardioHistory): Observable<any>{
-    return this.http.post(this.url + "deleteCardioHistory?", cardioHistory, {responseType: 'text'});
-	  }
+    	return this.http.post(this.url + "deleteCardioHistory?", cardioHistory, {responseType: 'text'});
+	}
 	  
-	addFlexHistory(history, flex){
-		console.log("HERE");
-		return this.http.post(this.url + "addFlexHistory", history);
+	addFlexHistory(history): Observable<any>{
+		return this.http.post(this.url + "addFlexHistory", history, {responseType: 'text'});
+	}
+	addFlex(flex): Observable<any>{
+		return this.http.post(this.url + "addFlex", flex, {responseType: 'text'});
+	}
+
+	addBodyLiftHistory(history): Observable<any>{
+		return this.http.post(this.url + "addBodyLiftHistory", history, {responseType: 'text'});
+	}
+	
+	removeBodyLift(bodyLift): Observable<any>{
+		return this.http.post(this.url + "removeBodyLift", bodyLift, {responseType: 'text'});
+	}
+
+	removeflex(flex): Observable<any>{
+		return this.http.post(this.url + "removeFlex", flex, {responseType: 'text'});
+	}
+
+	addBodyLift(bodyLift): Observable<any>{
+		return this.http.post(this.url + "addBodyLift", bodyLift, {responseType: 'text'});
 	}
 }

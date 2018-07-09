@@ -1,6 +1,7 @@
+import { History } from './History';
 
 export class BodyLift {
     id: number;
     reps: number;
-    history_id: number;
+    History: History;
   }
