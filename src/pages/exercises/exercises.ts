@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { 
   IonicPage,
   ModalController,
@@ -19,6 +19,8 @@ import { ExerciseProvider } from '../../providers/exercise/exercise';
 import { ProvidersUserProvider } from '../../providers/providers-user/providers-user';
 import { UserModel } from '../../models/users';
 import { Exercise } from '../../models/Exercise';
+
+import { GainsChartComponent } from '../../components/gains-chart/gains-chart';
 
 @IonicPage()
 @Component({
@@ -41,6 +43,8 @@ export class ListMasterPage {
   totalGains = [];
 
   filteredExercises = [];
+
+  @ViewChild(GainsChartComponent) gainsChart: GainsChartComponent
 
   private User: UserModel;
   private exercises: Exercise[];
@@ -79,7 +83,7 @@ export class ListMasterPage {
     this.filteredExercises = this.exercises;
     this.title = this.navParams.get('title');
     console.log(this.title);
-
+    this.gainsChart.makeGainsChart(this.title);
     // this.username = localStorage.getItem("username");
     // console.log(this.username);
     // this.lifts = {};

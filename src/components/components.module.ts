@@ -25,6 +25,7 @@ import { GainsChartComponent } from './gains-chart/gains-chart';
     FriendProfileBarComponent,
     CardioProfileRecordsComponent,
     CardioProfileBarComponent,
+    GainsChartComponent,
     GainsChartComponent],
 	imports: [],
 	exports: [BarChartComponent,
@@ -38,6 +39,7 @@ import { GainsChartComponent } from './gains-chart/gains-chart';
     FriendProfileBarComponent,
     CardioProfileRecordsComponent,
     CardioProfileBarComponent,
+    GainsChartComponent,
     GainsChartComponent]
 })
 export class ComponentsModule {}

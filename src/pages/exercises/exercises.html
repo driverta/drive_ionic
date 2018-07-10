@@ -12,7 +12,9 @@
   </ion-navbar>
 
 </ion-header>
+
 <ion-content>
+  <gains-chart></gains-chart>
   <ion-list>
     <ion-item-sliding *ngFor="let exercise of exercises" >
       <button ion-item (click)="openItem(exercise)" class="item-list">
