@@ -25,6 +25,7 @@ import { AppVersion } from '@ionic-native/app-version';
 
 import {Storage} from "@ionic/storage";
 import { local } from 'd3';
+import { BLE } from '@ionic-native/ble';
 
 
 @Component({
@@ -48,7 +49,7 @@ export class MyApp {
     { title: 'Login', component: 'LoginPage' },
     { title: 'Signup', component: 'SignupPage' },
     { title: 'Map', component: 'MapPage' },
-    { title: 'Exercises', component: 'ListMasterPage' },
+    { title: 'Exercises', component: 'Page' },
     { title: 'Menu', component: 'MenuPage' },
     { title: 'Profile', component: 'SettingsPage' },
     { title: 'Leaderboard', component: 'SearchPage' },
@@ -68,7 +69,8 @@ export class MyApp {
     public authProvider: AuthProvider,
     public alertCtrl: AlertController,
     private app: AppVersion,
-    private storage: Storage) {
+    private storage: Storage,
+    private ble: BLE) {
     this.initTranslate();
 
     this.tester = localStorage.getItem("stay");

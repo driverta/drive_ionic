@@ -30,10 +30,12 @@ import { FcmProvider } from '../providers/fcm/fcm';
 import { Firebase } from '@ionic-native/firebase';
 import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { SortByGainsPipe } from '../pipes/sort-by-gains/sort-by-gains'
+import { BLE } from '@ionic-native/ble';
 
 
 import { AppVersion } from '@ionic-native/app-version';
 import { JwtHttpInterceptor } from '../providers/auth/jwt-http-interceptor'
+
 
 // The translate loader needs to know where to load i18n files
 // in Ionic's static asset pipeline.
@@ -127,7 +129,8 @@ const firebase = {
     Firebase,
     AuthProvider,
     AppVersion,
-    SortByGainsPipe
+    SortByGainsPipe,
+    BLE
   ]
 })
 export class AppModule { }

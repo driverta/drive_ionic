@@ -88,4 +88,9 @@ export class HomePage {
       title: "Flexibility"
     });
   }
+
+  ble(){
+    console.log("Here")
+    this.navCtrl.push("BlePage");
+  }
 }

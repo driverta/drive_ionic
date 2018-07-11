@@ -304,6 +304,10 @@ export class ListMasterPage {
     // });
   }
 
+  ble() {
+    this.navCtrl.push("BlePage");
+  }
+
   editExercise(item){
     this.navCtrl.push('ItemCreatePage', {
       exercise: item
