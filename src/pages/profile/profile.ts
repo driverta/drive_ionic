@@ -224,7 +224,7 @@ export class SettingsPage {
       }).then((data) => {
         alert("here");
         this.form.patchValue({ 'profilePic': 'data:image/jpg;base64,' + data });
-        
+        this.show = true
       }, (err) => {
         alert('Unable to take photo');
       })
