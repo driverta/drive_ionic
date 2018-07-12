@@ -78,11 +78,13 @@ export class NewSetComponent {
   }
 
   ngOnInit() {
+    console.log(this.muscleGroup)
     if (this.muscleGroup == "Cardio") {
+      console.log("here")
       this.cardioBool = true;
       this.liftingBool = false;
       this.flexBool = false;
-    } if (this.muscleGroup == "Flexibility") {
+    } else if (this.muscleGroup == "Flexibility") {
       this.cardioBool = false;
       this.liftingBool = false;
       this.flexBool = true;

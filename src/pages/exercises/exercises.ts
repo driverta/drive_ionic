@@ -74,11 +74,11 @@ export class ListMasterPage {
    * The view loaded, let's query our items for the list
    */
   ionViewDidLoad() {
-    this.exercises = this.navParams.get('exercises');
-    console.log(this.exercises)
-    this.filteredExercises = this.exercises;
     this.title = this.navParams.get('title');
-    console.log(this.title);
+    this.userService.getExercises().subscribe(exercises => {
+      this.exercises = exercises.filter(exercise => exercise.MuscleGroup.muscleGroupName === this.title);
+    });
+    
 
     // this.username = localStorage.getItem("username");
     // console.log(this.username);
@@ -131,14 +131,14 @@ export class ListMasterPage {
     //         }
     //console.log(this.records._cardioRecs)
     console.log(this.userService.getUser().email);
-    this.getLocalExercises().then(exercises =>{
-      if (exercises != null) {
-        exercises.forEach(exercise =>{
-          var history = firebase.database().ref(this.userService.getUser().username + "/exercisesNew//history");
-          history.push(exercise);
-        });
-      }
-    });
+    // this.getLocalExercises().then(exercises =>{
+    //   if (exercises != null) {
+    //     exercises.forEach(exercise =>{
+    //       var history = firebase.database().ref(this.userService.getUser().username + "/exercisesNew//history");
+    //       history.push(exercise);
+    //     });
+    //   }
+    // });
     
     // this.userService.getExercises().subscribe(exercises => {
 
