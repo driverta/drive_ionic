@@ -57,7 +57,7 @@ export class SearchPage {
     this.show = true;
     this.username = this.user.username;
     this.players = [];
-    this.timeFilter = "Week"
+    this.segment = "week"
 
 
     this.userService.getLeaderboardData(this.userService.getUser().id).subscribe(data =>{
@@ -92,6 +92,7 @@ export class SearchPage {
 
   onSegmentChange(){
     this.competingUsers.forEach((user) =>{
+      console.log(user.gainsToday)
       switch(this.segment) {
         case "today":
           user.gains = user.gainsToday;

@@ -26,6 +26,7 @@ export class HomePage {
 
   ionViewDidLoad() {
     this.userService.getExercises().subscribe(exercises => {
+      console.log(exercises)
       this.exercises = exercises
     });
     console.log('ionViewDidLoad HomePage');
@@ -35,56 +36,56 @@ export class HomePage {
 
   toChest(){
     this.navCtrl.push('ListMasterPage', {
-      exercises : this.exercises.filter(exercise => exercise.MuscleGroup.muscleGroupName === "Chest"),
+      //exercises : this.exercises.filter(exercise => exercise.MuscleGroup.muscleGroupName === "Chest"),
       title: "Chest"
     });
   }
 
   toBack(){
     this.navCtrl.push('ListMasterPage', {
-      exercises : this.exercises.filter(exercise => exercise.MuscleGroup.muscleGroupName === "Back"),
+      //exercises : this.exercises.filter(exercise => exercise.MuscleGroup.muscleGroupName === "Back"),
       title: "Back"
     });
   }
 
   toLegs(){
     this.navCtrl.push('ListMasterPage', {
-      exercises : this.exercises.filter(exercise => exercise.MuscleGroup.muscleGroupName === "Legs"),
+      //exercises : this.exercises.filter(exercise => exercise.MuscleGroup.muscleGroupName === "Legs"),
       title: "Legs"
     });
   }
 
   toArms(){
     this.navCtrl.push('ListMasterPage', {
-      exercises : this.exercises.filter(exercise => exercise.MuscleGroup.muscleGroupName === "Arms"),
+      //exercises : this.exercises.filter(exercise => exercise.MuscleGroup.muscleGroupName === "Arms"),
       title: "Arms"
     });
   }
 
   toShoulders(){
     this.navCtrl.push('ListMasterPage', {
-      exercises : this.exercises.filter(exercise => exercise.MuscleGroup.muscleGroupName === "Shoulders"),
+      //exercises : this.exercises.filter(exercise => exercise.MuscleGroup.muscleGroupName === "Shoulders"),
       title: "Shoulders"
     });
   }
 
   toAbs(){
     this.navCtrl.push('ListMasterPage', {
-      exercises : this.exercises.filter(exercise => exercise.MuscleGroup.muscleGroupName === "Abs"),
-      title: "Abs"
+      //exercises : this.exercises.filter(exercise => exercise.MuscleGroup.muscleGroupName === "Abs"),
+      title: "Core"
     });
   }
 
   toCardio(){
     this.navCtrl.push('ListMasterPage', {
-      exercises : this.exercises.filter(exercise => exercise.MuscleGroup.muscleGroupName === "Cardio"),
+      //exercises : this.exercises.filter(exercise => exercise.MuscleGroup.muscleGroupName === "Cardio"),
       title: "Cardio"
     });
   }
 
   toFlexibility(){
     this.navCtrl.push('ListMasterPage', {
-      exercises : this.exercises.filter(exercise => exercise.MuscleGroup.muscleGroupName === "Flexibility"),
+      //exercises : this.exercises.filter(exercise => exercise.MuscleGroup.muscleGroupName === "Flexibility"),
       title: "Flexibility"
     });
   }
