@@ -139,6 +139,11 @@ export class LineChartComponent {
     this.g2.append("path")
         .datum(this.cardioHistory)
         .attr("class", "line")
+        .attr("fill", "none")
+        .attr("stroke", "black")
+        .attr("stroke-linejoin", "round")
+        .attr("stroke-linecap", "round")
+        .attr("stroke-width", 3)
         .attr("d", this.line);
   }
 
