@@ -4,6 +4,7 @@ import { User, ProvidersUserProvider, HistoryProvider } from '../../providers/pr
 import { Storage } from '@ionic/storage';
 import { CardioHistory } from '../../models/CardioHistory';
 import { LiftingHistory } from '../../models/LiftingHistory';
+import { Flexibility } from '../../models/Flexibility';
 
 import * as d3 from 'd3-selection';
 import * as d3Scale from "d3-scale";
@@ -40,6 +41,7 @@ export class GainsChartComponent {
   cardio = 0;
   cardioHistory: CardioHistory[] = new Array<CardioHistory>();
   liftingHistory: LiftingHistory[] = new Array<LiftingHistory>();
+  flexHistory: Flexibility[] = new Array<Flexibility>();
 
   filter = "";
 
@@ -164,7 +166,8 @@ export class GainsChartComponent {
     this.data[0] = [];
     this.exercises = {};
     this.xGains = 0;
-    if (this.filter == "Cardio"){
+    if (filter == "Cardio"){
+      console.log(this.cardioHistory)
       this.cardioHistory.forEach(c =>{
         if (c.exercise.MuscleGroup.muscleGroupName == filter) {
           this.xGains += c.gains;
@@ -188,6 +191,7 @@ export class GainsChartComponent {
       });
     }
     console.log(this.xGains);
+    console.log(this.exercises);
     Object.keys(this.exercises).forEach ((key) => {
       var percent = this.exercises[key] / this.xGains;
       console.log(percent)

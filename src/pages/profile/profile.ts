@@ -135,6 +135,9 @@ export class SettingsPage {
       this.buttons = true;
       this.myPicture = true;
       this.friendPicture = false;
+      this.userService.getExercises().subscribe(exercises => {
+        this.exercisesLength = exercises.length;
+      });
     } else {
       this.user = this.checkUser;
       this.weight = this.user.weight;
@@ -145,6 +148,9 @@ export class SettingsPage {
       this.buttons = false;
       this.myPicture = false;
       this.friendPicture = true;
+      this.userService.getCompetingUsersExercises(this.user.id).subscribe(exercises => {
+        this.exercisesLength = exercises.length;
+      });
     }
     this.competitorsList = [];
     // this.username = this.userService.getUser().username;
@@ -188,9 +194,7 @@ export class SettingsPage {
       }
     });
 
-    this.userService.getExercises().subscribe(exercises => {
-      this.exercisesLength = exercises.length;
-    });
+    
   }
 
   setLevel () {
