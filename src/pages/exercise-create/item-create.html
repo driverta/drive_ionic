@@ -1,7 +1,7 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>New Exercise</ion-title>
+    <ion-title>New {{mgSelect.muscleGroupName}} Exercise</ion-title>
     <ion-buttons start>
       <button ion-button (click)="cancel()">
         <span color="primary" showWhen="ios">
@@ -34,12 +34,12 @@
       <ion-item>
         <ion-input type="text" required [(ngModel)]="exercise.variation" placeholder="{{ 'E.g. Dumbbell' | translate }}" formControlName="variation"></ion-input>
       </ion-item>
-      <ion-item no-lines>
+<!--       <ion-item no-lines>
         <ion-select [compareWith]="setMG" required [(ngModel)] = "mgSelect" [ngModelOptions]="{standalone: true}">
           <ion-label>Muscle Group:</ion-label>
           <ion-option (ionSelect)="changeCheckbox(group.muscleGroupName)"*ngFor="let group of mg"  [value]="group">{{group.muscleGroupName}}</ion-option>
         </ion-select>
-      </ion-item>
+      </ion-item> -->
       <ion-item *ngIf="lift">
         <ion-label>Bodyweight</ion-label>
         <ion-checkbox formControlName="lift" [(ngModel)]="liftBool"></ion-checkbox>

@@ -43,7 +43,7 @@ export class ItemCreatePage {
 
   form: FormGroup;
 
-  private mg: MuscleGroup[];
+  //private mg: MuscleGroup;
 
   private mgSelect: MuscleGroup;
 
@@ -67,13 +67,15 @@ export class ItemCreatePage {
       this.exercise.variation = this.data.variation;
       this.mgSelect = this.data.MuscleGroup;
       this.edit = true;
+    } else {
+      this.mgSelect = navParams.get("muscleGroup")
     }
     //this.setlifts = navParams.get('lifts');
 
     this.form = formBuilder.group({
       name: ['', Validators.required],
       variation: [''],
-      muscle: MuscleGroup,
+      //muscle: MuscleGroup,
       lift: false,
       time: true,
       miles: true,
@@ -94,10 +96,11 @@ export class ItemCreatePage {
 
   ionViewDidLoad() {
 
-    this.exerciseService.getAllMuscleGroups().subscribe(data => {
-      this.mg = data;
-      console.log(this.mg)
-    })
+    this.changeCheckbox(this.mgSelect.muscleGroupName)
+    // this.exerciseService.getAllMuscleGroups().subscribe(data => {
+    //   this.mg = data;
+    //   console.log(this.mg)
+    // })
 
     // this.getExercises().then((val) => {
     //   console.log(val)
@@ -199,6 +202,7 @@ export class ItemCreatePage {
   }
 
   changeCheckbox(groupName) {
+    console.log(groupName)
     if (groupName == "Cardio"){
       this.lift = false;
       this.cardio = true;
