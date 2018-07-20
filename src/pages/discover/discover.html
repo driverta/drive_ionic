@@ -1,19 +1,8 @@
+
+
 <ion-content>
-  <!-- <div padding>
-    
-    <ion-segment [(ngModel)]="segment">
-      <ion-segment-button  value="discover_people">
-        People
-      </ion-segment-button>
-      <ion-segment-button value="discover_excercises">
-        Excercises
-      </ion-segment-button>
-    </ion-segment>
-   
-  </div> -->
-  <ion-searchbar (ionInput)="getItems($event)" placeholder="Search"></ion-searchbar>
   <div padding>
-    
+      <ion-searchbar (ionInput)="getItems($event)" placeholder="Search"></ion-searchbar>
       <ion-segment [(ngModel)]="segment">
         <ion-segment-button  value="discover_people">
           People

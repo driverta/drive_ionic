@@ -4,8 +4,6 @@ import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angu
 import { User } from '../../providers/providers';
 import firebase from 'firebase';
 
-import { SortByGainsPipe } from '../../pipes/sort-by-gains/sort-by-gains'
-
 import { ProvidersUserProvider } from '../../providers/providers-user/providers-user';
 import { ExerciseProvider } from '../../providers/exercise/exercise';
 import { FcmProvider } from '../../providers/fcm/fcm';
@@ -63,8 +61,6 @@ export class DiscoverPage {
     this.competingFriendsOfFriends = [];
     this.username = this.userService.getUser().username;
     this.userId = this.userService.getUser().id;
-    var query1 = firebase.database().ref("/users");
-    var query2 = firebase.database().ref('/' + this.username + '/competing');
 
     this.userService.getAllUsers().subscribe(data => {
       this.users = data;

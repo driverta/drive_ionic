@@ -180,9 +180,9 @@ export class SettingsPage {
     this.userService.getProfilePic(this.user.username).subscribe(data => {
       this.form.patchValue({"profilePic": "data:image/jpeg;base64," + data});
       if (data != "NahNigga"){
-        this.show = true;
         //console.log(data);
         this.form.patchValue({"profilePic": "data:image/jpeg;base64," + data});
+        this.show = true;
       } else {
         // <ion-icon *ngIf="item.profilePic == 'data:image/jpeg;base64,NahNigga'" class="default-img" name="contact"></ion-icon>
       }
