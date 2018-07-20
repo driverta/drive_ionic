@@ -21,6 +21,7 @@ import { UserModel } from '../../models/users';
 import { Exercise } from '../../models/Exercise';
 
 import { GainsChartComponent } from '../../components/gains-chart/gains-chart';
+import { MuscleGroup } from '../../models/MuscleGroupModel';
 
 @IonicPage()
 @Component({
@@ -48,7 +49,7 @@ export class ListMasterPage {
 
   private User: UserModel;
   private exercises: Exercise[];
-  private title: string;
+  private mg: MuscleGroup;
 
   constructor(
     public navCtrl: NavController,
@@ -67,6 +68,7 @@ export class ListMasterPage {
       console.log('Platform ready from', readySource);
       // Platform now ready, execute any required native code
     });
+    this.mg = this.navParams.get('title');
   }
 
   ionViewWillEnter(){
@@ -78,14 +80,14 @@ export class ListMasterPage {
    * The view loaded, let's query our items for the list
    */
   ionViewDidLoad() {
-    this.title = this.navParams.get('title');
-
+    
+    console.log(this.mg)
     this.userService.getExercises().subscribe(exercises => {
-      this.exercises = exercises.filter(exercise => exercise.MuscleGroup.muscleGroupName === this.title);
+      this.exercises = exercises.filter(exercise => exercise.MuscleGroup.muscleGroupName === this.mg.muscleGroupName);
     });
     
 
-    this.gainsChart.makeGainsChart(this.title);
+    this.gainsChart.makeGainsChart(this.mg.muscleGroupName);
 
     // this.username = localStorage.getItem("username");
     // console.log(this.username);
@@ -175,7 +177,9 @@ export class ListMasterPage {
 
   addExercise() {
     //this.navCtrl.push('ItemCreatePage');
-    let addModal = this.modalCtrl.create('ItemCreatePage');
+    let addModal = this.modalCtrl.create('ItemCreatePage', {
+      muscleGroup: this.mg
+    });
     addModal.onDidDismiss(item => {
       if (item) {
         this.ionViewDidLoad();
@@ -222,7 +226,7 @@ export class ListMasterPage {
   openItem(exercise) {
     this.navCtrl.push('ItemDetailPage', {
       exercise: exercise,
-      muscleGroup: exercise.MuscleGroup.muscleGroupName
+      muscleGroup: this.mg.muscleGroupName
     });
   }
 
