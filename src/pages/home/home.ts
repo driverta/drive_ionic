@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Exercise } from '../../models/Exercise';
 import { ProvidersUserProvider } from '../../providers/providers-user/providers-user';
 import { ExerciseProvider } from '../../providers/exercise/exercise';
+import { StatusBar } from '@ionic-native/status-bar';
 import { MuscleGroup } from '../../models/MuscleGroupModel';
 
 /**
@@ -22,11 +23,16 @@ export class HomePage {
   private exercises: Exercise[];
   private mg: MuscleGroup[];
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private exerciseService: ExerciseProvider,
+  constructor(
+    private statusBar: StatusBar,
+    public navCtrl: NavController, 
+    public navParams: NavParams, 
+    private exerciseService: ExerciseProvider,
     private userService: ProvidersUserProvider) {
   }
 
   ionViewDidLoad() {
+    this.statusBar.styleBlackOpaque();
     this.userService.getExercises().subscribe(exercises => {
       console.log(exercises)
       this.exercises = exercises

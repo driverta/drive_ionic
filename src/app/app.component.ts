@@ -3,28 +3,23 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { TranslateService } from '@ngx-translate/core';
 import { Config, Nav, Platform } from 'ionic-angular';
-import { HttpClient } from '@angular/common/http'
 
 import { FirstRunPage } from '../pages/pages';
 import { MainPage, TutorialPage } from '../pages/pages';
 
-import { Settings, ProvidersUserProvider } from '../providers/providers';
+import { ProvidersUserProvider } from '../providers/providers';
 import { User } from '../providers/providers';
 
-import { DataService } from '../providers/api/firebase';
-import firebase from 'firebase';
 
 import { FcmProvider } from '../providers/fcm/fcm';
 
 import { ToastController, AlertController } from 'ionic-angular';
 import { tap } from 'rxjs/operators';
-import { TabsPage } from '../pages/tabs/tabs';
 
 import { AuthProvider } from "../providers/auth/auth";
 import { AppVersion } from '@ionic-native/app-version';
 
 import {Storage} from "@ionic/storage";
-import { local } from 'd3';
 
 
 @Component({
@@ -67,17 +62,10 @@ export class MyApp {
     public toastCtrl: ToastController,
     public authProvider: AuthProvider,
     public alertCtrl: AlertController,
-    private app: AppVersion,
-    private storage: Storage) {
+    private app: AppVersion) {
     this.initTranslate();
 
     this.tester = localStorage.getItem("stay");
-    //alert(this.tester)
-    // if(this.tester == "logged"){
-    //   console.log("LOGGED");
-    //   this.setUser();
-    //   this.rootPage = MainPage;
-    // }
 
     platform.ready().then(() => {
       this.app.getVersionNumber().then((version) =>{
@@ -171,7 +159,9 @@ export class MyApp {
     this.platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
-      this.statusBar.styleDefault();
+      this.statusBar.overlaysWebView(true);
+      // this.statusBar.styleDefault();
+      this.statusBar.backgroundColorByHexString('#000000');
       this.splashScreen.hide();
      
     });
