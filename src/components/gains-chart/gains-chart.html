@@ -1,6 +1,13 @@
 <!-- Generated template for the GainsChartComponent component -->
-<ion-item no-lines>
-	<div id="chart">
-		<svg id="gainsChart"></svg>
+<!-- <ion-item no-lines>
+	<div id="chart" *ngFor="let id of ids>
+		<svg id=id></svg>
 	</div>
-</ion-item>
+</ion-item> -->
+<ion-list>
+	<div id='chart'>
+	    <ion-item *ngFor="let id of ids">
+	    	<svg id="{{id}}"></svg>
+	    </ion-item>
+    </div>
+</ion-list>
