@@ -30,6 +30,7 @@ export class GainsChartComponent {
 
   exercises = {};
   xGains = 0
+  ids = [];
 
   chest = 0;
   back = 0;
@@ -90,7 +91,8 @@ export class GainsChartComponent {
     
   }
 
-  public makeGainsChart(filter) {
+  public makeGainsChart(filters) {
+    this.ids = filters;
     this.data = [
       [//iPhone
       {axis:"Chest",value:0.12},
@@ -153,11 +155,16 @@ export class GainsChartComponent {
 	      this.data[0][5].value = this.core / this.allTime;
 	      this.data[0][6].value = this.cardio / this.allTime;
 	      console.log(this.allTime);
-	      if (filter == "All"){
-	      	this.radarChart("#gainsChart", this.data, this.radarChartOptions);
-	      } else {
-	      	this.executeFilter(filter)
-	      }
+        filters.forEach(filter => {
+          console.log(filter);
+          this.executeFilter(filter);
+        })
+
+	      // if (filter == "All"){
+	      // 	this.radarChart("#gainsChart", this.data, this.radarChartOptions);
+	      // } else {
+	      // 	this.executeFilter(filter)
+	      // }
       });
     });
   }
@@ -198,7 +205,7 @@ export class GainsChartComponent {
       var d = {axis: key, value: percent}
       this.data[0].push(d)
     });
-    this.radarChart("#gainsChart", this.data, this.radarChartOptions);
+    this.radarChart("#" + filter, this.data, this.radarChartOptions);
   }
 
   radarChart(id, data, options){

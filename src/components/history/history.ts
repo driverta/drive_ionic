@@ -12,6 +12,7 @@ import { CardioHistory } from '../../models/CardioHistory';
 import { UserModel } from '../../models/users';
 import { Flexibility } from '../../models/Flexibility';
 import { BodyLift } from '../../models/BodyLift';
+import { CardioTimeConvertPipe } from '../../pipes/cardio-time-convert/cardio-time-convert'
 
 @Component({
   selector: 'history',
