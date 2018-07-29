@@ -118,7 +118,9 @@ export class HomePage {
       clearInterval(this.interval);
       this.buttonPressed = false;
       this.workoutItem.endTime = new Date();
-      this.workoutService.setWorkoutEndTime(this.workoutItem);
+      this.workoutService.setWorkoutEndTime(this.workoutItem).subscribe(workout => {
+        
+      });
     } else {
       this.buttonPressed = true;
       this.workoutItem = new WorkoutModel();
@@ -136,7 +138,8 @@ export class HomePage {
           this.seconds++
         }
       }, 1000)
-      this.workoutItem.user = this.userService.getUser();
+      this.workoutItem = new WorkoutModel();
+      this.workoutItem.userId = this.userService.getUser().id;
       this.workoutItem.startTime = new Date();
       this.workoutService.createWorkout(this.workoutItem).subscribe(workout => {
         this.workoutItem.id = workout.id;
