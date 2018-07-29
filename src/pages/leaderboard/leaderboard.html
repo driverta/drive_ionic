@@ -50,10 +50,11 @@
       <h3 *ngIf="show" id="loading">Loading</h3>
 
       <ion-list class="no-margin" *ngSwitchCase="'timeline'">
-        <!-- <ion-item no-lines *ngFor="let workout of workouts">
-          <div id='{{workout.id}}'>
-          </div>
-        </ion-item> -->
+        <ion-item no-lines *ngFor="let workout of workouts">
+          <!-- <div id='{{workout.id}}'>
+          </div> -->
+          <timeline-chart></timeline-chart>
+        </ion-item>
         <div id='timelineContainer'>
         </div>
       </ion-list>
