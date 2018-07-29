@@ -24,7 +24,7 @@ export class HomePage {
 
   private exercises: Exercise[];
   private mg: MuscleGroup[];
-  workoutItem: WorkoutModel;
+  private workoutItem: WorkoutModel;
   minutes = 0;
   seconds = 0;
   hours = 0;
@@ -121,6 +121,8 @@ export class HomePage {
       this.workoutService.setWorkoutEndTime(this.workoutItem);
     } else {
       this.buttonPressed = true;
+      this.workoutItem = new WorkoutModel();
+      this.workoutItem.userId = this.userService.getUser().id;
 
       this.interval = setInterval(() =>{
         if (this.minutes == 59 && this.seconds == 59){
@@ -134,13 +136,11 @@ export class HomePage {
           this.seconds++
         }
       }, 1000)
-
       this.workoutItem.user = this.userService.getUser();
       this.workoutItem.startTime = new Date();
       this.workoutService.createWorkout(this.workoutItem).subscribe(workout => {
         this.workoutItem.id = workout.id;
       });
-
     }
   }
 }
