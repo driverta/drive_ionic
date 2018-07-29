@@ -2,7 +2,7 @@ import { UserModel } from './users'
 
 export class WorkoutModel {
     id: number;
-    user: UserModel;
+    userId: number;
     startTime: Date;
     endTime: Date;
 }

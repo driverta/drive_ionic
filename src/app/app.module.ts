@@ -22,6 +22,7 @@ import { FeathersProvider } from '../providers/feathers/feathers';
 import { ProvidersUserProvider } from '../providers/providers-user/providers-user';
 import { ExerciseProvider } from '../providers/exercise/exercise';
 import { AuthProvider } from "../providers/auth/auth";
+import { WorkoutService } from "../providers/workout/workout";
 
 import { AngularFireModule } from 'angularfire2';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
@@ -127,7 +128,8 @@ const firebase = {
     Firebase,
     AuthProvider,
     AppVersion,
-    SortByGainsPipe
+    SortByGainsPipe,
+    WorkoutService
   ]
 })
 export class AppModule { }

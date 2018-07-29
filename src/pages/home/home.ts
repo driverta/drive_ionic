@@ -24,7 +24,7 @@ export class HomePage {
 
   private exercises: Exercise[];
   private mg: MuscleGroup[];
-  workoutItem: WorkoutModel;
+  private workoutItem: WorkoutModel;
   minutes = 0;
   seconds = 0;
   buttonPressed = false;
@@ -115,7 +115,9 @@ export class HomePage {
       this.workoutService.setWorkoutEndTime(this.workoutItem);
     } else {
       this.buttonPressed = true;
-      this.workoutItem.user = this.userService.getUser();
+      console.log(this.userService.getUser().id);
+      this.workoutItem = new WorkoutModel();
+      this.workoutItem.userId = this.userService.getUser().id;
       this.workoutItem.startTime = new Date();
       this.workoutService.createWorkout(this.workoutItem).subscribe(workout => {
         this.workoutItem.id = workout.id;
