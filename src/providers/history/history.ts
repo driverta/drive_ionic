@@ -38,8 +38,8 @@ export class HistoryProvider {
   
 	}
 	// private url = "http://driveapi-env.y7mz5ppbve.us-east-2.elasticbeanstalk.com/";
-	// private url = "http://localhost:8080/api/";
-	private url = "http://DriveApi.y7mz5ppbve.us-east-2.elasticbeanstalk.com/";
+	private url = "http://localhost:8080/api/";
+	// private url = "http://DriveApi.y7mz5ppbve.us-east-2.elasticbeanstalk.com/";
 
 
 	getLiftingHistoryByExercise(userId, exerciseId): Observable<LiftingHistory[]> {
@@ -66,6 +66,14 @@ export class HistoryProvider {
 	
 	getCardioHistory(userId): Observable<CardioHistory[]> {
     	return this.http.get<CardioHistory[]>(this.url + "getCardioHistoryById?userId=" + userId)
+	}
+
+	getUserCardioHistoryBetween(userId, startTime, endTime): Observable<CardioHistory[]> {
+    	return this.http.get<CardioHistory[]>(this.url + "getUserCardioHistoryBetween?userId=" + userId + "&startTime=" + startTime + "&endTime=" + endTime);
+	}
+
+	getUserLiftingHistoryBetween(userId, startTime, endTime): Observable<LiftingHistory[]> {
+    	return this.http.get<LiftingHistory[]>(this.url + "getUserLiftingHistoryBetween?userId=" + userId + "&startTime=" + startTime + "&endTime=" + endTime);
 	}
 	
 	getLiftingHistory(userId): Observable<LiftingHistory[]> {

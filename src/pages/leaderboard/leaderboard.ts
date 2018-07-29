@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, ViewContainerRef, ComponentFactoryResolver  } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 
 import { ProvidersUserProvider } from '../../providers/providers';
+import { WorkoutService } from '../../providers/workout/workout';
+
 import { Levels } from '../../providers/providers';
 import { SortByGainsPipe } from '../../pipes/sort-by-gains/sort-by-gains'
 
@@ -10,6 +12,7 @@ import { UserModel } from '../../models/users';
 import { CompetingModel } from '../../models/competing';
 
 import { tap } from 'rxjs/operators';
+import { TimelineChartComponent } from '../../components/timeline-chart/timeline-chart';
 
 
 @IonicPage()
@@ -18,6 +21,9 @@ import { tap } from 'rxjs/operators';
   templateUrl: 'leaderboard.html',
 })
 export class SearchPage {
+  
+  @ViewChild(TimelineChartComponent) timelineChart: TimelineChartComponent
+  @ViewChild('timelineContainer', { read: ViewContainerRef }) container;
 
   currentItems: any = [];
   timeFilter = "All Time"
@@ -45,7 +51,9 @@ export class SearchPage {
     public navCtrl: NavController, 
     public navParams: NavParams, 
     public userService: ProvidersUserProvider,
-    private gainsPipe: SortByGainsPipe) {
+    public workoutService: WorkoutService,
+    private gainsPipe: SortByGainsPipe,
+    private resolver: ComponentFactoryResolver) {
       this.user = this.userService.getUser();
     }
 
@@ -100,12 +108,27 @@ export class SearchPage {
         case "week":
           user.gains = user.gainsWeek;
           break;
+        case "timeline":
+          this.populateCharts();
+          break;
         default:
           user.gains = user.gainsTotal;
           break;
       }
     });
     this.competingUsers = this.gainsPipe.transform(this.competingUsers)
+  }
+
+  populateCharts() {
+    this.workoutService.getCompetingWorkouts(this.user.id, 0, 10).subscribe(workouts => {
+      workouts.forEach(workout => {
+        // this.resolver.resolveComponentFactory
+        // const factory = this.resolver.resolveComponentFactory(this.timelineChart);
+        // let componentRef = this.container.createComponent(factory);
+        // (<TimelineChartComponent>componentRef.instance).makeTimelineChart(this.user.id, workout)
+        this.timelineChart.makeTimelineChart(this.user.id, workout)
+      });
+    });
   }
 
   filterDay(ev) {

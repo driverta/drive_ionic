@@ -3,8 +3,10 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Exercise } from '../../models/Exercise';
 import { ProvidersUserProvider } from '../../providers/providers-user/providers-user';
 import { ExerciseProvider } from '../../providers/exercise/exercise';
+import { WorkoutService } from '../../providers/workout/workout';
 import { StatusBar } from '@ionic-native/status-bar';
 import { MuscleGroup } from '../../models/MuscleGroupModel';
+import { WorkoutModel } from '../../models/Workout';
 
 /**
  * Generated class for the HomePage page.
@@ -22,6 +24,7 @@ export class HomePage {
 
   private exercises: Exercise[];
   private mg: MuscleGroup[];
+  workoutItem: WorkoutModel;
   minutes = 0;
   seconds = 0;
   hours = 0;
@@ -33,7 +36,8 @@ export class HomePage {
     public navCtrl: NavController, 
     public navParams: NavParams, 
     private exerciseService: ExerciseProvider,
-    private userService: ProvidersUserProvider) {
+    private userService: ProvidersUserProvider,
+    private workoutService: WorkoutService) {
   }
 
   ionViewDidLoad() {
@@ -113,8 +117,11 @@ export class HomePage {
       this.hours = 0;
       clearInterval(this.interval);
       this.buttonPressed = false;
+      this.workoutItem.endTime = new Date();
+      this.workoutService.setWorkoutEndTime(this.workoutItem);
     } else {
       this.buttonPressed = true;
+
       this.interval = setInterval(() =>{
         if (this.minutes == 59 && this.seconds == 59){
           this.hours++;
@@ -127,6 +134,13 @@ export class HomePage {
           this.seconds++
         }
       }, 1000)
+
+      this.workoutItem.user = this.userService.getUser();
+      this.workoutItem.startTime = new Date();
+      this.workoutService.createWorkout(this.workoutItem).subscribe(workout => {
+        this.workoutItem.id = workout.id;
+      });
+
     }
   }
 }
