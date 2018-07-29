@@ -16,8 +16,8 @@ import { CardioHistory } from '../../models/CardioHistory';
 export class ProvidersUserProvider {
 
   // private url = "http://driveapi-env.y7mz5ppbve.us-east-2.elasticbeanstalk.com/";
-//  private url = "http://localhost:8080/api/";
-   private url = "http://DriveApi.y7mz5ppbve.us-east-2.elasticbeanstalk.com/";
+  private url = "http://localhost:8080/api/";
+  //  private url = "http://DriveApi.y7mz5ppbve.us-east-2.elasticbeanstalk.com/";
 
 
   user: UserModel = new UserModel(); 
@@ -103,7 +103,6 @@ export class ProvidersUserProvider {
   }
 
   addFlexHistory(history, flex){
-    console.log("HERE");
     console.log(this.http.post(this.url + "addFlexHistory", history));
 		return this.http.post(this.url + "addFlexHistory", history);
   }

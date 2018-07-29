@@ -1,50 +1,63 @@
 
 <ion-content>
-        <button id="login" class="login-button img-button-chest"><span class="font-white">See how you compare to your friends!</span></button>
-   
+  <button id="login" class="login-button img-button-chest"><span class="font-white">See how you compare to your friends!</span></button>
+
 
   <div class="timespan">
-    <ion-list class="no-margin">
-<ion-item-divider no-lines sticky>    <ion-segment (ionChange)="onSegmentChange()" [(ngModel)]="segment">
-    <ion-segment-button value="today">
-      TODAY
-    </ion-segment-button>
-    <ion-segment-button value="week">
-      WEEK
-    </ion-segment-button>
-    <ion-segment-button value="all_time">
-      All TIME
-    </ion-segment-button>
-    <ion-segment-button value="blah">
-      timeline
-    </ion-segment-button>
-  </ion-segment></ion-item-divider>
 
+    <ion-item-divider no-lines sticky>    
+      <ion-segment (ionChange)="onSegmentChange()" [(ngModel)]="segment">
+        <ion-segment-button value="today">
+          TODAY
+        </ion-segment-button>
+        <ion-segment-button value="week">
+          WEEK
+        </ion-segment-button>
+        <ion-segment-button value="all_time">
+          All TIME
+        </ion-segment-button>
+        <ion-segment-button value="timeline">
+          timeline
+        </ion-segment-button>
+      </ion-segment>
+    </ion-item-divider>
 
-      <ion-item-sliding no-lines *ngFor="let item of competingUsers">
+    <div [ngSwitch]="segment">
+      <ion-list class="no-margin" *ngSwitchDefault>
+        <ion-item-sliding no-lines *ngFor="let item of competingUsers">
 
-        <ion-item (click)="openItem(item)" no-lines [ngClass]="{red: item.username == username}">
-          <ion-avatar item-start>
-            <img *ngIf="item.profilePic != 'data:image/jpeg;base64,NahNigga'" [src]="item.profilePic" />
-            <ion-icon *ngIf="item.profilePic == 'data:image/jpeg;base64,NahNigga'" class="default-img" name="contact"></ion-icon>
-          </ion-avatar>
+          <ion-item (click)="openItem(item)" no-lines [ngClass]="{red: item.username == username}">
+            <ion-avatar item-start>
+              <img *ngIf="item.profilePic != 'data:image/jpeg;base64,NahNigga'" [src]="item.profilePic" />
+              <ion-icon *ngIf="item.profilePic == 'data:image/jpeg;base64,NahNigga'" class="default-img" name="contact"></ion-icon>
+            </ion-avatar>
 
-          <h1>{{item.username}}
+            <h1>{{item.username}}
 
-            <div class="gains">{{item.gains}}</div>
-            <!-- <h3>{{item.rank}} {{item.level}}</h3> -->
+              <div class="gains">{{item.gains}}</div>
+              <!-- <h3>{{item.rank}} {{item.level}}</h3> -->
 
-          </h1>
-        </ion-item>
+            </h1>
+          </ion-item>
 
-        <ion-item-options *ngIf="item.username != username">
-          <button ion-button color="danger" (click)="presentConfirm(item)">
-            {{ 'Remove' | translate }}
-          </button>
-        </ion-item-options>
+          <ion-item-options *ngIf="item.username != username">
+            <button ion-button color="danger" (click)="presentConfirm(item)">
+              {{ 'Remove' | translate }}
+            </button>
+          </ion-item-options>
 
-      </ion-item-sliding>
-    </ion-list>
-    <h3 *ngIf="show" id="loading">Loading</h3>
+        </ion-item-sliding>
+      </ion-list>
+      <h3 *ngIf="show" id="loading">Loading</h3>
+
+      <ion-list class="no-margin" *ngSwitchCase="'timeline'">
+        <!-- <ion-item no-lines *ngFor="let workout of workouts">
+          <div id='{{workout.id}}'>
+          </div>
+        </ion-item> -->
+        <div id='timelineContainer'>
+        </div>
+      </ion-list>
+    </div>
   </div>
 </ion-content>
