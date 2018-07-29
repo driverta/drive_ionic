@@ -18,4 +18,12 @@ export class WorkoutService {
   getCompetingWorkouts(userId, startIndex, endIndex): Observable<WorkoutModel[]> {
     return this.http.get<WorkoutModel[]>(this.url + "getCompetingWorkouts?userId=" + userId + '&startIndex=' + startIndex + '&endIndex' + endIndex);
   }
+
+  createWorkout(workout): Observable<WorkoutModel> {
+    return this.http.post<WorkoutModel>(this.url + "createWorkout", workout);
+  }
+
+  setWorkoutEndTime(workout): Observable<WorkoutModel> {
+    return this.http.post<WorkoutModel>(this.url + "setWorkoutEndTime?", workout );
+  }
 }
