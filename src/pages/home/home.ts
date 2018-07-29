@@ -22,6 +22,9 @@ export class HomePage {
 
   private exercises: Exercise[];
   private mg: MuscleGroup[];
+  minutes = 0;
+  seconds = 0;
+  buttonPressed = false;
 
   constructor(
     private statusBar: StatusBar,
@@ -43,9 +46,7 @@ export class HomePage {
       this.mg = data;
       console.log(this.mg)
     })
-  }
-
-  
+  } 
 
   toChest(){
     this.navCtrl.push('ListMasterPage', {
@@ -101,5 +102,13 @@ export class HomePage {
       //exercises : this.exercises.filter(exercise => exercise.MuscleGroup.muscleGroupName === "Flexibility"),
       title: this.mg[8]
     });
+  }
+
+  workout(){
+    if (this.buttonPressed == true){
+      this.buttonPressed = false;
+    } else {
+      this.buttonPressed = true;
+    }
   }
 }
