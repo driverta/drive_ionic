@@ -24,7 +24,9 @@ export class HomePage {
   private mg: MuscleGroup[];
   minutes = 0;
   seconds = 0;
+  hours = 0;
   buttonPressed = false;
+  interval: any;
 
   constructor(
     private statusBar: StatusBar,
@@ -106,9 +108,25 @@ export class HomePage {
 
   workout(){
     if (this.buttonPressed == true){
+      this.seconds = 0;
+      this.minutes = 0;
+      this.hours = 0;
+      clearInterval(this.interval);
       this.buttonPressed = false;
     } else {
       this.buttonPressed = true;
+      this.interval = setInterval(() =>{
+        if (this.minutes == 59 && this.seconds == 59){
+          this.hours++;
+          this.minutes = 0;
+          this.seconds = 0;
+        } else if (this.seconds == 59){
+          this.minutes++;
+          this.seconds = 0;
+        } else {
+          this.seconds++
+        }
+      }, 1000)
     }
   }
 }
