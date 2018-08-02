@@ -14,7 +14,8 @@ export class JwtHttpInterceptor implements HttpInterceptor {
           setHeaders: {
             Accept: `application/json`,
             'Content-Type': `application/json`,
-            Authorization: `Bearer ${token}`
+            Authorization: `Bearer ${token}`,
+            Access: '*'
           }
         });
       } else {

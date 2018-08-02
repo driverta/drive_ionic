@@ -34,6 +34,9 @@ import { TimelineChartComponent } from './timeline-chart/timeline-chart';
 	imports: [IonicModule,
         PipesModule
     ],
+    entryComponents: [
+        TimelineChartComponent
+    ],
 	exports: [BarChartComponent,
     NewSetComponent,
     HistoryComponent,
