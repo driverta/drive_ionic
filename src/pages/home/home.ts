@@ -136,7 +136,7 @@ export class HomePage {
           this.seconds++
         }
       }, 1000)
-      this.workoutItem.user = this.userService.getUser();
+      this.workoutItem.userId = this.userService.getUser().id;
       this.workoutItem.startTime = new Date();
       this.workoutService.createWorkout(this.workoutItem).subscribe(workout => {
         this.workoutItem.id = workout.id;
