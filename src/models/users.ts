@@ -13,4 +13,9 @@ export class UserModel {
   gainsMonth: number;
   gainsTotal: number;
   gains: number;
+  display: boolean;
+
+  UserModel(){
+    this.display = false;
+  }
 }
