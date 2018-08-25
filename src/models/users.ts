@@ -14,6 +14,7 @@ export class UserModel {
   gainsTotal: number;
   gains: number;
   display: boolean;
+  level: number;
 
   UserModel(){
     this.display = false;
