@@ -22,8 +22,8 @@
 
         <ion-item (click)="openItem(item)" no-lines [ngClass]="{red: item.username == username}">
           <ion-avatar item-start>
-            <img *ngIf="item.profilePic != 'data:image/jpeg;base64,NahNigga'" [src]="item.profilePic" />
-            <ion-icon *ngIf="item.profilePic == 'data:image/jpeg;base64,NahNigga'" class="default-img" name="contact"></ion-icon>
+            <img *ngIf="item.profilePic != 'data:image/jpeg;base64,NahNigga' && item.display" [src]="item.profilePic" />
+            <ion-icon *ngIf="!item.display || item.profilePic == 'data:image/jpeg;base64,NahNigga'" class="default-img" name="contact"></ion-icon>
           </ion-avatar>
 
           <h1>{{item.username}}

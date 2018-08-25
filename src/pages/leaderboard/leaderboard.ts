@@ -65,6 +65,7 @@ export class SearchPage {
       this.competingUsers.forEach(player => {
         this.userService.getProfilePic(player.username).subscribe(pic => {
           player.profilePic = "data:image/jpeg;base64," + pic;
+          player.display = true;
         })
       })
       this.show = false;
