@@ -35,3 +35,7 @@ ion-title {
 .no-padding{
     padding-left:0px;
 }
+
+body.keyboard-is-open .hideElementOnKeyboardShown{
+    display: none;        
+}

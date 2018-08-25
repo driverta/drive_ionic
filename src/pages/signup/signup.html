@@ -95,7 +95,7 @@
               <ion-label>
                 <ion-icon name="lock"></ion-icon>
               </ion-label>
-              <ion-input class="place-holder-white" placeholder="Confirm Password" [(ngModel)]="confirmPassword" name="confirmPassword" clearInput type="password"></ion-input>
+              <ion-input class="place-holder-white" placeholder="Confirm Password" [(ngModel)]="confirmPassword" name="confirmPassword" clearInput type="password" (keyup.enter)="initiateSignUp()" ></ion-input>
             </ion-item>
           </ion-col>
         </ion-row>
@@ -113,7 +113,7 @@
         </button>
       </ion-col>
     </ion-row>
-    <ion-footer>
+    <ion-footer class="hideElementOnKeyboardShown">
       <ion-row>
         <ion-col text-center>
           <button ion-button type="submit" class="astext" (click)="signIn()">Already have an account? Sign In!</button>
