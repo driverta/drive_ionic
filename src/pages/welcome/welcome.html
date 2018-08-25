@@ -24,7 +24,7 @@
             <ion-label>
               <ion-icon name="lock"></ion-icon>
             </ion-label>
-            <ion-input class="fuckBlake" placeholder="Password" [(ngModel)]="account.password" name="password" clearInput type="password"></ion-input>
+            <ion-input class="fuckBlake" placeholder="Password" [(ngModel)]="account.password" (keyup.enter)="login()" name="password" clearInput type="password"></ion-input>
           </ion-item>
         </ion-col>
       </ion-row>
@@ -34,7 +34,7 @@
           <button [disabled]="buttonPressed" id="login" class="login-button" ion-button block (click)="login()"><ion-spinner *ngIf="buttonPressed" class="spinner-energized"></ion-spinner> <span  *ngIf="!buttonPressed">Sign In</span></button>
         </ion-col>
       </ion-row>
-      <ion-footer class="hide-on-keyboard-open" *ngIf="showFooter">
+      <ion-footer class="hideElementOnKeyboardShown" *ngIf="showFooter">
         <ion-row>
           <ion-col text-center>
             <button class="sign-up-button" ion-button class="astext" (click)="signup()">Don't have an account? Sign up!</button>

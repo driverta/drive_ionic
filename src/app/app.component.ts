@@ -20,6 +20,7 @@ import { AuthProvider } from "../providers/auth/auth";
 import { AppVersion } from '@ionic-native/app-version';
 
 import {Storage} from "@ionic/storage";
+import { Keyboard } from '@ionic-native/keyboard'
 
 
 @Component({
@@ -62,7 +63,7 @@ export class MyApp {
     public toastCtrl: ToastController,
     public authProvider: AuthProvider,
     public alertCtrl: AlertController,
-    private app: AppVersion) {
+    private app: AppVersion, private keyboard: Keyboard) {
     this.initTranslate();
 
     this.tester = localStorage.getItem("stay");
@@ -86,6 +87,14 @@ export class MyApp {
         }, 
         err => alert(JSON.stringify(err)))
       });
+
+      this.keyboard.onKeyboardShow().subscribe(() => {
+        document.body.classList.add('keyboard-is-open');
+    });
+
+    this.keyboard.onKeyboardHide().subscribe(() => {
+        document.body.classList.remove('keyboard-is-open');
+    });
     });
 
     authProvider.authUser.subscribe(jwt => {
