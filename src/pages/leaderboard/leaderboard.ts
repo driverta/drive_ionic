@@ -67,6 +67,12 @@ export class SearchPage {
           player.profilePic = "data:image/jpeg;base64," + pic;
           player.display = true;
         })
+        this.levels._levels.forEach( value => {
+        if (player.gainsTotal > value.totalPoints) {
+          player.level = value.level;
+        }
+      });
+
       })
       this.show = false;
       this.filterDay('Week');
@@ -74,21 +80,7 @@ export class SearchPage {
   }
 
   setLevel (gains, i) {
-    this.levels._levels.forEach( value => {
-      if (gains > value.totalPoints) {
-        this.players[i].level = value.level;
-        var xlevel = this.players[i].level
-      }
-      if (xlevel < 10){
-        this.players[i].rank = "Frail Body"
-      } else if ( xlevel >= 10 && xlevel < 20){
-        this.players[i].rank = "Gym Rat"
-      } else if ( xlevel >= 20 && xlevel < 30){
-        this.players[i].rank = "Bodybuilder"
-      } else if ( xlevel > 30){
-        this.players[i].rank = "Olympian"
-      }
-    });
+    
   }
 
   onSegmentChange(){
