@@ -98,4 +98,19 @@ page-profile {
     font-size: 6em;
   }
 
+  .profileContent {
+    background-image: url('../assets/img/dumbell_blur.jpg');
+    height: 250px;
+  }
+
+  .headerText{
+    margin: 0px;
+    text-align: center;
+    color:white
+  }
+
+  .number{
+    font-size: 2rem;
+  }
+
 }

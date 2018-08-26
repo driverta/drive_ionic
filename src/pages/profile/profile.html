@@ -13,29 +13,90 @@
 </ion-header>
 
 <ion-content>
+    <div class="profileContent">
 
-  <div class="levels">
+    <form [formGroup]="form" *ngIf="settingsReady" class="pic">
+        <input type="file" #fileInput style="visibility: hidden; height: 0px" name="files[]" (change)="processWebImage($event)" />
+        <div class="profile-image-wrapper" (click)="getPicture()">
+
+
+          <div class="profile-image-placeholder" *ngIf="show">
+            <!-- <ion-icon *ngIf="friendPicture" class="profile-image icon-size" name="contact"></ion-icon>
+            <ion-icon *ngIf="myPicture" name="add"></ion-icon> -->
+            <div *ngIf="myPicture" class="profile-image" [style.backgroundImage]="getProfileImageStyle()"></div>
+            <ion-icon *ngIf="friendPicture" class="profile-image icon-size" name="contact"></ion-icon>
+          </div>
+          <!-- <div*ngIf="!show"> -->
+            <!-- <div *ngIf="myPicture" class="profile-image" [style.backgroundImage]="getProfileImageStyle()"></div>
+            <ion-icon *ngIf="friendPicture" class="profile-image icon-size" name="contact"></ion-icon> -->
+          <!-- </div> -->
+    
+        </div>
+        
+      </form>
+      <!-- <ion-grid>
+          <ion-row>
+            <ion-col>
+                <circle-progress
+                [percent]="85"
+                [radius]="50"
+                [outerStrokeWidth]="0"
+                [innerStrokeWidth]="8"
+                [outerStrokeColor]="'#aa1414'"
+                [innerStrokeColor]="'#C7E596'"
+                [animation]="true"
+                [animationDuration]="300"
+              ></circle-progress>
+            </ion-col>
+            <ion-col>
+                <circle-progress
+                [percent]="100"
+                [radius]="50"
+                [outerStrokeWidth]="0"
+                [innerStrokeWidth]="8"
+                [outerStrokeColor]="'#aa1414'"
+                [innerStrokeColor]="'#C7E596'"
+                [animation]="false"
+                [title]="'level'"
+                ></circle-progress>
+            </ion-col>
+
+          </ion-row>
+
+      </ion-grid> -->
+
+      <br />
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+           <p class="headerText number" on-click="goToRecords();">{{exercisesLength}}</p>
+           <br/>
+           <p class="headerText">Exercises</p>
+          </ion-col>
+          <ion-col>
+              <p class="headerText number" on-click="goToCompeting();">{{competing}}</p>
+              <br/>
+              <p class="headerText">Following</p>
+          </ion-col>
+          <ion-col>
+              <p class="headerText number" on-click="goToCompetitors();">{{competitors}}</p>
+              <br/>
+              <p class="headerText">Followers</p>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </div>
+
+
+<br />
+
+  <!-- <div class="levels">
       <h3>LEVEL <span class="sick">{{xlevel}}</span> : <span class="sick">{{xcurrent}}</span> / <span class="sick">{{xtotal}}</span> GAINS</h3>
     </div>
     <div id="myProgress">
     <div id="myBar" [ngStyle]="{'width.%' : progress}"></div>
-  </div>
-  <form [formGroup]="form" *ngIf="settingsReady" class="pic">
-    <input type="file" #fileInput style="visibility: hidden; height: 0px" name="files[]" (change)="processWebImage($event)" />
-    <div class="profile-image-wrapper" (click)="getPicture()">
-      <div class="profile-image-placeholder" *ngIf="show">
-        <!-- <ion-icon *ngIf="friendPicture" class="profile-image icon-size" name="contact"></ion-icon>
-        <ion-icon *ngIf="myPicture" name="add"></ion-icon> -->
-        <div *ngIf="myPicture" class="profile-image" [style.backgroundImage]="getProfileImageStyle()"></div>
-        <ion-icon *ngIf="friendPicture" class="profile-image icon-size" name="contact"></ion-icon>
-      </div>
-      <!-- <div*ngIf="!show"> -->
-        <!-- <div *ngIf="myPicture" class="profile-image" [style.backgroundImage]="getProfileImageStyle()"></div>
-        <ion-icon *ngIf="friendPicture" class="profile-image icon-size" name="contact"></ion-icon> -->
-      <!-- </div> -->
+  </div> -->
 
-    </div>
-  </form>
   <div class="stats">
     <table>
       <tr>
