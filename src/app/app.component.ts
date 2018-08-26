@@ -69,24 +69,7 @@ export class MyApp {
     this.tester = localStorage.getItem("stay");
 
     platform.ready().then(() => {
-      this.app.getVersionNumber().then((version) =>{
-        console.log(JSON.stringify(version));
-        this.authProvider.getVersion().subscribe(currentVersion => {
-          console.log(currentVersion);
-          if (version != currentVersion) {
-            let alert = this.alertCtrl.create({
-              title: 'Your version is out of date',
-              message: 'Please download the latest version',
-              buttons: [{
-                text: "OK",
-                handler: () => { alert.dismiss() }
-              }]
-            })
-            alert.present();
-          }
-        }, 
-        err => alert(JSON.stringify(err)))
-      });
+
 
       this.keyboard.onKeyboardShow().subscribe(() => {
         document.body.classList.add('keyboard-is-open');
@@ -95,8 +78,6 @@ export class MyApp {
     this.keyboard.onKeyboardHide().subscribe(() => {
         document.body.classList.remove('keyboard-is-open');
     });
-    });
-
     authProvider.authUser.subscribe(jwt => {
       if (jwt) {
         console.log("HOME")
@@ -138,6 +119,11 @@ export class MyApp {
     });
 
     this.authProvider.checkLogin();
+
+
+
+
+    });
   }
 
   setUser() {
