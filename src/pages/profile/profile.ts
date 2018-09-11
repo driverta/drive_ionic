@@ -205,15 +205,6 @@ export class SettingsPage {
         this.xtotal = value.levelPoints;
         this.progress = this.xcurrent / this.xtotal * 100
       }
-      if (this.xlevel < 10){
-        this.rank = "FRAIL BODY"
-      } else if ( this.xlevel >= 10 && this.xlevel < 20){
-        this.rank = "GYM RAT"
-      } else if ( this.xlevel >= 20 && this.xlevel < 30){
-        this.rank = "BODYBUILDER"
-      } else if ( this.xlevel > 30){
-        this.rank = "OLYMPIAN"
-      }
     })
     
   }

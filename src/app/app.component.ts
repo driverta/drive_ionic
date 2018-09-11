@@ -20,6 +20,7 @@ import { AuthProvider } from "../providers/auth/auth";
 import { AppVersion } from '@ionic-native/app-version';
 
 import {Storage} from "@ionic/storage";
+import { Keyboard } from '@ionic-native/keyboard'
 
 
 @Component({
@@ -62,36 +63,29 @@ export class MyApp {
     public toastCtrl: ToastController,
     public authProvider: AuthProvider,
     public alertCtrl: AlertController,
-    private app: AppVersion) {
+    private keyboard: Keyboard) {
     this.initTranslate();
 
     this.tester = localStorage.getItem("stay");
 
     platform.ready().then(() => {
-      this.app.getVersionNumber().then((version) =>{
-        console.log(JSON.stringify(version));
-        this.authProvider.getVersion().subscribe(currentVersion => {
-          console.log(currentVersion);
-          if (version != currentVersion) {
-            let alert = this.alertCtrl.create({
-              title: 'Your version is out of date',
-              message: 'Please download the latest version',
-              buttons: [{
-                text: "OK",
-                handler: () => { alert.dismiss() }
-              }]
-            })
-            alert.present();
-          }
-        }, 
-        err => alert(JSON.stringify(err)))
-      });
+
+
+      this.keyboard.onKeyboardShow().subscribe(() => {
+        document.body.classList.add('keyboard-is-open');
     });
 
+    this.keyboard.onKeyboardHide().subscribe(() => {
+        document.body.classList.remove('keyboard-is-open');
+    });
     authProvider.authUser.subscribe(jwt => {
+      console.log(jwt)
+      console.log(localStorage.getItem('email'));
       if (jwt) {
         console.log("HOME")
+        
         this.userService.getUserByEmail(localStorage.getItem("email")).subscribe(data =>{
+          console.log(data);
           this.userService.setUser(data);
           this.nav.push(MainPage);
           // Get a FCM token
@@ -129,6 +123,11 @@ export class MyApp {
     });
 
     this.authProvider.checkLogin();
+
+
+
+
+    });
   }
 
   setUser() {
