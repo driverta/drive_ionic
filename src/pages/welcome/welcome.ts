@@ -64,43 +64,6 @@ export class WelcomePage {
    keyboard.didHide.subscribe(() => {
       this.showFooter = true;
    });
-
-
-    // authProvider.authUser.subscribe(jwt => {
-    //   if (jwt) {
-    //     this.userService.getUserByEmail(this.account.email).subscribe(data =>{
-    //       this.userService.setUser(data);
-    //       this.navCtrl.push(MainPage);
-    //       // Get a FCM token
-    //       fcm.getToken();
-
-    //       // Listen to incoming messages
-    //       fcm.listenToNotifications().pipe(
-    //         tap(msg => {
-    //           console.log("FIRST MESSAGE" + JSON.stringify(msg));
-    //           if (msg['tap'] == true) {
-    //             console.log("here");
-    //             userService.getOneUser(msg['user'].split(' ')[0]).subscribe(user => {
-    //               this.navCtrl.push(MainPage).then(() => {
-    //                 this.navCtrl.push('FriendProfilePage', {
-    //                   item: user
-    //                 });
-    //               })
-    //             })
-    //           }
-    //           // show a toast
-    //           const toast = toastCtrl.create({
-    //             message: msg['body'],
-    //             duration: 3000,
-    //             position: 'top'
-    //           });
-    //           toast.present();
-    //         })
-    //       ).subscribe()
-    //     },
-    //     err => console.log(err));
-    //   } else { }
-    // });
   }
 
   signup() {
@@ -133,12 +96,13 @@ export class WelcomePage {
     else{
       this.authLogin()
         .then(value => {
-          console.log(value);
-          let user = new APIUser;
-          user.email = this.account.email
-          user.password = this.account.password
-          user.username = this.account.email.split('@')[0]
-          this.signupWithAPI(user);
+          firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
+            localStorage.setItem("jwt_token", idToken);
+            console.log(idToken)
+            this.authProvider.authUser.next(idToken);
+          }).catch(function(error) {
+            // Handle error
+          });
         }).catch( error => {
           this.presentFirebaseError(error)
         });
@@ -151,44 +115,6 @@ export class WelcomePage {
         // You logic goes here
         this.showFooter = false;
     }
-  }
-
-  loginWithAPI(value: any) {
-    let loading = this.loadingCtrl.create({
-      spinner: 'bubbles',
-      content: 'Logging in ...'
-    });
-
-    loading.present();
-
-    this.authProvider
-      .login(value)
-      .pipe(finalize(() => loading.dismiss()))
-      .subscribe(
-        () => {},
-        err => {
-          alert(err)
-          this.handleError(err);
-        });
-  }
-
-  signupWithAPI(value: any) {
-    let loading = this.loadingCtrl.create({
-      spinner: 'bubbles',
-      content: 'Logging in ...'
-    });
-
-    loading.present();
-    if (localStorage.getItem("jwt_token")) {
-      localStorage.removeItem("jwt_token");
-    }
-
-    this.authProvider
-      .signup(value, this.account.email)
-      .pipe(finalize(() => loading.dismiss()))
-      .subscribe(
-        (jwt) => { },
-        err => console.log(err));
   }
 
   handleError(error: any) {

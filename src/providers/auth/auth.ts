@@ -5,43 +5,36 @@ import {Storage} from "@ionic/storage";
 // import {JwtHelperService} from "@auth0/angular-jwt";
 import { HttpClient } from '@angular/common/http';
 import { local } from "d3";
+import { AngularFirestore } from '@angular/fire/firestore';
 
 @Injectable()
 export class AuthProvider {
   private jwtTokenName = 'jwt_token';
 
   authUser = new ReplaySubject<any>(1);
-
+  private auth: any;
   // private url = "http://driveapi-env.y7mz5ppbve.us-east-2.elasticbeanstalk.com";
-  // private url = "http://localhost:8080/api";
-  private url = "http://DriveApi.y7mz5ppbve.us-east-2.elasticbeanstalk.com";
+  private url = "http://localhost:8080/api";
+  // private url = "http://DriveApi.y7mz5ppbve.us-east-2.elasticbeanstalk.com";
 
   constructor(private readonly httpClient: HttpClient,
               private readonly storage: Storage,
+              private af: AngularFirestore
               // private readonly jwtHelper: JwtHelperService
             ) {
   }
 
   checkLogin() {
     const jwt = localStorage.getItem(this.jwtTokenName)
-    console.log("CHECKING JWT")
     if (jwt) {
-      console.log("HERE1")
-      this.httpClient.get(`${this.url}/authenticate`)
-        .subscribe(() => this.authUser.next(jwt),
-          (err) => {
-            console.log("HERE2");
-            localStorage.removeItem(this.jwtTokenName);
-            this.authUser.next(null);
-          })
-      // OR
-      // this.authUser.next(jwt);
+      this.authUser.next(jwt);
     } else {
       localStorage.removeItem(this.jwtTokenName);
       console.log(localStorage.getItem(this.jwtTokenName));
       this.authUser.next(null);
     }
   }
+
 
   getVersion(): Observable<any> {
     return this.httpClient.get(`${this.url}/getVersion`, {responseType: 'text'})
