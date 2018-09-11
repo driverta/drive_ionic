@@ -63,7 +63,7 @@ export class MyApp {
     public toastCtrl: ToastController,
     public authProvider: AuthProvider,
     public alertCtrl: AlertController,
-    private app: AppVersion, private keyboard: Keyboard) {
+    private keyboard: Keyboard) {
     this.initTranslate();
 
     this.tester = localStorage.getItem("stay");
@@ -79,9 +79,13 @@ export class MyApp {
         document.body.classList.remove('keyboard-is-open');
     });
     authProvider.authUser.subscribe(jwt => {
+      console.log(jwt)
+      console.log(localStorage.getItem('email'));
       if (jwt) {
         console.log("HOME")
+        
         this.userService.getUserByEmail(localStorage.getItem("email")).subscribe(data =>{
+          console.log(data);
           this.userService.setUser(data);
           this.nav.push(MainPage);
           // Get a FCM token
