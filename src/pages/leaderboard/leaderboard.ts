@@ -21,7 +21,7 @@ import { TimelineChartComponent } from '../../components/timeline-chart/timeline
   templateUrl: 'leaderboard.html',
 })
 export class SearchPage {
-  @ViewChild(TimelineChartComponent) timelineChart: TimelineChartComponent;
+  // @ViewChild(TimelineChartComponent) timelineChart: TimelineChartComponent;
   @ViewChild('timelineContainer', { read: ViewContainerRef }) container;
 
   currentItems: any = [];
@@ -38,6 +38,8 @@ export class SearchPage {
   month = false;
   day = false;
   segment = "week";
+  hideTimeline = true;
+  charts: any[];
   competingUsers: UserModel[] = new Array<UserModel>();
 
   players= [
@@ -52,8 +54,8 @@ export class SearchPage {
     public userService: ProvidersUserProvider,
     public workoutService: WorkoutService,
     private gainsPipe: SortByGainsPipe,
-    private resolver: ComponentFactoryResolver,
-    public viewContainerRef: ViewContainerRef) {
+    private resolver: ComponentFactoryResolver
+  ) {
       this.user = this.userService.getUser();
     }
 
@@ -98,17 +100,27 @@ export class SearchPage {
     });
   }
 
-  ionViewWillLoad() {
+  ionViewDidLoad() {
     this.workoutService.getCompetingWorkouts(this.user.id, 0, 10).subscribe(workouts => {
+      console.log(workouts)
+
       workouts.forEach(workout => {
-        // this.resolver.resolveComponentFactory
-        // const factory = this.resolver.resolveComponentFactory(TimelineChartComponent);
-        
-        // let componentRef = this.container.createComponent(factory);
-        // (<TimelineChartComponent>componentRef.instance).makeTimelineChart(this.user.id, workout)
-        this.timelineChart.makeTimelineChart(this.user.id, workout);
+        if ((workout.startTime != null) && (workout.endTime != null) ) {
+          workout.startTime = new Date(workout.startTime);
+          workout.endTime = new Date(workout.endTime);
+          this.resolver.resolveComponentFactory
+          const factory = this.resolver.resolveComponentFactory(TimelineChartComponent);
+          let componentRef = this.container.createComponent(factory);
+          (<TimelineChartComponent>componentRef.instance).makeTimelineChart(workout)
+        }
       });
     });
+  }
+
+  setCharts(display) {
+    this.charts.forEach(chart => {
+      chart.show = false
+    })
   }
 
   onSegmentChange(){
@@ -117,33 +129,22 @@ export class SearchPage {
       switch(this.segment) {
         case "today":
           user.gains = user.gainsToday;
+          this.hideTimeline = true;
           break;
         case "week":
           user.gains = user.gainsWeek;
+          this.hideTimeline = true;
           break;
         case "timeline":
-          this.populateCharts();
+          this.hideTimeline = false;
           break;
         default:
           user.gains = user.gainsTotal;
+          this.hideTimeline = true;
           break;
       }
     });
     this.competingUsers = this.gainsPipe.transform(this.competingUsers)
-  }
-
-  populateCharts() {
-    // this.workoutService.getCompetingWorkouts(this.user.id, 0, 10).subscribe(workouts => {
-    //   workouts.forEach(workout => {
-    //     // this.resolver.resolveComponentFactory
-    //     const factory = this.resolver.resolveComponentFactory(TimelineChartComponent);
-        
-
-    //     let componentRef = this.container.createComponent(factory);
-    //     (<TimelineChartComponent>componentRef.instance).makeTimelineChart(this.user.id, workout)
-    //     // this.timelineChart.makeTimelineChart(this.user.id, workout)
-    //   });
-    // });
   }
 
   filterDay(ev) {

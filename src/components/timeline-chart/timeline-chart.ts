@@ -1,10 +1,11 @@
-import { Component, Input } from '@angular/core';
-import { IonicPage, ActionSheetController, NavController, NavParams } from 'ionic-angular';
-import { User, ProvidersUserProvider, HistoryProvider } from '../../providers/providers';
+import { Component, Input, Output, EventEmitter  } from '@angular/core';
+import { ActionSheetController, NavParams } from 'ionic-angular';
+import { ProvidersUserProvider, HistoryProvider } from '../../providers/providers';
 import { Storage } from '@ionic/storage';
 import { CardioHistory } from '../../models/CardioHistory';
 import { LiftingHistory } from '../../models/LiftingHistory';
 import { Flexibility } from '../../models/Flexibility';
+import { WorkoutModel } from '../../models/Workout';
 
 import * as d3 from 'd3-selection';
 import * as d3Scale from "d3-scale";
@@ -23,16 +24,16 @@ import * as d3Axis from "d3-axis";
   templateUrl: 'timeline-chart.html'
 })
 export class TimelineChartComponent {
+  @Input() hide = false;
 
   text: string;
-  user: any;
 	gains = 0
 	allTime = 0;
 
   exercises = {};
   xGains = 0
   id: string;
-
+  userId: string;
   chest = 0;
   back = 0;
   legs = 0;
@@ -44,11 +45,11 @@ export class TimelineChartComponent {
   cardioHistory: CardioHistory[] = new Array<CardioHistory>();
   liftingHistory: LiftingHistory[] = new Array<LiftingHistory>();
   flexHistory: Flexibility[] = new Array<Flexibility>();
+  workout: WorkoutModel;
 
   margin = {top: 50, right: 110, bottom: 50, left: 45};
   width: number;
   height: number;
-  @Input() inputData: any;
 
   data = [
     [//iPhone
@@ -81,60 +82,61 @@ export class TimelineChartComponent {
   ) {
     console.log('Hello TimelineChartComponent Component');
     this.text = 'Hello World';
+    this.width = Math.min(700, window.innerWidth - 10) - this.margin.left - this.margin.right,
+    this.height = Math.min(this.width, window.innerHeight - this.margin.top - this.margin.bottom - 20);
+    this.radarChartOptions.w = this.width;
+    this.radarChartOptions.h = this.height;
+    this.radarChartOptions.margin = this.margin;
   }
 
-  public makeTimelineChart(userId, workout) {
-    this.id = userId + '_' + workout.id;
-    this.allTime = 0;
+  public makeTimelineChart(workout) {
+    console.log(workout)
+    this.workout = workout
+    const userId = workout.user.id;
+    this.id = 't_' + userId; + workout.id;
 
-    this.chest = 0;
-    this.back = 0;
-    this.legs = 0;
-    this.shoulders = 0;
-    this.arms = 0;
-    this.core = 0;
-    this.other = 0;
-    this.cardio = 0;
+    console.log(this.allTime);
 
-    this.historyService.getUserCardioHistoryBetween(this.user.id, workout.startTime, workout.endTime).subscribe((cardioHistory) => {
+    this.historyService.getUserCardioHistoryBetween(userId, workout.startTime, workout.endTime).subscribe((cardioHistory) => {
       this.cardioHistory = cardioHistory;
       this.cardioHistory.forEach(ch => {
-        this.cardio += ch.gains;
+        this.cardio += (ch.gains || 0);
       });
-      this.historyService.getUserLiftingHistoryBetween(this.user.id, workout.startTime, workout.endTime).subscribe((liftingHistory) => {
+      this.historyService.getUserLiftingHistoryBetween(userId, workout.startTime, workout.endTime).subscribe((liftingHistory) => {
         this.liftingHistory = liftingHistory;
         this.liftingHistory.forEach(lh =>{
           switch(lh.exercise.MuscleGroup.muscleGroupName) {
+            
             case "Chest":
-              this.chest += lh.gains;
+              this.chest += (lh.gains || 0);
               break;
             case "Back":
-              this.back += lh.gains;
+              this.back += (lh.gains || 0);
               break;
             case "Legs":
-              this.legs += lh.gains;
+              this.legs += (lh.gains || 0);
               break;
             case "Shoulders":
-              this.shoulders += lh.gains;
+              this.shoulders += (lh.gains || 0);
               break;
             case "Arms":
-              this.arms += lh.gains;
+              this.arms += (lh.gains || 0);
               break;
             case "Core":
-              this.core += lh.gains;
+              this.core += (lh.gains || 0);
               break;
-            }
-      	  });
-	      this.allTime = this.cardio + this.back + this.chest + this.arms + this.core + this.arms + this.shoulders + this.legs;
-	      this.data[0][0].value = this.chest / this.allTime;
-	      this.data[0][1].value = this.back / this.allTime;
-	      this.data[0][2].value = this.legs / this.allTime;
-	      this.data[0][3].value = this.shoulders / this.allTime;
-	      this.data[0][4].value = this.arms / this.allTime;
-	      this.data[0][5].value = this.core / this.allTime;
-        this.data[0][6].value = this.cardio / this.allTime;
+          }
+        });
+        this.allTime = this.cardio + this.back + this.chest + this.arms + this.core + this.arms + this.shoulders + this.legs;
+	      this.data[0][0].value = (this.chest / this.allTime) || 0;
+	      this.data[0][1].value = (this.back / this.allTime) || 0;
+	      this.data[0][2].value = (this.legs / this.allTime) || 0;
+	      this.data[0][3].value = (this.shoulders / this.allTime) || 0;
+	      this.data[0][4].value = (this.arms / this.allTime) || 0;
+	      this.data[0][5].value = (this.core / this.allTime) || 0;
+        this.data[0][6].value = (this.cardio / this.allTime) || 0;
 
-        this.radarChart(this.id, this.data, this.radarChartOptions);
+        this.radarChart('#' + this.id, this.data, this.radarChartOptions);
       });
     });
   }
@@ -167,6 +169,7 @@ export class TimelineChartComponent {
     //var maxValue = Math.max(cfg.maxValue, d3Array.max(data, function(i){console.log(i); return d3Array.max(i.map(function(o){ console.log(o); return o.value;}))}));
     var maxValue = options.maxValue
     console.log(maxValue)
+    console.log(this.data)
 
     var allAxis = (data[0].map((i, j) => {return i.axis})),  //Names of each axis
       total = allAxis.length,          //The number of different axes
@@ -194,7 +197,7 @@ export class TimelineChartComponent {
     //Append a g element    
     var g = svg.append("g")
         .attr("transform", "translate(" + (cfg.w/2 + cfg.margin.left) + "," + (cfg.h/2 + cfg.margin.top) + ")");
-    
+
     /////////////////////////////////////////////////////////
     ////////// Glow filter for some extra pizzazz ///////////
     /////////////////////////////////////////////////////////

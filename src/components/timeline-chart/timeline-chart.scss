@@ -1,3 +1,65 @@
 timeline-chart {
-
-}
+    table {
+      margin-left:auto; 
+      margin-right:auto;
+      border-collapse: separate;
+    }
+  
+    table th {
+      font-size: 35px;
+      padding-top: 30px;
+    }
+  
+    table td {
+      font-size: 25px;
+      width: 150px;
+    }
+  
+    .stats {
+      text-align: center;
+    }
+    
+    body {
+      font-family: 'Open Sans', sans-serif;
+      font-size: 11px;
+      font-weight: 300;
+      fill: #242424;
+      text-align: center;
+      text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, -1px 0 0 #fff, 0 -1px 0 #fff;
+      cursor: default;
+  
+    }
+    
+    .legend {
+      font-family: 'Raleway', sans-serif;
+      fill: white;
+    }
+    
+    .tooltip {
+      fill: #333333;
+    }
+  
+    .tlchart {
+      height: 300px;
+    }
+  
+    #chart {
+      color: black;
+      text-align: center;
+    }
+  
+    .axis-title text{
+      fill: black;
+    }
+  
+    .axis text{
+      fill: black;
+    }
+  
+    svg {
+      display: block;
+      height: 325px;
+      margin: auto;
+    }
+  }
+  

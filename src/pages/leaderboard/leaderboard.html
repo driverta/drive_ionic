@@ -20,9 +20,12 @@
         </ion-segment-button>
       </ion-segment>
     </ion-item-divider>
-
+    <div [hidden]="hideTimeline == true">
+      <div #timelineContainer></div>  
+    </div>
     <div [ngSwitch]="segment">
       <ion-list class="no-margin" *ngSwitchDefault>
+
         <ion-item-sliding no-lines *ngFor="let item of competingUsers">
 
           <ion-item (click)="openItem(item)" no-lines [ngClass]="{red: item.username == username}">
@@ -48,16 +51,11 @@
         </ion-item-sliding>
       </ion-list>
       <h3 *ngIf="show" id="loading">Loading</h3>
-
-      <ion-list class="no-margin" *ngSwitchCase="'timeline'">
-        <ion-item no-lines *ngFor="let workout of workouts">
-          <!-- <div id='{{workout.id}}'>
-          </div> -->
-          <timeline-chart></timeline-chart>
-        </ion-item>
-        <div id='timelineContainer'>
-        </div>
-      </ion-list>
+      <ng-container *ngSwitchCase="'timeline'">
+        <ion-list class="no-margin">
+          <!-- <timeline-chart (myEvent)="ionViewDidLoad();"></timeline-chart> -->
+        </ion-list>
+      </ng-container>
     </div>
   </div>
 </ion-content>

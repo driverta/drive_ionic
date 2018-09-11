@@ -35,6 +35,8 @@ import { SortByGainsPipe } from '../pipes/sort-by-gains/sort-by-gains'
 
 import { AppVersion } from '@ionic-native/app-version';
 import { JwtHttpInterceptor } from '../providers/auth/jwt-http-interceptor'
+import { TimelineChartComponent } from './../components/timeline-chart/timeline-chart'
+import { ComponentsModule } from '../components/components.module';
 
 // The translate loader needs to know where to load i18n files
 // in Ionic's static asset pipeline.
@@ -88,6 +90,7 @@ const firebase = {
         deps: [HttpClient]
       }
     }),
+    ComponentsModule,
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot(),
     AngularFireModule.initializeApp(firebase), 
@@ -102,7 +105,8 @@ const firebase = {
   ],
   bootstrap: [IonicApp],
   entryComponents: [
-    MyApp
+    MyApp,
+    TimelineChartComponent
   ],
   providers: [
     Api,
