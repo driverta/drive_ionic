@@ -62,7 +62,7 @@ export class HistoryComponent {
       this.liftingBool = false
       this.bodyLiftBool = true // TODO: GET Body Lift History 
       this.historyService.getBodyLiftByExercise(this.user.id, this.exercise.id).subscribe(bodyLifts => {
-        this.bodyLiftHistory = bodyLifts;
+        this.bodyLiftHistory = bodyLifts.reverse();
         console.log(bodyLifts);
       });
     } else if (this.muscleGroup == "Flexibility") {

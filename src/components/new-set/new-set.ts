@@ -54,6 +54,8 @@ export class NewSetComponent {
   historyModel: History;
   flex: Flexibility;
   bodyLift: BodyLift;
+  liftingHistory: LiftingHistory[];
+  bodyLiftHistory: BodyLift[];
 
   private invalid: boolean = false;
 
@@ -116,6 +118,7 @@ export class NewSetComponent {
     this.lf = new LiftingHistory();
     this.lf.reps = this.reps;
     this.lf.weight = this.weight;
+    this.lf.set = 0;
     this.lf.user_id = this.userService.getUser().id;
     var date;
     date = new Date();
@@ -156,9 +159,24 @@ export class NewSetComponent {
     }, 2000);
 
     console.log(this.lf);
-    this.userService.addLiftingHistory(this.lf).subscribe();
-    this.myEvent.emit(null);
-    this.ngOnInit(); 
+    
+    this.userService.getLiftingHistoryByIdAndExercise(this.exercise).subscribe(data =>{
+      this.liftingHistory = data;
+      this.liftingHistory = this.liftingHistory.reverse();
+      var newDate = new Date(this.liftingHistory[0].date).toDateString()
+      console.log(newDate)
+      console.log(date.toDateString())
+      if (newDate == date.toDateString()){
+        console.log("here")
+        this.lf.set = this.liftingHistory[0].set + 1;
+      }
+      console.log(this.lf.set)
+      //console.log(newDate)
+      this.userService.addLiftingHistory(this.lf).subscribe();
+      this.myEvent.emit(null);
+      this.ngOnInit();
+    })
+     
   }
 
   addCardioSet() {
@@ -271,6 +289,7 @@ export class NewSetComponent {
     this.historyModel.gains = 5;
     this.g = 5;
     this.bodyLift.reps = this.reps;
+    this.bodyLift.set = 0;
     console.log(JSON.stringify(this.historyModel));
 
     if (this.reps == undefined) { this.reps = 0 }                                                                                                                                                 
@@ -291,13 +310,23 @@ export class NewSetComponent {
       this.points = false;
     }, 2000);
     this.bodyLift.History = this.historyModel
-    this.historyService.addBodyLift(this.bodyLift).subscribe()
-    // this.historyService.addBodyLiftHistory(this.historyModel).subscribe(history => {
-    //   this.bodyLift.History = history
-    //   this.historyService.addBodyLift(this.bodyLift).subscribe()
-    // });
-    this.myEvent.emit(null);
-    this.ngOnInit(); 
+    this.historyService.getBodyLiftByExercise(this.user.id, this.exercise.id).subscribe(bodyLifts => {
+        this.bodyLiftHistory = bodyLifts;
+        this.bodyLiftHistory = this.bodyLiftHistory.reverse();
+        console.log(this.bodyLiftHistory[0].History.date)
+        //var newDate = new Date(this.liftingHistory[0].date).toDateString()
+        var newDate = new Date(this.bodyLiftHistory[0].History.date).toDateString()
+          if (newDate == new Date().toDateString()){
+            this.bodyLift.set = this.bodyLiftHistory[0].set + 1;
+            
+          }
+          this.historyService.addBodyLift(this.bodyLift).subscribe()
+          this.myEvent.emit(null);
+          this.ngOnInit(); 
+          console.log(bodyLifts[0].History.date);
+        });
+    
+    
   }
 
   newLevel(level){
