@@ -44,18 +44,12 @@ export class WelcomePage {
 
   constructor(public navCtrl: NavController,
     public alertCtrl: AlertController,
-    private userService: ProvidersUserProvider,
     private authProvider: AuthProvider,
     private toastCtrl: ToastController,
     public httpClient: HttpClient,
     public keyboard: Keyboard,
-    // public jwtHelper: JwtHelperService,
     public firebaseNative: Firebase,
-    private readonly loadingCtrl: LoadingController,
-    private storage: Storage,
-    private fcm: FcmProvider
   ) { 
-
     keyboard.didShow.subscribe(() => {
       console.log("here");
       this.showFooter = false;
@@ -96,12 +90,14 @@ export class WelcomePage {
     else{
       this.authLogin()
         .then(value => {
-          firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
+          localStorage.setItem("email",this.account.email);
+          firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then((idToken) => {
             localStorage.setItem("jwt_token", idToken);
-            console.log(idToken)
+            localStorage.setItem("stay","logged");
             this.authProvider.authUser.next(idToken);
           }).catch(function(error) {
             // Handle error
+            console.log(error);
           });
         }).catch( error => {
           this.presentFirebaseError(error)
@@ -173,7 +169,7 @@ export class WelcomePage {
   }
 
   saveLogin() {
-      localStorage.setItem("stay","logged");
-      localStorage.setItem("email",this.account.email);
-    }
+    localStorage.setItem("stay","logged");
+    localStorage.setItem("email",this.account.email);
+  }
 }

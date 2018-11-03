@@ -4,20 +4,77 @@
 
 
   <div class="timespan">
+    <!-- <ion-item-divider no-lines sticky>    
+      <ion-segment (ionChange)="onSegmentChange()" [(ngModel)]="segment">
+        <ion-segment-button value="today">
+          TODAY
+        </ion-segment-button>
+        <ion-segment-button value="week">
+          WEEK
+        </ion-segment-button>
+        <ion-segment-button value="all_time">
+          All TIME
+        </ion-segment-button>
+        <ion-segment-button value="timeline">
+          timeline
+        </ion-segment-button>
+      </ion-segment>
+    </ion-item-divider>
+    <div [hidden]="hideTimeline == true">
+      <div #timelineContainer></div>  
+    </div>
+    <div [ngSwitch]="segment">
+      <ion-list class="no-margin" *ngSwitchDefault>
+
+        <ion-item-sliding no-lines *ngFor="let item of competingUsers">
+
+          <ion-item (click)="openItem(item)" no-lines [ngClass]="{red: item.username == username}">
+            <ion-avatar item-start>
+              <img *ngIf="item.profilePic != 'data:image/jpeg;base64,NahNigga'" [src]="item.profilePic" />
+              <ion-icon *ngIf="item.profilePic == 'data:image/jpeg;base64,NahNigga'" class="default-img" name="contact"></ion-icon>
+            </ion-avatar>
+
+            <h1>{{item.username}}
+
+              <div class="gains">{{item.gains}}</div>
+
+            </h1>
+          </ion-item>
+
+          <ion-item-options *ngIf="item.username != username">
+            <button ion-button color="danger" (click)="presentConfirm(item)">
+              {{ 'Remove' | translate }}
+            </button>
+          </ion-item-options>
+
+        </ion-item-sliding>
+      </ion-list>
+      <h3 *ngIf="show" id="loading">Loading</h3>
+      <ng-container *ngSwitchCase="'timeline'">
+        <ion-list class="no-margin">
+        </ion-list>
+      </ng-container>
+    </div> -->
     <ion-list class="no-margin">
-<ion-item-divider no-lines sticky>    <ion-segment (ionChange)="onSegmentChange()" [(ngModel)]="segment">
-    <ion-segment-button value="today">
-      TODAY
-    </ion-segment-button>
-    <ion-segment-button value="week">
-      WEEK
-    </ion-segment-button>
-    <ion-segment-button value="all_time">
-      All TIME
-    </ion-segment-button>
-  </ion-segment></ion-item-divider>
-
-
+      <ion-item-divider no-lines sticky>    
+        <ion-segment (ionChange)="onSegmentChange()" [(ngModel)]="segment">
+          <ion-segment-button value="today">
+            TODAY
+          </ion-segment-button>
+          <ion-segment-button value="week">
+            WEEK
+          </ion-segment-button>
+          <ion-segment-button value="all_time">
+            All TIME
+          </ion-segment-button>
+          <ion-segment-button value="timeline">
+              timeline
+            </ion-segment-button>
+        </ion-segment>
+      </ion-item-divider>
+      <div class="insert-a-component-inside">
+        <ng-container #timelineContainer></ng-container>
+      </div>
       <ion-item-sliding no-lines *ngFor="let item of competingUsers">
 
         <ion-item (click)="openItem(item)" no-lines [ngClass]="{red: item.username == username}">

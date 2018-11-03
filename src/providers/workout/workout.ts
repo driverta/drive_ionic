@@ -19,6 +19,10 @@ export class WorkoutService {
     return this.http.get<WorkoutModel[]>(this.url + "getCompetingWorkouts?userId=" + userId + '&startIndex=' + startIndex + '&endIndex=' + endIndex);
   }
 
+  getTimelineData(userId, startIndex, endIndex): Observable<any[]> {
+    return this.http.get<any[]>(this.url + "getTimelineData?userId=" + userId + '&startIndex=' + startIndex + '&endIndex=' + endIndex);
+  }
+
   createWorkout(workout): Observable<WorkoutModel> {
     return this.http.post<WorkoutModel>(this.url + "createWorkout", workout);
   }

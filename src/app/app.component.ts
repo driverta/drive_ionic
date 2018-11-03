@@ -94,9 +94,7 @@ export class MyApp {
           // Listen to incoming messages
           fcm.listenToNotifications().pipe(
             tap(msg => {
-              console.log("FIRST MESSAGE" + JSON.stringify(msg));
               if (msg['tap'] == true) {
-                console.log("here");
                 userService.getOneUser(msg['user'].split(' ')[0]).subscribe(user => {
                   this.nav.push(MainPage).then(() => {
                     this.nav.push('FriendProfilePage', {

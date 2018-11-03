@@ -1,11 +1,6 @@
-import { Component, Input, Output, EventEmitter  } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, ChangeDetectionStrategy, ViewChild, ElementRef, Renderer2, Inject  } from '@angular/core';
 import { ActionSheetController, NavParams } from 'ionic-angular';
-import { ProvidersUserProvider, HistoryProvider } from '../../providers/providers';
-import { Storage } from '@ionic/storage';
-import { CardioHistory } from '../../models/CardioHistory';
-import { LiftingHistory } from '../../models/LiftingHistory';
-import { Flexibility } from '../../models/Flexibility';
-import { WorkoutModel } from '../../models/Workout';
+
 
 import * as d3 from 'd3-selection';
 import * as d3Scale from "d3-scale";
@@ -21,36 +16,18 @@ import * as d3Axis from "d3-axis";
  */
 @Component({
   selector: 'timeline-chart',
-  templateUrl: 'timeline-chart.html'
+  templateUrl: 'timeline-chart.html',
 })
 export class TimelineChartComponent {
-  @Input() hide = false;
-
-  text: string;
-	gains = 0
-	allTime = 0;
-
-  exercises = {};
-  xGains = 0
-  id: string;
-  userId: string;
-  chest = 0;
-  back = 0;
-  legs = 0;
-  shoulders = 0;
-  arms = 0;
-  core = 0;
-  other = 0;
-  cardio = 0;
-  cardioHistory: CardioHistory[] = new Array<CardioHistory>();
-  liftingHistory: LiftingHistory[] = new Array<LiftingHistory>();
-  flexHistory: Flexibility[] = new Array<Flexibility>();
-  workout: WorkoutModel;
-
+  @Input() hide = true;
+  @Input() workout: any;
+  @Input() user: any;
+  @Input() id: any;
   margin = {top: 50, right: 110, bottom: 50, left: 45};
   width: number;
   height: number;
-
+  username: string;
+  loaded = false;
   data = [
     [//iPhone
     {axis:"Chest",value:0.12},
@@ -62,7 +39,7 @@ export class TimelineChartComponent {
     {axis:"Cardio",value:0.60}      
     ]
   ];
-
+  el: any;
   radarChartOptions = {
     w: 0,
     h: 0,
@@ -76,76 +53,41 @@ export class TimelineChartComponent {
   constructor(
     public navParams: NavParams,
     public actShtCtrl: ActionSheetController,
-    private storage: Storage,
-    private userService: ProvidersUserProvider,
-    private historyService: HistoryProvider
+    @Inject(ElementRef) elementRef: ElementRef
   ) {
-    console.log('Hello TimelineChartComponent Component');
-    this.text = 'Hello World';
     this.width = Math.min(700, window.innerWidth - 10) - this.margin.left - this.margin.right,
     this.height = Math.min(this.width, window.innerHeight - this.margin.top - this.margin.bottom - 20);
     this.radarChartOptions.w = this.width;
     this.radarChartOptions.h = this.height;
     this.radarChartOptions.margin = this.margin;
+    this.el = elementRef.nativeElement;
   }
 
-  public makeTimelineChart(workout) {
-    console.log(workout)
-    this.workout = workout
-    const userId = workout.user.id;
-    this.id = 't_' + userId; + workout.id;
+  ngAfterViewInit() {
+    var data = []
+    this.workout.forEach(wk => {
+      data.push({axis: wk[0], value: wk[1]})
+    })
+    this.radarChart('#' + this.id, [data], this.radarChartOptions);
+  }
 
-    console.log(this.allTime);
+  public makeTimelineChart(workout, id, user) {
+    this.username = user.username
+    this.id = 't_' + id;
+    var data = []
 
-    this.historyService.getUserCardioHistoryBetween(userId, workout.startTime, workout.endTime).subscribe((cardioHistory) => {
-      this.cardioHistory = cardioHistory;
-      this.cardioHistory.forEach(ch => {
-        this.cardio += (ch.gains || 0);
-      });
-      this.historyService.getUserLiftingHistoryBetween(userId, workout.startTime, workout.endTime).subscribe((liftingHistory) => {
-        this.liftingHistory = liftingHistory;
-        this.liftingHistory.forEach(lh =>{
-          switch(lh.exercise.MuscleGroup.muscleGroupName) {
-            
-            case "Chest":
-              this.chest += (lh.gains || 0);
-              break;
-            case "Back":
-              this.back += (lh.gains || 0);
-              break;
-            case "Legs":
-              this.legs += (lh.gains || 0);
-              break;
-            case "Shoulders":
-              this.shoulders += (lh.gains || 0);
-              break;
-            case "Arms":
-              this.arms += (lh.gains || 0);
-              break;
-            case "Core":
-              this.core += (lh.gains || 0);
-              break;
-          }
-        });
-        this.allTime = this.cardio + this.back + this.chest + this.arms + this.core + this.arms + this.shoulders + this.legs;
-	      this.data[0][0].value = (this.chest / this.allTime) || 0;
-	      this.data[0][1].value = (this.back / this.allTime) || 0;
-	      this.data[0][2].value = (this.legs / this.allTime) || 0;
-	      this.data[0][3].value = (this.shoulders / this.allTime) || 0;
-	      this.data[0][4].value = (this.arms / this.allTime) || 0;
-	      this.data[0][5].value = (this.core / this.allTime) || 0;
-        this.data[0][6].value = (this.cardio / this.allTime) || 0;
-
-        this.radarChart('#' + this.id, this.data, this.radarChartOptions);
-      });
-    });
+    workout.forEach(wk => {
+      data.push({axis: wk[0], value: wk[1]})
+    })
+    this.radarChart('#' + this.id, [data], this.radarChartOptions);
   }
 
   radarChart(id, data, options){
+    console.log(data)
     var cfg = {
      w: 600,        //Width of the circle
      h: 600,        //Height of the circle
-     margin: {top: 20, right: 20, bottom: 20, left: 20}, //The margins of the SVG
+     margin: {top: 20, right: 0, bottom: 20, left: 20}, //The margins of the SVG
      levels: 3,        //How many levels or inner circles should there be drawn
      maxValue: 0,       //What is the value that the biggest circle will represent
      labelFactor: 1.25,   //How much farther than the radius of the outer circle should the labels be placed
@@ -161,16 +103,14 @@ export class TimelineChartComponent {
     //Put all of the options into a variable called cfg
     if('undefined' !== typeof options){
       for(var i in options){
-      if('undefined' !== typeof options[i]){ cfg[i] = options[i]; }
+        if('undefined' !== typeof options[i]){ cfg[i] = options[i]; }
       }//for i
     }//if
     
     //If the supplied maxValue is smaller than the actual one, replace by the max in the data
     //var maxValue = Math.max(cfg.maxValue, d3Array.max(data, function(i){console.log(i); return d3Array.max(i.map(function(o){ console.log(o); return o.value;}))}));
     var maxValue = options.maxValue
-    console.log(maxValue)
-    console.log(this.data)
-
+    
     var allAxis = (data[0].map((i, j) => {return i.axis})),  //Names of each axis
       total = allAxis.length,          //The number of different axes
       radius = Math.min(cfg.w/2, cfg.h/2),   //Radius of the outermost circle
@@ -181,19 +121,20 @@ export class TimelineChartComponent {
     var rScale = d3Scale.scaleLinear()
       .range([0, radius])
       .domain([0, maxValue]);
-      
+    
     /////////////////////////////////////////////////////////
     //////////// Create the container SVG and g /////////////
     /////////////////////////////////////////////////////////
-
+    console.log(id);
     //Remove whatever chart with the same id/class was present before
     d3.select(id).select("svg").remove();
-    
+
     //Initiate the radar chart SVG
     var svg = d3.select(id).append("svg")
         .attr("width",  cfg.w + cfg.margin.left + cfg.margin.right)
         .attr("height", cfg.h + cfg.margin.top + cfg.margin.bottom)
-        .attr("class", "radar"+id);
+        .attr("class", "radar");
+
     //Append a g element    
     var g = svg.append("g")
         .attr("transform", "translate(" + (cfg.w/2 + cfg.margin.left) + "," + (cfg.h/2 + cfg.margin.top) + ")");
@@ -209,6 +150,7 @@ export class TimelineChartComponent {
       feMergeNode_1 = feMerge.append('feMergeNode').attr('in','coloredBlur'),
       feMergeNode_2 = feMerge.append('feMergeNode').attr('in','SourceGraphic');
 
+
     /////////////////////////////////////////////////////////
     /////////////// Draw the Circular grid //////////////////
     /////////////////////////////////////////////////////////
@@ -219,8 +161,8 @@ export class TimelineChartComponent {
     //Draw the background circles
     var x = [5,4,3,2,1]
     axisGrid.selectAll(".levels")
-       .data(x)
-       .enter()
+      .data(x)
+      .enter()
       .append("circle")
       .attr("class", "gridCircle")
       .attr("r", function(d, i){return radius/cfg.levels*d;})
@@ -269,7 +211,7 @@ export class TimelineChartComponent {
       .attr("dy", "0.35em")
       .attr("x", (d, i) => { return rScale(maxValue * cfg.labelFactor) * Math.cos(angleSlice*i - Math.PI/2); })
       .attr("y", function(d, i){ return rScale(maxValue * cfg.labelFactor) * Math.sin(angleSlice*i - Math.PI/2); })
-      .text(function(d: any){ return d})
+      .text(function(d: any){ console.log(d);return d})
       .call(wrap, cfg.wrapWidth);
 
     /////////////////////////////////////////////////////////

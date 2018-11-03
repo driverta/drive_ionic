@@ -1,4 +1,4 @@
-import { Component, ViewChild, ViewContainerRef, ComponentFactoryResolver  } from '@angular/core';
+import { Component, ViewChild, ViewContainerRef, ComponentFactoryResolver, Directive, Inject, NgModuleFactoryLoader, SystemJsNgModuleLoader  } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 
 import { ProvidersUserProvider } from '../../providers/providers';
@@ -13,7 +13,8 @@ import { CompetingModel } from '../../models/competing';
 
 import { tap } from 'rxjs/operators';
 import { TimelineChartComponent } from '../../components/timeline-chart/timeline-chart';
-
+import { BehaviorSubject } from 'rxjs';
+import * as d3 from 'd3-selection';
 
 @IonicPage()
 @Component({
@@ -21,12 +22,12 @@ import { TimelineChartComponent } from '../../components/timeline-chart/timeline
   templateUrl: 'leaderboard.html',
 })
 export class SearchPage {
-  // @ViewChild(TimelineChartComponent) timelineChart: TimelineChartComponent;
   @ViewChild('timelineContainer', { read: ViewContainerRef }) container;
 
   currentItems: any = [];
   timeFilter = "All Time"
   user: any;
+  id: any;
   username: String;
   rank = "Frail Body"
   loop = 0;
@@ -39,9 +40,10 @@ export class SearchPage {
   day = false;
   segment = "week";
   hideTimeline = true;
+  timelineCharts: any[] = [];
   charts: any[];
   competingUsers: UserModel[] = new Array<UserModel>();
-
+  workout: any;
   players= [
     {name: "tom", level: 3, gains: 100, profilePic: "", totalGains: [], rank: "Frail Body"}
   ]
@@ -54,7 +56,7 @@ export class SearchPage {
     public userService: ProvidersUserProvider,
     public workoutService: WorkoutService,
     private gainsPipe: SortByGainsPipe,
-    private resolver: ComponentFactoryResolver
+    private resolver: ComponentFactoryResolver,
   ) {
       this.user = this.userService.getUser();
     }
@@ -94,18 +96,26 @@ export class SearchPage {
   }
 
   ionViewDidLoad() {
-    this.workoutService.getCompetingWorkouts(this.user.id, 0, 10).subscribe(workouts => {
+    
+    this.workoutService.getTimelineData(this.user.id, 0, 10).subscribe(workouts => {
       console.log(workouts)
-
+      var counter = 0
       workouts.forEach(workout => {
-        if ((workout.startTime != null) && (workout.endTime != null) ) {
-          workout.startTime = new Date(workout.startTime);
-          workout.endTime = new Date(workout.endTime);
-          this.resolver.resolveComponentFactory
-          const factory = this.resolver.resolveComponentFactory(TimelineChartComponent);
-          let componentRef = this.container.createComponent(factory);
-          (<TimelineChartComponent>componentRef.instance).makeTimelineChart(workout)
-        }
+        this.resolver.resolveComponentFactory
+        const factory = this.resolver.resolveComponentFactory(TimelineChartComponent);
+        let componentRef = this.container.createComponent(factory);
+        
+        const timeline = (<TimelineChartComponent>componentRef.instance);
+        console.log(timeline);
+        timeline.workout = workout;
+        timeline.user = this.user
+        timeline.username = this.user.username
+        timeline.id = this.user.username + counter.toString();
+        this.timelineCharts.push(timeline);
+        console.log(this.user)
+        // timeline.makeTimelineChart(workout, this.user.username + counter.toString(), this.user );
+        // timeline.makeTimelineChart(workout, this.user.username + counter.toString(), this.user );
+        counter++;
       });
     });
   }
