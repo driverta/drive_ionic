@@ -79,13 +79,10 @@ export class MyApp {
         document.body.classList.remove('keyboard-is-open');
     });
     authProvider.authUser.subscribe(jwt => {
-      console.log(jwt)
-      console.log(localStorage.getItem('email'));
+      
       if (jwt) {
-        console.log("HOME")
         
         this.userService.getUserByEmail(localStorage.getItem("email")).subscribe(data =>{
-          console.log(data);
           this.userService.setUser(data);
           this.nav.push(MainPage);
           // Get a FCM token
@@ -94,9 +91,7 @@ export class MyApp {
           // Listen to incoming messages
           fcm.listenToNotifications().pipe(
             tap(msg => {
-              console.log("FIRST MESSAGE" + JSON.stringify(msg));
               if (msg['tap'] == true) {
-                console.log("here");
                 userService.getOneUser(msg['user'].split(' ')[0]).subscribe(user => {
                   this.nav.push(MainPage).then(() => {
                     this.nav.push('FriendProfilePage', {

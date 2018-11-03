@@ -20,7 +20,6 @@ export class ExerciseProvider {
 
 
   constructor(public http: HttpClient) {
-    console.log('Hello ExerciseProvider Provider');
   }
 
   getExercisesByUserId(userId): Observable<Exercise[]> {

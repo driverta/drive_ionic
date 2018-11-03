@@ -23,7 +23,6 @@ export class ProvidersUserProvider {
   user: UserModel = new UserModel(); 
 
   constructor(public http: HttpClient) {
-    console.log('Hello ProvidersUserProvider Provider');
   }
 
   getAllUsers(): Observable<UserModel[]> {
@@ -98,13 +97,10 @@ export class ProvidersUserProvider {
 
   addCardioHistory(cardio){
     cardio.user_id=this.user.id;
-    console.log(cardio)
     return this.http.post(this.url + "addCardioHistory", cardio);
   }
 
   addFlexHistory(history, flex){
-    console.log("HERE");
-    console.log(this.http.post(this.url + "addFlexHistory", history));
 		return this.http.post(this.url + "addFlexHistory", history);
   }
 

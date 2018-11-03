@@ -85,7 +85,6 @@ export class SearchPage {
 
   onSegmentChange(){
     this.competingUsers.forEach((user) =>{
-      console.log(user.gainsToday)
       switch(this.segment) {
         case "today":
           user.gains = user.gainsToday;
@@ -130,7 +129,7 @@ export class SearchPage {
           text: 'Cancel',
           role: 'cancel',
           handler: () => {
-            console.log('Cancel clicked');
+
           }
         },
         {
@@ -149,7 +148,6 @@ export class SearchPage {
     competing.id = this.user.id;
     competing.competingUser = competingUser.id
     this.userService.removeCompetingUser(competing).subscribe(data => {
-      console.log(data);
       this.ionViewWillEnter();
     })
   }

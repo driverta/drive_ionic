@@ -34,14 +34,11 @@ export class HomePage {
   ionViewDidLoad() {
     this.statusBar.styleBlackOpaque();
     this.userService.getExercises().subscribe(exercises => {
-      console.log(exercises)
       this.exercises = exercises
     });
-    console.log('ionViewDidLoad HomePage');
 
     this.exerciseService.getAllMuscleGroups().subscribe(data => {
       this.mg = data;
-      console.log(this.mg)
     })
   }
 

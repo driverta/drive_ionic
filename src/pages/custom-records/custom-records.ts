@@ -39,7 +39,6 @@ export class CustomRecordsPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad CustomRecordsPage');
   }
 
   tooManyAlert() {

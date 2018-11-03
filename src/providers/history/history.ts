@@ -59,8 +59,6 @@ export class HistoryProvider {
 	}
 
 	getBodyLiftByExercise(userId, exerciseId): Observable<BodyLift[]> {
-		console.log(userId);
-		console.log(exerciseId);
 		return this.http.get<BodyLift[]>(this.url + "getBodyLiftHistoryByExercise?userId=" + userId + '&exerciseId=' + exerciseId)
 	}
 	

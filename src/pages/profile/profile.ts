@@ -234,7 +234,6 @@ export class SettingsPage {
     let reader = new FileReader();
     reader.onload = (readerEvent) => {
       this.imageData = (readerEvent.target as any).result;
-      console.log(this.imageData);
       this.userService.uploadProfilePic(this.user.username, this.imageData).subscribe(data => {
         this.show = false;
         this.form.patchValue({ 'profilePic': this.imageData });
@@ -284,7 +283,6 @@ export class SettingsPage {
   }
 
   ngOnChanges() {
-    console.log('Ng All Changes');
   }
 
   logOut(){
@@ -295,7 +293,6 @@ export class SettingsPage {
           text: 'No',
           role: 'cancel',
           handler: () => {
-            console.log('Cancel clicked');
           }
         },
         {

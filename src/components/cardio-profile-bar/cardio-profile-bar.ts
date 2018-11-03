@@ -56,7 +56,6 @@ export class CardioProfileBarComponent {
   }
 
   public makeChart() {
-    console.log("FUCK DIS")
     this.tempRec = [
       {min: 0, max: 5, miles: 0, time: 0, mph: 0, records: 0},
       {min: 5, max: 10, miles: 0, time: 0, mph: 0, records: 0},

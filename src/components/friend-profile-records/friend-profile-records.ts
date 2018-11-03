@@ -25,7 +25,6 @@ export class FriendProfileRecordsComponent {
     ) {
     this.exercise = navParams.get('item');
     this.user = navParams.get('user')
-    console.log(this.user)
   }
 
   ngOnInit() {
@@ -35,10 +34,8 @@ export class FriendProfileRecordsComponent {
     this.records._chart = [
       
     ];
-    console.log("data")
     this.userService.getCompetingUsersLiftingHistoryByIdAndExercise(this.exercise, this.user.id).subscribe(data =>{
       this.liftingHistory = data;
-      console.log(data)
       this.getRecords();
     })
   }
@@ -64,7 +61,6 @@ export class FriendProfileRecordsComponent {
 
         this.records._records.push({reps: history.reps, weight: history.weight, oneRepMax: history.oneRepMax, records: 1})
       }
-      console.log(this.records._records);
       
     }
   }

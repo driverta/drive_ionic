@@ -96,7 +96,6 @@ export class FriendCardioRecordDetailPage {
     this.records._cardioRecords = [
       
     ];
-    console.log(this.exercise.exerciseName)
     this.userService.getCompetingUsersCardioHistoryByIdAndExercise(this.exercise, this.user.id).subscribe(data =>{
       this.cardioHistory = data;
       this.getRecords();
@@ -131,7 +130,6 @@ export class FriendCardioRecordDetailPage {
 
       }
     })
-    console.log(this.cardioRecords)
     this.sortRecords();
   }
 
@@ -211,7 +209,6 @@ export class FriendCardioRecordDetailPage {
   }
 
   saveExercise(exercise) {
-    console.log("DragonFuckerWasHere")
     this.bool = true;
     
     this.userService.getExercises().subscribe(exercises => {
@@ -255,7 +252,6 @@ export class FriendCardioRecordDetailPage {
 
   getExercises(): Promise<any> {
     this.storage.ready().then(() => {
-      console.log(this.storage.get(this.myUsername + '/exercises'))
       
     })
     return this.storage.get(this.myUsername + '/exercises');

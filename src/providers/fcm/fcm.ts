@@ -24,7 +24,6 @@ export class FcmProvider {
   
     if (this.platform.is('ios')) {
       token = await this.firebaseNative.getToken();
-      console.log(token);
       await this.firebaseNative.grantPermission();
     }
 
@@ -33,8 +32,6 @@ export class FcmProvider {
 
   // Save the token to firestore
   private saveTokenToFirestore(token) {
-    console.log("TOKEN")
-    console.log(token);
     if (!token) return;
     const devicesRef = this.afs.collection('devices')
     let platform;
@@ -49,7 +46,6 @@ export class FcmProvider {
       userId: this.userService.getUser().username,
       platform
     }
-    console.log(docData);
   
     return devicesRef.doc(token).set(docData);
   }

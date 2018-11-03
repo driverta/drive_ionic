@@ -58,7 +58,6 @@ export class FriendProfileBarComponent {
     this.records._chart = [
       
     ];
-    console.log("data")
     this.userService.getCompetingUsersLiftingHistoryByIdAndExercise(this.exercise, this.user.id).subscribe(data =>{
       this.liftingHistory = data;
       
@@ -129,7 +128,6 @@ export class FriendProfileBarComponent {
 
         this.records._records.push({reps: history.reps, weight: history.weight, oneRepMax: history.oneRepMax, records: 1})
       }
-      console.log(this.records._records);
       this.records._records.sort((a: any, b: any) => {
         if (a.reps < b.reps) {
           return -1;

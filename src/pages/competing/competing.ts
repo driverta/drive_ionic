@@ -32,7 +32,6 @@ export class CompetingPage {
   }
 
   ionViewDidLoad() {
-    console.log(this.listType)
     if (this.listType == "competing"){
       if (this.user == this.userService.getUser()){
         this.canAddFriend = false;
@@ -44,7 +43,6 @@ export class CompetingPage {
     if (this.listType == "competitors"){  
       this.userService.getCompetitors(this.user.id).subscribe(data => {
         this.list = data
-        console.log("here")
         this.showDelete = false;
       })
     }
@@ -61,7 +59,6 @@ export class CompetingPage {
   }
 
   openItem(item){
-    console.log(item)
     this.navCtrl.push('SettingsPage', {
       item: item
     });
@@ -76,7 +73,6 @@ export class CompetingPage {
           text: 'Cancel',
           role: 'cancel',
           handler: () => {
-            console.log('Cancel clicked');
           }
         },
         {
@@ -106,7 +102,6 @@ export class CompetingPage {
     competing.competingUser = id
 
     this.userService.addCompetingUser(competing).subscribe(data => {
-      console.log(data);
       if (data === "already_exists") {
         this.alreadyCompeting();
       }

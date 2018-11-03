@@ -57,7 +57,6 @@ export class WelcomePage {
   ) { 
 
     keyboard.didShow.subscribe(() => {
-      console.log("here");
       this.showFooter = false;
    });
    
@@ -98,7 +97,6 @@ export class WelcomePage {
         .then(value => {
           firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
             localStorage.setItem("jwt_token", idToken);
-            console.log(idToken)
             this.authProvider.authUser.next(idToken);
           }).catch(function(error) {
             // Handle error
@@ -110,7 +108,6 @@ export class WelcomePage {
   }
 
   keyboardCheck() {
-    console.log("KEYBOARD OPEN");
     if (this.keyboard.isOpen()) {
         // You logic goes here
         this.showFooter = false;
@@ -145,8 +142,6 @@ export class WelcomePage {
   }
 
   presentFirebaseError(error: Error){
-    console.log(error.code);
-    console.log(error.message);
     this.buttonPressed = false;
     let firebaseError: Alert = this.alertCtrl.create({
      title: "Error",

@@ -168,7 +168,6 @@ export class SignupPage {
 
   addExercises() {
     this.userService.createUser(this.user).subscribe(response => {
-      console.log(response);
       this.userService.setUser(response)
       var bench = new Exercise;
       bench.exerciseName = "Bench Press";

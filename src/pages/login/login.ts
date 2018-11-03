@@ -44,9 +44,7 @@ export class LoginPage {
   }
 
   setUser() {
-    console.log(this.account.email);
     this.userService.getUserByEmail(this.account.email).subscribe(data =>{
-      console.log(data);
       this.userService.setUser(data);
       this.doLogin();
     });
@@ -64,8 +62,6 @@ export class LoginPage {
   }
 
   presentFirebaseError(error: Error){
-    console.log(error.code);
-    console.log(error.message);
     let firebaseError: Alert = this.alertCtrl.create({
      title: "Error",
      message: "Something went wrong!",

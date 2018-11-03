@@ -152,7 +152,6 @@ export class GainsChartComponent {
 	      this.data[0][4].value = this.arms / this.allTime;
 	      this.data[0][5].value = this.core / this.allTime;
 	      this.data[0][6].value = this.cardio / this.allTime;
-	      console.log(this.allTime);
 	      if (filter == "All"){
 	      	this.radarChart("#gainsChart", this.data, this.radarChartOptions);
 	      } else {
@@ -167,7 +166,6 @@ export class GainsChartComponent {
     this.exercises = {};
     this.xGains = 0;
     if (filter == "Cardio"){
-      console.log(this.cardioHistory)
       this.cardioHistory.forEach(c =>{
         if (c.exercise.MuscleGroup.muscleGroupName == filter) {
           this.xGains += c.gains;
@@ -190,11 +188,8 @@ export class GainsChartComponent {
         }
       });
     }
-    console.log(this.xGains);
-    console.log(this.exercises);
     Object.keys(this.exercises).forEach ((key) => {
       var percent = this.exercises[key] / this.xGains;
-      console.log(percent)
       var d = {axis: key, value: percent}
       this.data[0].push(d)
     });
@@ -228,7 +223,6 @@ export class GainsChartComponent {
     //If the supplied maxValue is smaller than the actual one, replace by the max in the data
     //var maxValue = Math.max(cfg.maxValue, d3Array.max(data, function(i){console.log(i); return d3Array.max(i.map(function(o){ console.log(o); return o.value;}))}));
     var maxValue = options.maxValue
-    console.log(maxValue)
 
     var allAxis = (data[0].map((i, j) => {return i.axis})),  //Names of each axis
       total = allAxis.length,          //The number of different axes

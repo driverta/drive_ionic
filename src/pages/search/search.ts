@@ -27,7 +27,6 @@ export class AddCompetitorsPage {
   	this.users = [];
     this.players = [];
     this.username = localStorage.getItem("username");
-    console.log(this.username)
     var query1 = firebase.database().ref("/users");
 
     query1.once("value").then( snapshot => {
@@ -76,7 +75,6 @@ export class AddCompetitorsPage {
 
   addToLeaderboard(item){
     var check = true;
-    console.log(this.players)
     this.players.forEach( value => {
 
       if (value.name == item.name) {

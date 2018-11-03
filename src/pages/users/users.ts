@@ -26,10 +26,8 @@ export class UsersPage {
 
   	this.userService.getAllUsers().subscribe(data => {
   		this.users = data;
-      console.log(data);
   	});
 
-    console.log('ionViewDidLoad UsersPage');
   }
 
 }

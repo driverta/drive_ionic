@@ -62,7 +62,6 @@ export class CardioProfileRecordsComponent {
     ];
     this.cardioRecords = [
     ];
-    console.log(this.exercise.exerciseName)
     this.userService.getCardioHistoryByIdAndExercise(this.exercise).subscribe(data =>{
       this.cardioHistory = data;
       this.getRecords();
@@ -97,7 +96,6 @@ export class CardioProfileRecordsComponent {
 
       }
     })
-    console.log(this.cardioRecords)
   }
 
 }

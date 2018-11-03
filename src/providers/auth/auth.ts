@@ -30,7 +30,6 @@ export class AuthProvider {
       this.authUser.next(jwt);
     } else {
       localStorage.removeItem(this.jwtTokenName);
-      console.log(localStorage.getItem(this.jwtTokenName));
       this.authUser.next(null);
     }
   }
@@ -46,18 +45,15 @@ export class AuthProvider {
   }
 
   logout() {
-    console.log(this.jwtTokenName);
     localStorage.removeItem(this.jwtTokenName)
     this.storage.remove(this.jwtTokenName).then(() => this.authUser.next(null));
   }
 
   signup(values: any, email): Observable<any> {
-    console.log("HERE")
     return this.httpClient.post(this.url + '/signup', values, {responseType: 'text'})
       .pipe(tap((jwt: any) => {
         if (jwt !== 'EXISTS') {
           this.saveLogin(email);
-          console.log("DOESNT EXISTS");
           return this.handleJwtResponse(jwt);
         }
         return jwt;
