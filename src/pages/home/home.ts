@@ -33,6 +33,7 @@ export class HomePage {
 
   ionViewDidLoad() {
     this.statusBar.styleBlackOpaque();
+    console.log(this.userService.getUser());
     this.userService.getExercises().subscribe(exercises => {
       console.log(exercises)
       this.exercises = exercises

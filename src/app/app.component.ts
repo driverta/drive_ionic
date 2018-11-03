@@ -30,7 +30,6 @@ import { Keyboard } from '@ionic-native/keyboard'
 })
 export class MyApp {
   rootPage = FirstRunPage;
-  tester = ""
   email = ""
 
   @ViewChild(Nav) nav: Nav;
@@ -63,10 +62,10 @@ export class MyApp {
     public toastCtrl: ToastController,
     public authProvider: AuthProvider,
     public alertCtrl: AlertController,
+    private storage: Storage,
     private keyboard: Keyboard) {
     this.initTranslate();
 
-    this.tester = localStorage.getItem("stay");
 
     platform.ready().then(() => {
 
@@ -78,44 +77,51 @@ export class MyApp {
     this.keyboard.onKeyboardHide().subscribe(() => {
         document.body.classList.remove('keyboard-is-open');
     });
-    authProvider.authUser.subscribe(jwt => {
-      console.log(jwt)
-      console.log(localStorage.getItem('email'));
-      if (jwt) {
-        console.log("HOME")
-        
-        this.userService.getUserByEmail(localStorage.getItem("email")).subscribe(data =>{
-          console.log(data);
-          this.userService.setUser(data);
-          this.nav.push(MainPage);
-          // Get a FCM token
-          fcm.getToken();
 
-          // Listen to incoming messages
-          fcm.listenToNotifications().pipe(
-            tap(msg => {
-              console.log("FIRST MESSAGE" + JSON.stringify(msg));
-              if (msg['tap'] == true) {
-                console.log("here");
-                userService.getOneUser(msg['user'].split(' ')[0]).subscribe(user => {
-                  this.nav.push(MainPage).then(() => {
-                    this.nav.push('FriendProfilePage', {
-                      item: user
-                    });
-                  })
+    authProvider.authUser.subscribe(jwtToken => {
+
+      if (jwtToken) {
+        this.storage.set("jwt_token", jwtToken).then(
+          () => {},
+        ).catch((error) => {
+          console.log(error);
+        });
+
+        this.storage.get("email").then(
+          (email) => {
+            this.userService.getUserByEmail(email).subscribe(data =>{
+              this.userService.setUser(data);
+              this.nav.push(MainPage);
+              // Get a FCM token
+              fcm.getToken();
+              this.rootPage = MainPage;
+    
+              // Listen to incoming messages
+              fcm.listenToNotifications().pipe(
+                tap(msg => {
+                  if (msg['tap'] == true) {
+                    userService.getOneUser(msg['user'].split(' ')[0]).subscribe(user => {
+                      this.nav.push(MainPage).then(() => {
+                        this.nav.push('FriendProfilePage', {
+                          item: user
+                        });
+                      })
+                    })
+                  }
+                  // show a toast
+                  const toast = toastCtrl.create({
+                    message: msg['body'],
+                    duration: 3000,
+                    position: 'top'
+                  });
+                  toast.present();
                 })
-              }
-              // show a toast
-              const toast = toastCtrl.create({
-                message: msg['body'],
-                duration: 3000,
-                position: 'top'
-              });
-              toast.present();
+              ).subscribe()
             })
-          ).subscribe()
-          this.rootPage = MainPage;
-        })
+          }
+        ).catch(
+          (error) => {}
+        );
       }
       else {
         this.rootPage = TutorialPage;
@@ -123,35 +129,7 @@ export class MyApp {
     });
 
     this.authProvider.checkLogin();
-
-
-
-
     });
-  }
-
-  setUser() {
-    this.email = localStorage.getItem("email");
-
-    this.userService.getUserByEmail(this.email).subscribe(data =>{
-      this.userService.setUser(data);
-    })
-
-    // var query1 = firebase.database().ref("/users");
-
-    // query1.once("value").then( snapshot => {
-      
-    //   snapshot.forEach( childSnapshot => {
-        
-    //     var childData1 = childSnapshot.val();
-    //     if (childData1.email == this.email) {
-    //       this.user._user = childData1.name;
-    //       localStorage.setItem("username",childData1.name);
-    //       //this.rootPage = MainPage;
-    //     }
-    //     //alert(this.user._user);      
-    //   });
-    // });
   }
 
   ionViewDidLoad() {

@@ -1,20 +1,13 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, ToastController, AlertController, Alert, LoadingController, Keyboard } from 'ionic-angular';
 import { ProvidersUserProvider, AuthProvider } from '../../providers/providers';
-import { MainPage } from '../pages';
 import firebase from 'firebase';
 import { Firebase } from '@ionic-native/firebase';
 
 import { Error } from '@firebase/auth-types';
-import { APIUser } from '../../models/APIUser'
 // import {JwtHelperService} from "@auth0/angular-jwt";
 import {HttpClient} from "@angular/common/http";
 import { Injectable } from '@angular/core';
-import {finalize} from 'rxjs/operators';
-import {Storage} from "@ionic/storage";
-import { FcmProvider } from '../../providers/fcm/fcm';
-
-import { tap } from 'rxjs/operators';
 /**
  * The Welcome Page is a splash page that quickly describes the app,
  * and then directs the user to create an account or log in.
@@ -45,19 +38,15 @@ export class WelcomePage {
   constructor(public navCtrl: NavController,
     public alertCtrl: AlertController,
     private userService: ProvidersUserProvider,
-    private authProvider: AuthProvider,
+    public authProvider: AuthProvider,
     private toastCtrl: ToastController,
     public httpClient: HttpClient,
     public keyboard: Keyboard,
     // public jwtHelper: JwtHelperService,
     public firebaseNative: Firebase,
-    private readonly loadingCtrl: LoadingController,
-    private storage: Storage,
-    private fcm: FcmProvider
   ) { 
 
     keyboard.didShow.subscribe(() => {
-      console.log("here");
       this.showFooter = false;
    });
    
@@ -71,7 +60,7 @@ export class WelcomePage {
   }
 
   login() {
-
+  
     this.buttonPressed = true;
 
     if(this.account.email == ''){
@@ -94,18 +83,14 @@ export class WelcomePage {
       this.buttonPressed = false;
     }
     else{
-      this.authLogin()
-        .then(value => {
-          firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
-            localStorage.setItem("jwt_token", idToken);
-            console.log(idToken)
-            this.authProvider.authUser.next(idToken);
-          }).catch(function(error) {
-            // Handle error
-          });
-        }).catch( error => {
-          this.presentFirebaseError(error)
-        });
+      this.authProvider.authWithFirebase(this.account.email, this.account.password).then(
+        (token) => {
+          this.authProvider.authUser.next(token);
+        },
+        (error) => {
+          this.presentFirebaseError(error);
+        }
+      )
     }
   }
 
@@ -145,8 +130,6 @@ export class WelcomePage {
   }
 
   presentFirebaseError(error: Error){
-    console.log(error.code);
-    console.log(error.message);
     this.buttonPressed = false;
     let firebaseError: Alert = this.alertCtrl.create({
      title: "Error",
@@ -166,10 +149,6 @@ export class WelcomePage {
     firebaseError.setMessage("Invalid password")
    }
     firebaseError.present();
-  }
- 
-  authLogin() : Promise<any> {
-    return firebase.auth().signInWithEmailAndPassword(this.account.email, this.account.password);
   }
 
   saveLogin() {

@@ -9,7 +9,8 @@ import { IonicPage,
   NavParams,
   AlertController,
   ModalController,
-  Img
+  Img,
+  Alert
 } from 'ionic-angular';
 import { Camera } from '@ionic-native/camera';
 import { Storage } from '@ionic/storage';
@@ -87,7 +88,8 @@ export class SettingsPage {
     public translate: TranslateService,
     public camera: Camera,
     public levels: Levels,
-    private userService: ProvidersUserProvider) {
+    private userService: ProvidersUserProvider,
+    private authProvider: AuthProvider) {
 
     // this.userData = this.userService.getUser();
     this.checkUser = this.navParams.get("item")
@@ -301,20 +303,19 @@ export class SettingsPage {
         {
           text: 'Yes',
           handler: () => {
-            this.reallyLogOut();
+            this.authProvider.logout().then(
+              () => {
+                this.navCtrl.push("FirstRunPage");
+              },
+              (error) => {
+                this.presentLogoutError(error);
+              }
+            );
           }
         }
       ]
     });
     alert.present();
-  }
-
-  reallyLogOut(){
-    localStorage.removeItem("jwt_token")
-    localStorage.setItem("stay","out");
-    localStorage.setItem("email","");
-    window.location.reload();
-    this.navCtrl.push("FirstRunPage");
   }
 
   rules(){
@@ -364,5 +365,14 @@ export class SettingsPage {
     })
 
     addModal.present();
+  }
+
+  presentLogoutError(error) {
+    let firebaseError: Alert = this.alertCtrl.create({
+      title: "Error",
+      message: "Something went wrong logging out. Please try again.",
+      buttons: ['Ok']
+    });
+    firebaseError.present();
   }
 }
