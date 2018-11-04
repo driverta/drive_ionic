@@ -1,26 +1,14 @@
 import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-<<<<<<< HEAD
-=======
-import { TranslateService } from '@ngx-translate/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Records } from '../../providers/providers';
-import { IonicPage,
-  Nav,
-  NavController,
-  NavParams,
-  AlertController,
-  ModalController,
-  Img,
-  Alert
-} from 'ionic-angular';
->>>>>>> master
 import { Camera } from '@ionic-native/camera';
 import { TranslateService } from '@ngx-translate/core';
-import { AlertController, IonicPage, ModalController, Nav, NavController, NavParams, Slides } from 'ionic-angular';
+import { AlertController, Alert, IonicPage, ModalController, Nav, NavController, NavParams, Slides } from 'ionic-angular';
 import { Exercise } from '../../models/Exercise';
 import { Levels, Settings } from '../../providers/providers';
 import { ProvidersUserProvider } from '../../providers/providers-user/providers-user';
+import { AuthProvider } from '../../providers/auth/auth'
 // Import ng-circle-progress
 import { NgCircleProgressModule } from 'ng-circle-progress';
 
