@@ -58,7 +58,7 @@ export class HistoryComponent {
     } else if (this.exercise.bodyLift) {
       this.liftingBool = false
       this.bodyLiftBool = true // TODO: GET Body Lift History 
-      if (this.history.bodyLiftHistory) {
+      if (this.history.bodyLift) {
         this.bodyLiftHistory = this.history.bodyLift.reverse()
       }
     } else if (this.muscleGroup == "Flexibility") {
