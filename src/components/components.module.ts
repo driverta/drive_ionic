@@ -27,7 +27,7 @@ import { GainsChartComponent } from './gains-chart/gains-chart';
     CardioProfileBarComponent,
     GainsChartComponent,
     GainsChartComponent],
-	imports: [],
+	imports: [ ],
 	exports: [BarChartComponent,
     NewSetComponent,
     HistoryComponent,

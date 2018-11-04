@@ -32,7 +32,6 @@ import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from "@angular/common
 import { SortByGainsPipe } from '../pipes/sort-by-gains/sort-by-gains'
 import { Keyboard } from '@ionic-native/keyboard'
 
-
 import { AppVersion } from '@ionic-native/app-version';
 import { JwtHttpInterceptor } from '../providers/auth/jwt-http-interceptor'
 
@@ -99,7 +98,15 @@ const firebase = {
     //     deps: [Storage]
     //   }
     // })
-      // Specify ng-circle-progress as an import
+    NgCircleProgressModule.forRoot({
+      // set defaults here
+      radius: 100,
+      outerStrokeWidth: 16,
+      innerStrokeWidth: 8,
+      outerStrokeColor: "#78C000",
+      innerStrokeColor: "#C7E596",
+      animationDuration: 300,
+    })
   ],
   bootstrap: [IonicApp],
   entryComponents: [

@@ -1,13 +1,11 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 import { NavParams, NavController, AlertController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
-
+import { NgCircleProgressModule } from 'ng-circle-progress';
 import { HistoryProvider, ProvidersUserProvider } from '../../providers/providers';
 import { Levels } from '../../providers/providers';
 import { Records } from '../../providers/providers';
-
 import firebase from 'firebase';
-
 import * as d3 from 'd3-selection';
 import { LiftingHistory } from '../../models/LiftingHistory';
 import { CardioHistory } from '../../models/CardioHistory';

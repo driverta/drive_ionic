@@ -5,8 +5,12 @@
   </ion-navbar>
 
 </ion-header>
-
 <ion-content *ngIf="!friend" scrollY="false" no-line>
+		<ion-item>
+        <circle-progress [percent]="85" [radius]="25" [outerStrokeWidth]="6" [innerStrokeWidth]="4"
+          [outerStrokeColor]="'#9C000A'" [innerStrokeColor]="'#C60000'" [animation]="true" [animationDuration]="300"></circle-progress>
+      </ion-item>
+
 
   <div padding>
 	  <ion-segment  [(ngModel)]="segment">
@@ -39,6 +43,7 @@
 	  </ion-list>
 
 	</div>
+
 </ion-content>
 <ion-content *ngIf="friend" padding>
 		<records></records>
