@@ -1,27 +1,13 @@
 import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { TranslateService } from '@ngx-translate/core';
-import { DomSanitizer } from '@angular/platform-browser';
-import { Records } from '../../providers/providers';
-import { IonicPage,
-  Nav,
-  NavController,
-  NavParams,
-  AlertController,
-  ModalController,
-  Img
-} from 'ionic-angular';
 import { Camera } from '@ionic-native/camera';
-import { Storage } from '@ionic/storage';
-
-import { Settings } from '../../providers/providers';
-import { User } from '../../providers/providers';
-import { Levels } from '../../providers/providers';
-import { AuthProvider } from '../../providers/providers';
+import { TranslateService } from '@ngx-translate/core';
+import { AlertController, IonicPage, ModalController, Nav, NavController, NavParams, Slides } from 'ionic-angular';
+import { Exercise } from '../../models/Exercise';
+import { Levels, Settings } from '../../providers/providers';
 import { ProvidersUserProvider } from '../../providers/providers-user/providers-user';
-//import { WelcomePage } from '../pages';
-
-import firebase from 'firebase';
+// Import ng-circle-progress
+import { NgCircleProgressModule } from 'ng-circle-progress';
 
 @IonicPage()
 @Component({
@@ -62,10 +48,15 @@ export class SettingsPage {
   buttons: boolean = true;
   myPicture: boolean = true;
   friendPicture: boolean = false;
+  segment = "stats";
 
   settingsReady = false;
 
+  latestExercise: Exercise = new Exercise()
+
   form: FormGroup;
+
+  @ViewChild(Slides) slides: Slides;
 
   profileSettings = {
     page: 'profile',
@@ -137,6 +128,7 @@ export class SettingsPage {
       this.friendPicture = false;
       this.userService.getExercises().subscribe(exercises => {
         this.exercisesLength = exercises.length;
+        this.latestExercise = exercises.pop()
       });
     } else {
       this.user = this.checkUser;
@@ -144,6 +136,7 @@ export class SettingsPage {
       this.height = this.user.height;
       this.gym = this.user.gym;
       this.location = this.user.location;
+      
       this.username = this.user.username;
       this.buttons = false;
       this.myPicture = false;
@@ -206,7 +199,6 @@ export class SettingsPage {
         this.progress = this.xcurrent / this.xtotal * 100
       }
     })
-    
   }
 
   getPicture() {
