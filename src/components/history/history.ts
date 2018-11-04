@@ -12,6 +12,7 @@ import { CardioHistory } from '../../models/CardioHistory';
 import { UserModel } from '../../models/users';
 import { Flexibility } from '../../models/Flexibility';
 import { BodyLift } from '../../models/BodyLift';
+import { CardioTimeConvertPipe } from '../../pipes/cardio-time-convert/cardio-time-convert'
 
 @Component({
   selector: 'history',
@@ -37,7 +38,7 @@ export class HistoryComponent {
 
   constructor(
     navParams: NavParams,
-    private historyService: HistoryProvider,
+    private history: HistoryProvider,
     private alertCtrl: AlertController,
     private storage: Storage,
     private userService: ProvidersUserProvider
@@ -49,29 +50,26 @@ export class HistoryComponent {
 
   ngOnInit() {
     if (this.muscleGroup == "Cardio") {
-      this.userService.getCardioHistoryByIdAndExercise(this.exercise).subscribe(data =>{
-        this.cardioHistory = data;
-        this.cardioHistory = this.cardioHistory.reverse();
         this.cardioBool = true;
         this.liftingBool = false;
-      });
+        if (this.history.cardioHistory){
+          this.cardioHistory = this.history.cardioHistory.reverse()
+        }
     } else if (this.exercise.bodyLift) {
       this.liftingBool = false
       this.bodyLiftBool = true // TODO: GET Body Lift History 
-      this.historyService.getBodyLiftByExercise(this.user.id, this.exercise.id).subscribe(bodyLifts => {
-        this.bodyLiftHistory = bodyLifts;
-      });
+      if (this.history.bodyLiftHistory) {
+        this.bodyLiftHistory = this.history.bodyLift.reverse()
+      }
     } else if (this.muscleGroup == "Flexibility") {
       this.liftingBool = false
       this.flexBool = true // TODO: GET flex history
-      this.historyService.getFlexByExercise(this.user.id, this.exercise.id).subscribe(flex => {
-        this.flexHistory = flex;
-      });
+      this.flexHistory = this.history.flexHistory
     } else {
-      this.userService.getLiftingHistoryByIdAndExercise(this.exercise).subscribe(data =>{
-        this.liftingHistory = data;
-        this.liftingHistory = this.liftingHistory.reverse();
-      })
+      if (this.history.liftingHistory) {
+        console.log("Yoo")
+        this.liftingHistory = this.history.liftingHistory.reverse()
+      }
     }
   }
 
@@ -165,7 +163,7 @@ export class HistoryComponent {
 
   deleteLifting(x) {
     this.username = this.user.username
-    this.historyService.removeLiftingHistory(x).subscribe(data => {
+    this.history.removeLiftingHistory(x).subscribe(data => {
       this.myEvent2.emit(null);
       this.ngOnInit();
     });
@@ -173,7 +171,7 @@ export class HistoryComponent {
 
   deleteCardio(x) {
     this.username = this.user.username
-    this.historyService.removeCardioHistory(x).subscribe(data => {
+    this.history.removeCardioHistory(x).subscribe(data => {
       this.myEvent2.emit(null);
       this.ngOnInit();
     });
@@ -181,7 +179,7 @@ export class HistoryComponent {
 
   deleteBodyLift(x) {
     this.username = this.user.username
-    this.historyService.removeBodyLift(x).subscribe(data => {
+    this.history.removeBodyLift(x).subscribe(data => {
       this.myEvent2.emit(null);
       this.ngOnInit();
     });
@@ -189,7 +187,7 @@ export class HistoryComponent {
 
   deleteFlex(x) {
     this.username = this.user.username
-    this.historyService.removeflex(x).subscribe(data => {
+    this.history.removeflex(x).subscribe(data => {
       this.myEvent2.emit(null);
       this.ngOnInit();
     });

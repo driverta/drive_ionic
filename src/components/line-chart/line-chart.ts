@@ -54,13 +54,14 @@ export class LineChartComponent {
 
   public makeLineChart() {
     if (this.muscleGroup == "Cardio") {
-      this.userService.getCardioHistoryByIdAndExercise(this.exercise).subscribe(data =>{
-        this.cardioHistory = data;
+      //this.userService.getCardioHistoryByIdAndExercise(this.exercise).subscribe(data =>{
+        this.cardioHistory = this.history.cardioHistory;
         this.axisText = "MPH"
         this.setCardioChart();
-      });
+      //});
     } else {
       this.userService.getLiftingHistoryByIdAndExercise(this.exercise).subscribe(data =>{
+        //this.liftingHistory = this.history.liftingHistory;
         this.liftingHistory = data;
         this.axisText = "1RM"
         this.setLiftingChart();
