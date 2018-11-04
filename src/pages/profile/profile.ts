@@ -48,12 +48,14 @@ export class SettingsPage {
   checkUser: any;
   show: boolean = true;
   load: boolean = true;
-  buttons: boolean = true;
+  buttons: boolean = false;
   myPicture: boolean = true;
   friendPicture: boolean = false;
+  profilePictureActive = false;
   segment = "stats";
 
   settingsReady = false;
+  showDefaultProfilePicture = true;
 
   latestExercise: Exercise = new Exercise()
 
@@ -117,60 +119,34 @@ export class SettingsPage {
   }
 
   ionViewDidLoad() {
-   //console.log(this.checkUser)
     if (this.checkUser == undefined){
       this.user = this.userService.getUser()
-      //console.log("here")
-      //this.username = this.user.username;
-      this.weight = this.user.weight;
-      this.height = this.user.height;
-      this.gym = this.user.gym;
-      this.location = this.user.location;
-      this.username = this.user.username;
       this.buttons = true;
       this.myPicture = true;
-      this.friendPicture = false;
       this.userService.getExercises().subscribe(exercises => {
         this.exercisesLength = exercises.length;
-        this.latestExercise = exercises.pop()
+        // this.latestExercise = exercises.pop()
       });
     } else {
       this.user = this.checkUser;
-      this.weight = this.user.weight;
-      this.height = this.user.height;
-      this.gym = this.user.gym;
-      this.location = this.user.location;
-      
       this.username = this.user.username;
-      this.buttons = false;
       this.myPicture = false;
       this.friendPicture = true;
       this.userService.getCompetingUsersExercises(this.user.id).subscribe(exercises => {
         this.exercisesLength = exercises.length;
       });
     }
-    this.competitorsList = [];
-    // this.username = this.userService.getUser().username;
-    // this.userService.getOneUser(this.username).subscribe(data => {
 
-    //   this.weight = data.weight;
-    //   this.height = data.height;
-    //   this.gym = data.gym;
-    //   this.location = data.location;
-    //   //this.gym = data.gym;
-    // })
-    // Build an empty form for the template to render
+    this.competitorsList = [];
     this.form = this.formBuilder.group({});  
 
     this.userService.getTotalGains(this.user.id).subscribe(totalGains => {
-      //console.log(totalGains);
       this.gains = totalGains;
       this.setLevel();
     });;
 
     this.userService.getCompetingUsers(this.user.id).subscribe(data => {
       this.competingList = data;
-      //console.log(this.competingList);
       this.competing = this.competingList.length;
     })
 
@@ -183,15 +159,11 @@ export class SettingsPage {
     this.userService.getProfilePic(this.user.username).subscribe(data => {
       this.form.patchValue({"profilePic": "data:image/jpeg;base64," + data});
       if (data != "NahNigga"){
-        //console.log(data);
         this.form.patchValue({"profilePic": "data:image/jpeg;base64," + data});
         this.show = true;
-      } else {
-        // <ion-icon *ngIf="item.profilePic == 'data:image/jpeg;base64,NahNigga'" class="default-img" name="contact"></ion-icon>
+        this.showDefaultProfilePicture = false;
       }
     });
-
-    
   }
 
   setLevel () {
@@ -226,7 +198,6 @@ export class SettingsPage {
   }
 
   processWebImage(event) {
-    //alert(event);
     let reader = new FileReader();
     reader.onload = (readerEvent) => {
       this.imageData = (readerEvent.target as any).result;
@@ -239,18 +210,12 @@ export class SettingsPage {
   }
 
   getProfileImageStyle() {
-
     try {
-      //this.noLoad();
       return 'url(' + this.form.controls['profilePic'].value + ')'
     }
     catch(err){
 
     }
-    finally{
-      
-    }
-    
   }
 
   noLoad(){
@@ -277,10 +242,6 @@ export class SettingsPage {
       this._buildForm();
     });
   }
-
-  ngOnChanges() {
-  }
-
   logOut(){
     let alert = this.alertCtrl.create({
       title: 'Logout of ' + this.username + '?',
@@ -307,10 +268,6 @@ export class SettingsPage {
       ]
     });
     alert.present();
-  }
-
-  rules(){
-    this.navCtrl.push('RulesPage');
   }
 
   goToCompeting(){
