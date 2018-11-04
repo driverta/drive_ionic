@@ -88,7 +88,6 @@ export class FriendRecordDetailPage {
   // }
 
   saveExercise(exercise) {
-    console.log("DragonFuckerWasHere")
     this.bool = true;
     
     this.userService.getExercises().subscribe(exercises => {
@@ -132,7 +131,6 @@ export class FriendRecordDetailPage {
 
   getExercises(): Promise<any> {
     this.storage.ready().then(() => {
-      console.log(this.storage.get(this.myUsername + '/exercises'))
       
     })
     return this.storage.get(this.myUsername + '/exercises');

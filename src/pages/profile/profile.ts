@@ -1,5 +1,20 @@
 import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+<<<<<<< HEAD
+=======
+import { TranslateService } from '@ngx-translate/core';
+import { DomSanitizer } from '@angular/platform-browser';
+import { Records } from '../../providers/providers';
+import { IonicPage,
+  Nav,
+  NavController,
+  NavParams,
+  AlertController,
+  ModalController,
+  Img,
+  Alert
+} from 'ionic-angular';
+>>>>>>> master
 import { Camera } from '@ionic-native/camera';
 import { TranslateService } from '@ngx-translate/core';
 import { AlertController, IonicPage, ModalController, Nav, NavController, NavParams, Slides } from 'ionic-angular';
@@ -78,7 +93,8 @@ export class SettingsPage {
     public translate: TranslateService,
     public camera: Camera,
     public levels: Levels,
-    private userService: ProvidersUserProvider) {
+    private userService: ProvidersUserProvider,
+    private authProvider: AuthProvider) {
 
     // this.userData = this.userService.getUser();
     this.checkUser = this.navParams.get("item")
@@ -226,7 +242,6 @@ export class SettingsPage {
     let reader = new FileReader();
     reader.onload = (readerEvent) => {
       this.imageData = (readerEvent.target as any).result;
-      console.log(this.imageData);
       this.userService.uploadProfilePic(this.user.username, this.imageData).subscribe(data => {
         this.show = false;
         this.form.patchValue({ 'profilePic': this.imageData });
@@ -276,7 +291,6 @@ export class SettingsPage {
   }
 
   ngOnChanges() {
-    console.log('Ng All Changes');
   }
 
   logOut(){
@@ -287,26 +301,24 @@ export class SettingsPage {
           text: 'No',
           role: 'cancel',
           handler: () => {
-            console.log('Cancel clicked');
           }
         },
         {
           text: 'Yes',
           handler: () => {
-            this.reallyLogOut();
+            this.authProvider.logout().then(
+              () => {
+                this.navCtrl.push("FirstRunPage");
+              },
+              (error) => {
+                this.presentLogoutError(error);
+              }
+            );
           }
         }
       ]
     });
     alert.present();
-  }
-
-  reallyLogOut(){
-    localStorage.removeItem("jwt_token")
-    localStorage.setItem("stay","out");
-    localStorage.setItem("email","");
-    window.location.reload();
-    this.navCtrl.push("FirstRunPage");
   }
 
   rules(){
@@ -356,5 +368,14 @@ export class SettingsPage {
     })
 
     addModal.present();
+  }
+
+  presentLogoutError(error) {
+    let firebaseError: Alert = this.alertCtrl.create({
+      title: "Error",
+      message: "Something went wrong logging out. Please try again.",
+      buttons: ['Ok']
+    });
+    firebaseError.present();
   }
 }

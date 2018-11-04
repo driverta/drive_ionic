@@ -38,8 +38,8 @@ export class HistoryProvider {
   
 	}
 	// private url = "http://driveapi-env.y7mz5ppbve.us-east-2.elasticbeanstalk.com/";
-	// private url = "http://localhost:8080/api/";
-	private url = "http://DriveApi.y7mz5ppbve.us-east-2.elasticbeanstalk.com/";
+	private url = "http://localhost:8080/api/";
+	// private url = "http://DriveApi.y7mz5ppbve.us-east-2.elasticbeanstalk.com/";
 
 
 	getLiftingHistoryByExercise(userId, exerciseId): Observable<LiftingHistory[]> {
@@ -59,8 +59,6 @@ export class HistoryProvider {
 	}
 
 	getBodyLiftByExercise(userId, exerciseId): Observable<BodyLift[]> {
-		console.log(userId);
-		console.log(exerciseId);
 		return this.http.get<BodyLift[]>(this.url + "getBodyLiftHistoryByExercise?userId=" + userId + '&exerciseId=' + exerciseId)
 	}
 	

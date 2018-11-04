@@ -50,8 +50,6 @@ export class ItemDetailPage {
     private storage: Storage,
     private userService: ProvidersUserProvider) {
     this.platform.ready().then((readySource) => {
-        console.log("anything")
-        console.log('Platform ready from', readySource);
         // Platform now ready, execute any required native code
       });
     this.exercise = navParams.get('exercise');
@@ -64,12 +62,9 @@ export class ItemDetailPage {
   }
 
   ionViewWillEnter() {
-    console.log(this.exercise.MuscleGroup.muscleGroupName)
     if (this.exercise.MuscleGroup.muscleGroupName == "Flexibility" || this.exercise.bodyLift){
-      console.log("Flex")
       this.noRecords = false;
     } else {
-      console.log("NoFlexZone")
       this.noRecords = true;
     }
 

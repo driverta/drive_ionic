@@ -143,7 +143,6 @@ export class FriendRecordsPage {
           text: 'Cancel',
           role: 'cancel',
           handler: () => {
-            console.log('Cancel clicked');
           }
         }
       ]
@@ -169,7 +168,6 @@ export class FriendRecordsPage {
   // }
 
   saveExercise(exercise) {
-    console.log("DragonFuckerWasHere")
     this.bool = true;
     
     this.userService.getExercises().subscribe(exercises => {

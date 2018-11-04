@@ -48,7 +48,6 @@ export class HistoryComponent {
   }
 
   ngOnInit() {
-    console.log("MUSCLE GROUP IS " + this.muscleGroup);
     if (this.muscleGroup == "Cardio") {
       this.userService.getCardioHistoryByIdAndExercise(this.exercise).subscribe(data =>{
         this.cardioHistory = data;
@@ -57,19 +56,16 @@ export class HistoryComponent {
         this.liftingBool = false;
       });
     } else if (this.exercise.bodyLift) {
-      console.log("BODYLIFT");
       this.liftingBool = false
       this.bodyLiftBool = true // TODO: GET Body Lift History 
       this.historyService.getBodyLiftByExercise(this.user.id, this.exercise.id).subscribe(bodyLifts => {
         this.bodyLiftHistory = bodyLifts;
-        console.log(bodyLifts);
       });
     } else if (this.muscleGroup == "Flexibility") {
       this.liftingBool = false
       this.flexBool = true // TODO: GET flex history
       this.historyService.getFlexByExercise(this.user.id, this.exercise.id).subscribe(flex => {
         this.flexHistory = flex;
-        console.log(this.flexHistory);
       });
     } else {
       this.userService.getLiftingHistoryByIdAndExercise(this.exercise).subscribe(data =>{
@@ -88,7 +84,6 @@ export class HistoryComponent {
           text: 'Cancel',
           role: 'cancel',
           handler: () => {
-            console.log('Cancel clicked');
           }
         },
         {
@@ -111,7 +106,6 @@ export class HistoryComponent {
           text: 'Cancel',
           role: 'cancel',
           handler: () => {
-            console.log('Cancel clicked');
           }
         },
         {
@@ -134,7 +128,6 @@ export class HistoryComponent {
           text: 'Cancel',
           role: 'cancel',
           handler: () => {
-            console.log('Cancel clicked');
           }
         },
         {
@@ -157,7 +150,6 @@ export class HistoryComponent {
           text: 'Cancel',
           role: 'cancel',
           handler: () => {
-            console.log('Cancel clicked');
           }
         },
         {

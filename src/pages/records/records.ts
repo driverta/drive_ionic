@@ -41,7 +41,6 @@ export class RecordsPage {
   }
 
   ionViewDidLoad() {
-    console.log(this.user)
     if (this.user == this.userService.getUser()){
       this.userService.getExercises().subscribe(exercises => {
         this.exercises = exercises;
@@ -143,7 +142,6 @@ export class RecordsPage {
           text: 'Cancel',
           role: 'cancel',
           handler: () => {
-            console.log('Cancel clicked');
           }
         }
       ]
@@ -161,7 +159,6 @@ export class RecordsPage {
   }
 
   saveExercise(exercise) {
-    console.log("DragonFuckerWasHere")
     this.bool = true;
     
     this.userService.getExercises().subscribe(exercises => {

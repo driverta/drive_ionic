@@ -180,9 +180,7 @@ export class DiscoverPage {
     let competing = new CompetingModel;
     competing.id = this.userId;
     competing.competingUser = this.id
-    console.log(competing);
     this.userService.addCompetingUser(competing).subscribe(data => {
-      console.log(data);
       if(data === "already_exists") {
         this.alreadyCompeting();
       }

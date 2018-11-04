@@ -35,7 +35,6 @@ export class FriendCompetingPage {
   }
 
   ionViewDidLoad() {
-    console.log(this.list);
     this.list.forEach(player => {
       this.userService.getProfilePic(player.username).subscribe(pic => {
         player.profilePic = "data:image/jpeg;base64," + pic;
@@ -49,7 +48,6 @@ export class FriendCompetingPage {
   }
 
   openItem(item){
-    console.log("here");
     this.navCtrl.push('FriendProfilePage', {
       item: item
     });
