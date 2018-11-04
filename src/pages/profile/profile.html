@@ -1,38 +1,39 @@
 <ion-header>
   <ion-navbar>
-    <ion-buttons *ngIf="buttons" left>
+    <ion-buttons *ngIf="buttons" start>
       <button ion-button icon-only (click)="logOut()">
         <ion-icon name="log-out"></ion-icon>
       </button>
     </ion-buttons>
-
-    <ion-title>{{ username }}</ion-title>
-
-    <ion-buttons *ngIf="buttons" right>
+    <ion-buttons *ngIf="buttons" end>
       <button ion-button icon-only (click)="editProfile()">
         <ion-icon name="contact"></ion-icon>
       </button>
     </ion-buttons>
+    <ion-title>{{ username }}</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content>
   <div class="profileContent">
 
-    <form [formGroup]="form" *ngIf="settingsReady" class="pic">
+    <form [formGroup]="form" *ngIf="myPicture && settingsReady" class="pic">
       <input type="file" #fileInput style="visibility: hidden; height: 0px" name="files[]" (change)="processWebImage($event)" />
       <div class="profile-image-wrapper" (click)="getPicture()">
-
-
         <div class="profile-image-placeholder" *ngIf="show">
-          <!-- <ion-icon *ngIf="friendPicture" class="profile-image icon-size" name="contact"></ion-icon>
-            <ion-icon *ngIf="myPicture" name="add"></ion-icon> -->
           <div *ngIf="myPicture" class="profile-image" [style.backgroundImage]="getProfileImageStyle()"></div>
-          <ion-icon *ngIf="friendPicture" class="profile-image icon-size" name="contact"></ion-icon>
+          <ion-icon *ngIf="friendPicture" class="profile-image icon-size" name="contact" [style.backgroundImage]="getProfileImageStyle()"></ion-icon>
         </div>
       </div>
-
     </form>
+
+    <div class="pic">
+      <div class="profile-image-wrapper" *ngIf="friendPicture">
+          <div *ngIf="!showDefaultProfilePicture" style="margin-top: 20px" class="profile-image" [style.backgroundImage]="getProfileImageStyle()"></div>
+          <ion-icon *ngIf="showDefaultProfilePicture"  style="margin-top: 20px" class="profile-image icon-size" name="contact"></ion-icon>
+      </div>
+    </div>
+
     <br />
     <ion-grid>
       <ion-row>
@@ -55,22 +56,22 @@
     </ion-grid>
   </div>
 
-      <ion-slides style="height: 100px">
-          <ion-slide>
-            <ion-item>
-              <circle-progress item-start style="margin-left: 20%" [percent]="progress" [radius]="25" [outerStrokeWidth]="6" [innerStrokeWidth]="4" [outerStrokeColor]="'#9C000A'"
-                [innerStrokeColor]="'#C60000'" [animation]="true" [animationDuration]="300" [showTitle]="false" [showSubtitle]="false"
-                [showUnits]="false"></circle-progress>
-              <ion-label style="margin-left: 0%">{{xcurrent}} out of {{xtotal}}</ion-label>
-            </ion-item>
-          </ion-slide>
-          <ion-slide>
-            <ion-item>
-              <ion-img item-start class="badge-icon" item-start style="margin-left: 100%"></ion-img>
-              <ion-label class="slider-text" style="margin-left: 25%">Latest Exercise: {{latestExercise.exerciseName}} </ion-label>
-            </ion-item>
-          </ion-slide>
-        </ion-slides>
+  <ion-slides style="height: 100px">
+    <ion-slide>
+      <ion-item>
+        <circle-progress item-start style="margin-left: 20%" [percent]="progress" [radius]="25" [outerStrokeWidth]="6" [innerStrokeWidth]="4"
+          [outerStrokeColor]="'#9C000A'" [innerStrokeColor]="'#C60000'" [animation]="true" [animationDuration]="300" [showTitle]="false"
+          [showSubtitle]="false" [showUnits]="false"></circle-progress>
+        <ion-label style="margin-left: 0%">{{xcurrent}} out of {{xtotal}} Exp.</ion-label>
+      </ion-item>
+    </ion-slide>
+    <!-- <ion-slide>
+      <ion-item>
+        <ion-img item-start class="badge-icon" item-start style="margin-left: 100%"></ion-img>
+        <ion-label class="slider-text" style="margin-left: 25%">Latest Exercise: {{latestExercise.exerciseName}} </ion-label>
+      </ion-item>
+    </ion-slide> -->
+  </ion-slides>
 
   <ion-item-divider no-lines sticky>
     <ion-segment [(ngModel)]="segment">
@@ -112,7 +113,7 @@
           Height
         </ion-label>
         <div item-content>
-          {{height}} F
+          {{user.height}} F
         </div>
       </ion-item>
       <ion-item>
@@ -120,7 +121,7 @@
           Weight
         </ion-label>
         <div item-content>
-          {{weight}}lbs
+          {{user.weight}}lbs
         </div>
       </ion-item>
       <ion-item>
@@ -128,7 +129,7 @@
           Gym
         </ion-label>
         <div item-content>
-          {{gym}}
+          {{user.gym}}
         </div>
       </ion-item>
       <ion-item>
@@ -136,7 +137,7 @@
           Location
         </ion-label>
         <div item-content>
-          {{location}}
+          {{user.location}}
         </div>
       </ion-item>
     </ion-list>
