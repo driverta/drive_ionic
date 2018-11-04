@@ -1,21 +1,18 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Edit Profile</ion-title>
-    <ion-buttons start>
+
+    <ion-buttons left>
       <button ion-button (click)="cancel()">
-        <span color="primary" showWhen="ios">
-          {{ 'CANCEL_BUTTON' | translate }}
-        </span>
-        <ion-icon name="md-close" showWhen="android,windows"></ion-icon>
+        <ion-icon name="close"></ion-icon>
       </button>
     </ion-buttons>
-    <ion-buttons end>
-      <button ion-button (click)="changeData();" [disabled]="!isReadyToSave" strong>
-        <span color="primary" showWhen="ios">
-          {{ 'DONE_BUTTON' | translate }}
-        </span>
-        <ion-icon name="md-checkmark" showWhen="core,android,windows"></ion-icon>
+
+    <ion-title>Edit Profile</ion-title>
+
+    <ion-buttons right>
+      <button ion-button (click)="changeData()">
+        <ion-icon name="checkmark"></ion-icon>
       </button>
     </ion-buttons>
   </ion-navbar>
