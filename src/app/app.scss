@@ -23,10 +23,6 @@
     margin-top: 2%;
 }
 
-ion-title {
-	text-align: center;
-}
-
 .fields{
     padding-right:5%;
     padding-left:5%;
@@ -34,4 +30,8 @@ ion-title {
 
 .no-padding{
     padding-left:0px;
+}
+
+body.keyboard-is-open .hideElementOnKeyboardShown{
+    display: none;        
 }

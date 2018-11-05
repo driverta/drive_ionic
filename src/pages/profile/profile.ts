@@ -1,27 +1,16 @@
 import { Component, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { TranslateService } from '@ngx-translate/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Records } from '../../providers/providers';
-import { IonicPage,
-  Nav,
-  NavController,
-  NavParams,
-  AlertController,
-  ModalController,
-  Img
-} from 'ionic-angular';
 import { Camera } from '@ionic-native/camera';
-import { Storage } from '@ionic/storage';
-
-import { Settings } from '../../providers/providers';
-import { User } from '../../providers/providers';
-import { Levels } from '../../providers/providers';
-import { AuthProvider } from '../../providers/providers';
+import { TranslateService } from '@ngx-translate/core';
+import { AlertController, Alert, IonicPage, ModalController, Nav, NavController, NavParams, Slides } from 'ionic-angular';
+import { Exercise } from '../../models/Exercise';
+import { Levels, Settings } from '../../providers/providers';
 import { ProvidersUserProvider } from '../../providers/providers-user/providers-user';
-//import { WelcomePage } from '../pages';
-
-import firebase from 'firebase';
+import { AuthProvider } from '../../providers/auth/auth'
+// Import ng-circle-progress
+import { NgCircleProgressModule } from 'ng-circle-progress';
 
 @IonicPage()
 @Component({
@@ -59,13 +48,20 @@ export class SettingsPage {
   checkUser: any;
   show: boolean = true;
   load: boolean = true;
-  buttons: boolean = true;
+  buttons: boolean = false;
   myPicture: boolean = true;
   friendPicture: boolean = false;
+  profilePictureActive = false;
+  segment = "stats";
 
   settingsReady = false;
+  showDefaultProfilePicture = true;
+
+  latestExercise: Exercise = new Exercise()
 
   form: FormGroup;
+
+  @ViewChild(Slides) slides: Slides;
 
   profileSettings = {
     page: 'profile',
@@ -87,7 +83,8 @@ export class SettingsPage {
     public translate: TranslateService,
     public camera: Camera,
     public levels: Levels,
-    private userService: ProvidersUserProvider) {
+    private userService: ProvidersUserProvider,
+    private authProvider: AuthProvider) {
 
     // this.userData = this.userService.getUser();
     this.checkUser = this.navParams.get("item")
@@ -122,58 +119,34 @@ export class SettingsPage {
   }
 
   ionViewDidLoad() {
-   //console.log(this.checkUser)
     if (this.checkUser == undefined){
       this.user = this.userService.getUser()
-      //console.log("here")
-      //this.username = this.user.username;
-      this.weight = this.user.weight;
-      this.height = this.user.height;
-      this.gym = this.user.gym;
-      this.location = this.user.location;
-      this.username = this.user.username;
       this.buttons = true;
       this.myPicture = true;
-      this.friendPicture = false;
       this.userService.getExercises().subscribe(exercises => {
         this.exercisesLength = exercises.length;
+        // this.latestExercise = exercises.pop()
       });
     } else {
       this.user = this.checkUser;
-      this.weight = this.user.weight;
-      this.height = this.user.height;
-      this.gym = this.user.gym;
-      this.location = this.user.location;
       this.username = this.user.username;
-      this.buttons = false;
       this.myPicture = false;
       this.friendPicture = true;
       this.userService.getCompetingUsersExercises(this.user.id).subscribe(exercises => {
         this.exercisesLength = exercises.length;
       });
     }
-    this.competitorsList = [];
-    // this.username = this.userService.getUser().username;
-    // this.userService.getOneUser(this.username).subscribe(data => {
 
-    //   this.weight = data.weight;
-    //   this.height = data.height;
-    //   this.gym = data.gym;
-    //   this.location = data.location;
-    //   //this.gym = data.gym;
-    // })
-    // Build an empty form for the template to render
+    this.competitorsList = [];
     this.form = this.formBuilder.group({});  
 
     this.userService.getTotalGains(this.user.id).subscribe(totalGains => {
-      //console.log(totalGains);
       this.gains = totalGains;
       this.setLevel();
     });;
 
     this.userService.getCompetingUsers(this.user.id).subscribe(data => {
       this.competingList = data;
-      //console.log(this.competingList);
       this.competing = this.competingList.length;
     })
 
@@ -186,15 +159,11 @@ export class SettingsPage {
     this.userService.getProfilePic(this.user.username).subscribe(data => {
       this.form.patchValue({"profilePic": "data:image/jpeg;base64," + data});
       if (data != "NahNigga"){
-        //console.log(data);
         this.form.patchValue({"profilePic": "data:image/jpeg;base64," + data});
         this.show = true;
-      } else {
-        // <ion-icon *ngIf="item.profilePic == 'data:image/jpeg;base64,NahNigga'" class="default-img" name="contact"></ion-icon>
+        this.showDefaultProfilePicture = false;
       }
     });
-
-    
   }
 
   setLevel () {
@@ -205,17 +174,7 @@ export class SettingsPage {
         this.xtotal = value.levelPoints;
         this.progress = this.xcurrent / this.xtotal * 100
       }
-      if (this.xlevel < 10){
-        this.rank = "FRAIL BODY"
-      } else if ( this.xlevel >= 10 && this.xlevel < 20){
-        this.rank = "GYM RAT"
-      } else if ( this.xlevel >= 20 && this.xlevel < 30){
-        this.rank = "BODYBUILDER"
-      } else if ( this.xlevel > 30){
-        this.rank = "OLYMPIAN"
-      }
     })
-    
   }
 
   getPicture() {
@@ -239,11 +198,9 @@ export class SettingsPage {
   }
 
   processWebImage(event) {
-    //alert(event);
     let reader = new FileReader();
     reader.onload = (readerEvent) => {
       this.imageData = (readerEvent.target as any).result;
-      console.log(this.imageData);
       this.userService.uploadProfilePic(this.user.username, this.imageData).subscribe(data => {
         this.show = false;
         this.form.patchValue({ 'profilePic': this.imageData });
@@ -253,18 +210,12 @@ export class SettingsPage {
   }
 
   getProfileImageStyle() {
-
     try {
-      //this.noLoad();
       return 'url(' + this.form.controls['profilePic'].value + ')'
     }
     catch(err){
 
     }
-    finally{
-      
-    }
-    
   }
 
   noLoad(){
@@ -291,11 +242,6 @@ export class SettingsPage {
       this._buildForm();
     });
   }
-
-  ngOnChanges() {
-    console.log('Ng All Changes');
-  }
-
   logOut(){
     let alert = this.alertCtrl.create({
       title: 'Logout of ' + this.username + '?',
@@ -304,30 +250,24 @@ export class SettingsPage {
           text: 'No',
           role: 'cancel',
           handler: () => {
-            console.log('Cancel clicked');
           }
         },
         {
           text: 'Yes',
           handler: () => {
-            this.reallyLogOut();
+            this.authProvider.logout().then(
+              () => {
+                this.navCtrl.push("FirstRunPage");
+              },
+              (error) => {
+                this.presentLogoutError(error);
+              }
+            );
           }
         }
       ]
     });
     alert.present();
-  }
-
-  reallyLogOut(){
-    localStorage.removeItem("jwt_token")
-    localStorage.setItem("stay","out");
-    localStorage.setItem("email","");
-    window.location.reload();
-    this.navCtrl.push("FirstRunPage");
-  }
-
-  rules(){
-    this.navCtrl.push('RulesPage');
   }
 
   goToCompeting(){
@@ -373,5 +313,14 @@ export class SettingsPage {
     })
 
     addModal.present();
+  }
+
+  presentLogoutError(error) {
+    let firebaseError: Alert = this.alertCtrl.create({
+      title: "Error",
+      message: "Something went wrong logging out. Please try again.",
+      buttons: ['Ok']
+    });
+    firebaseError.present();
   }
 }

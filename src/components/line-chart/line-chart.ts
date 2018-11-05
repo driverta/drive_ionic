@@ -50,21 +50,18 @@ export class LineChartComponent {
     this.height2 = 500 - this.margin2.top - this.margin2.bottom;
     this.exercise = navParams.get('exercise');
     this.muscleGroup = navParams.get('muscleGroup');
-    console.log(this.exercise);
-    console.log(this.muscleGroup);
   }
 
   public makeLineChart() {
     if (this.muscleGroup == "Cardio") {
-      this.userService.getCardioHistoryByIdAndExercise(this.exercise).subscribe(data =>{
-        console.log(data)
-        this.cardioHistory = data;
+      //this.userService.getCardioHistoryByIdAndExercise(this.exercise).subscribe(data =>{
+        this.cardioHistory = this.history.cardioHistory;
         this.axisText = "MPH"
         this.setCardioChart();
-      });
+      //});
     } else {
-      console.log("here");
       this.userService.getLiftingHistoryByIdAndExercise(this.exercise).subscribe(data =>{
+        //this.liftingHistory = this.history.liftingHistory;
         this.liftingHistory = data;
         this.axisText = "1RM"
         this.setLiftingChart();

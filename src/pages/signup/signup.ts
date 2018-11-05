@@ -37,8 +37,6 @@ export class SignupPage {
 
   totalGains = [];
 
-  bro: string = "bro";
-
   users: UserModel[];
   private user: UserModel;
 
@@ -124,8 +122,8 @@ export class SignupPage {
   }
 
   saveLogin() {
-    localStorage.setItem("stay","logged");
-    localStorage.setItem("email",this.account.email);
+    this.storage.set("stay", "logged")
+    this.storage.set("email", this.account.email);
   }
 
   signUp() {
@@ -168,7 +166,6 @@ export class SignupPage {
 
   addExercises() {
     this.userService.createUser(this.user).subscribe(response => {
-      console.log(response);
       this.userService.setUser(response)
       var bench = new Exercise;
       bench.exerciseName = "Bench Press";

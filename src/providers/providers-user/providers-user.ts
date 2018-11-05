@@ -16,18 +16,22 @@ import { CardioHistory } from '../../models/CardioHistory';
 export class ProvidersUserProvider {
 
   // private url = "http://driveapi-env.y7mz5ppbve.us-east-2.elasticbeanstalk.com/";
-  // private url = "http://localhost:8080/api/";
-   private url = "http://DriveApi.y7mz5ppbve.us-east-2.elasticbeanstalk.com/";
+
+  private url = "http://localhost:8080/api/";
+  // private url = "http://DriveApi.y7mz5ppbve.us-east-2.elasticbeanstalk.com/";
 
 
   user: UserModel = new UserModel(); 
 
   constructor(public http: HttpClient) {
-    console.log('Hello ProvidersUserProvider Provider');
   }
 
   getAllUsers(): Observable<UserModel[]> {
-    return this.http.get<UserModel[]>(this.url + "getUsers")
+    return this.http.get<UserModel[]>(this.url + "getAllUsers")
+  }
+
+  getFilteredUsersSearch(searchTerm): Observable<UserModel[]> {
+    return this.http.get<UserModel[]>(this.url + "getFilteredUsersSearch?searchTerm=" + searchTerm)
   }
 
   getLeaderboardData(userId): Observable<UserModel[]> {
@@ -98,12 +102,11 @@ export class ProvidersUserProvider {
 
   addCardioHistory(cardio){
     cardio.user_id=this.user.id;
-    console.log(cardio)
     return this.http.post(this.url + "addCardioHistory", cardio);
   }
 
   addFlexHistory(history, flex){
-    console.log(this.http.post(this.url + "addFlexHistory", history));
+
 		return this.http.post(this.url + "addFlexHistory", history);
   }
 

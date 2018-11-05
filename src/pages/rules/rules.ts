@@ -19,7 +19,6 @@ export class RulesPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad RulesPage');
   }
 
 }

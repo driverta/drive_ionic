@@ -2,7 +2,12 @@
 
 <ion-content>
   <div padding>
-      <ion-searchbar (ionInput)="getItems($event)" placeholder="Search"></ion-searchbar>
+      <ion-searchbar
+        [(ngModel)]="searchTerm"
+        [formControl]="searchControl"
+        (ionInput)="onSearchInput()"
+        (keyup.enter)="search()">
+      </ion-searchbar>
       <ion-segment [(ngModel)]="segment">
         <ion-segment-button  value="discover_people">
           People
@@ -11,7 +16,9 @@
           Excercises
         </ion-segment-button>
       </ion-segment>
-     
+      <div *ngIf="searching" class="spinner-container">
+          <ion-spinner></ion-spinner>
+      </div>
     </div>
 
 
@@ -19,16 +26,16 @@
     <ion-list *ngSwitchCase="'discover_people'">
     
       <ion-list>
-        <ion-item *ngFor="let item of currentItems">
-            <button no-lines ion-item (click)="openItem(item)">
+        <ion-item *ngFor="let user of currentItems">
+            <button no-lines ion-item (click)="openItem(user)">
           <ion-avatar item-start>
-            <img *ngIf="item.profilePic != 'data:image/jpeg;base64,NahNigga'" [src]="item.profilePic" />
-            <ion-icon *ngIf="item.profilePic == 'data:image/jpeg;base64,NahNigga'" class="default-img" name="contact"></ion-icon>
+            <img *ngIf="user.profilePic != 'data:image/jpeg;base64,NahNigga'" [src]="user.profilePic" />
+            <ion-icon *ngIf="user.profilePic == 'data:image/jpeg;base64,NahNigga'" class="default-img" name="contact"></ion-icon>
           </ion-avatar>
 
-          <h2>{{item.username}}</h2>
+          <h2>{{user.username}}</h2>
             </button>
-            <button class="list-button" ion-button icon-only item-end (click)="addToLeaderboard(item)">
+            <button class="list-button" ion-button icon-only item-end (click)="addToLeaderboard(user)">
               <ion-icon name="add"></ion-icon>
             </button>
         </ion-item>

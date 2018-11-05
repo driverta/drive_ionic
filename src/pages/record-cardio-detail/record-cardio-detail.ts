@@ -30,7 +30,6 @@ export class RecordCardioDetailPage {
   }
 
   ionViewWillEnter() {
-    console.log("FUCK DIS")
     this.cardioBar.makeChart();
   }
 }

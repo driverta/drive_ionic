@@ -61,7 +61,6 @@ export class ItemCreatePage {
     private exerciseService: ExerciseProvider) {
 
     this.data = navParams.get('exercise');
-    console.log(this.data);
     if (this.data != null) {
       this.exercise.name = this.data.exerciseName;
       this.exercise.variation = this.data.variation;
@@ -194,7 +193,6 @@ export class ItemCreatePage {
 
   getExercises(): Promise<any> {
     this.storage.ready().then(() => {
-      console.log(this.storage.get(this.username + '/exercises'))
 
     })
     return this.storage.get(this.username + '/exercises');
@@ -202,7 +200,6 @@ export class ItemCreatePage {
   }
 
   changeCheckbox(groupName) {
-    console.log(groupName)
     if (groupName == "Cardio"){
       this.lift = false;
       this.cardio = true;

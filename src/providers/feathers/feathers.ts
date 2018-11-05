@@ -12,7 +12,6 @@ import 'rxjs/add/operator/map';
 export class FeathersProvider {
 
   constructor(public http: HttpClient) {
-    console.log('Hello FeathersProvider Provider');
   }
 
 }

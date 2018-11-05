@@ -64,8 +64,7 @@ export class ListMasterPage {
     public navParams: NavParams,
     private userService: ProvidersUserProvider) {
     this.platform.ready().then((readySource) => {
-      console.log("anything")
-      console.log('Platform ready from', readySource);
+
       // Platform now ready, execute any required native code
     });
     this.mg = this.navParams.get('title');
@@ -80,8 +79,7 @@ export class ListMasterPage {
    * The view loaded, let's query our items for the list
    */
   ionViewDidLoad() {
-    
-    console.log(this.mg)
+
     this.userService.getExercises().subscribe(exercises => {
       this.exercises = exercises.filter(exercise => exercise.MuscleGroup.muscleGroupName === this.mg.muscleGroupName);
     });
@@ -139,7 +137,6 @@ export class ListMasterPage {
     //           this.saveData();
     //         }
     //console.log(this.records._cardioRecs)
-    console.log(this.userService.getUser().email);
     // this.getLocalExercises().then(exercises =>{
     //   if (exercises != null) {
     //     exercises.forEach(exercise =>{
@@ -162,8 +159,6 @@ export class ListMasterPage {
   }
 
   getUsers(): Promise<any> {
-    console.log("at user method");
-    console.log(JSON.stringify(this.storage.get('/users')));
     return this.storage.get('/users');
   }
   
@@ -197,7 +192,6 @@ export class ListMasterPage {
           text: 'Cancel',
           role: 'cancel',
           handler: () => {
-            console.log('Cancel clicked');
           }
         },
         {
@@ -292,7 +286,6 @@ export class ListMasterPage {
           text: 'Cancel',
           role: 'cancel',
           handler: () => {
-            console.log('Cancel clicked');
           }
         }
       ]

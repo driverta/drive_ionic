@@ -15,16 +15,19 @@ import { MuscleGroup } from '../../models/MuscleGroupModel';
 export class ExerciseProvider {
 
   // private url = "http://driveapi-env.y7mz5ppbve.us-east-2.elasticbeanstalk.com/";
-  // private url = "http://localhost:8080/api/";
-   private url = "http://DriveApi.y7mz5ppbve.us-east-2.elasticbeanstalk.com/";
+  private url = "http://localhost:8080/api/";
+  //  private url = "http://DriveApi.y7mz5ppbve.us-east-2.elasticbeanstalk.com/";
 
 
   constructor(public http: HttpClient) {
-    console.log('Hello ExerciseProvider Provider');
   }
 
   getExercisesByUserId(userId): Observable<Exercise[]> {
     return this.http.get<Exercise[]>(this.url + "getExerciseByUserID?userID=" + userId)
+  }
+
+  getFilteredExercisesSearch(searchTerm, userId): Observable<Exercise[]> {
+    return this.http.get<Exercise[]>(this.url + `getFilteredExercisesSearch?searchTerm=${searchTerm}&userId=${userId}`);
   }
 
   getAllExercises(): Observable<Exercise[]> {

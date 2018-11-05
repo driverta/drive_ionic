@@ -1,20 +1,13 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, ToastController, AlertController, Alert, LoadingController, Keyboard } from 'ionic-angular';
 import { ProvidersUserProvider, AuthProvider } from '../../providers/providers';
-import { MainPage } from '../pages';
 import firebase from 'firebase';
 import { Firebase } from '@ionic-native/firebase';
 
 import { Error } from '@firebase/auth-types';
-import { APIUser } from '../../models/APIUser'
 // import {JwtHelperService} from "@auth0/angular-jwt";
 import {HttpClient} from "@angular/common/http";
 import { Injectable } from '@angular/core';
-import {finalize} from 'rxjs/operators';
-import {Storage} from "@ionic/storage";
-import { FcmProvider } from '../../providers/fcm/fcm';
-
-import { tap } from 'rxjs/operators';
 /**
  * The Welcome Page is a splash page that quickly describes the app,
  * and then directs the user to create an account or log in.
@@ -45,62 +38,21 @@ export class WelcomePage {
   constructor(public navCtrl: NavController,
     public alertCtrl: AlertController,
     private userService: ProvidersUserProvider,
-    private authProvider: AuthProvider,
+    public authProvider: AuthProvider,
     private toastCtrl: ToastController,
     public httpClient: HttpClient,
     public keyboard: Keyboard,
     // public jwtHelper: JwtHelperService,
     public firebaseNative: Firebase,
-    private readonly loadingCtrl: LoadingController,
-    private storage: Storage,
-    private fcm: FcmProvider
   ) { 
 
     keyboard.didShow.subscribe(() => {
-      console.log("here");
       this.showFooter = false;
    });
    
    keyboard.didHide.subscribe(() => {
       this.showFooter = true;
    });
-
-
-    // authProvider.authUser.subscribe(jwt => {
-    //   if (jwt) {
-    //     this.userService.getUserByEmail(this.account.email).subscribe(data =>{
-    //       this.userService.setUser(data);
-    //       this.navCtrl.push(MainPage);
-    //       // Get a FCM token
-    //       fcm.getToken();
-
-    //       // Listen to incoming messages
-    //       fcm.listenToNotifications().pipe(
-    //         tap(msg => {
-    //           console.log("FIRST MESSAGE" + JSON.stringify(msg));
-    //           if (msg['tap'] == true) {
-    //             console.log("here");
-    //             userService.getOneUser(msg['user'].split(' ')[0]).subscribe(user => {
-    //               this.navCtrl.push(MainPage).then(() => {
-    //                 this.navCtrl.push('FriendProfilePage', {
-    //                   item: user
-    //                 });
-    //               })
-    //             })
-    //           }
-    //           // show a toast
-    //           const toast = toastCtrl.create({
-    //             message: msg['body'],
-    //             duration: 3000,
-    //             position: 'top'
-    //           });
-    //           toast.present();
-    //         })
-    //       ).subscribe()
-    //     },
-    //     err => console.log(err));
-    //   } else { }
-    // });
   }
 
   signup() {
@@ -108,7 +60,7 @@ export class WelcomePage {
   }
 
   login() {
-
+  
     this.buttonPressed = true;
 
     if(this.account.email == ''){
@@ -131,64 +83,24 @@ export class WelcomePage {
       this.buttonPressed = false;
     }
     else{
-      this.authLogin()
-        .then(value => {
-          console.log(value);
-          let user = new APIUser;
-          user.email = this.account.email
-          user.password = this.account.password
-          user.username = this.account.email.split('@')[0]
-          this.signupWithAPI(user);
-        }).catch( error => {
-          this.presentFirebaseError(error)
-        });
+
+      this.authProvider.authWithFirebase(this.account.email, this.account.password).then(
+        (token) => {
+          this.authProvider.authUser.next(token);
+        },
+        (error) => {
+          this.presentFirebaseError(error);
+        }
+      )
+
     }
   }
 
   keyboardCheck() {
-    console.log("KEYBOARD OPEN");
     if (this.keyboard.isOpen()) {
         // You logic goes here
         this.showFooter = false;
     }
-  }
-
-  loginWithAPI(value: any) {
-    let loading = this.loadingCtrl.create({
-      spinner: 'bubbles',
-      content: 'Logging in ...'
-    });
-
-    loading.present();
-
-    this.authProvider
-      .login(value)
-      .pipe(finalize(() => loading.dismiss()))
-      .subscribe(
-        () => {},
-        err => {
-          alert(err)
-          this.handleError(err);
-        });
-  }
-
-  signupWithAPI(value: any) {
-    let loading = this.loadingCtrl.create({
-      spinner: 'bubbles',
-      content: 'Logging in ...'
-    });
-
-    loading.present();
-    if (localStorage.getItem("jwt_token")) {
-      localStorage.removeItem("jwt_token");
-    }
-
-    this.authProvider
-      .signup(value, this.account.email)
-      .pipe(finalize(() => loading.dismiss()))
-      .subscribe(
-        (jwt) => { },
-        err => console.log(err));
   }
 
   handleError(error: any) {
@@ -219,8 +131,6 @@ export class WelcomePage {
   }
 
   presentFirebaseError(error: Error){
-    console.log(error.code);
-    console.log(error.message);
     this.buttonPressed = false;
     let firebaseError: Alert = this.alertCtrl.create({
      title: "Error",
@@ -240,10 +150,6 @@ export class WelcomePage {
     firebaseError.setMessage("Invalid password")
    }
     firebaseError.present();
-  }
- 
-  authLogin() : Promise<any> {
-    return firebase.auth().signInWithEmailAndPassword(this.account.email, this.account.password);
   }
 
   saveLogin() {

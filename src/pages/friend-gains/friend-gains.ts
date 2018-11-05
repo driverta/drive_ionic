@@ -113,7 +113,6 @@ export class FriendGainsPage {
       });
       this.historyService.getLiftingHistory(this.user.id).subscribe((liftingHistory) => {
         this.liftingHistory = liftingHistory;
-        console.log(this.liftingHistory)
         this.liftingHistory.forEach(lh =>{
           switch(lh.exercise.MuscleGroup.muscleGroupName) {
             case "Chest":
@@ -136,7 +135,6 @@ export class FriendGainsPage {
               break;
           }
       });
-      console.log(this.chest)
       this.allTime = this.cardio + this.back + this.chest + this.arms + this.core + this.arms + this.shoulders + this.legs;
       this.data[0][0].value = this.chest / this.allTime;
       this.data[0][1].value = this.back / this.allTime;
@@ -145,7 +143,6 @@ export class FriendGainsPage {
       this.data[0][4].value = this.arms / this.allTime;
       this.data[0][5].value = this.core / this.allTime;
       this.data[0][6].value = this.cardio / this.allTime;
-      console.log(this.data)
       this.radarChart("#gainsChart2", this.data, this.radarChartOptions);
       })
     })
@@ -212,7 +209,6 @@ export class FriendGainsPage {
           text: 'Cancel',
           role: 'cancel',
           handler: () => {
-            console.log('Cancel clicked');
           }
         }
       ]
@@ -257,7 +253,6 @@ export class FriendGainsPage {
       this.data[0].push(d)
       
     }) 
-    console.log(this.data)
     this.radarChart("#gainsChart2", this.data, this.radarChartOptions);
   }
   
@@ -293,7 +288,6 @@ export class FriendGainsPage {
     //If the supplied maxValue is smaller than the actual one, replace by the max in the data
     //var maxValue = Math.max(cfg.maxValue, d3Array.max(data, function(i){console.log(i); return d3Array.max(i.map(function(o){ console.log(o); return o.value;}))}));
     var maxValue = options.maxValue
-    console.log(maxValue)
 
     var allAxis = (data[0].map((i, j) => {return i.axis})),  //Names of each axis
       total = allAxis.length,          //The number of different axes

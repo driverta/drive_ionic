@@ -7,7 +7,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { IonicStorageModule, Storage } from '@ionic/storage';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { IonicApp, IonicErrorHandler, IonicModule, Keyboard } from 'ionic-angular';
+import { IonicApp, IonicErrorHandler, IonicModule} from 'ionic-angular';
 
 import { Items } from '../mocks/providers/items';
 import { Settings } from '../providers/providers';
@@ -22,7 +22,10 @@ import { FeathersProvider } from '../providers/feathers/feathers';
 import { ProvidersUserProvider } from '../providers/providers-user/providers-user';
 import { ExerciseProvider } from '../providers/exercise/exercise';
 import { AuthProvider } from "../providers/auth/auth";
+
 import { WorkoutService } from "../providers/workout/workout";
+
+import { NgCircleProgressModule } from 'ng-circle-progress';
 
 import { AngularFireModule } from 'angularfire2';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
@@ -31,6 +34,7 @@ import { FcmProvider } from '../providers/fcm/fcm';
 import { Firebase } from '@ionic-native/firebase';
 import { HttpClientModule, HttpClient, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { SortByGainsPipe } from '../pipes/sort-by-gains/sort-by-gains'
+import { Keyboard } from '@ionic-native/keyboard'
 
 
 import { AppVersion } from '@ionic-native/app-version';
@@ -99,6 +103,7 @@ const firebase = {
     //     deps: [Storage]
     //   }
     // })
+      // Specify ng-circle-progress as an import
   ],
   bootstrap: [IonicApp],
   entryComponents: [

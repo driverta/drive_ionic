@@ -20,6 +20,7 @@ import { AuthProvider } from "../providers/auth/auth";
 import { AppVersion } from '@ionic-native/app-version';
 
 import {Storage} from "@ionic/storage";
+import { Keyboard } from '@ionic-native/keyboard'
 
 
 @Component({
@@ -29,7 +30,6 @@ import {Storage} from "@ionic/storage";
 })
 export class MyApp {
   rootPage = FirstRunPage;
-  tester = ""
   email = ""
 
   @ViewChild(Nav) nav: Nav;
@@ -62,66 +62,68 @@ export class MyApp {
     public toastCtrl: ToastController,
     public authProvider: AuthProvider,
     public alertCtrl: AlertController,
-    private app: AppVersion) {
+    private storage: Storage,
+    private keyboard: Keyboard) {
     this.initTranslate();
 
-    this.tester = localStorage.getItem("stay");
 
     platform.ready().then(() => {
-      this.app.getVersionNumber().then((version) =>{
-        console.log(JSON.stringify(version));
-        this.authProvider.getVersion().subscribe(currentVersion => {
-          console.log(currentVersion);
-          if (version != currentVersion) {
-            let alert = this.alertCtrl.create({
-              title: 'Your version is out of date',
-              message: 'Please download the latest version',
-              buttons: [{
-                text: "OK",
-                handler: () => { alert.dismiss() }
-              }]
-            })
-            alert.present();
-          }
-        }, 
-        err => alert(JSON.stringify(err)))
-      });
+
+
+      this.keyboard.onKeyboardShow().subscribe(() => {
+        document.body.classList.add('keyboard-is-open');
     });
 
-    authProvider.authUser.subscribe(jwt => {
-      if (jwt) {
-        console.log("HOME")
-        this.userService.getUserByEmail(localStorage.getItem("email")).subscribe(data =>{
-          this.userService.setUser(data);
-          this.nav.push(MainPage);
-          // Get a FCM token
-          fcm.getToken();
+    this.keyboard.onKeyboardHide().subscribe(() => {
+        document.body.classList.remove('keyboard-is-open');
+    });
 
-          // Listen to incoming messages
-          fcm.listenToNotifications().pipe(
-            tap(msg => {
-              console.log("FIRST MESSAGE" + JSON.stringify(msg));
-              if (msg['tap'] == true) {
-                console.log("here");
-                userService.getOneUser(msg['user'].split(' ')[0]).subscribe(user => {
-                  this.nav.push(MainPage).then(() => {
-                    this.nav.push('FriendProfilePage', {
-                      item: user
-                    });
-                  })
+
+    authProvider.authUser.subscribe(jwtToken => {
+
+      if (jwtToken) {
+        this.storage.set("jwt_token", jwtToken).then(
+          () => {},
+        ).catch((error) => {
+          console.log(error);
+        });
+
+        this.storage.get("email").then(
+          (email) => {
+            this.userService.getUserByEmail(email).subscribe(data =>{
+              this.userService.setUser(data);
+              this.nav.push(MainPage);
+              // Get a FCM token
+              fcm.getToken();
+              this.rootPage = MainPage;
+    
+              // Listen to incoming messages
+              fcm.listenToNotifications().pipe(
+                tap(msg => {
+                  if (msg['tap'] == true) {
+                    userService.getOneUser(msg['user'].split(' ')[0]).subscribe(user => {
+                      this.nav.push(MainPage).then(() => {
+                        this.nav.push('FriendProfilePage', {
+                          item: user
+                        });
+                      })
+                    })
+                  }
+                  // show a toast
+                  const toast = toastCtrl.create({
+                    message: msg['body'],
+                    duration: 3000,
+                    position: 'top'
+                  });
+                  toast.present();
+
                 })
-              }
-              // show a toast
-              const toast = toastCtrl.create({
-                message: msg['body'],
-                duration: 3000,
-                position: 'top'
-              });
-              toast.present();
+              ).subscribe()
             })
-          ).subscribe()
-          this.rootPage = MainPage;
-        })
+          }
+        ).catch(
+          (error) => {}
+        );
       }
       else {
         this.rootPage = TutorialPage;
@@ -129,30 +131,7 @@ export class MyApp {
     });
 
     this.authProvider.checkLogin();
-  }
-
-  setUser() {
-    this.email = localStorage.getItem("email");
-
-    this.userService.getUserByEmail(this.email).subscribe(data =>{
-      this.userService.setUser(data);
-    })
-
-    // var query1 = firebase.database().ref("/users");
-
-    // query1.once("value").then( snapshot => {
-      
-    //   snapshot.forEach( childSnapshot => {
-        
-    //     var childData1 = childSnapshot.val();
-    //     if (childData1.email == this.email) {
-    //       this.user._user = childData1.name;
-    //       localStorage.setItem("username",childData1.name);
-    //       //this.rootPage = MainPage;
-    //     }
-    //     //alert(this.user._user);      
-    //   });
-    // });
+    });
   }
 
   ionViewDidLoad() {

@@ -1,71 +1,146 @@
 <ion-header>
-
   <ion-navbar>
-    <ion-title>{{ username }}</ion-title>
-
-    <ion-buttons *ngIf="buttons" right>
+    <ion-buttons *ngIf="buttons" start>
       <button ion-button icon-only (click)="logOut()">
         <ion-icon name="log-out"></ion-icon>
       </button>
     </ion-buttons>
+    <ion-buttons *ngIf="buttons" end>
+      <button ion-button icon-only (click)="editProfile()">
+        <ion-icon name="contact"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title>{{ username }}</ion-title>
   </ion-navbar>
-
 </ion-header>
 
 <ion-content>
+  <div class="profileContent">
 
-  <div class="levels">
-      <h3>{{rank}} <span class="sick">{{xlevel}}</span> : <span class="sick">{{xcurrent}}</span> / <span class="sick">{{xtotal}}</span> GAINS</h3>
-    </div>
-    <div id="myProgress">
-    <div id="myBar" [ngStyle]="{'width.%' : progress}"></div>
-  </div>
-  <form [formGroup]="form" *ngIf="settingsReady" class="pic">
-    <input type="file" #fileInput style="visibility: hidden; height: 0px" name="files[]" (change)="processWebImage($event)" />
-    <div class="profile-image-wrapper" (click)="getPicture()">
-      <div class="profile-image-placeholder" *ngIf="show">
-        <!-- <ion-icon *ngIf="friendPicture" class="profile-image icon-size" name="contact"></ion-icon>
-        <ion-icon *ngIf="myPicture" name="add"></ion-icon> -->
-        <div *ngIf="myPicture" class="profile-image" [style.backgroundImage]="getProfileImageStyle()"></div>
-        <ion-icon *ngIf="friendPicture" class="profile-image icon-size" name="contact"></ion-icon>
+    <form [formGroup]="form" *ngIf="myPicture && settingsReady" class="pic">
+      <input type="file" #fileInput style="visibility: hidden; height: 0px" name="files[]" (change)="processWebImage($event)" />
+      <div class="profile-image-wrapper" (click)="getPicture()">
+        <div class="profile-image-placeholder" *ngIf="show">
+          <div *ngIf="myPicture" class="profile-image" [style.backgroundImage]="getProfileImageStyle()"></div>
+          <ion-icon *ngIf="friendPicture" class="profile-image icon-size" name="contact" [style.backgroundImage]="getProfileImageStyle()"></ion-icon>
+        </div>
       </div>
-      <!-- <div*ngIf="!show"> -->
-        <!-- <div *ngIf="myPicture" class="profile-image" [style.backgroundImage]="getProfileImageStyle()"></div>
-        <ion-icon *ngIf="friendPicture" class="profile-image icon-size" name="contact"></ion-icon> -->
-      <!-- </div> -->
+    </form>
 
+    <div class="pic">
+      <div class="profile-image-wrapper" *ngIf="friendPicture">
+          <div *ngIf="!showDefaultProfilePicture" style="margin-top: 20px" class="profile-image" [style.backgroundImage]="getProfileImageStyle()"></div>
+          <ion-icon *ngIf="showDefaultProfilePicture"  style="margin-top: 20px" class="profile-image icon-size" name="contact"></ion-icon>
+      </div>
     </div>
-  </form>
-  <div class="stats">
-    <table>
-      <tr>
-        <td>{{height}}ft</td>
-        <td>{{gym}}</td>
-      </tr>
-      <tr>
-        <td>{{weight}}lbs</td>
-        <td>{{location}}</td>
-      </tr>
-      <tr *ngIf="buttons">
-        <th id="rules"><button on-click="rules()" ion-button type="button" color="primary" block>{{ "Rules" | translate }}</button></th>
-        <th id="edit"><button on-click="editProfile()" ion-button type="button" color="primary" block>{{ "Edit Profile" | translate }}</button></th>
-      <tr>
-        <th on-click="goToCompeting();">{{competing}}</th>
-        <th on-click="goToCompetitors();">{{competitors}}</th>
-      </tr>
-      <tr>
-        <td on-click="goToCompeting();">Competing</td>
-        <td on-click="goToCompetitors();">Competitors</td>
-      </tr>
-      <tr>
-        <th on-click="goToRecords();">{{exercisesLength}}</th>
-        <th on-click="goToGains();">{{gains}}</th>
-      </tr>
-      <tr>
-        <td on-click="goToRecords();">Exercises</td>
-        <td>Gains</td>
-      </tr>
-    </table>
+
+    <br />
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <p class="headerText number">{{xlevel}}</p>
+          <br/>
+          <p class="headerText">Level</p>
+        </ion-col>
+        <ion-col>
+          <p class="headerText number" on-click="goToCompeting();">{{competing}}</p>
+          <br/>
+          <p class="headerText">Following</p>
+        </ion-col>
+        <ion-col>
+          <p class="headerText number" on-click="goToCompetitors();">{{competitors}}</p>
+          <br/>
+          <p class="headerText">Followers</p>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
   </div>
 
+  <ion-slides style="height: 100px">
+    <ion-slide>
+      <ion-item>
+        <circle-progress item-start style="margin-left: 20%" [percent]="progress" [radius]="25" [outerStrokeWidth]="6" [innerStrokeWidth]="4"
+          [outerStrokeColor]="'#9C000A'" [innerStrokeColor]="'#C60000'" [animation]="true" [animationDuration]="300" [showTitle]="false"
+          [showSubtitle]="false" [showUnits]="false"></circle-progress>
+        <ion-label style="margin-left: 0%">{{xcurrent}} out of {{xtotal}} Exp.</ion-label>
+      </ion-item>
+    </ion-slide>
+    <!-- <ion-slide>
+      <ion-item>
+        <ion-img item-start class="badge-icon" item-start style="margin-left: 100%"></ion-img>
+        <ion-label class="slider-text" style="margin-left: 25%">Latest Exercise: {{latestExercise.exerciseName}} </ion-label>
+      </ion-item>
+    </ion-slide> -->
+  </ion-slides>
+
+  <ion-item-divider no-lines sticky>
+    <ion-segment [(ngModel)]="segment">
+      <ion-segment-button value="stats">
+        Stats
+      </ion-segment-button>
+      <ion-segment-button value="about">
+        About
+      </ion-segment-button>
+    </ion-segment>
+  </ion-item-divider>
+
+  <div *ngIf='segment === "stats"'>
+    <ion-list>
+      <!-- Item with a label and content -->
+      <ion-item on-click="goToGains();">
+        <ion-label>
+          Total Gains
+        </ion-label>
+        <div item-content>
+          {{gains}}
+        </div>
+      </ion-item>
+      <ion-item on-click="goToRecords();">
+        <ion-label>
+          Exercises
+        </ion-label>
+        <div item-content>
+          {{exercisesLength}}
+        </div>
+      </ion-item>
+    </ion-list>
+  </div>
+  <div *ngIf='segment == "about"'>
+    <ion-list>
+      <!-- Item with a label and content -->
+      <ion-item>
+        <ion-label>
+          Height
+        </ion-label>
+        <div item-content>
+          {{user.height}} F
+        </div>
+      </ion-item>
+      <ion-item>
+        <ion-label>
+          Weight
+        </ion-label>
+        <div item-content>
+          {{user.weight}}lbs
+        </div>
+      </ion-item>
+      <ion-item>
+        <ion-label>
+          Gym
+        </ion-label>
+        <div item-content>
+          {{user.gym}}
+        </div>
+      </ion-item>
+      <ion-item>
+        <ion-label>
+          Location
+        </ion-label>
+        <div item-content>
+          {{user.location}}
+        </div>
+      </ion-item>
+    </ion-list>
+  </div>
+  <br />
 </ion-content>
