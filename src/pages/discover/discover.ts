@@ -12,6 +12,9 @@ import { UserModel } from '../../models/users';
 import { Exercise } from '../../models/Exercise';
 
 import { CompetingModel } from '../../models/competing';
+import { FormControl } from '@angular/forms';
+
+import { debounceTime } from 'rxjs/operators/debounceTime';
 
 /**
  * Generated class for the DiscoverPage page.
@@ -40,9 +43,13 @@ export class DiscoverPage {
   likelyFriends: any = []; 
   competingFriends: any = []; 
   competingFriendsOfFriends: any = [];
-  show = true;
+  show = false;
   segment = "discover_people";
-  search = "";
+
+  searchTerm: string = '';
+  items: any;
+  searchControl: FormControl;
+  searching: any = false;
 
   constructor(public alertCtrl: AlertController,
     public navCtrl: NavController,
@@ -51,105 +58,93 @@ export class DiscoverPage {
     private userService: ProvidersUserProvider,
     public exerciseService: ExerciseProvider,
     private fcm: FcmProvider) {
+      this.searchControl = new FormControl();
+  }
+
+  ionViewDidLoad() {
+    this.searchControl.valueChanges.pipe(debounceTime(700)).subscribe(search => {
+      this.search();
+    })
   }
 
   ionViewWillEnter() {
-    this.show = true;
+    this.show = false;
   	this.users = [];
     this.likelyFriends = [];
     this.competingFriends = [];
     this.competingFriendsOfFriends = [];
     this.username = this.userService.getUser().username;
     this.userId = this.userService.getUser().id;
+  }
 
-    this.userService.getAllUsers().subscribe(data => {
-      this.users = data;
-      this.show = false;
-      this.users.forEach(player => {
-        this.userService.getProfilePic(player.username).subscribe(pic => {
-          player.profilePic = "data:image/jpeg;base64," + pic;
-        })
-      })
-    });
-    this.exerciseService.getUniqueExercises(this.userId).subscribe(exercises =>{
-      this.exercises = exercises;
-    })
+  search() {
+    if (this.searchTerm != '' || !this.searchTerm) {
+      if (this.segment == "discover_people") {
+        this.userService.getFilteredUsersSearch(this.searchTerm).subscribe(data => {
+          this.currentItems = data;
+          this.searching = false;
+        });
+      } else {
+        this.exerciseService.getFilteredExercisesSearch(this.searchTerm, this.userId).subscribe(data => {
+          this.currentExercises = data;
+          this.searching = false;
+        });
+      }
+    } else {
+      this.searching = false;
+    }
+  }
+
+  setFilteredItems() {
+    if (this.segment == "discover_people") {
+      this.filterUsers();
+    } else {
+      this.filterExercises()
+    }
+  }
+
+  filterItems(searchTerm) {
+    return this.items.filter((item) => {
+        return item.title.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1;
+    });    
+  }
+
+  // On input, display spinner to user
+  onSearchInput(){
+    this.searching = true;
   }
   
-  // getFriendsOfFriends(friend) {
-  //   var query = firebase.database().ref('/' + friend + '/competing');
-  
-  //   query.once("value").then( snapshot => {
-  //     var loop = 0;
-  //     snapshot.forEach( childSnapshot => {
-  //       var competingFriendOfFriend = childSnapshot.val().name;
-  //       if (!this.competingFriendsOfFriends.includes(competingFriendOfFriend) && !this.competingFriends.includes(competingFriendOfFriend)) {
-  //         this.competingFriendsOfFriends.push(competingFriendOfFriend);
-  //         var likelyFriend = {
-  //           name: competingFriendOfFriend,
-  //           profilePic: '',
-  //           gains: 0,
-  //         };
-  //         var queryGains = firebase.database().ref('/' + competingFriendOfFriend + '/gains');
-  //         var loop = 0;
-  //         queryGains.once("value").then( snapshot => {
-  //           loop++;
-  //           var totalGains = 0;
-  //           snapshot.forEach( childSnapshot => {
-  //             var childData1 = childSnapshot.val();
-  //             totalGains = totalGains + childData1.gains;
-  //           });
-  //           likelyFriend.gains = totalGains;
-  //           var queryGains = firebase.database().ref('/users/' + competingFriendOfFriend + '/profilePic');
-  //           queryGains.once("value").then( profilePic => {
-  //             likelyFriend.profilePic = profilePic.val();
-  //             console.log(likelyFriend);
-  //             this.likelyFriends.push(likelyFriend);
-  //             if (loop == snapshot.numChildren()) {
-  //               this.show = false;
-  //             }
-  //           });
-  //         });      
-  //       }  
-  //     });
-  //   });
-  // }
-  
-  getItems(ev) {
-    let val = ev.target.value;
-    if (!val || !val.trim()) {
+  filterUsers() {
+    if (!this.searchTerm || !this.searchTerm.trim()) {
       this.currentItems = [];
       return;
     }
     this.currentItems = this.users.filter((v) => {
-    if(v.username && val) {
-      if (v.username.toLowerCase().indexOf(val.toLowerCase()) > -1) {
+    if(v.username && this.searchTerm) {
+      if (v.username.toLowerCase().indexOf(this.searchTerm.toLowerCase()) > -1) {
         return true;
 	      }
 	    return false;
 	    }
     });
-    this.getExercises(ev)
-    
-
   }
 
-  getExercises(ev) {
-    let val = ev.target.value;
-    if (!val || !val.trim()) {
+  filterExercises() {
+    // let val = ev.target.value;
+    if (!this.searchTerm || !this.searchTerm.trim()) {
       this.currentExercises = [];
       return;
     }
     this.currentExercises = this.exercises.filter((v) => {
-    if(v.exerciseName && val) {
-      if (v.exerciseName.toLowerCase().indexOf(val.toLowerCase()) > -1) {
-        return true;
-	      }
-	    return false;
+      if(v.exerciseName && this.searchTerm) {
+        if (v.exerciseName.toLowerCase().indexOf(this.searchTerm.toLowerCase()) > -1) {
+          return true;
+        }
+        return false;
 	    }
     });
-    this.getItems(ev)
   }
+
   addToExercises(exercise){
     this.bool = true;
     
@@ -231,6 +226,45 @@ export class DiscoverPage {
   //   var queryGains = firebase.database().ref('/users/' + username + '/profilePic');
   //   queryGains.once("value").then( profilePic => {
   //     return profilePic.val()
+  //   });
+  // }
+
+    // getFriendsOfFriends(friend) {
+  //   var query = firebase.database().ref('/' + friend + '/competing');
+  
+  //   query.once("value").then( snapshot => {
+  //     var loop = 0;
+  //     snapshot.forEach( childSnapshot => {
+  //       var competingFriendOfFriend = childSnapshot.val().name;
+  //       if (!this.competingFriendsOfFriends.includes(competingFriendOfFriend) && !this.competingFriends.includes(competingFriendOfFriend)) {
+  //         this.competingFriendsOfFriends.push(competingFriendOfFriend);
+  //         var likelyFriend = {
+  //           name: competingFriendOfFriend,
+  //           profilePic: '',
+  //           gains: 0,
+  //         };
+  //         var queryGains = firebase.database().ref('/' + competingFriendOfFriend + '/gains');
+  //         var loop = 0;
+  //         queryGains.once("value").then( snapshot => {
+  //           loop++;
+  //           var totalGains = 0;
+  //           snapshot.forEach( childSnapshot => {
+  //             var childData1 = childSnapshot.val();
+  //             totalGains = totalGains + childData1.gains;
+  //           });
+  //           likelyFriend.gains = totalGains;
+  //           var queryGains = firebase.database().ref('/users/' + competingFriendOfFriend + '/profilePic');
+  //           queryGains.once("value").then( profilePic => {
+  //             likelyFriend.profilePic = profilePic.val();
+  //             console.log(likelyFriend);
+  //             this.likelyFriends.push(likelyFriend);
+  //             if (loop == snapshot.numChildren()) {
+  //               this.show = false;
+  //             }
+  //           });
+  //         });      
+  //       }  
+  //     });
   //   });
   // }
 
