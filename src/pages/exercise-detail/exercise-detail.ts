@@ -68,18 +68,22 @@ export class ItemDetailPage {
     }
   }
 
-  ionViewDidEnter() {
-    console.log(this.barChart)
-    console.log(this.historyChild)
-    this.historyChild.showHistory();
+  refreshCharts() {
+    this.barChart.makeBarChart();
+      if(!this.friend){
+        this.lineChart.makeLineChart();
+      }
+  }
+
+  ionViewWillEnter() {
+    console.log("hey")
     if (this.muscleGroup == "Cardio") {
       this.noRecords = true;
       
       
       this.userService.getCardioHistoryByIdAndExercise(this.exercise).subscribe(data =>{
         this.cardioHistory = data;
-        this.historyService.cardioHistory = this.cardioHistory;
-        this.historyChild.showHistory();
+        this.historyService.cardioHistory = this.cardioHistory.reverse();
         this.barChart.makeBarChart();
         if(!this.friend){
           this.lineChart.makeLineChart();
@@ -88,23 +92,21 @@ export class ItemDetailPage {
     } else if (this.exercise.bodyLift) {
       this.noRecords = false;
       this.historyService.getBodyLiftByExercise(this.user.id, this.exercise.id).subscribe(bodyLifts => {
-        this.historyService.bodyLift = bodyLifts;
-        this.historyChild.showHistory();
+        this.historyService.bodyLift = bodyLifts.reverse();
       });
     } else if (this.muscleGroup == "Flexibility") {
       this.noRecords = false;
       this.historyService.getFlexByExercise(this.user.id, this.exercise.id).subscribe(flex => {
         this.historyService.flexHistory = flex;
-        this.historyChild.showHistory();
+        //this.historyChild.showHistory();
       });
     } else {
       this.noRecords = true;
       console.log("here")
       this.userService.getLiftingHistoryByIdAndExercise(this.exercise).subscribe(data =>{
         console.log(data);
-        this.historyService.liftingHistory = data;
+        this.historyService.liftingHistory = data.reverse();
         console.log(this.historyChild)
-        this.historyChild.showHistory();
         this.barChart.makeBarChart();
         if(!this.friend){
           console.log("there")

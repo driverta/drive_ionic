@@ -27,7 +27,7 @@
 		<line-chart  [hidden]="selectedValue!=2 || (exercise.bodyLift || (exercise.MuscleGroup.muscleGroupName == 'Flexibility'))" ></line-chart>
 	<div [ngSwitch]="segment">
 	  <ion-list *ngSwitchCase="'set'">
-	    <new-set (myEvent)="ionViewWillEnter();"></new-set>
+	    <new-set (myEvent)="refreshCharts();"></new-set>
 	  </ion-list>
 
 	  <ion-list *ngSwitchCase="'history'">

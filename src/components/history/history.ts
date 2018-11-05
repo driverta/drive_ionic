@@ -49,18 +49,19 @@ export class HistoryComponent {
     this.user = userService.getUser();
   }
 
-  public showHistory() {
+  ngOnInit() {
+    console.log("load")
     if (this.muscleGroup == "Cardio") {
         this.cardioBool = true;
         this.liftingBool = false;
         if (this.history.cardioHistory){
-          this.cardioHistory = this.history.cardioHistory.reverse()
+          this.cardioHistory = this.history.cardioHistory
         }
     } else if (this.exercise.bodyLift) {
       this.liftingBool = false
       this.bodyLiftBool = true // TODO: GET Body Lift History 
       if (this.history.bodyLift) {
-        this.bodyLiftHistory = this.history.bodyLift.reverse()
+        this.bodyLiftHistory = this.history.bodyLift
       }
     } else if (this.muscleGroup == "Flexibility") {
       this.liftingBool = false
@@ -69,7 +70,7 @@ export class HistoryComponent {
     } else {
       if (this.history.liftingHistory) {
         console.log("Yoo")
-        this.liftingHistory = this.history.liftingHistory.reverse()
+        this.liftingHistory = this.history.liftingHistory
       }
     }
   }
@@ -166,7 +167,8 @@ export class HistoryComponent {
     this.username = this.user.username
     this.history.removeLiftingHistory(x).subscribe(data => {
       this.myEvent2.emit(null);
-      this.showHistory();
+      this.history.liftingHistory.splice(0, 1)
+      this.ngOnInit();
     });
   }
 
@@ -174,7 +176,8 @@ export class HistoryComponent {
     this.username = this.user.username
     this.history.removeCardioHistory(x).subscribe(data => {
       this.myEvent2.emit(null);
-      this.showHistory();
+      this.history.cardioHistory.splice(0, 1)
+      this.ngOnInit();
     });
   }
 
@@ -182,7 +185,8 @@ export class HistoryComponent {
     this.username = this.user.username
     this.history.removeBodyLift(x).subscribe(data => {
       this.myEvent2.emit(null);
-      this.showHistory();
+      this.history.bodyLift.splice(0, 1)
+      this.ngOnInit();
     });
   }
 
@@ -190,7 +194,8 @@ export class HistoryComponent {
     this.username = this.user.username
     this.history.removeflex(x).subscribe(data => {
       this.myEvent2.emit(null);
-      this.showHistory();
+      this.history.flexHistory.splice(0, 1)
+      this.ngOnInit();
     });
   }
 }

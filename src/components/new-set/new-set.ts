@@ -163,7 +163,7 @@ export class NewSetComponent {
       this.lf.set = this.liftingHistory[0].set + 1;
     }
     this.userService.addLiftingHistory(this.lf).subscribe();
-    this.historyService.liftingHistory.push(this.lf)
+    this.historyService.liftingHistory.unshift(this.lf)
     this.myEvent.emit(null);
     this.ngOnInit(); 
   }
@@ -228,7 +228,7 @@ export class NewSetComponent {
         this.points = false;
       }, 2000);
       this.userService.addCardioHistory(this.cardio).subscribe();
-      this.historyService.cardioHistory.push(this.cardio)
+      this.historyService.cardioHistory.unshift(this.cardio)
       this.myEvent.emit(null);
       this.ngOnInit();
     }
@@ -256,7 +256,7 @@ export class NewSetComponent {
     this.flex.History = this.historyModel
 
     this.historyService.addFlex(this.flex).subscribe()
-    this.historyService.flexHistory.push(this.flex)
+    this.historyService.flexHistory.unshift(this.flex)
     this.myEvent.emit(null);
     this.ngOnInit(); 
   }
@@ -290,7 +290,7 @@ export class NewSetComponent {
     }, 2000);
     this.bodyLift.History = this.historyModel
     this.historyService.addBodyLift(this.bodyLift).subscribe()
-    this.historyService.bodyLift.push(this.bodyLift)
+    this.historyService.bodyLift.unshift(this.bodyLift)
     // this.historyService.addBodyLiftHistory(this.historyModel).subscribe(history => {
     //   this.bodyLift.History = history
     //   this.historyService.addBodyLift(this.bodyLift).subscribe()
