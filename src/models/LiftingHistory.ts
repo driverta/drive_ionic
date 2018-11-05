@@ -4,6 +4,7 @@ export class LiftingHistory {
     id: number;
     date: any;
     weight: number;
+    set: number;
     reps: number;
     user_id: number;
     oneRepMax: number;

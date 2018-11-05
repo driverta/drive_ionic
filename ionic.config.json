@@ -9,6 +9,5 @@
       "path": "/api",
       "proxyUrl": "http://DriveApi.y7mz5ppbve.us-east-2.elasticbeanstalk.com"
     }
-  ],
-  "app_id": ""
+  ]
 }
