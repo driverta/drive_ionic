@@ -48,6 +48,8 @@ export class NewSetComponent {
   liftingBool = true;
   cardioBool = false;
   flexBool = false;
+  liftingHistory: LiftingHistory[];
+  bodyLiftHistory: BodyLift[];
 
   lf: LiftingHistory;
   cardioHistory: CardioHistory[];
@@ -115,6 +117,7 @@ export class NewSetComponent {
     this.lf.reps = this.reps;
     this.lf.weight = this.weight;
     this.lf.user_id = this.userService.getUser().id;
+    this.lf.set = 1;
     var date;
     date = new Date();
     // date = date.getUTCFullYear() + '-' +
@@ -153,7 +156,15 @@ export class NewSetComponent {
       this.points = false;
     }, 2000);
 
+    this.liftingHistory = this.historyService.liftingHistory;
+    //this.liftingHistory = this.liftingHistory.reverse();
+    var newDate = new Date(this.liftingHistory[0].date).toDateString()
+    if (newDate == date.toDateString()){
+
+      this.lf.set = this.liftingHistory[0].set + 1;
+    }
     this.userService.addLiftingHistory(this.lf).subscribe();
+    this.historyService.liftingHistory.unshift(this.lf)
     this.myEvent.emit(null);
     this.ngOnInit(); 
     this.notify.emit(this.lf.gains)
@@ -219,6 +230,7 @@ export class NewSetComponent {
         this.points = false;
       }, 2000);
       this.userService.addCardioHistory(this.cardio).subscribe();
+      this.historyService.cardioHistory.unshift(this.cardio)
       this.myEvent.emit(null);
       this.notify.emit(0)
       this.ngOnInit();
@@ -247,7 +259,7 @@ export class NewSetComponent {
     this.flex.History = this.historyModel
 
     this.historyService.addFlex(this.flex).subscribe()
-    
+    this.historyService.flexHistory.unshift(this.flex)
     this.myEvent.emit(null);
     this.ngOnInit(); 
   }
@@ -281,6 +293,7 @@ export class NewSetComponent {
     }, 2000);
     this.bodyLift.History = this.historyModel
     this.historyService.addBodyLift(this.bodyLift).subscribe()
+    this.historyService.bodyLift.unshift(this.bodyLift)
     // this.historyService.addBodyLiftHistory(this.historyModel).subscribe(history => {
     //   this.bodyLift.History = history
     //   this.historyService.addBodyLift(this.bodyLift).subscribe()

@@ -18,13 +18,12 @@ import { BodyLift } from '../../models/BodyLift';
 @Injectable()
 export class HistoryProvider {
 
-	liftingHistory: LiftingHistory = new LiftingHistory(); 
-
-	cardioHistory: CardioHistory = new CardioHistory();
+	liftingHistory: LiftingHistory[]; 
+	cardioHistory: CardioHistory[];
 
 	History: History = new History();
-	BodyLift: BodyLift = new BodyLift();
-	Flexibility: Flexibility = new Flexibility();
+	bodyLift: BodyLift[];
+	flexHistory: Flexibility[];
 
 	_history = [{date: new Date(0), reps: 0, weight: 0, oneRM: 0}]
 

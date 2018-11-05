@@ -32,7 +32,7 @@
 							[showSubtitle]="false" [showUnits]="false"></circle-progress>
 						<ion-label style="margin-left: 0%">{{xcurrent}} out of {{xtotal}} Exp.</ion-label>
 					</ion-item>
-	    <new-set (myEvent)="ionViewWillEnter();" (notify)='onNotify($event)'></new-set>
+	    <new-set (myEvent)="refreshCharts();" (notify)='onNotify($event)'></new-set>
 	  </ion-list>
 
 	  <ion-list *ngSwitchCase="'history'">
