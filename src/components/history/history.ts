@@ -1,6 +1,6 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import  { StatsLineChart } from '../../models/item';
-import  { NavParams, AlertController } from 'ionic-angular';
+import  { NavParams, NavController, AlertController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 
 import { HistoryProvider, ProvidersUserProvider } from '../../providers/providers';
@@ -38,6 +38,7 @@ export class HistoryComponent {
 
   constructor(
     navParams: NavParams,
+    public navCtrl: NavController,
     private history: HistoryProvider,
     private alertCtrl: AlertController,
     private storage: Storage,
@@ -48,7 +49,7 @@ export class HistoryComponent {
     this.user = userService.getUser();
   }
 
-  ngOnInit() {
+  public showHistory() {
     if (this.muscleGroup == "Cardio") {
         this.cardioBool = true;
         this.liftingBool = false;
@@ -165,7 +166,7 @@ export class HistoryComponent {
     this.username = this.user.username
     this.history.removeLiftingHistory(x).subscribe(data => {
       this.myEvent2.emit(null);
-      this.ngOnInit();
+      this.showHistory();
     });
   }
 
@@ -173,7 +174,7 @@ export class HistoryComponent {
     this.username = this.user.username
     this.history.removeCardioHistory(x).subscribe(data => {
       this.myEvent2.emit(null);
-      this.ngOnInit();
+      this.showHistory();
     });
   }
 
@@ -181,7 +182,7 @@ export class HistoryComponent {
     this.username = this.user.username
     this.history.removeBodyLift(x).subscribe(data => {
       this.myEvent2.emit(null);
-      this.ngOnInit();
+      this.showHistory();
     });
   }
 
@@ -189,7 +190,7 @@ export class HistoryComponent {
     this.username = this.user.username
     this.history.removeflex(x).subscribe(data => {
       this.myEvent2.emit(null);
-      this.ngOnInit();
+      this.showHistory();
     });
   }
 }

@@ -9,6 +9,7 @@ import { Levels } from '../../providers/providers';
 
 import { BarChartComponent } from '../../components/bar-chart/bar-chart';
 import { LineChartComponent } from '../../components/line-chart/line-chart';
+import { HistoryComponent } from '../../components/history/history';
 import { SortByRepsPipe } from '../../pipes/sort-by-reps/sort-by-reps';
 
 import { LiftingHistory } from '../../models/LiftingHistory';
@@ -41,8 +42,9 @@ export class ItemDetailPage {
 
   private friend: boolean = true;
 
-  @ViewChild(BarChartComponent) barChart: BarChartComponent
-  @ViewChild(LineChartComponent) lineChart: LineChartComponent
+  @ViewChild(HistoryComponent) historyChild: HistoryComponent;
+  @ViewChild(BarChartComponent) barChart: BarChartComponent;
+  @ViewChild(LineChartComponent) lineChart: LineChartComponent;
 
   constructor(public navCtrl: NavController,
     navParams: NavParams,
@@ -53,6 +55,7 @@ export class ItemDetailPage {
     private storage: Storage,
     public historyService: HistoryProvider,
     private userService: ProvidersUserProvider) {
+
     this.platform.ready().then((readySource) => {
         // Platform now ready, execute any required native code
       });
@@ -65,8 +68,10 @@ export class ItemDetailPage {
     }
   }
 
-  ionViewWillEnter() {
-
+  ionViewDidEnter() {
+    console.log(this.barChart)
+    console.log(this.historyChild)
+    this.historyChild.showHistory();
     if (this.muscleGroup == "Cardio") {
       this.noRecords = true;
       
@@ -74,6 +79,7 @@ export class ItemDetailPage {
       this.userService.getCardioHistoryByIdAndExercise(this.exercise).subscribe(data =>{
         this.cardioHistory = data;
         this.historyService.cardioHistory = this.cardioHistory;
+        this.historyChild.showHistory();
         this.barChart.makeBarChart();
         if(!this.friend){
           this.lineChart.makeLineChart();
@@ -83,11 +89,13 @@ export class ItemDetailPage {
       this.noRecords = false;
       this.historyService.getBodyLiftByExercise(this.user.id, this.exercise.id).subscribe(bodyLifts => {
         this.historyService.bodyLift = bodyLifts;
+        this.historyChild.showHistory();
       });
     } else if (this.muscleGroup == "Flexibility") {
       this.noRecords = false;
       this.historyService.getFlexByExercise(this.user.id, this.exercise.id).subscribe(flex => {
         this.historyService.flexHistory = flex;
+        this.historyChild.showHistory();
       });
     } else {
       this.noRecords = true;
@@ -95,6 +103,8 @@ export class ItemDetailPage {
       this.userService.getLiftingHistoryByIdAndExercise(this.exercise).subscribe(data =>{
         console.log(data);
         this.historyService.liftingHistory = data;
+        console.log(this.historyChild)
+        this.historyChild.showHistory();
         this.barChart.makeBarChart();
         if(!this.friend){
           console.log("there")
