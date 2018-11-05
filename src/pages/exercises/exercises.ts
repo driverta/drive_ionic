@@ -85,7 +85,7 @@ export class ListMasterPage {
     });
     
 
-    this.gainsChart.makeGainsChart(this.mg.muscleGroupName);
+    this.gainsChart.makeGainsChart([this.mg.muscleGroupName]);
 
     // this.username = localStorage.getItem("username");
     // console.log(this.username);

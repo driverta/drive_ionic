@@ -11,45 +11,49 @@
 
 <ion-content padding>
 
-  <!-- <ion-grid>
+  <ion-grid>
     <ion-row>
       <ion-col>
-        <button id="login" class="login-button" ion-button block (click)="login()"><ion-spinner *ngIf="buttonPressed" class="spinner-energized"></ion-spinner> <span  *ngIf="!buttonPressed">Start a workout!</span></button>
+        <button id="login" class="login-button" ion-button block (click)="workout()"><!-- <ion-spinner *ngIf="buttonPressed" class="spinner-energized"></ion-spinner> -->
+        <span  *ngIf="!buttonPressed">Start a workout!</span>
+        <span *ngIf="buttonPressed">End Workout {{hours}}:{{minutes}}:{{seconds}}</span>
+        <!-- <timer interval="1000">{{hours}} hour{{hoursS}}, {{minutes}} minute{{minutesS}}, {{seconds}} second{{secondsS}}.</timer> -->
+        </button>
       </ion-col>
     </ion-row>
-  </ion-grid> -->
+  </ion-grid>
 
   <ion-grid>
     <ion-row>
       <ion-col col-6>
-         <button id="login" class="login-button img-button-chest" ion-button block (click)="toChest()"><ion-spinner *ngIf="buttonPressed" class="spinner-energized"></ion-spinner> <span  *ngIf="!buttonPressed">Chest</span></button>
+         <button id="login" class="login-button img-button-chest" ion-button block (click)="toChest()"><!-- <ion-spinner *ngIf="buttonPressed" class="spinner-energized"></ion-spinner> --> <span  >Chest</span></button>
       </ion-col>
       <ion-col col-6>
-        <button id="login" class="login-button img-button-back" ion-button block (click)="toBack()"><ion-spinner *ngIf="buttonPressed" class="spinner-energized"></ion-spinner> <span  *ngIf="!buttonPressed">Back</span></button>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col col-6>
-        <button id="login" class="login-button img-button-legs" ion-button block (click)="toLegs()"><ion-spinner *ngIf="buttonPressed" class="spinner-energized"></ion-spinner> <span  *ngIf="!buttonPressed">Legs</span></button>
-      </ion-col>
-      <ion-col col-6>
-        <button id="login" class="login-button img-button-arms" ion-button block (click)="toArms()"><ion-spinner *ngIf="buttonPressed" class="spinner-energized"></ion-spinner> <span  *ngIf="!buttonPressed">Arms</span></button>
+        <button id="login" class="login-button img-button-back" ion-button block (click)="toBack()"><!-- <ion-spinner *ngIf="buttonPressed" class="spinner-energized"></ion-spinner> --> <span  >Back</span></button>
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col col-6>
-        <button id="login" class="login-button img-button-shoulder" ion-button block (click)="toShoulders()"><ion-spinner *ngIf="buttonPressed" class="spinner-energized"></ion-spinner> <span  *ngIf="!buttonPressed">Shoulders</span></button>
+        <button id="login" class="login-button img-button-legs" ion-button block (click)="toLegs()"><!-- <ion-spinner *ngIf="buttonPressed" class="spinner-energized"></ion-spinner> --> <span  >Legs</span></button>
       </ion-col>
       <ion-col col-6>
-        <button id="login" class="login-button img-button-abs" ion-button block (click)="toAbs()"><ion-spinner *ngIf="buttonPressed" class="spinner-energized"></ion-spinner> <span  *ngIf="!buttonPressed">Abs</span></button>
+        <button id="login" class="login-button img-button-arms" ion-button block (click)="toArms()"><!-- <ion-spinner *ngIf="buttonPressed" class="spinner-energized"></ion-spinner> --> <span  >Arms</span></button>
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col col-6>
-        <button id="login" class="login-button img-button-cardio" ion-button block (click)="toCardio()"><ion-spinner *ngIf="buttonPressed" class="spinner-energized"></ion-spinner> <span  *ngIf="!buttonPressed">Cardio</span></button>
+        <button id="login" class="login-button img-button-shoulder" ion-button block (click)="toShoulders()"><!-- <ion-spinner *ngIf="buttonPressed" class="spinner-energized"></ion-spinner> --> <span >Shoulders</span></button>
       </ion-col>
       <ion-col col-6>
-        <button id="login" class="login-button img-button-yoga" ion-button block (click)="toFlexibility()"><ion-spinner *ngIf="buttonPressed" class="spinner-energized"></ion-spinner> <span  *ngIf="!buttonPressed">Flexibility</span></button>
+        <button id="login" class="login-button img-button-abs" ion-button block (click)="toAbs()"><!-- <ion-spinner *ngIf="buttonPressed" class="spinner-energized"></ion-spinner> --> <span >Abs</span></button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col col-6>
+        <button id="login" class="login-button img-button-cardio" ion-button block (click)="toCardio()"><!-- <ion-spinner *ngIf="buttonPressed" class="spinner-energized"></ion-spinner> --> <span >Cardio</span></button>
+      </ion-col>
+      <ion-col col-6>
+        <button id="login" class="login-button img-button-yoga" ion-button block (click)="toFlexibility()"><!-- <ion-spinner *ngIf="buttonPressed" class="spinner-energized"></ion-spinner> --> <span >Flexibility</span></button>
       </ion-col>
     </ion-row>
   </ion-grid>

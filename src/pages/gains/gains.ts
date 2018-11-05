@@ -6,6 +6,7 @@ import { CardioHistory } from '../../models/CardioHistory';
 import { LiftingHistory } from '../../models/LiftingHistory';
 
 import { GainsChartComponent } from '../../components/gains-chart/gains-chart';
+import { CardioTimeConvertPipe } from '../../pipes/cardio-time-convert/cardio-time-convert'
 
 
 @IonicPage()
@@ -33,7 +34,7 @@ export class GainsPage {
     }
 
     ionViewDidLoad() {
-      this.gainsChart.makeGainsChart(this.filter);
+      this.gainsChart.makeGainsChart([this.filter]);
     }
 
     filterGains(){

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { IonicPage, ActionSheetController, NavController, NavParams } from 'ionic-angular';
 import { User, ProvidersUserProvider, HistoryProvider } from '../../providers/providers';
 import { Storage } from '@ionic/storage';
@@ -13,24 +13,25 @@ import * as d3Shape from "d3-shape";
 import * as d3Axis from "d3-axis";
 
 /**
- * Generated class for the GainsChartComponent component.
+ * Generated class for the TimelineChartComponent component.
  *
  * See https://angular.io/api/core/Component for more info on Angular
  * Components.
  */
 @Component({
-  selector: 'gains-chart',
-  templateUrl: 'gains-chart.html'
+  selector: 'timeline-chart',
+  templateUrl: 'timeline-chart.html'
 })
-export class GainsChartComponent {
+export class TimelineChartComponent {
 
+  text: string;
   user: any;
 	gains = 0
 	allTime = 0;
 
   exercises = {};
   xGains = 0
-  ids = [];
+  id: string;
 
   chest = 0;
   back = 0;
@@ -44,11 +45,10 @@ export class GainsChartComponent {
   liftingHistory: LiftingHistory[] = new Array<LiftingHistory>();
   flexHistory: Flexibility[] = new Array<Flexibility>();
 
-  filter = "";
-
   margin = {top: 50, right: 110, bottom: 50, left: 45};
   width: number;
   height: number;
+  @Input() inputData: any;
 
   data = [
     [//iPhone
@@ -72,39 +72,19 @@ export class GainsChartComponent {
     color: "red"
   };
 
-  constructor(public navCtrl: NavController,
-  	public navParams: NavParams,
+  constructor(
+    public navParams: NavParams,
     public actShtCtrl: ActionSheetController,
     private storage: Storage,
     private userService: ProvidersUserProvider,
-    private historyService: HistoryProvider) {
-
-    this.user = navParams.get('user');
-    if(this.user == null){
-      this.user = userService.getUser();
-    }
-    this.width = Math.min(700, window.innerWidth - 10) - this.margin.left - this.margin.right,
-    this.height = Math.min(this.width, window.innerHeight - this.margin.top - this.margin.bottom - 20);
-    this.radarChartOptions.w = this.width;
-    this.radarChartOptions.h = this.height;
-    this.radarChartOptions.margin = this.margin;
-    
+    private historyService: HistoryProvider
+  ) {
+    console.log('Hello TimelineChartComponent Component');
+    this.text = 'Hello World';
   }
 
-  public makeGainsChart(filters) {
-    this.ids = filters;
-    this.data = [
-      [//iPhone
-      {axis:"Chest",value:0.12},
-      {axis:"Back",value:0.18},
-      {axis:"Legs",value:0.29},
-      {axis:"Shoulders",value:0.17},
-      {axis:"Arms",value:0.22},
-      {axis:"Core",value:0.02},
-      {axis:"Cardio",value:0.60}      
-      ]
-    ];
-
+  public makeTimelineChart(userId, workout) {
+    this.id = userId + '_' + workout.id;
     this.allTime = 0;
 
     this.chest = 0;
@@ -115,14 +95,13 @@ export class GainsChartComponent {
     this.core = 0;
     this.other = 0;
     this.cardio = 0;
-    
 
-    this.historyService.getCardioHistory(this.user.id).subscribe((cardioHistory) => {
+    this.historyService.getUserCardioHistoryBetween(this.user.id, workout.startTime, workout.endTime).subscribe((cardioHistory) => {
       this.cardioHistory = cardioHistory;
       this.cardioHistory.forEach(ch => {
         this.cardio += ch.gains;
       });
-      this.historyService.getLiftingHistory(this.user.id).subscribe((liftingHistory) => {
+      this.historyService.getUserLiftingHistoryBetween(this.user.id, workout.startTime, workout.endTime).subscribe((liftingHistory) => {
         this.liftingHistory = liftingHistory;
         this.liftingHistory.forEach(lh =>{
           switch(lh.exercise.MuscleGroup.muscleGroupName) {
@@ -153,57 +132,11 @@ export class GainsChartComponent {
 	      this.data[0][3].value = this.shoulders / this.allTime;
 	      this.data[0][4].value = this.arms / this.allTime;
 	      this.data[0][5].value = this.core / this.allTime;
-	      this.data[0][6].value = this.cardio / this.allTime;
+        this.data[0][6].value = this.cardio / this.allTime;
 
-	      console.log(this.allTime);
-        filters.forEach(filter => {
-          console.log(filter);
-          this.executeFilter(filter);
-        })
-
-	      // if (filter == "All"){
-	      // 	this.radarChart("#gainsChart", this.data, this.radarChartOptions);
-	      // } else {
-	      // 	this.executeFilter(filter)
-	      // }
-
+        this.radarChart(this.id, this.data, this.radarChartOptions);
       });
     });
-  }
-
-  executeFilter(filter){
-    this.data[0] = [];
-    this.exercises = {};
-    this.xGains = 0;
-    if (filter == "Cardio"){
-      this.cardioHistory.forEach(c =>{
-        if (c.exercise.MuscleGroup.muscleGroupName == filter) {
-          this.xGains += c.gains;
-          if (this.exercises[c.exercise.exerciseName]){
-            this.exercises[c.exercise.exerciseName] += c.gains;
-          } else {
-            this.exercises[c.exercise.exerciseName] = c.gains;
-          }
-        }
-    });
-    } else {
-      this.liftingHistory.forEach(lf =>{
-        if (lf.exercise.MuscleGroup.muscleGroupName == filter) {
-          this.xGains += lf.gains;
-          if (this.exercises[lf.exercise.exerciseName]){
-            this.exercises[lf.exercise.exerciseName] += lf.gains;
-          } else {
-            this.exercises[lf.exercise.exerciseName] = lf.gains;
-          }
-        }
-      });
-    }
-    Object.keys(this.exercises).forEach ((key) => {
-      var percent = this.exercises[key] / this.xGains;
-      var d = {axis: key, value: percent}
-      this.data[0].push(d)
-    });
-    this.radarChart("#" + filter, this.data, this.radarChartOptions);
   }
 
   radarChart(id, data, options){
@@ -233,6 +166,7 @@ export class GainsChartComponent {
     //If the supplied maxValue is smaller than the actual one, replace by the max in the data
     //var maxValue = Math.max(cfg.maxValue, d3Array.max(data, function(i){console.log(i); return d3Array.max(i.map(function(o){ console.log(o); return o.value;}))}));
     var maxValue = options.maxValue
+    console.log(maxValue)
 
     var allAxis = (data[0].map((i, j) => {return i.axis})),  //Names of each axis
       total = allAxis.length,          //The number of different axes
