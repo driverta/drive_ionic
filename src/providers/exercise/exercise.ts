@@ -26,6 +26,10 @@ export class ExerciseProvider {
     return this.http.get<Exercise[]>(this.url + "getExerciseByUserID?userID=" + userId)
   }
 
+  getFilteredExercisesSearch(searchTerm, userId): Observable<Exercise[]> {
+    return this.http.get<Exercise[]>(this.url + `getFilteredExercisesSearch?searchTerm=${searchTerm}&userId=${userId}`);
+  }
+
   getAllExercises(): Observable<Exercise[]> {
     return this.http.get<Exercise[]>(this.url + "getAllExercises")
   }

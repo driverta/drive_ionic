@@ -26,7 +26,11 @@ export class ProvidersUserProvider {
   }
 
   getAllUsers(): Observable<UserModel[]> {
-    return this.http.get<UserModel[]>(this.url + "getUsers")
+    return this.http.get<UserModel[]>(this.url + "getAllUsers")
+  }
+
+  getFilteredUsersSearch(searchTerm): Observable<UserModel[]> {
+    return this.http.get<UserModel[]>(this.url + "getFilteredUsersSearch?searchTerm=" + searchTerm)
   }
 
   getLeaderboardData(userId): Observable<UserModel[]> {
