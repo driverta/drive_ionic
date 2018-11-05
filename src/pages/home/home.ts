@@ -3,8 +3,10 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Exercise } from '../../models/Exercise';
 import { ProvidersUserProvider } from '../../providers/providers-user/providers-user';
 import { ExerciseProvider } from '../../providers/exercise/exercise';
+import { WorkoutService } from '../../providers/workout/workout';
 import { StatusBar } from '@ionic-native/status-bar';
 import { MuscleGroup } from '../../models/MuscleGroupModel';
+import { WorkoutModel } from '../../models/Workout';
 
 /**
  * Generated class for the HomePage page.
@@ -22,13 +24,20 @@ export class HomePage {
 
   private exercises: Exercise[];
   private mg: MuscleGroup[];
+  private workoutItem: WorkoutModel;
+  minutes = 0;
+  seconds = 0;
+  hours = 0;
+  buttonPressed = false;
+  interval: any;
 
   constructor(
     private statusBar: StatusBar,
     public navCtrl: NavController, 
     public navParams: NavParams, 
     private exerciseService: ExerciseProvider,
-    private userService: ProvidersUserProvider) {
+    private userService: ProvidersUserProvider,
+    private workoutService: WorkoutService) {
   }
 
   ionViewDidLoad() {
@@ -41,9 +50,7 @@ export class HomePage {
     this.exerciseService.getAllMuscleGroups().subscribe(data => {
       this.mg = data;
     })
-  }
-
-  
+  } 
 
   toChest(){
     this.navCtrl.push('ListMasterPage', {
@@ -99,5 +106,39 @@ export class HomePage {
       //exercises : this.exercises.filter(exercise => exercise.MuscleGroup.muscleGroupName === "Flexibility"),
       title: this.mg[8]
     });
+  }
+
+  workout(){
+    if (this.buttonPressed == true){
+      this.seconds = 0;
+      this.minutes = 0;
+      this.hours = 0;
+      clearInterval(this.interval);
+      this.buttonPressed = false;
+      this.workoutItem.endTime = new Date();
+      this.workoutService.setWorkoutEndTime(this.workoutItem);
+    } else {
+      this.buttonPressed = true;
+      this.workoutItem = new WorkoutModel();
+      this.workoutItem.userId = this.userService.getUser().id;
+
+      this.interval = setInterval(() =>{
+        if (this.minutes == 59 && this.seconds == 59){
+          this.hours++;
+          this.minutes = 0;
+          this.seconds = 0;
+        } else if (this.seconds == 59){
+          this.minutes++;
+          this.seconds = 0;
+        } else {
+          this.seconds++
+        }
+      }, 1000)
+      //this.workoutItem.user = this.userService.getUser();
+      this.workoutItem.startTime = new Date();
+      this.workoutService.createWorkout(this.workoutItem).subscribe(workout => {
+        this.workoutItem.id = workout.id;
+      });
+    }
   }
 }

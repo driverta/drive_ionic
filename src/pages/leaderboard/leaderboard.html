@@ -1,9 +1,10 @@
 
 <ion-content>
-        <button id="login" class="login-button img-button-chest"><span class="font-white">See how you compare to your friends!</span></button>
-   
+  <button id="login" class="login-button img-button-chest"><span class="font-white">See how you compare to your friends!</span></button>
+
 
   <div class="timespan">
+
     <ion-list class="no-margin">
 <ion-item-divider no-lines sticky>    <ion-segment (ionChange)="onSegmentChange()" [(ngModel)]="segment">
     <ion-segment-button value="today">
@@ -34,16 +35,11 @@
             <!-- <h3>{{item.rank}} {{item.level}}</h3> -->
 
           </h1>
+
         </ion-item>
-
-        <ion-item-options *ngIf="item.username != username">
-          <button ion-button color="danger" (click)="presentConfirm(item)">
-            {{ 'Remove' | translate }}
-          </button>
-        </ion-item-options>
-
-      </ion-item-sliding>
-    </ion-list>
-    <h3 *ngIf="show" id="loading">Loading</h3>
+        <div id='timelineContainer'>
+        </div>
+      </ion-list>
+    </div>
   </div>
 </ion-content>

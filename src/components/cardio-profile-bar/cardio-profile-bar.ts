@@ -136,7 +136,7 @@ export class CardioProfileBarComponent {
   }
 
   setChart() {
-    d3.selectAll("svg > *").remove();
+    d3.select("#barCardio").selectAll("svg > *").remove();
     this.initSvg()
     this.initAxis();
     this.drawAxis();

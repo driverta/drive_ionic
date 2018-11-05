@@ -98,7 +98,7 @@ export class ProfileBarComponent {
   }
 
   setChart() {
-    d3.selectAll("svg > *").remove();
+    d3.select("#barChart").selectAll("svg > *").remove();
     this.initSvg()
     this.initAxis();
     this.drawAxis();

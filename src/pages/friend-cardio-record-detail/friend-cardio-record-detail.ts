@@ -148,7 +148,7 @@ export class FriendCardioRecordDetailPage {
   }
 
   setChart() {
-    //d3.selectAll("svg > *").remove();
+    d3.select("#barCardio").selectAll("svg > *").remove();
     this.initSvg()
     this.initAxis();
     this.drawAxis();

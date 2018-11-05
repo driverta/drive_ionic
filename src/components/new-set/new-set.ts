@@ -1,13 +1,11 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 import { NavParams, NavController, AlertController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
-
+import { NgCircleProgressModule } from 'ng-circle-progress';
 import { HistoryProvider, ProvidersUserProvider } from '../../providers/providers';
 import { Levels } from '../../providers/providers';
 import { Records } from '../../providers/providers';
-
 import firebase from 'firebase';
-
 import * as d3 from 'd3-selection';
 import { LiftingHistory } from '../../models/LiftingHistory';
 import { CardioHistory } from '../../models/CardioHistory';
@@ -21,6 +19,9 @@ import { BodyLift } from '../../models/BodyLift';
   templateUrl: 'new-set.html'
 })
 export class NewSetComponent {
+
+
+  @Output() notify: EventEmitter<number> = new EventEmitter<number>();
 
   xlevel = 1;
 	xcurrent = 0;
@@ -166,6 +167,7 @@ export class NewSetComponent {
     this.historyService.liftingHistory.unshift(this.lf)
     this.myEvent.emit(null);
     this.ngOnInit(); 
+    this.notify.emit(this.lf.gains)
   }
 
   addCardioSet() {
@@ -191,7 +193,7 @@ export class NewSetComponent {
       this.minutes = Number(this.minutes);
       this.seconds = Number(this.seconds);
 
-      d3.selectAll("svg > *").remove();
+      // d3.selectAll("svg > *").remove();
       let date = new Date().toISOString();
       var time = this.hours + ":" + this.minutes + ":" + this.seconds;
       var newMinutes = this.minutes / 60;
@@ -230,6 +232,7 @@ export class NewSetComponent {
       this.userService.addCardioHistory(this.cardio).subscribe();
       this.historyService.cardioHistory.unshift(this.cardio)
       this.myEvent.emit(null);
+      this.notify.emit(0)
       this.ngOnInit();
     }
   }

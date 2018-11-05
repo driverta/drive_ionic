@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Slides} from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import { Platform } from 'ionic-angular';
 
@@ -11,16 +11,18 @@ import { BarChartComponent } from '../../components/bar-chart/bar-chart';
 import { LineChartComponent } from '../../components/line-chart/line-chart';
 import { HistoryComponent } from '../../components/history/history';
 import { SortByRepsPipe } from '../../pipes/sort-by-reps/sort-by-reps';
-
+// Import ng-circle-progress
+import { NgCircleProgressModule } from 'ng-circle-progress';
 import { LiftingHistory } from '../../models/LiftingHistory';
 import { CardioHistory } from '../../models/CardioHistory';
 import { Flexibility } from '../../models/Flexibility';
+import { NewSetComponent } from '../../components/new-set/new-set';
 import { BodyLift } from '../../models/BodyLift';
 
 @IonicPage()
 @Component({
   selector: 'page-exercise-detail',
-  templateUrl: 'exercise-detail.html'
+  templateUrl: 'exercise-detail.html',
 })
 export class ItemDetailPage {
 
@@ -35,6 +37,12 @@ export class ItemDetailPage {
   history = [];
   muscleGroup: any;
 
+  xlevel = 1;
+	xcurrent = 0;
+	xtotal = 0;
+	progress = 0;
+	gains = 0;
+
   liftingHistory: LiftingHistory[];
   cardioHistory: CardioHistory[];
   bodyLiftHistory: BodyLift[];
@@ -42,9 +50,10 @@ export class ItemDetailPage {
 
   private friend: boolean = true;
 
+  @ViewChild(BarChartComponent) barChart: BarChartComponent
+  @ViewChild(LineChartComponent) lineChart: LineChartComponent
+  @ViewChild(Slides) slides: Slides;
   @ViewChild(HistoryComponent) historyChild: HistoryComponent;
-  @ViewChild(BarChartComponent) barChart: BarChartComponent;
-  @ViewChild(LineChartComponent) lineChart: LineChartComponent;
 
   constructor(public navCtrl: NavController,
     navParams: NavParams,
@@ -114,22 +123,34 @@ export class ItemDetailPage {
         }
       })
     }
-
-    // if(this.friend){
-    //   if (this.exercise.MuscleGroup.muscleGroupName != Flexibility || !this.exercise.bodyLift) {
-    //     this.barChart.makeBarChart();
-    //   }
-    // }
-    // else{
-    //   if (this.exercise.MuscleGroup.muscleGroupName != Flexibility || !this.exercise.bodyLift) {
-    //     this.barChart.makeBarChart();
-    //     this.lineChart.makeLineChart();
-    //   }
-    // }
+    this.setUp()
   }
   
   showBar() {
     this.selectedValue = 1;
+  }
+
+  setUp(){
+    this.userService.getTotalGains(this.user.id).subscribe(totalGains => {
+      this.gains = totalGains;
+      this.setLevel();
+    });;
+  }
+
+  onNotify(gains: number) {
+    this.gains += gains
+    this.setLevel()
+  }
+
+  setLevel () {
+    this.levels._levels.forEach( ( value, index) => {
+      if (this.gains > value.totalPoints - 1) {
+        this.xcurrent = this.gains - value.totalPoints;
+        this.xlevel = value.level;
+        this.xtotal = value.levelPoints;
+        this.progress = this.xcurrent / this.xtotal * 100
+      }
+    })
   }
 
   showLine() {
