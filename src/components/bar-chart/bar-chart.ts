@@ -199,7 +199,7 @@ export class BarChartComponent {
   }
 
   setLiftingChart() {
-    d3.selectAll("svg > *").remove();
+    d3.select("#barChart").selectAll("svg > *").remove();
     this.initSvg()
     this.initLiftingAxis();
     this.drawAxis();
@@ -207,7 +207,7 @@ export class BarChartComponent {
   }
 
   setCardioChart() {
-    d3.selectAll("svg > *").remove();
+    d3.select("#barChart").selectAll("svg > *").remove();
     this.initSvg();
     this.initCardioAxis();
     this.drawAxis();

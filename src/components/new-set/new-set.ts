@@ -20,6 +20,9 @@ import { BodyLift } from '../../models/BodyLift';
 })
 export class NewSetComponent {
 
+
+  @Output() notify: EventEmitter<number> = new EventEmitter<number>();
+
   xlevel = 1;
 	xcurrent = 0;
 	xtotal = 0;
@@ -153,6 +156,7 @@ export class NewSetComponent {
     this.userService.addLiftingHistory(this.lf).subscribe();
     this.myEvent.emit(null);
     this.ngOnInit(); 
+    this.notify.emit(this.lf.gains)
   }
 
   addCardioSet() {
@@ -178,7 +182,7 @@ export class NewSetComponent {
       this.minutes = Number(this.minutes);
       this.seconds = Number(this.seconds);
 
-      d3.selectAll("svg > *").remove();
+      // d3.selectAll("svg > *").remove();
       let date = new Date().toISOString();
       var time = this.hours + ":" + this.minutes + ":" + this.seconds;
       var newMinutes = this.minutes / 60;
@@ -216,6 +220,7 @@ export class NewSetComponent {
       }, 2000);
       this.userService.addCardioHistory(this.cardio).subscribe();
       this.myEvent.emit(null);
+      this.notify.emit(0)
       this.ngOnInit();
     }
   }

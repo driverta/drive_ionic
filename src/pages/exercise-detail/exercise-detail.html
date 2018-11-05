@@ -5,13 +5,8 @@
   </ion-navbar>
 
 </ion-header>
-<ion-content *ngIf="!friend" scrollY="false" no-line>
-		<ion-item>
-        <circle-progress [percent]="85" [radius]="25" [outerStrokeWidth]="6" [innerStrokeWidth]="4"
-          [outerStrokeColor]="'#9C000A'" [innerStrokeColor]="'#C60000'" [animation]="true" [animationDuration]="300"></circle-progress>
-      </ion-item>
 
-
+<ion-content *ngIf="!friend">
   <div padding>
 	  <ion-segment  [(ngModel)]="segment">
 	    <ion-segment-button (click)="hideCharts()" value="set">
@@ -31,7 +26,13 @@
 		<line-chart  [hidden]="selectedValue!=2 || (exercise.bodyLift || (exercise.MuscleGroup.muscleGroupName == 'Flexibility'))" ></line-chart>
 	<div [ngSwitch]="segment">
 	  <ion-list *ngSwitchCase="'set'">
-	    <new-set (myEvent)="ionViewWillEnter();"></new-set>
+				<ion-item>
+						<circle-progress item-start style="margin-left: 20%" [percent]="progress" [radius]="25" [outerStrokeWidth]="6" [innerStrokeWidth]="4"
+							[outerStrokeColor]="'#9C000A'" [innerStrokeColor]="'#C60000'" [animation]="true" [animationDuration]="300" [showTitle]="false"
+							[showSubtitle]="false" [showUnits]="false"></circle-progress>
+						<ion-label style="margin-left: 0%">{{xcurrent}} out of {{xtotal}} Exp.</ion-label>
+					</ion-item>
+	    <new-set (myEvent)="ionViewWillEnter();" (notify)='onNotify($event)'></new-set>
 	  </ion-list>
 
 	  <ion-list *ngSwitchCase="'history'">
