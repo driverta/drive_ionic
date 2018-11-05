@@ -16,11 +16,8 @@ import { NgCircleProgressModule } from 'ng-circle-progress';
 import { LiftingHistory } from '../../models/LiftingHistory';
 import { CardioHistory } from '../../models/CardioHistory';
 import { Flexibility } from '../../models/Flexibility';
-<<<<<<< HEAD
 import { NewSetComponent } from '../../components/new-set/new-set';
-=======
 import { BodyLift } from '../../models/BodyLift';
->>>>>>> master
 
 @IonicPage()
 @Component({
@@ -53,15 +50,10 @@ export class ItemDetailPage {
 
   private friend: boolean = true;
 
-<<<<<<< HEAD
   @ViewChild(BarChartComponent) barChart: BarChartComponent
   @ViewChild(LineChartComponent) lineChart: LineChartComponent
   @ViewChild(Slides) slides: Slides;
-=======
   @ViewChild(HistoryComponent) historyChild: HistoryComponent;
-  @ViewChild(BarChartComponent) barChart: BarChartComponent;
-  @ViewChild(LineChartComponent) lineChart: LineChartComponent;
->>>>>>> master
 
   constructor(public navCtrl: NavController,
     navParams: NavParams,
