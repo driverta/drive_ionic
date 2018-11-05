@@ -55,4 +55,10 @@ gains-chart {
   .axis text{
     fill: black;
   }
+
+  svg {
+    display: block;
+    height: 325px;
+    margin: auto;
+  }
 }

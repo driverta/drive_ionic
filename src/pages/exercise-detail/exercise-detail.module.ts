@@ -9,16 +9,13 @@ import { HistoryComponent } from '../../components/history/history';
 import { RecordsComponent } from '../../components/records/records';
 import { LineChartComponent } from '../../components/line-chart/line-chart';
 import { PipesModule } from '../../pipes/pipes.module';
+import { ComponentsModule } from '../../components/components.module';
+
 
 
 @NgModule({
   declarations: [
-    ItemDetailPage,
-    BarChartComponent,
-    NewSetComponent,
-    HistoryComponent,
-    RecordsComponent,
-    LineChartComponent
+    ItemDetailPage
   ],
   imports: [
     IonicPageModule.forChild(ItemDetailPage),
@@ -32,7 +29,8 @@ import { PipesModule } from '../../pipes/pipes.module';
       outerStrokeColor: "#78C000",
       innerStrokeColor: "#C7E596",
       animationDuration: 300,
-    })
+    }),
+    ComponentsModule
   ],
   exports: [
     ItemDetailPage
