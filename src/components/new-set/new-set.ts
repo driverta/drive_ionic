@@ -158,7 +158,11 @@ export class NewSetComponent {
 
     this.liftingHistory = this.historyService.liftingHistory;
     //this.liftingHistory = this.liftingHistory.reverse();
-    var newDate = new Date(this.liftingHistory[0].date).toDateString()
+
+
+    var newDate = this.liftingHistory[0] == null ? new Date() : new Date(this.liftingHistory[0].date).toDateString()
+    
+    
     if (newDate == date.toDateString()){
 
       this.lf.set = this.liftingHistory[0].set + 1;
