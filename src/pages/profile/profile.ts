@@ -25,7 +25,7 @@ export class SettingsPage {
   xcurrent = 25;
   xtotal = 100;
   progress = 25;
-  username = "test"
+  username = ""
   rank = "Frail Body"
   weight = 0
   height = "0"
@@ -120,7 +120,8 @@ export class SettingsPage {
 
   ionViewDidLoad() {
     if (this.checkUser == undefined){
-      this.user = this.userService.getUser()
+      this.user = this.userService.getUser();
+      this.username = this.user.username;
       this.buttons = true;
       this.myPicture = true;
       this.userService.getExercises().subscribe(exercises => {
