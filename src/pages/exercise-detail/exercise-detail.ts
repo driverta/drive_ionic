@@ -92,7 +92,7 @@ export class ItemDetailPage {
       
       this.userService.getCardioHistoryByIdAndExercise(this.exercise).subscribe(data =>{
         this.cardioHistory = data;
-        this.historyService.cardioHistory = this.cardioHistory.reverse();
+        this.historyService.cardioHistory = this.cardioHistory;
         this.barChart.makeBarChart();
         if(!this.friend){
           this.lineChart.makeLineChart();
@@ -101,7 +101,7 @@ export class ItemDetailPage {
     } else if (this.exercise.bodyLift) {
       this.noRecords = false;
       this.historyService.getBodyLiftByExercise(this.user.id, this.exercise.id).subscribe(bodyLifts => {
-        this.historyService.bodyLift = bodyLifts.reverse();
+        this.historyService.bodyLift = bodyLifts;
       });
     } else if (this.muscleGroup == "Flexibility") {
       this.noRecords = false;
@@ -114,7 +114,7 @@ export class ItemDetailPage {
       console.log("here")
       this.userService.getLiftingHistoryByIdAndExercise(this.exercise).subscribe(data =>{
         console.log(data);
-        this.historyService.liftingHistory = data.reverse();
+        this.historyService.liftingHistory = data;
         console.log(this.historyChild)
         this.barChart.makeBarChart();
         if(!this.friend){
