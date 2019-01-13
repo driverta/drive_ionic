@@ -50,7 +50,6 @@ export class HistoryComponent {
   }
 
   ngOnInit() {
-    console.log("load")
     if (this.muscleGroup == "Cardio") {
         this.cardioBool = true;
         this.liftingBool = false;
