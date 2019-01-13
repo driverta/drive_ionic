@@ -109,7 +109,7 @@ export class SignupPage {
       this.buttonPressed = false;
     } else {
 
-      this.userService.getOneUser(this.account.name).subscribe(data => {
+      this.userService.getUserByUsername(this.account.name).subscribe(data => {
         if (data.username === "alreadyexists") {
           this.signUp();
         }
@@ -151,13 +151,15 @@ export class SignupPage {
         apiUser.email = this.account.email
         apiUser.password = this.account.password
         apiUser.username = this.account.email.split('@')[0]
-        this.authProvider
-          .login(apiUser)
-          .pipe(finalize(() => loading.dismiss()))
-          .subscribe(
-            () => {
-            },
-            err => this.handleError(err));
+        this.authProvider.authWithFirebase(this.account.email, this.account.password).then(
+          (token) => {
+            this.authProvider.authUser.next(token);
+            loading.dismiss();
+          },
+          (error) => {
+            this.presentFirebaseError(error);
+          }
+        )
 
       }).catch((error: Error) => {
         this.presentFirebaseError(error)

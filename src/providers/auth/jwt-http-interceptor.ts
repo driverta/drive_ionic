@@ -27,7 +27,7 @@ export class JwtHttpInterceptor implements HttpInterceptor {
 
       return fromPromise(this.storage.get('jwt_token'))
               .pipe(switchMap(token => {
-                  console.log(token);
+                  
                   if (token) {
                         clone = request.clone({
                           setHeaders: {
