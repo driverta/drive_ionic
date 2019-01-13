@@ -68,8 +68,6 @@ export class MyApp {
 
 
     platform.ready().then(() => {
-
-
       this.keyboard.onKeyboardShow().subscribe(() => {
         document.body.classList.add('keyboard-is-open');
     });

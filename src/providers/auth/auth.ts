@@ -8,6 +8,8 @@ import { local } from "d3";
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Firebase } from "@ionic-native/firebase";
 import firebase from 'firebase';
+import { UserModel } from "../../models/users";
+import { ProvidersUserProvider } from "../providers-user/providers-user";
 
 @Injectable()
 export class AuthProvider {
@@ -22,7 +24,8 @@ export class AuthProvider {
   constructor(private readonly httpClient: HttpClient,
               private readonly storage: Storage,
               private af: AngularFirestore,
-              public firebaseNative: Firebase
+              public firebaseNative: Firebase,
+              public userService: ProvidersUserProvider
             ) {
   }
 
@@ -61,6 +64,7 @@ export class AuthProvider {
       ).catch((error) => {
          reject(error);
       });
+      this.userService.setUser(new UserModel());
       this.storage.remove("email").then(
         () => this.authUser.next(null)
       ).catch((error) => {

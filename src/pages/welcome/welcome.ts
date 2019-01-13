@@ -155,5 +155,5 @@ export class WelcomePage {
   saveLogin() {
       localStorage.setItem("stay","logged");
       localStorage.setItem("email",this.account.email);
-    }
+  }
 }
