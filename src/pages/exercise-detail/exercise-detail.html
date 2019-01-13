@@ -26,11 +26,11 @@
 		<line-chart  [hidden]="selectedValue!=2 || (exercise.bodyLift || (exercise.MuscleGroup.muscleGroupName == 'Flexibility'))" ></line-chart>
 	<div [ngSwitch]="segment">
 	  <ion-list *ngSwitchCase="'set'">
-				<ion-item>
+				<ion-item no-lines>
 						<circle-progress item-start style="margin-left: 20%" [percent]="progress" [radius]="25" [outerStrokeWidth]="6" [innerStrokeWidth]="4"
 							[outerStrokeColor]="'#9C000A'" [innerStrokeColor]="'#C60000'" [animation]="true" [animationDuration]="300" [showTitle]="false"
 							[showSubtitle]="false" [showUnits]="false"></circle-progress>
-						<ion-label style="margin-left: 0%">{{xcurrent}} out of {{xtotal}} Exp.</ion-label>
+						<ion-label style="margin-left: 0%;">{{xcurrent}} out of {{xtotal}} Exp.</ion-label>
 					</ion-item>
 	    <new-set (myEvent)="refreshCharts();" (notify)='onNotify($event)'></new-set>
 	  </ion-list>
