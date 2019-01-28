@@ -6,11 +6,13 @@ import 'rxjs/add/observable/throw';
 import { fromPromise } from 'rxjs/observable/fromPromise';
 import { switchMap } from 'rxjs/operators';
 import { Storage } from '@ionic/storage';
+import { AlertController, Alert} from 'ionic-angular';
 
 @Injectable()
 export class JwtHttpInterceptor implements HttpInterceptor {
   constructor(
-    private storage: Storage
+    private storage: Storage,
+    public alertCtrl: AlertController,
   ) {}
   
   private handleAuthError(err: HttpErrorResponse): Observable<any> {
@@ -18,6 +20,12 @@ export class JwtHttpInterceptor implements HttpInterceptor {
     if (err.status === 401 || err.status === 403) {
       //navigate /delete cookies or whatever
     }
+    let alert = this.alertCtrl.create({
+      title: "Terms of Use",
+      message: JSON.stringify(err.message),
+      buttons: ['Ok']
+    });
+    alert.present();
     return Observable.throw(err);
   }
 
