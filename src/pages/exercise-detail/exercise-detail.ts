@@ -85,7 +85,6 @@ export class ItemDetailPage {
   }
 
   ionViewWillEnter() {
-    console.log("hey")
     if (this.muscleGroup == "Cardio") {
       this.noRecords = true;
       
@@ -111,14 +110,10 @@ export class ItemDetailPage {
       });
     } else {
       this.noRecords = true;
-      console.log("here")
       this.userService.getLiftingHistoryByIdAndExercise(this.exercise).subscribe(data =>{
-        console.log(data);
         this.historyService.liftingHistory = data;
-        console.log(this.historyChild)
         this.barChart.makeBarChart();
         if(!this.friend){
-          console.log("there")
           this.lineChart.makeLineChart();
         }
       })

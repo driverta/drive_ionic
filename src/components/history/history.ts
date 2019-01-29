@@ -68,7 +68,6 @@ export class HistoryComponent {
       this.flexHistory = this.history.flexHistory
     } else {
       if (this.history.liftingHistory) {
-        console.log("Yoo")
         this.liftingHistory = this.history.liftingHistory
       }
     }

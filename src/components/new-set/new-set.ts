@@ -167,7 +167,16 @@ export class NewSetComponent {
 
       this.lf.set = this.liftingHistory[0].set + 1;
     }
-    this.userService.addLiftingHistory(this.lf).subscribe();
+    this.userService.addLiftingHistory(this.lf).subscribe(result => {
+      if (result == "FAILED") {
+        var alert = this.alertCtrl.create({
+          title: "ERROR",
+          message: "FAILED TO ADD ENTRY - CONTACT DRIVE FITNESS",
+          buttons: ["OK"]
+        });
+        alert.present();
+      }
+    });
     this.historyService.liftingHistory.unshift(this.lf)
     this.myEvent.emit(null);
     this.ngOnInit(); 
@@ -233,7 +242,16 @@ export class NewSetComponent {
         this.bool = false;
         this.points = false;
       }, 2000);
-      this.userService.addCardioHistory(this.cardio).subscribe();
+      this.userService.addCardioHistory(this.cardio).subscribe(result => {
+        if (result == "FAILED") {
+          var alert = this.alertCtrl.create({
+            title: "ERROR",
+            message: "FAILED TO ADD ENTRY - CONTACT DRIVE FITNESS",
+            buttons: ["OK"]
+          });
+          alert.present();
+        }
+      });
       this.historyService.cardioHistory.unshift(this.cardio)
       this.myEvent.emit(null);
       this.notify.emit(0)
@@ -262,7 +280,16 @@ export class NewSetComponent {
     }, 2000);
     this.flex.History = this.historyModel
 
-    this.historyService.addFlex(this.flex).subscribe()
+    this.historyService.addFlex(this.flex).subscribe(result => {
+      if (result == "FAILED") {
+        var alert = this.alertCtrl.create({
+          title: "ERROR",
+          message: "FAILED TO ADD ENTRY - CONTACT DRIVE FITNESS",
+          buttons: ["OK"]
+        });
+        alert.present();
+      }
+    });
     this.historyService.flexHistory.unshift(this.flex)
     this.myEvent.emit(null);
     this.ngOnInit(); 
@@ -296,12 +323,17 @@ export class NewSetComponent {
       this.points = false;
     }, 2000);
     this.bodyLift.History = this.historyModel
-    this.historyService.addBodyLift(this.bodyLift).subscribe()
+    this.historyService.addBodyLift(this.bodyLift).subscribe(result => {
+      if (result == "FAILED") {
+        var alert = this.alertCtrl.create({
+          title: "ERROR",
+          message: "FAILED TO ADD ENTRY - CONTACT DRIVE FITNESS",
+          buttons: ["OK"]
+        });
+        alert.present();
+      }
+    });
     this.historyService.bodyLift.unshift(this.bodyLift)
-    // this.historyService.addBodyLiftHistory(this.historyModel).subscribe(history => {
-    //   this.bodyLift.History = history
-    //   this.historyService.addBodyLift(this.bodyLift).subscribe()
-    // });
     this.myEvent.emit(null);
     this.ngOnInit(); 
   }

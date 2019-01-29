@@ -83,7 +83,7 @@ export class ProvidersUserProvider {
 
   addLiftingHistory(lf){
     lf.user_id=this.user.id;
-    return this.http.post(this.url + "addLiftingHistory", lf);
+    return this.http.post(this.url + "addLiftingHistory", lf, {responseType: 'text'});
   }
 
   getLiftingHistoryByIdAndExercise(ex: Exercise): Observable<LiftingHistory[]>{
@@ -105,12 +105,12 @@ export class ProvidersUserProvider {
 
   addCardioHistory(cardio){
     cardio.user_id=this.user.id;
-    return this.http.post(this.url + "addCardioHistory", cardio);
+    return this.http.post(this.url + "addCardioHistory", cardio, {responseType: 'text'});
   }
 
   addFlexHistory(history, flex){
 
-		return this.http.post(this.url + "addFlexHistory", history);
+		return this.http.post(this.url + "addFlexHistory", history, {responseType: 'text'});
   }
 
   getExercise(mgId, name, variation): Observable<Exercise> {

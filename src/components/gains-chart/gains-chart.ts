@@ -155,9 +155,7 @@ export class GainsChartComponent {
 	      this.data[0][5].value = this.core / this.allTime;
 	      this.data[0][6].value = this.cardio / this.allTime;
 
-	      console.log(this.allTime);
         filters.forEach(filter => {
-          console.log(filter);
           this.executeFilter(filter);
         })
 
