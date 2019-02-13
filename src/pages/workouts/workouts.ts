@@ -15,11 +15,6 @@ import { Records } from '../../providers/providers';
 
 import { ExerciseProvider } from '../../providers/exercise/exercise';
 import { ProvidersUserProvider } from '../../providers/providers-user/providers-user';
-import { UserModel } from '../../models/users';
-import { Exercise } from '../../models/Exercise';
-
-import { GainsChartComponent } from '../../components/gains-chart/gains-chart';
-import { MuscleGroup } from '../../models/MuscleGroupModel';
 
 @IonicPage()
 @Component({
@@ -62,15 +57,14 @@ export class WorkoutsPage {
   }
 
   addWorkout() {
-    //this.navCtrl.push('ItemCreatePage');
-    // let addModal = this.modalCtrl.create('WorkoutCreatePage', {
-    // });
-    // addModal.onDidDismiss(item => {
-    //   if (item) {
-    //     this.ionViewDidLoad();
-    //   }
-    // })
-    // addModal.present();
+    let addModal = this.modalCtrl.create('WorkoutCreatePage', {
+    });
+    addModal.onDidDismiss(item => {
+      if (item) {
+        this.ionViewDidLoad();
+      }
+    })
+    addModal.present();
   }
 
   presentConfirm(item) {

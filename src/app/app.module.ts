@@ -23,6 +23,7 @@ import { ProvidersUserProvider } from '../providers/providers-user/providers-use
 import { ExerciseProvider } from '../providers/exercise/exercise';
 import { AuthProvider } from "../providers/auth/auth";
 
+import { DragulaModule } from 'ng2-dragula';
 import { WorkoutService } from "../providers/workout/workout";
 
 import { NgCircleProgressModule } from 'ng-circle-progress';
@@ -95,6 +96,7 @@ const firebase = {
     IonicStorageModule.forRoot(),
     AngularFireModule.initializeApp(firebase), 
     AngularFirestoreModule,
+    DragulaModule.forRoot(),
     // JwtModule.forRoot({
     //   jwtOptionsProvider: {
     //     provide: JWT_OPTIONS,

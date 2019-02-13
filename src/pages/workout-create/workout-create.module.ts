@@ -2,21 +2,22 @@ import { NgModule } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 import { IonicPageModule } from 'ionic-angular';
 import { ComponentsModule } from '../../components/components.module';
-import { WorkoutsPage } from './workouts';
+import { WorkoutCreatePage } from './workout-create';
 import { PipesModule } from '../../pipes/pipes.module';
-
+import {DragulaModule , DragulaService} from "ng2-dragula"
 @NgModule({
   declarations: [
-    WorkoutsPage,
+    WorkoutCreatePage,
   ],
   imports: [
-    IonicPageModule.forChild(WorkoutsPage),
+    IonicPageModule.forChild(WorkoutCreatePage),
     TranslateModule.forChild(),
     PipesModule,
-    ComponentsModule
+    ComponentsModule,
+    DragulaModule
   ],
   exports: [
-    WorkoutsPage
+    WorkoutCreatePage
   ]
 })
-export class WorkoutsPageModule { }
+export class WorkoutCreatePageModule { }

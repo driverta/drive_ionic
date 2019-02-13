@@ -2,7 +2,7 @@
 
   <ion-navbar>
 
-    <ion-title>WORKOUTS</ion-title>
+    <ion-title> Workouts</ion-title>
 
     <ion-buttons right>
       <button ion-button icon-only (click)="addWorkout()">
@@ -17,13 +17,9 @@
   <ion-list>
     <ion-item-sliding *ngFor="let workout of workouts" >
       <button ion-item (click)="openItem(workout)" class="item-list">
-        <!--<ion-avatar item-start>
-        </ion-avatar>-->
 
         <h2 class="item-text">{{workout.workoutName}}</h2>
       </button>
-        <!-- <ion-note item-end *ngIf="item.note">{{item.note}}</ion-note>
-       -->
 
       <ion-item-options>
         <button ion-button color="light"(click)="editWorkout(workout)">

@@ -1,0 +1,52 @@
+<ion-header>
+  <ion-navbar>
+    <ion-buttons start>
+      <button ion-button (click)="cancel()">
+        <span color="primary" showWhen="ios">
+          {{ 'CANCEL_BUTTON' | translate }}
+        </span>
+        <ion-icon name="md-close" showWhen="android,windows"></ion-icon>
+      </button>
+    </ion-buttons>
+    <ion-title>Create Workout</ion-title>
+    <ion-buttons start>
+      <button ion-button icon-left (click)="prev()"><ion-icon name="arrow-back"></ion-icon> Prev</button>
+    </ion-buttons>
+    <ion-buttons end>
+      <button ion-button icon-right (click)="next()">Next <ion-icon name="arrow-forward"></ion-icon></button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-slides #signupSlider>
+    <ion-slide>
+      <form [formGroup]="slideOneForm">
+        <ion-item (click)="OpenSelect()">
+            <ion-label fixed>
+              <ion-icon item-start ios="ios-map" class="ionicon"></ion-icon>Search
+            </ion-label>
+        </ion-item>
+        <ion-grid>
+            <ion-row no-padding class="matrix" disable-scroll>
+              <ion-col size="12" class="q1">
+                <div class="q-header">Exercises</div>
+                <ion-list reorder='true'>
+                  <ion-item *ngFor="let exercise of workoutExercises">
+                    <ion-label>
+                        {{ exercise.exerciseName }}
+                    </ion-label>
+                  </ion-item>
+                </ion-list>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </form>
+      </ion-slide>
+
+      <ion-slide>
+
+      </ion-slide>
+
+  </ion-slides>
+</ion-content>

@@ -1,0 +1,36 @@
+<ion-header no-border>
+  <ion-toolbar>
+    <ion-title>
+      {{titleText}}
+    </ion-title>
+    <ion-buttons start>
+      <button ion-button (click)="CloseModel()">
+        Cancel
+      </button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar color="light">
+    <ion-row>
+      <ion-col col-12 no-padding>
+        <ion-searchbar mode="ios" [(ngModel)]="searchText" (ionInput)="FilterItems()"></ion-searchbar>
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-fab right bottom (click)="CloseModel()">
+    <button ion-fab>
+      <ion-icon name="checkmark"></ion-icon>
+    </button>
+  </ion-fab>
+  <ion-row *ngFor="let item of filterItems;" (click)="CheckChange(item)" style="border-bottom:1px solid #eee  "
+    align-items-center>
+    <ion-col col-2 text-center style="padding:5px;">
+      <ion-icon *ngIf="item.selected" name="ios-checkmark-circle" color="primary" style="font-size: 26px;"></ion-icon>
+      <ion-icon *ngIf="!item.selected" name="ios-radio-button-off" color="primary" style="font-size: 26px;color: rgb(199, 199, 199);"></ion-icon>
+    </ion-col>
+    <ion-col col-10>
+      {{ item.name}}
+    </ion-col>
+  </ion-row>
+</ion-content>
