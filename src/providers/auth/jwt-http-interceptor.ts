@@ -21,7 +21,7 @@ export class JwtHttpInterceptor implements HttpInterceptor {
       //navigate /delete cookies or whatever
     }
     let alert = this.alertCtrl.create({
-      title: "Terms of Use",
+      title: "ERROR",
       message: JSON.stringify(err.message),
       buttons: ['Ok']
     });
@@ -32,7 +32,7 @@ export class JwtHttpInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
       let clone: HttpRequest<any>;
-
+      console.log(request.url);
       return fromPromise(this.storage.get('jwt_token'))
               .pipe(switchMap(token => {
                   

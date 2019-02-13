@@ -1,0 +1,38 @@
+<ion-header>
+
+  <ion-navbar>
+
+    <ion-title>WORKOUTS</ion-title>
+
+    <ion-buttons right>
+      <button ion-button icon-only (click)="addWorkout()">
+        <ion-icon name="add"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item-sliding *ngFor="let workout of workouts" >
+      <button ion-item (click)="openItem(workout)" class="item-list">
+        <!--<ion-avatar item-start>
+        </ion-avatar>-->
+
+        <h2 class="item-text">{{workout.workoutName}}</h2>
+      </button>
+        <!-- <ion-note item-end *ngIf="item.note">{{item.note}}</ion-note>
+       -->
+
+      <ion-item-options>
+        <button ion-button color="light"(click)="editWorkout(workout)">
+          {{ "Edit" }}
+        </button>
+        <button ion-button color="danger" (click)="presentConfirm(workout)">
+          {{ 'DELETE_BUTTON' | translate }}
+        </button>
+      </ion-item-options>
+    </ion-item-sliding>
+  </ion-list>
+</ion-content>

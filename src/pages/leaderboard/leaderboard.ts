@@ -112,15 +112,15 @@ export class SearchPage {
   }
 
   populateCharts() {
-    this.workoutService.getCompetingWorkouts(this.user.id, 0, 10).subscribe(workouts => {
-      workouts.forEach(workout => {
-        // this.resolver.resolveComponentFactory
-        // const factory = this.resolver.resolveComponentFactory(this.timelineChart);
-        // let componentRef = this.container.createComponent(factory);
-        // (<TimelineChartComponent>componentRef.instance).makeTimelineChart(this.user.id, workout)
-        this.timelineChart.makeTimelineChart(this.user.id, workout)
-      });
-    });
+    // this.workoutService.getCompetingWorkouts(this.user.id, 0, 10).subscribe(workouts => {
+    //   workouts.forEach(workout => {
+    //     // this.resolver.resolveComponentFactory
+    //     // const factory = this.resolver.resolveComponentFactory(this.timelineChart);
+    //     // let componentRef = this.container.createComponent(factory);
+    //     // (<TimelineChartComponent>componentRef.instance).makeTimelineChart(this.user.id, workout)
+    //     this.timelineChart.makeTimelineChart(this.user.id, workout)
+    //   });
+    // });
   }
 
   filterDay(ev) {
