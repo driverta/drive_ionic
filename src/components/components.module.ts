@@ -17,6 +17,7 @@ import { PipesModule } from '../pipes/pipes.module'
 // import { FriendCardioProfileRecordsComponent } from './friend-cardio-profile-records/friend-cardio-profile-records';
 import { GainsChartComponent } from './gains-chart/gains-chart';
 import { TimelineChartComponent } from './timeline-chart/timeline-chart';
+import { WorkoutCreateExerciseDetailsComponent } from './workout-create-exercise-details/workout-create-exercise-details';
 @NgModule({
 	declarations: [BarChartComponent,
     NewSetComponent,
@@ -30,7 +31,8 @@ import { TimelineChartComponent } from './timeline-chart/timeline-chart';
     CardioProfileRecordsComponent,
     CardioProfileBarComponent,
     GainsChartComponent,
-    TimelineChartComponent],
+    TimelineChartComponent,
+    WorkoutCreateExerciseDetailsComponent],
 	imports: [IonicModule,
         PipesModule
     ],
@@ -46,6 +48,7 @@ import { TimelineChartComponent } from './timeline-chart/timeline-chart';
     CardioProfileRecordsComponent,
     CardioProfileBarComponent,
     GainsChartComponent,
-    TimelineChartComponent]
+    TimelineChartComponent,
+    WorkoutCreateExerciseDetailsComponent]
 })
 export class ComponentsModule {}

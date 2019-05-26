@@ -1,0 +1,21 @@
+<div #expandWrapper class='expand-wrapper' [class.collapsed]="!expanded">
+    <div *ngIf="superSet != undefined">
+      <ion-label>
+        Super Set: {{superSet.exerciseName}}
+      </ion-label>
+      <p>
+          Muscle Group: {{superSet.MuscleGroup.muscleGroupName}}
+      </p>
+      <p>
+          Variation: {{superSet.variation}}
+      </p>
+    </div>
+    <div *ngIf="superSet == undefined">
+      <ion-label>
+        No super set selected. 
+      </ion-label>
+      <ion-label>
+        Swipe left to select a superset.
+      </ion-label>
+    </div>
+</div>

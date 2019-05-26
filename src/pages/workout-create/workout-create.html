@@ -27,26 +27,37 @@
               <ion-icon item-start ios="ios-map" class="ionicon"></ion-icon>Search
             </ion-label>
         </ion-item>
-        <ion-grid>
-            <ion-row no-padding class="matrix" disable-scroll>
-              <ion-col size="12" class="q1">
-                <div class="q-header">Exercises</div>
-                <ion-list reorder='true'>
-                  <ion-item *ngFor="let exercise of workoutExercises">
-                    <ion-label>
-                        {{ exercise.exerciseName }}
-                    </ion-label>
-                  </ion-item>
-                </ion-list>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
-        </form>
-      </ion-slide>
+        <div class="q-header">Exercises</div>
+        <ion-list style="overflow-y: scroll;" #workoutExerciseList>
+          <ion-item-group reorder="true" (ionItemReorder)="$event.applyTo(workoutExercises)">
+            <ion-item-sliding *ngFor="let exercise of workoutExercises">
+              <button detail-none (click)="expandItem(exercise)" ion-item>
+                <ion-label>
+                    {{ exercise.exerciseName }}
+                    <workout-create-exercise-details [expandHeight]="itemExpandHeight" [expanded]="exercise.expanded" [superSet]="exercise.superSet">
+                        Hello people
+                    </workout-create-exercise-details>
+                </ion-label>
+              </button>
+              <ion-item-options>
+                <button ion-button color="light"(click)="addSuperSet(exercise)">
+                  {{ "Add Super Set" }}
+                </button>
+              </ion-item-options>
+            </ion-item-sliding>
+          </ion-item-group>
+        </ion-list>
+      </form>
+    </ion-slide>
 
-      <ion-slide>
+    <ion-slide>
+      <ion-item>
+        <ion-label>Workout Name</ion-label>
+        <ion-input></ion-input>
+      </ion-item>
 
-      </ion-slide>
+      <button ion-button color="primary">Create Workout</button>
+    </ion-slide>
 
   </ion-slides>
 </ion-content>

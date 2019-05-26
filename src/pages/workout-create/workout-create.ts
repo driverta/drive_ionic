@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 import { 
   IonicPage,
   ModalController,
@@ -9,7 +9,7 @@ import {
   ViewController
 } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
-import { Platform } from 'ionic-angular';
+import { Platform, Content } from 'ionic-angular';
 
 import { Items } from '../../providers/providers';
 import { Records } from '../../providers/providers';
@@ -21,6 +21,10 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { DragulaService } from 'ng2-dragula';
 
+import { VirtualScroll } from 'ionic-angular';
+import { Exercise } from '../../models/Exercise';
+import { MuscleGroup } from '../../models/MuscleGroupModel';
+
 @IonicPage()
 @Component({
   selector: 'page-workout-create',
@@ -31,17 +35,22 @@ export class WorkoutCreatePage {
   users = [];
   workoutExercises = [];
 
+  screenHeight: any;
+  itemExpandHeight: number = 100;
+  items: any = [];
+
   @ViewChild('signupSlider') signupSlider: any;
 
   slideOneForm: FormGroup;
   slideTwoForm: FormGroup;
+
+  @ViewChild('workoutExerciseList') workoutExerciseList: ElementRef;
 
   submitAttempt: boolean = false;
 
   exercises = [];
   constructor(
     public navCtrl: NavController,
-    public items: Items,
     public records: Records,
     public modalCtrl: ModalController,
     private alertCtrl: AlertController,
@@ -53,6 +62,8 @@ export class WorkoutCreatePage {
     private userService: ProvidersUserProvider,
     public formBuilder: FormBuilder) {
     this.platform.ready().then((readySource) => {
+      this.signupSlider.onlyExternal = true;
+      this.workoutExerciseList.nativeElement.style.height = this.platform.height() - 200 + 'px';
       // Platform now ready, execute any required native code
       this.userService.getExercises().subscribe(exercises => {
         this.exercises = exercises;
@@ -65,19 +76,23 @@ export class WorkoutCreatePage {
     });
   }
 
-  OpenSelect() {
-    let data = [];
-    for (let index = 0; index < this.exercises.length; index++) {
-            const element = this.exercises[index];
-            data.push({ name: element.exerciseName, key: element.id });
-    }
-    let modal = this.modalCtrl.create('SelectsearchsinglePage', { data: data, titleText: "Please Select An Exercise" });
-    modal.onDidDismiss((data) => {
-        if (data.length != 0) {
-          this.workoutExercises.push(this.exercises.filter(x => x.exerciseName === data.name)[0]);
-        }
-    });
-    modal.present();
+    OpenSelect() {
+      let data = [];
+      for (let index = 0; index < this.exercises.length; index++) {
+              const element = this.exercises[index];
+              data.push({ name: element.exerciseName, key: element.id });
+      }
+      let modal = this.modalCtrl.create('SelectsearchsinglePage', { data: data, titleText: "Please Select An Exercise" });
+      modal.onDidDismiss((data) => {
+          if (data.length != 0) {
+            let exercise = this.exercises.filter(x => x.exerciseName === data.name)[0];
+            // exercise.superSet = new Exercise();
+            // exercise.superSet.MuscleGroup = new MuscleGroup();
+            exercise.expanded = false;
+            this.workoutExercises.push(exercise);
+          }
+      });
+      modal.present();
     }
 
 
@@ -106,5 +121,37 @@ export class WorkoutCreatePage {
    */
   ionViewDidLoad() {
     
+  }
+
+  addSuperSet(exercise) {
+    let data = [];
+      for (let index = 0; index < this.exercises.length; index++) {
+              const element = this.exercises[index];
+              data.push({ name: element.exerciseName, key: element.id });
+      }
+    let modal = this.modalCtrl.create('SelectsearchsinglePage', { data: data, titleText: "Please Select An Exercise" });
+    modal.onDidDismiss((data) => {
+        if (data.length != 0) {
+          exercise.superSet = this.exercises.filter(x => x.exerciseName === data.name)[0];
+          // let exercise = this.exercises.filter(x => x.exerciseName === data.name)[0];
+          // this.workoutExercises.push(exercise);
+        }
+    });
+    modal.present();
+  }
+
+  expandItem(item){
+    console.log(item);
+    this.workoutExercises.map((listItem) => {
+
+        if(item == listItem){
+            listItem.expanded = !listItem.expanded;
+        } else {
+            listItem.expanded = false;
+        }
+
+        return listItem;
+
+    });
   }
 }
