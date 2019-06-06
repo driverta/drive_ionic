@@ -2,14 +2,14 @@ import { NgModule } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 import { IonicPageModule } from 'ionic-angular';
 import { NgCircleProgressModule } from 'ng-circle-progress';
-import { SettingsPage } from './profile';
+import { ProfilePage } from './profile';
 
 @NgModule({
   declarations: [
-    SettingsPage,
+    ProfilePage,
   ],
   imports: [
-    IonicPageModule.forChild(SettingsPage),
+    IonicPageModule.forChild(ProfilePage),
     TranslateModule.forChild(),
     NgCircleProgressModule.forRoot({
       // set defaults here
@@ -22,7 +22,7 @@ import { SettingsPage } from './profile';
     }),
   ],
   exports: [
-    SettingsPage
+    ProfilePage
   ]
 })
-export class SettingsPageModule { }
+export class ProfilePageModule { }

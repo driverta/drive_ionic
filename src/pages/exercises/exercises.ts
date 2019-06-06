@@ -148,7 +148,8 @@ export class ExercisesPage {
   openItem(exercise) {
     this.navCtrl.push('ExerciseDetailPage', {
       exercise: exercise,
-      muscleGroup: this.mg.muscleGroupName
+      muscleGroup: this.mg.muscleGroupName,
+      user: this.userService.getUser()
     });
   }
 

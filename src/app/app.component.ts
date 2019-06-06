@@ -45,7 +45,7 @@ export class MyApp {
     { title: 'Map', component: 'MapPage' },
     { title: 'Exercises', component: 'ListMasterPage' },
     { title: 'Menu', component: 'MenuPage' },
-    { title: 'Profile', component: 'SettingsPage' },
+    { title: 'Profile', component: 'ProfilePage' },
     { title: 'Leaderboard', component: 'SearchPage' },
     { title: 'AddCompetitors', component: 'AddCompetitorsPage' },
     { title: 'Home', component: 'HomePage'}

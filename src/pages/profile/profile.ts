@@ -17,7 +17,7 @@ import { NgCircleProgressModule } from 'ng-circle-progress';
   selector: 'page-profile',
   templateUrl: 'profile.html'
 })
-export class SettingsPage {
+export class ProfilePage {
   // Our local settings object
   @ViewChild('fileInput') fileInput;
   @ViewChild(Nav) nav: Nav;
@@ -72,7 +72,7 @@ export class SettingsPage {
   pageTitleKey: string = 'Profile';
   pageTitle: string;
 
-  subSettings: any = SettingsPage;
+  subSettings: any = ProfilePage;
 
   constructor(public navCtrl: NavController,
     public settings: Settings,
@@ -118,6 +118,7 @@ export class SettingsPage {
   }
 
   ionViewDidLoad() {
+    console.log(this.checkUser);
     if (this.checkUser == undefined){
       this.user = this.userService.getUser();
       this.username = this.user.username;

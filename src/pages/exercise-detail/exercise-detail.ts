@@ -16,6 +16,7 @@ import { BodyLift } from '../../models/BodyLift';
 import { LiftingRecords } from '../../models/LiftingRecords';
 import { RecordsComponent } from '../../components/records/records';
 import { CardioRecord } from '../../models/CardioRecord';
+import {Storage} from "@ionic/storage";
 
 @IonicPage()
 @Component({
@@ -48,7 +49,7 @@ export class ExerciseDetailPage {
   bodyLiftHistory: BodyLift[];
   flexHistory: Flexibility[];
 
-  private friend: boolean = true;
+  friend: boolean = false;
 
   @ViewChild(LineChartComponent) lineChart: LineChartComponent
   @ViewChild(RecordsComponent) recordComponent: RecordsComponent
@@ -61,18 +62,28 @@ export class ExerciseDetailPage {
     public levels: Levels,
     private platform: Platform,
     public historyService: HistoryProvider,
-    private userService: ProvidersUserProvider) {
+    private userService: ProvidersUserProvider,
+    private readonly storage: Storage,
+    ) {
 
     this.platform.ready().then((readySource) => {
         // Platform now ready, execute any required native code
-      });
+    });
     this.exercise = navParams.get('exercise');
     this.muscleGroup = navParams.get('muscleGroup');
     this.user = navParams.get('user');
-    if(this.user == null){
-      this.user = userService.getUser();
-      this.friend = false;
-    }
+    this.storage.get('email').then((email) => {
+      if (this.user.email != email) {
+        this.friend = true;
+        this.segment = "records";
+      }
+    })
+
+
+    // if(this.user == null){
+    //   this.user = userService.getUser();
+    //   this.friend = false;
+    // }
   }
 
   refreshCharts() {
@@ -88,12 +99,7 @@ export class ExerciseDetailPage {
       this.userService.getCardioHistoryByIdAndExercise(this.exercise).subscribe(data =>{
         this.cardioHistory = data;
         this.historyService.cardioHistory = this.cardioHistory;
-        // this.recordComponent.barChart.makeBarChart();
-        // if(!this.friend){
-        //   this.lineChart.makeLineChart();
-        // }
       });
-      alert("here");
       this.getCardioRecords();
     } else if (this.exercise.bodyLift) {
       this.noRecords = false;
@@ -111,9 +117,6 @@ export class ExerciseDetailPage {
       this.noRecords = true;
       this.userService.getLiftingHistoryByIdAndExercise(this.exercise).subscribe(data =>{
         this.historyService.liftingHistory = data;
-        // if(!this.friend){
-        //   this.lineChart.makeLineChart();
-        // }
       })
       this.getLiftingRecords();
       console.log(this.liftingRecords);

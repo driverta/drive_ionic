@@ -176,7 +176,7 @@ export class SearchPage {
   }
 
   openItem(item){
-    this.navCtrl.push('SettingsPage', {
+    this.navCtrl.push('ProfilePage', {
       item: item
     });
   }
