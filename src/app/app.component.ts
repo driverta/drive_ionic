@@ -70,65 +70,63 @@ export class MyApp {
     platform.ready().then(() => {
       this.keyboard.onKeyboardShow().subscribe(() => {
         document.body.classList.add('keyboard-is-open');
-    });
+      });
 
-    this.keyboard.onKeyboardHide().subscribe(() => {
-        document.body.classList.remove('keyboard-is-open');
-    });
+      this.keyboard.onKeyboardHide().subscribe(() => {
+          document.body.classList.remove('keyboard-is-open');
+      });
+      this.authProvider.checkLogin();
 
+      authProvider.authUser.subscribe(jwtToken => {
 
-    authProvider.authUser.subscribe(jwtToken => {
+        if (jwtToken) {
+          this.storage.set("jwt_token", jwtToken).then(
+            () => {},
+          ).catch((error) => {
+            console.log(error);
+          });
 
-      if (jwtToken) {
-        this.storage.set("jwt_token", jwtToken).then(
-          () => {},
-        ).catch((error) => {
-          console.log(error);
-        });
-
-        this.storage.get("email").then(
-          (email) => {
-            this.userService.getUserByEmail(email).subscribe(data =>{
-              this.userService.setUser(data);
-              this.nav.push(MainPage);
-              // Get a FCM token
-              fcm.getToken();
-              this.rootPage = MainPage;
-    
-              // Listen to incoming messages
-              fcm.listenToNotifications().pipe(
-                tap(msg => {
-                  if (msg['tap'] == true) {
-                    userService.getOneUser(msg['user'].split(' ')[0]).subscribe(user => {
-                      this.nav.push(MainPage).then(() => {
-                        this.nav.push('FriendProfilePage', {
-                          item: user
-                        });
+          this.storage.get("email").then(
+            (email) => {
+              this.userService.getUserByEmail(email).subscribe(data =>{
+                this.userService.setUser(data);
+                this.nav.push(MainPage);
+                // Get a FCM token
+                fcm.getToken();
+                this.rootPage = MainPage;
+      
+                // Listen to incoming messages
+                fcm.listenToNotifications().pipe(
+                  tap(msg => {
+                    if (msg['tap'] == true) {
+                      userService.getOneUser(msg['user'].split(' ')[0]).subscribe(user => {
+                        this.nav.push(MainPage).then(() => {
+                          this.nav.push('FriendProfilePage', {
+                            item: user
+                          });
+                        })
                       })
-                    })
-                  }
-                  // show a toast
-                  const toast = toastCtrl.create({
-                    message: msg['body'],
-                    duration: 3000,
-                    position: 'top'
-                  });
-                  toast.present();
+                    }
+                    // show a toast
+                    const toast = toastCtrl.create({
+                      message: msg['body'],
+                      duration: 3000,
+                      position: 'top'
+                    });
+                    toast.present();
 
-                })
-              ).subscribe()
-            })
-          }
-        ).catch(
-          (error) => {}
-        );
-      }
-      else {
-        this.rootPage = TutorialPage;
-      }
-    });
-
-    this.authProvider.checkLogin();
+                  })
+                ).subscribe()
+              })
+            }
+          ).catch(
+            (error) => {}
+          );
+        }
+        else {
+          this.rootPage = TutorialPage;
+        }
+      });
     });
   }
 

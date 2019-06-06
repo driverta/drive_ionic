@@ -1,17 +1,15 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, Input } from '@angular/core';
 import { NavParams, NavController, AlertController } from 'ionic-angular';
-import { Storage } from '@ionic/storage';
-import { NgCircleProgressModule } from 'ng-circle-progress';
 import { HistoryProvider, ProvidersUserProvider } from '../../providers/providers';
 import { Levels } from '../../providers/providers';
 import { Records } from '../../providers/providers';
-import firebase from 'firebase';
-import * as d3 from 'd3-selection';
 import { LiftingHistory } from '../../models/LiftingHistory';
 import { CardioHistory } from '../../models/CardioHistory';
 import { Flexibility } from '../../models/Flexibility';
 import { History } from '../../models/History';
 import { BodyLift } from '../../models/BodyLift';
+import { LiftingRecords } from '../../models/LiftingRecords';
+import { CardioRecord } from '../../models/CardioRecord';
 
 
 @Component({
@@ -22,6 +20,8 @@ export class NewSetComponent {
 
 
   @Output() notify: EventEmitter<number> = new EventEmitter<number>();
+  @Input() liftingRecords: LiftingRecords[];
+  @Input() cardioRecords: CardioRecord[];
 
   xlevel = 1;
 	xcurrent = 0;
@@ -98,7 +98,7 @@ export class NewSetComponent {
     this.userService.getTotalGains(this.user.id).subscribe(totalGains => {
       this.gains = totalGains;
       this.setLevel();
-    });;
+    });
   }
 
   setLevel () {
@@ -120,18 +120,15 @@ export class NewSetComponent {
     this.lf.set = 1;
     var date;
     date = new Date();
-    // date = date.getUTCFullYear() + '-' +
-    //         ('00' + (date.getUTCMonth() + 1)).slice(-2) + '-' +
-    //         ('00' + date.getUTCDate()).slice(-2);   
     this.lf.date = date
-    var oneRepMaxFirstStep =  (this.weight * this.reps * .033);
-    this.lf.oneRepMax = parseInt(this.weight) + oneRepMaxFirstStep;
+    this.lf.oneRepMax = parseInt(this.weight) + (this.weight * this.reps * .033);
     this.lf.exercise = this.exercise;
     this.lf.gains = 5;
     this.g = 5;
     this.checkRec =false;
     this.points = true;
-    for(let record of this.records._records){
+
+    for(let record of this.liftingRecords){
       if(record.reps == this.lf.reps){
         this.checkRec = true;
         if (record.weight < this.lf.weight){
@@ -338,13 +335,8 @@ export class NewSetComponent {
     this.ngOnInit(); 
   }
 
-  newLevel(level){
-    let alert = this.alertCtrl.create({
-      title: "CONGRATULATIONS!" ,
-      message: "You are now a Level " + level,
-      buttons: ['Ok']
-    });
-    alert.present();   
+  private setCardioRecords(minTime) {
+
   }
 }
 

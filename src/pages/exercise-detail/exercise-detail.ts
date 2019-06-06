@@ -1,6 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams, Slides} from 'ionic-angular';
-import { Storage } from '@ionic/storage';
+import { IonicPage, NavController, NavParams} from 'ionic-angular';
 import { Platform } from 'ionic-angular';
 
 import { Items, ProvidersUserProvider, HistoryProvider } from '../../providers/providers';
@@ -9,22 +8,21 @@ import { Levels } from '../../providers/providers';
 
 import { BarChartComponent } from '../../components/bar-chart/bar-chart';
 import { LineChartComponent } from '../../components/line-chart/line-chart';
-import { HistoryComponent } from '../../components/history/history';
-import { SortByRepsPipe } from '../../pipes/sort-by-reps/sort-by-reps';
 // Import ng-circle-progress
-import { NgCircleProgressModule } from 'ng-circle-progress';
 import { LiftingHistory } from '../../models/LiftingHistory';
 import { CardioHistory } from '../../models/CardioHistory';
 import { Flexibility } from '../../models/Flexibility';
-import { NewSetComponent } from '../../components/new-set/new-set';
 import { BodyLift } from '../../models/BodyLift';
+import { LiftingRecords } from '../../models/LiftingRecords';
+import { RecordsComponent } from '../../components/records/records';
+import { CardioRecord } from '../../models/CardioRecord';
 
 @IonicPage()
 @Component({
   selector: 'page-exercise-detail',
   templateUrl: 'exercise-detail.html',
 })
-export class ItemDetailPage {
+export class ExerciseDetailPage {
 
   selectedValue = 0;
   exercise: any;
@@ -43,6 +41,8 @@ export class ItemDetailPage {
 	progress = 0;
 	gains = 0;
 
+  liftingRecords: LiftingRecords[];
+  cardioRecords: CardioRecord[];
   liftingHistory: LiftingHistory[];
   cardioHistory: CardioHistory[];
   bodyLiftHistory: BodyLift[];
@@ -50,10 +50,9 @@ export class ItemDetailPage {
 
   private friend: boolean = true;
 
-  @ViewChild(BarChartComponent) barChart: BarChartComponent
   @ViewChild(LineChartComponent) lineChart: LineChartComponent
-  @ViewChild(Slides) slides: Slides;
-  @ViewChild(HistoryComponent) historyChild: HistoryComponent;
+  @ViewChild(RecordsComponent) recordComponent: RecordsComponent
+
 
   constructor(public navCtrl: NavController,
     navParams: NavParams,
@@ -61,7 +60,6 @@ export class ItemDetailPage {
     public records: Records,
     public levels: Levels,
     private platform: Platform,
-    private storage: Storage,
     public historyService: HistoryProvider,
     private userService: ProvidersUserProvider) {
 
@@ -78,25 +76,25 @@ export class ItemDetailPage {
   }
 
   refreshCharts() {
-    this.barChart.makeBarChart();
-      if(!this.friend){
-        this.lineChart.makeLineChart();
-      }
+      // if(!this.friend){
+      //   this.lineChart.makeLineChart();
+      // }
   }
 
   ionViewWillEnter() {
     if (this.muscleGroup == "Cardio") {
       this.noRecords = true;
       
-      
       this.userService.getCardioHistoryByIdAndExercise(this.exercise).subscribe(data =>{
         this.cardioHistory = data;
         this.historyService.cardioHistory = this.cardioHistory;
-        this.barChart.makeBarChart();
-        if(!this.friend){
-          this.lineChart.makeLineChart();
-        }
+        // this.recordComponent.barChart.makeBarChart();
+        // if(!this.friend){
+        //   this.lineChart.makeLineChart();
+        // }
       });
+      alert("here");
+      this.getCardioRecords();
     } else if (this.exercise.bodyLift) {
       this.noRecords = false;
       this.historyService.getBodyLiftByExercise(this.user.id, this.exercise.id).subscribe(bodyLifts => {
@@ -108,15 +106,18 @@ export class ItemDetailPage {
         this.historyService.flexHistory = flex;
         //this.historyChild.showHistory();
       });
+      
     } else {
       this.noRecords = true;
       this.userService.getLiftingHistoryByIdAndExercise(this.exercise).subscribe(data =>{
         this.historyService.liftingHistory = data;
-        this.barChart.makeBarChart();
-        if(!this.friend){
-          this.lineChart.makeLineChart();
-        }
+        // if(!this.friend){
+        //   this.lineChart.makeLineChart();
+        // }
       })
+      this.getLiftingRecords();
+      console.log(this.liftingRecords);
+
     }
     this.setUp()
   }
@@ -125,7 +126,7 @@ export class ItemDetailPage {
     this.selectedValue = 1;
   }
 
-  setUp(){
+  setUp() { 
     this.userService.getTotalGains(this.user.id).subscribe(totalGains => {
       this.gains = totalGains;
       this.setLevel();
@@ -154,5 +155,19 @@ export class ItemDetailPage {
 
   hideCharts() {
     this.selectedValue = 0;
+  }
+
+  private getLiftingRecords() {
+    this.historyService.getLiftingRecords(this.user.id, this.exercise.id).subscribe(liftingRecords => {
+      this.liftingRecords = liftingRecords;
+      console.log(liftingRecords);
+    })
+  }
+
+  private getCardioRecords() {
+    this.historyService.getCardioRecords(this.user.id, this.exercise.id).subscribe(cardioRecords => {
+      this.cardioRecords = cardioRecords;
+      console.log(this.cardioRecords);
+    })
   }
 }

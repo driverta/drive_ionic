@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { NavParams } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 
@@ -20,7 +20,7 @@ import { CardioHistory } from '../../models/CardioHistory';
   templateUrl: 'line-chart.html'
 })
 export class LineChartComponent {
-
+  @Input() historyService: HistoryProvider;
   liftingHistory: LiftingHistory[];
   cardioHistory: CardioHistory[];
 	username: any;
@@ -41,7 +41,6 @@ export class LineChartComponent {
   constructor(
   	navParams: NavParams,
   	public user: User,
-    private history: HistoryProvider,
     private storage: Storage,
     private userService: ProvidersUserProvider
   	) {
@@ -51,11 +50,15 @@ export class LineChartComponent {
     this.exercise = navParams.get('exercise');
     this.muscleGroup = navParams.get('muscleGroup');
   }
+  ngAfterViewInit() {
+    alert("here2");
+    this.makeLineChart();
+  }
 
   public makeLineChart() {
     if (this.muscleGroup == "Cardio") {
       //this.userService.getCardioHistoryByIdAndExercise(this.exercise).subscribe(data =>{
-        this.cardioHistory = this.history.cardioHistory;
+        this.cardioHistory = this.historyService.cardioHistory;
         this.axisText = "MPH"
         this.setCardioChart();
       //});

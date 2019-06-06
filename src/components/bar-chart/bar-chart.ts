@@ -1,13 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import  { StatsBarChart } from '../../models/item';
-import { Storage } from '@ionic/storage';
-
-import { User } from '../../providers/providers';
-import { Records } from '../../providers/providers';
-
-import { SortByRepsPipe } from '../../pipes/sort-by-reps/sort-by-reps';
-import { HistoryProvider, ProvidersUserProvider } from '../../providers/providers';
+import { Component, OnInit, Input } from '@angular/core';
+import { NavController, NavParams } from 'ionic-angular';
+import { ProvidersUserProvider } from '../../providers/providers';
 
 import { LiftingHistory } from '../../models/LiftingHistory';
 import { CardioHistory } from '../../models/CardioHistory';
@@ -18,6 +11,7 @@ import * as d3Array from "d3-array";
 import * as d3Axis from "d3-axis";
 
 import firebase from 'firebase';
+import { LiftingRecords } from '../../models/LiftingRecords';
 
 @Component({
   selector: 'bar-chart',
@@ -27,7 +21,6 @@ export class BarChartComponent {
 
   cardioRecords = [];
   cardioHistory: CardioHistory[];
-  liftingRecords = [];
   liftingHistory: LiftingHistory[];
 	username: any;
   exercise:any;
@@ -49,11 +42,12 @@ export class BarChartComponent {
   xAxisText = "";
   yAxisText = "";
 
+  @Input() liftingRecords: LiftingRecords[];
+
+
   constructor(
     navParams: NavParams,
     public navCtrl: NavController,
-    private records: Records,
-    private storage: Storage,
     private userService: ProvidersUserProvider
     ) {
 
@@ -67,7 +61,12 @@ export class BarChartComponent {
     }
   }
 
+  ngAfterViewInit() {
+    this.makeBarChart();
+  }
+
   public makeBarChart() {
+    console.log(this.liftingRecords);
     if (this.muscleGroup == "Cardio") {
       this.tempRec = [
         {min: 0, max: 5, miles: 0, time: 0, mph: 0, records: 0},
@@ -113,40 +112,20 @@ export class BarChartComponent {
         })
       }
     } else {
-      this.liftingRecords = [];
       if (this.user == this.userService.getUser()){
         this.userService.getLiftingHistoryByIdAndExercise(this.exercise).subscribe(data =>{
           this.liftingHistory = data;
-          this.getLiftingRecords();
+          this.sortLiftingRecords();
         })
       } else {
         this.userService.getCompetingUsersLiftingHistoryByIdAndExercise(this.exercise, this.user.id).subscribe(data =>{
           this.liftingHistory = data;
-          this.getLiftingRecords();
+          this.sortLiftingRecords();
         })
       }
     }
   }
 
-  getLiftingRecords() {
-    for(let history of this.liftingHistory){
-      this.checkRec =false;
-      for(let record of this.liftingRecords){
-        if(history.reps == record.reps){
-          this.checkRec = true;
-          if(history.weight > record.weight){
-            record.weight = history.weight;
-            record.oneRepMax = history.oneRepMax;
-            record.records++;
-          }
-        }
-      }
-      if (this.checkRec == false){
-        this.liftingRecords.push({reps: history.reps, weight: history.weight, oneRepMax: history.oneRepMax, records: 1})
-      }
-    }
-    this.sortLiftingRecords();
-  }
   getCardioRecords() {
     for(let history of this.cardioHistory){
       this.tempRec.forEach( (value, index) => {
@@ -169,15 +148,15 @@ export class BarChartComponent {
   }
 
   sortLiftingRecords() {
-    this.liftingRecords.sort((a: any, b: any) => {
-      if (a.reps < b.reps) {
-        return -1;
-      } else if (a.reps > b.reps) {
-        return 1;
-      } else {
-        return 0;
-      }
-    });
+    // this.liftingRecords.sort((a: any, b: any) => {
+    //   if (a.reps < b.reps) {
+    //     return -1;
+    //   } else if (a.reps > b.reps) {
+    //     return 1;
+    //   } else {
+    //     return 0;
+    //   }
+    // });
     this.xAxisText = "1RM";
     this.xAxisText = "Reps";
     this.setLiftingChart();

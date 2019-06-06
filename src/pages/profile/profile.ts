@@ -94,7 +94,7 @@ export class SettingsPage {
   _buildForm() {
 
     let group: any = {
-      profilePic: ['default-img'],
+      profilePic: [''],
       option1: [this.options.option1],
       option2: [this.options.option2],
       option3: [this.options.option3]
@@ -114,7 +114,6 @@ export class SettingsPage {
     // Watch the form for changes, and
     this.form.valueChanges.subscribe((v) => {
       this.settings.merge(this.form.value);
-      // console.log(group.profilePic);
     });
   }
 
@@ -158,7 +157,7 @@ export class SettingsPage {
     })
 
     this.userService.getProfilePic(this.user.username).subscribe(data => {
-      this.form.patchValue({"profilePic": "data:image/jpeg;base64," + data});
+      //this.form.patchValue({"profilePic": "data:image/jpeg;base64," + data});
       if (data != "NahNigga"){
         this.form.patchValue({"profilePic": "data:image/jpeg;base64," + data});
         this.show = true;
@@ -186,7 +185,6 @@ export class SettingsPage {
         targetWidth: 96,
         targetHeight: 96
       }).then((data) => {
-        alert("here");
         this.form.patchValue({ 'profilePic': 'data:image/jpg;base64,' + data });
         this.show = true
       }, (err) => {

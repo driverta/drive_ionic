@@ -2,11 +2,10 @@ import { NgModule } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
 import { IonicPageModule } from 'ionic-angular';
 import { NgCircleProgressModule } from 'ng-circle-progress';
-import { ItemDetailPage } from './exercise-detail';
+import { ExerciseDetailPage } from './exercise-detail';
 import { BarChartComponent } from '../../components/bar-chart/bar-chart';
 import { NewSetComponent } from '../../components/new-set/new-set';
 import { HistoryComponent } from '../../components/history/history';
-import { RecordsComponent } from '../../components/records/records';
 import { LineChartComponent } from '../../components/line-chart/line-chart';
 import { PipesModule } from '../../pipes/pipes.module';
 import { ComponentsModule } from '../../components/components.module';
@@ -15,10 +14,10 @@ import { ComponentsModule } from '../../components/components.module';
 
 @NgModule({
   declarations: [
-    ItemDetailPage
+    ExerciseDetailPage
   ],
   imports: [
-    IonicPageModule.forChild(ItemDetailPage),
+    IonicPageModule.forChild(ExerciseDetailPage),
     TranslateModule.forChild(),
     PipesModule,
     NgCircleProgressModule.forRoot({
@@ -33,7 +32,7 @@ import { ComponentsModule } from '../../components/components.module';
     ComponentsModule
   ],
   exports: [
-    ItemDetailPage
+    ExerciseDetailPage
   ]
 })
-export class ItemDetailPageModule { }
+export class ExerciseDetailPageModule { }

@@ -7,7 +7,6 @@ import { IonicPage,
 } from 'ionic-angular';
 
 import { Storage } from '@ionic/storage';
-import { KeysPipe } from '../../pipes/keys/keys';
 import { ExerciseProvider } from '../../providers/exercise/exercise';
 import { ProvidersUserProvider } from '../../providers/providers-user/providers-user';
 import { Exercise } from '../../models/Exercise';
@@ -36,7 +35,6 @@ export class RecordsPage {
     private exerciseService: ExerciseProvider,
     public actShtCtrl: ActionSheetController,
     private userService: ProvidersUserProvider) {
-  	//this.username = localStorage.getItem("username");
     this.user = navParams.get('user');
   }
 
@@ -54,11 +52,6 @@ export class RecordsPage {
         this.friendExercises = true;
       });
     }
-  	
-    // this.getExercises().then((val) => {
-    //   this.setlifts = val;
-    //   this.lifts = this.setlifts
-    // })
   }
 
   getExercises(): Promise<any> {
@@ -66,19 +59,11 @@ export class RecordsPage {
   }
 
   openItem(exercise) {
-    // console.log(exercise.MuscleGroup.muscleGroupName)
-    // if (exercise.MuscleGroup.muscleGroupName == "Cardio"){
-    //   console.log("KiLL M3")
-    //   this.navCtrl.push('RecordCardioDetailPage', {
-    //     exercise: exercise
-    //   });
-    // }else {
-      this.navCtrl.push('ItemDetailPage', {
-        exercise: exercise,
-        muscleGroup: exercise.MuscleGroup.muscleGroupName,
-        user: this.user
-      });
-    //}
+    this.navCtrl.push('ExerciseDetailPage', {
+      exercise: exercise,
+      muscleGroup: exercise.MuscleGroup.muscleGroupName,
+      user: this.user
+    });
   }
 
   filterExercises(){

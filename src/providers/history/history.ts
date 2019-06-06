@@ -7,6 +7,8 @@ import { CardioHistory } from '../../models/CardioHistory';
 import { History } from '../../models/History';
 import { Flexibility } from '../../models/Flexibility';
 import { BodyLift } from '../../models/BodyLift';
+import { LiftingRecords } from '../../models/LiftingRecords';
+import { CardioRecord } from '../../models/CardioRecord';
 
 
 /*
@@ -33,16 +35,24 @@ export class HistoryProvider {
 
 	_cardioCharts = [{date: new Date(0), miles: 0, time: 0, mph: 0}]
 
-  constructor(public http: HttpClient) {
+    constructor(public http: HttpClient) {
   
 	}
 	// private url = "http://driveapi-env.y7mz5ppbve.us-east-2.elasticbeanstalk.com/";
-	//private url = "http://localhost:8080/api/";
-	private url = "http://DriveApi.y7mz5ppbve.us-east-2.elasticbeanstalk.com/";
+	private url = "http://localhost:8080/api/";
+	//private url = "http://DriveApi.y7mz5ppbve.us-east-2.elasticbeanstalk.com/";
 
 
 	getLiftingHistoryByExercise(userId, exerciseId): Observable<LiftingHistory[]> {
     	return this.http.get<LiftingHistory[]>(this.url + "getLiftingHistoryByExercise?userId=" + userId + '&exerciseId=' + exerciseId)
+	}
+
+	getLiftingRecords(userId, exerciseId): Observable<LiftingRecords[]> {
+    	return this.http.get<LiftingRecords[]>(this.url + "getLiftingRecords?userId=" + userId + '&exerciseId=' + exerciseId)
+	}
+
+	getCardioRecords(userId, exerciseId): Observable<CardioRecord[]> {
+    	return this.http.get<CardioRecord[]>(this.url + "getCardioRecords?userId=" + userId + '&exerciseId=' + exerciseId)
 	}
 	
 	getCardioHistoryByExercise(userId, exerciseId): Observable<CardioHistory[]> {

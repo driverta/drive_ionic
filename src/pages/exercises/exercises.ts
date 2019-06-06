@@ -29,7 +29,7 @@ import { MuscleGroup } from '../../models/MuscleGroupModel';
   templateUrl: 'exercises.html'
 })
 //@Injectable()
-export class ListMasterPage {
+export class ExercisesPage {
   username = "bob";
   users = [];
 
@@ -70,9 +70,7 @@ export class ListMasterPage {
     this.mg = this.navParams.get('title');
   }
 
-  ionViewWillEnter(){
-    
-    this.ionViewDidLoad();
+  ionViewWillEnter(){    
   }
 
   /**
@@ -86,76 +84,6 @@ export class ListMasterPage {
     
 
     this.gainsChart.makeGainsChart([this.mg.muscleGroupName]);
-
-    // this.username = localStorage.getItem("username");
-    // console.log(this.username);
-    // this.lifts = {};
-    // this.setlifts = {};
-    // // Get user data status
-    // 
-    // this.getUsers().then((val) => {
-    //   console.log("Slut");
-    //   if (val != null) {
-    //     this.users = val;
-    //   }
-    //   if (this.users.includes(this.username)) {
-    //     this.status = this.username;
-    //   }
-    //   else {
-    //     this.status = "cloud";
-    //   }
-    // }).then(() => {
-    // 
-    //   if (this.status == this.username) {
-    //     this.getExercises().then((val) => {
-    //       this.setlifts = val;
-    //       this.lifts = this.setlifts;
-    //       this.show = false;
-    //       var exercises = firebase.database().ref('/' + this.username + '/exercises');
-    //       exercises.set(this.setlifts);
-    //     })
-    //   } else {
-    //     var query1 = firebase.database().ref('/' + this.username + '/exercises');
-    //     query1.once("value").then( snapshot => {
-    //       this.loop = 0;
-    //       snapshot.forEach( childSnapshot => {
-    // 
-    //         this.loop++
-    //         var childData1 = childSnapshot.val();
-    //         var key = childSnapshot.key;
-    // 
-    //         th
-    //       });
-    //     });  
-    //   }
-    // })is.setlifts[key] = childData1;
-    //         this.lifts = this.setlifts
-    // 
-    //         if ( snapshot.numChildren() == this.loop ) {
-    //           //alert("HERE")
-    //           this.show = false;
-    //           this.saveData();
-    //         }
-    //console.log(this.records._cardioRecs)
-    // this.getLocalExercises().then(exercises =>{
-    //   if (exercises != null) {
-    //     exercises.forEach(exercise =>{
-    //       var history = firebase.database().ref(this.userService.getUser().username + "/exercisesNew//history");
-    //       history.push(exercise);
-    //     });
-    //   }
-    // });
-    
-    // this.userService.getExercises().subscribe(exercises => {
-
-    //   this.exercises = exercises;
-    //   if (this.filter == "All"){
-    //     this.filteredExercises = exercises;
-    //   } else {
-    //     this.executeFilter()
-    //   }
-    //   this.show = false;
-    // });
   }
 
   getUsers(): Promise<any> {
@@ -218,7 +146,7 @@ export class ListMasterPage {
    * Navigate to the detail page for this item.
    */
   openItem(exercise) {
-    this.navCtrl.push('ItemDetailPage', {
+    this.navCtrl.push('ExerciseDetailPage', {
       exercise: exercise,
       muscleGroup: this.mg.muscleGroupName
     });

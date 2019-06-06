@@ -83,7 +83,6 @@ export class WelcomePage {
       this.buttonPressed = false;
     }
     else{
-
       this.authProvider.authWithFirebase(this.account.email, this.account.password).then(
         (token) => {
           this.authProvider.authUser.next(token);

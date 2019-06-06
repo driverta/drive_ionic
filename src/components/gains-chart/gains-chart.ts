@@ -75,13 +75,12 @@ export class GainsChartComponent {
   constructor(public navCtrl: NavController,
   	public navParams: NavParams,
     public actShtCtrl: ActionSheetController,
-    private storage: Storage,
     private userService: ProvidersUserProvider,
     private historyService: HistoryProvider) {
 
     this.user = navParams.get('user');
     if(this.user == null){
-      this.user = userService.getUser();
+      this.user = this.userService.getUser();
     }
     this.width = Math.min(700, window.innerWidth - 10) - this.margin.left - this.margin.right,
     this.height = Math.min(this.width, window.innerHeight - this.margin.top - this.margin.bottom - 20);
@@ -146,7 +145,7 @@ export class GainsChartComponent {
               break;
             }
       	  });
-	      this.allTime = this.cardio + this.back + this.chest + this.arms + this.core + this.arms + this.shoulders + this.legs;
+        this.allTime = this.cardio + this.back + this.chest + this.arms + this.core + this.arms + this.shoulders + this.legs;
 	      this.data[0][0].value = this.chest / this.allTime;
 	      this.data[0][1].value = this.back / this.allTime;
 	      this.data[0][2].value = this.legs / this.allTime;
@@ -158,13 +157,6 @@ export class GainsChartComponent {
         filters.forEach(filter => {
           this.executeFilter(filter);
         })
-
-	      // if (filter == "All"){
-	      // 	this.radarChart("#gainsChart", this.data, this.radarChartOptions);
-	      // } else {
-	      // 	this.executeFilter(filter)
-	      // }
-
       });
     });
   }
@@ -183,7 +175,7 @@ export class GainsChartComponent {
             this.exercises[c.exercise.exerciseName] = c.gains;
           }
         }
-    });
+      });
     } else {
       this.liftingHistory.forEach(lf =>{
         if (lf.exercise.MuscleGroup.muscleGroupName == filter) {
@@ -201,6 +193,7 @@ export class GainsChartComponent {
       var d = {axis: key, value: percent}
       this.data[0].push(d)
     });
+    console.log(this.data);
     this.radarChart("#" + filter, this.data, this.radarChartOptions);
   }
 

@@ -25,15 +25,20 @@
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
-        },
-        "ads_service": {
-          "status": 2
+          "other_platform_oauth_client": [
+            {
+              "client_id": "564282992846-m5at9biquoffbmuop75mbo8f3ip1q53l.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "564282992846-2t5up0q1eu107u1tj7otej9stdu05eod.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.drive.fitness"
+              }
+            }
+          ]
         }
       }
     }

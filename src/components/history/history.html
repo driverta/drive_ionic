@@ -1,4 +1,5 @@
 <div>
+  <line-chart  [hidden]="(exercise.bodyLift || (exercise.MuscleGroup.muscleGroupName == 'Flexibility'))" [historyService]=historyService></line-chart>
   <ion-item >
     <div class="scrollingtable" *ngIf="liftingBool">
       <table class="table table-bordered" id="headers">
@@ -13,7 +14,7 @@
       </table>
       <ion-scroll scrollY="true" class="scroll">
         <table>
-          <tr *ngFor="let x of liftingHistory">
+          <tr *ngFor="let x of historyService.liftingHistory">
             <td>{{x.date | date: 'MM/dd/yyyy'}}</td>
             <td>{{x.set}}</td>
             <td>{{x.weight}}</td>
@@ -38,7 +39,7 @@
         </table>
         <ion-scroll scrollY="true" class="scroll">
           <table>
-            <tr *ngFor="let x of cardioHistory">
+            <tr *ngFor="let x of historyService.cardioHistory">
               <td>{{x.date | date: 'MM/dd/yyyy'}}</td>
               <td>{{x.miles}}</td>
               <td>{{x.minutes | cardioTimeConvert}}</td>
@@ -62,7 +63,7 @@
         </table>
         <ion-scroll scrollY="true" class="scroll">
           <table>
-            <tr *ngFor="let x of bodyLiftHistory">
+            <tr *ngFor="let x of historyService.bodyLiftHistory">
               <td>{{x.History.date | date: 'MM/dd/yyyy'}}</td>
               <td>{{x.set}}
               <td>{{x.reps}}</td>
@@ -84,7 +85,7 @@
         </table>
         <ion-scroll scrollY="true" class="scroll">
           <table>
-            <tr *ngFor="let x of flexHistory">
+            <tr *ngFor="let x of historyService.flexHistory">
               <td>{{x.History.date | date: 'MM/dd/yyyy'}}</td>
               <td>{{x.minutes}}</td>
               <td>

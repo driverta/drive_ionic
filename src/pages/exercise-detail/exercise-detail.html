@@ -1,9 +1,7 @@
 <ion-header>
-
   <ion-navbar>
     <ion-title>{{ exercise.exerciseName }}</ion-title>
   </ion-navbar>
-
 </ion-header>
 
 <ion-content *ngIf="!friend">
@@ -20,10 +18,7 @@
 	    </ion-segment-button>
 
 	  </ion-segment>
-	</div>
-		<bar-chart [hidden]="selectedValue!=1" ></bar-chart>
-		
-		<line-chart  [hidden]="selectedValue!=2 || (exercise.bodyLift || (exercise.MuscleGroup.muscleGroupName == 'Flexibility'))" ></line-chart>
+	</div>		
 	<div [ngSwitch]="segment">
 	  <ion-list *ngSwitchCase="'set'">
 				<ion-item no-lines>
@@ -32,22 +27,21 @@
 							[showSubtitle]="false" [showUnits]="false"></circle-progress>
 						<ion-label style="margin-left: 0%;">{{xcurrent}} out of {{xtotal}} Exp.</ion-label>
 					</ion-item>
-	    <new-set (myEvent)="refreshCharts();" (notify)='onNotify($event)'></new-set>
+	    <new-set [liftingRecords]="liftingRecords" (myEvent)="refreshCharts();" (notify)='onNotify($event)'></new-set>
 	  </ion-list>
 
 	  <ion-list *ngSwitchCase="'history'">
-	  	<history (myEvent2)="ionViewWillEnter();"></history>
+	  	<history (myEvent2)="ionViewWillEnter();" [historyService]="historyService"></history>
 	  </ion-list>
 
 	  <ion-list *ngSwitchCase="'records'">
-	    <records></records>
+	    <records [liftingRecords]="liftingRecords" [cardioRecords]="cardioRecords"></records>
 	  </ion-list>
-
 	</div>
-
 </ion-content>
-<ion-content *ngIf="friend" padding>
-		<records></records>
-		<bar-chart></bar-chart>
-	</ion-content>
+
+<ion-content class="has-header">
+		<records [liftingRecords]="liftingRecords" [cardioRecords]="cardioRecords" *ngIf="friend"></records>
+</ion-content>
+
 

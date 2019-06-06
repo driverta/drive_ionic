@@ -18,18 +18,30 @@ export class AuthProvider {
   authUser = new ReplaySubject<any>(1);
   private auth: any;
   // private url = "http://driveapi-env.y7mz5ppbve.us-east-2.elasticbeanstalk.com";
-  //private url = "http://localhost:8080/api";
-  private url = "http://DriveApi.y7mz5ppbve.us-east-2.elasticbeanstalk.com/";
+  private url = "http://localhost:8080/api";
+  //private url = "http://DriveApi.y7mz5ppbve.us-east-2.elasticbeanstalk.com/";
 
   constructor(private readonly httpClient: HttpClient,
               private readonly storage: Storage,
               private af: AngularFirestore,
               public firebaseNative: Firebase,
-              public userService: ProvidersUserProvider
+              public userService: ProvidersUserProvider,
             ) {
   }
 
   checkLogin() {
+    this.userService.checkAuthentication().subscribe(data =>{
+      alert(data);
+      console.log(data);
+    })
+
+    // this.userService.checkAuthentication().catch((err) => {
+    //   console.log(err);
+    //   this.refreshToken();
+    //   this.userService.checkAuthentication().catch(err => {
+    //     this.authUser.next(null);
+    //   }).subscribe(data => {})
+    // }).subscribe(data => {});
 
     this.storage.get('jwt_token').then((jwt_token) => {
       if (jwt_token) {
@@ -97,6 +109,7 @@ export class AuthProvider {
     let self = this;
     var promise = new Promise((resolve, reject) => {
       firebase.auth().signInWithEmailAndPassword(email, password).then(value => {
+        
         firebase.auth().currentUser.getIdToken(/* forceRefresh */ true).then(function(idToken) {
           self.saveLogin(email);
           resolve(idToken);
@@ -108,6 +121,36 @@ export class AuthProvider {
       });
     })
     return promise;
+  }
+
+  refreshToken() {
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        user.getIdToken(true).then(jwtToken => {
+          this.storage.set("jwt_token", jwtToken).then(
+            () => {},
+          ).catch((error) => {
+            console.log(error);
+          });
+          return jwtToken;
+        })
+      }
+    })
+  }
+
+
+  saveRefreshToken(refreshToken) {
+    this.storage.set("refreshToken", refreshToken).then(
+      () => {},
+      (error) => {}
+    )
+  }
+
+  saveTokenTimeout(tokenTimeout) {
+    this.storage.set("tokenTimeout", tokenTimeout).then(
+      () => {},
+      (error) => {}
+    )
   }
 
   saveLogin(email) {

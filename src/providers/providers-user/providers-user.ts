@@ -17,12 +17,16 @@ export class ProvidersUserProvider {
 
   // private url = "http://driveapi-env.y7mz5ppbve.us-east-2.elasticbeanstalk.com/";
 
-  //private url = "http://localhost:8080/api/";
-  private url = "http://DriveApi.y7mz5ppbve.us-east-2.elasticbeanstalk.com/";
+  private url = "http://localhost:8080/api/";
+  //private url = "http://DriveApi.y7mz5ppbve.us-east-2.elasticbeanstalk.com/";
 
   user: UserModel = new UserModel(); 
 
   constructor(public http: HttpClient) {
+  }
+
+  checkAuthentication(): Observable<string> {
+    return this.http.get<string>(this.url + "checkAuthentication");
   }
 
   getAllUsers(): Observable<UserModel[]> {
