@@ -120,4 +120,5 @@
     <plugin name="cordova-sqlite-storage" spec="^2.3.2" />
     <plugin name="cordova-plugin-app-version" spec="^0.1.9" />
     <plugin name="cordova-plugin-statusbar" spec="^2.4.2" />
+    <allow-navigation href="http://192.168.0.107:8100" />
 </widget>

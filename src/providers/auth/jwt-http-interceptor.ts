@@ -64,7 +64,6 @@ export class JwtHttpInterceptor implements HttpInterceptor {
                       return next.handle(clone).catch(error => {
 
                         if (error.status === 401) {
-                          alert("HERE");
                           let auth = this.inj.get(AuthProvider);
                           auth.refreshToken();
                           clone = this.addAuthHeader(request, this.storage.get('jwt_token'))

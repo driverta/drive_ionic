@@ -66,7 +66,6 @@ export class BarChartComponent {
   }
 
   public makeBarChart() {
-    console.log(this.liftingRecords);
     if (this.muscleGroup == "Cardio") {
       this.tempRec = [
         {min: 0, max: 5, miles: 0, time: 0, mph: 0, records: 0},

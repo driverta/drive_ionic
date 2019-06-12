@@ -73,7 +73,8 @@ export class ExerciseDetailPage {
     this.muscleGroup = navParams.get('muscleGroup');
     this.user = navParams.get('user');
     this.storage.get('email').then((email) => {
-      if (this.user.email != email) {
+      if (this.user.email.toUpperCase() != email.toUpperCase()) {
+        
         this.friend = true;
         this.segment = "records";
       }
@@ -119,7 +120,6 @@ export class ExerciseDetailPage {
         this.historyService.liftingHistory = data;
       })
       this.getLiftingRecords();
-      console.log(this.liftingRecords);
 
     }
     this.setUp()

@@ -51,7 +51,6 @@ export class LineChartComponent {
     this.muscleGroup = navParams.get('muscleGroup');
   }
   ngAfterViewInit() {
-    alert("here2");
     this.makeLineChart();
   }
 
