@@ -11,7 +11,6 @@ import { IonicApp, IonicErrorHandler, IonicModule} from 'ionic-angular';
 
 import { Items } from '../mocks/providers/items';
 import { Settings } from '../providers/providers';
-import { User } from '../providers/providers';
 import { Api } from '../providers/providers';
 import { MyApp } from './app.component';
 import { DataService } from '../providers/api/firebase';
@@ -23,7 +22,7 @@ import { ProvidersUserProvider } from '../providers/providers-user/providers-use
 import { ExerciseProvider } from '../providers/exercise/exercise';
 import { AuthProvider } from "../providers/auth/auth";
 
-import { WorkoutService } from "../providers/workout/workout";
+import { WorkoutProvider } from "../providers/workout/workout";
 
 import { NgCircleProgressModule } from 'ng-circle-progress';
 
@@ -120,7 +119,6 @@ const firebase = {
     Api,
     DataService,
     Items,
-    User,
     Camera,
     GoogleMaps,
     SplashScreen,
@@ -141,7 +139,7 @@ const firebase = {
     AuthProvider,
     AppVersion,
     SortByGainsPipe,
-    WorkoutService
+    WorkoutProvider
   ]
 })
 export class AppModule { }

@@ -29,9 +29,9 @@ export class MyGymPage {
   }
 
   toWorkouts(){
-    // this.navCtrl.push('ExercisesPage', {
+    this.navCtrl.push('WorkoutsPage', {
       
-    // });
+    });
   }
 
 }

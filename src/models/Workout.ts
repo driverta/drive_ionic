@@ -1,8 +1,8 @@
 import { UserModel } from './users'
+import { WorkoutExercise } from './workout-exercise.model';
 
-export class WorkoutModel {
+export class Workout {
     id: number;
-    userId: number;
-    startTime: Date;
-    endTime: Date;
+    user: UserModel;
+    workoutExercises: WorkoutExercise[];
 }

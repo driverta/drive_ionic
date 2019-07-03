@@ -3,7 +3,6 @@ import { NavParams } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 
 import { HistoryProvider, ProvidersUserProvider } from '../../providers/providers';
-import { User } from '../../providers/providers';
 
 
 import * as d3 from 'd3-selection';
@@ -40,7 +39,6 @@ export class LineChartComponent {
 
   constructor(
   	navParams: NavParams,
-  	public user: User,
     private storage: Storage,
     private userService: ProvidersUserProvider
   	) {

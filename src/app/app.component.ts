@@ -8,7 +8,6 @@ import { FirstRunPage } from '../pages/pages';
 import { MainPage, TutorialPage } from '../pages/pages';
 
 import { ProvidersUserProvider } from '../providers/providers';
-import { User } from '../providers/providers';
 
 
 import { FcmProvider } from '../providers/fcm/fcm';
@@ -53,7 +52,6 @@ export class MyApp {
 
   constructor(public translate: TranslateService,
     private platform: Platform,
-    public user: User,
     private config: Config,
     private statusBar: StatusBar,
     private splashScreen: SplashScreen,

@@ -4,7 +4,6 @@ import { IonicPage, NavController, ViewController, NavParams, AlertController } 
 import { CustomRecordsPage } from '../custom-records/custom-records';
 import { Storage } from '@ionic/storage';
 import { ProvidersUserProvider } from '../../providers/providers-user/providers-user';
-import firebase from 'firebase';
 
 @IonicPage()
 @Component({
